@@ -1,13 +1,9 @@
-import * as Sentry from "@sentry/nextjs";
-
 export async function register() {
-  if (process.env.NEXT_RUNTIME === "nodejs") {
-    await import("./sentry.server.config");
-  }
-
-  if (process.env.NEXT_RUNTIME === "edge") {
-    await import("./sentry.edge.config");
-  }
+  // Self-host: Sentry configs are intentionally empty (no operator telemetry).
 }
 
-export const onRequestError = Sentry.captureRequestError;
+export function onRequestError(
+  ..._args: unknown[]
+): void {
+  // no-op: do not send request errors to Helicone-cloud Sentry
+}

@@ -30,7 +30,8 @@ export const betterAuthClient = betterAuth({
   }),
   emailAndPassword: {
     enabled: true,
-    autoSignIn: false,
+    autoSignIn: true,
+    requireEmailVerification: false,
   },
   logger: {
     log: (message: string) => {

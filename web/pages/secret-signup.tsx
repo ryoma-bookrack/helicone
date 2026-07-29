@@ -1,8 +1,6 @@
-import { InboxArrowDownIcon } from "@heroicons/react/24/outline";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import useNotification from "../components/shared/notification/useNotification";
-import ThemedModal from "../components/shared/themed/themedModal";
 import AuthForm from "../components/templates/auth/authForm";
 import { DEMO_EMAIL } from "../lib/constants";
 import PublicMetaData from "../components/layout/public/publicMetaData";
@@ -12,7 +10,6 @@ import { logger } from "@/lib/telemetry/logger";
 const SecretSignUp = () => {
   const heliconeAuthClient = useHeliconeAuthClient();
   const { setNotification } = useNotification();
-  const [showEmailConfirmation, setShowEmailConfirmation] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
@@ -55,7 +52,8 @@ const SecretSignUp = () => {
             return;
           }
 
-          setShowEmailConfirmation(true);
+          setNotification("Account created. Redirecting...", "success");
+          router.push("/welcome");
         }}
         handleGoogleSubmit={async () => {
           const { error } = await heliconeAuthClient.signInWithOAuth({
@@ -92,22 +90,6 @@ const SecretSignUp = () => {
         showSSOButton={true}
         authFormType={"signup"}
       />
-      <ThemedModal
-        open={showEmailConfirmation}
-        setOpen={setShowEmailConfirmation}
-      >
-        <div className="flex w-full min-w-[300px] flex-col items-center justify-center space-y-4 p-2 text-center">
-          <h1 className="text-2xl font-semibold text-gray-900">
-            Confirm your email
-          </h1>
-          <p className="mt-2 text-sm text-gray-500">
-            Please check your email for a confirmation link.
-          </p>
-          <div className="pt-4">
-            <InboxArrowDownIcon className="h-16 w-16 text-gray-700" />
-          </div>
-        </div>
-      </ThemedModal>
     </PublicMetaData>
   );
 };

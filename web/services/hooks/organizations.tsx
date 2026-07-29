@@ -5,8 +5,6 @@ import { useHeliconeAuthClient } from "@/packages/common/auth/client/AuthClientF
 import { HeliconeUser } from "@/packages/common/auth/types";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import Cookies from "js-cookie";
-import { env } from "next-runtime-env";
-import posthog from "posthog-js";
 import { useEffect, useMemo, useState } from "react";
 import {
   $JAWN_API,
@@ -14,8 +12,6 @@ import {
   getJawnClient,
 } from "../../lib/clients/jawn";
 import { ORG_ID_COOKIE_KEY } from "../../lib/constants";
-import { OnboardingState } from "./useOrgOnboarding";
-import { getAttributionForPostHog } from "@helicone-package/common";
 
 const useGetOrgMembers = (orgId: string) => {
   const { data, isLoading, refetch } = $JAWN_API.useQuery(
@@ -128,57 +124,12 @@ const useGetOrgs = () => {
   };
 };
 
+/** Self-host: strip PostHog identify / Pylon chat (operator telemetry). */
 const identifyUserOrg = (
-  org: Database["public"]["Tables"]["organization"]["Row"],
-  user: HeliconeUser,
+  _org: Database["public"]["Tables"]["organization"]["Row"],
+  _user: HeliconeUser,
 ) => {
-  if (user) {
-    // Identify user
-    posthog.identify(user.id, {
-      name: user.user_metadata?.name,
-      email: user.email,
-    });
-
-    // Set attribution as $set_once (first-touch - won't overwrite existing values)
-    const attributionProps = getAttributionForPostHog({ omitUndefined: true });
-    if (Object.keys(attributionProps).length > 0) {
-      posthog.setPersonProperties({}, attributionProps);
-    }
-  }
-
-  const orgOnboardingStatus = org.onboarding_status as unknown as OnboardingState;
-
-  if (org) {
-    posthog.group("organization", org.id, {
-      name: org.name || "",
-      tier: org.tier || "",
-      stripe_customer_id: org.stripe_customer_id || "",
-      organization_type: org.organization_type || "",
-      date_joined: org.created_at || "",
-      has_onboarded: org.has_onboarded || false,
-      has_integrated: orgOnboardingStatus?.hasIntegrated || false,
-      has_completed_quickstart: orgOnboardingStatus?.hasCompletedQuickstart || false,
-    });
-
-    if (user && env("NEXT_PUBLIC_IS_ON_PREM") !== "true") {
-      window.pylon = {
-        chat_settings: {
-          app_id: "f766dfd3-28f8-40a8-872f-351274cbd306",
-          email: user.email,
-          name: user.user_metadata?.name,
-          avatar_url: user.user_metadata?.avatar_url,
-        },
-      };
-
-      if (window.Pylon) {
-        window.Pylon("setNewIssueCustomFields", {
-          organization_id: org.id,
-          organization_name: org.name,
-          organization_tier: org.tier,
-        });
-      }
-    }
-  }
+  // no-op
 };
 
 const useAddOrgMemberMutation = () => {

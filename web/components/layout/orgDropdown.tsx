@@ -27,8 +27,6 @@ import {
 import { UpgradeProDialog } from "../templates/organization/plan/upgradeProDialog";
 import { useOrg } from "./org/organizationContext";
 import OrgMoreDropdown from "./orgMoreDropdown";
-import Intercom from "@intercom/messenger-js-sdk";
-import { INTERCOM_APP_ID } from "./SidebarHelpDropdown";
 
 interface OrgDropdownProps {}
 
@@ -89,7 +87,6 @@ export default function OrgDropdown({}: OrgDropdownProps) {
 
   const handleSignOut = useCallback(() => {
     heliconeAuthClient.signOut().then(() => {
-      Intercom({ app_id: INTERCOM_APP_ID, hide_default_launcher: true });
       router.push("/");
     });
   }, [heliconeAuthClient, router]);

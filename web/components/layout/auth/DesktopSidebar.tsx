@@ -22,10 +22,8 @@ import { useTheme } from "next-themes";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import React, { useEffect, useMemo, useRef, useState } from "react";
-import ChangelogModal from "../ChangelogModal";
 import { useOrg } from "../org/organizationContext";
 import OrgDropdown from "../orgDropdown";
-import SidebarHelpDropdown from "../SidebarHelpDropdown";
 import NavItem from "./NavItem";
 import { ChangelogItem } from "./types";
 import SidebarQuickstepCard from "../SidebarQuickstartCard";
@@ -53,7 +51,6 @@ interface SidebarProps {
 }
 
 const DesktopSidebar = ({
-  changelog,
   NAVIGATION,
   sidebarRef,
 }: SidebarProps) => {
@@ -190,25 +187,6 @@ const DesktopSidebar = ({
     } else {
       setIsCollapsed(!isCollapsed);
     }
-  };
-
-  const [modalOpen, setModalOpen] = useState(false);
-  const [changelogToView, setChangelogToView] = useState<ChangelogItem | null>(
-    null,
-  );
-
-  const handleChangelogClick = (changelog: ChangelogItem) => {
-    setChangelogToView(changelog);
-    setModalOpen(true);
-  };
-
-  const handleModalOpen = (open: boolean) => {
-    if (!open) {
-      setChangelogToView(null);
-    } else {
-      setChangelogToView(changelog[0]);
-    }
-    setModalOpen(open);
   };
 
   return (
@@ -538,24 +516,12 @@ const DesktopSidebar = ({
                     />
                     {!isCollapsed && <span>Configure</span>}
                   </Button>
-
-                  <SidebarHelpDropdown
-                    changelog={changelog}
-                    handleChangelogClick={handleChangelogClick}
-                    isCollapsed={isCollapsed}
-                  />
                 </>
               )}
             </div>
           </div>
         </div>
       </div>
-
-      <ChangelogModal
-        open={modalOpen}
-        setOpen={handleModalOpen}
-        changelog={changelogToView}
-      />
     </>
   );
 };

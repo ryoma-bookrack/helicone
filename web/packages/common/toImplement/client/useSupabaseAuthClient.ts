@@ -4,7 +4,6 @@ import {
   useSupabaseClient,
   useUser,
 } from "@supabase/auth-helpers-react";
-import posthog from "posthog-js";
 import { useMemo } from "react";
 import { HeliconeAuthClient } from "../../auth/client/HeliconeAuthClient";
 import { HeliconeOrg, HeliconeUser } from "../../auth/types";
@@ -37,7 +36,6 @@ export class SupabaseAuthClient implements HeliconeAuthClient {
     await this.supabaseClient?.auth.signOut({ scope: "global" });
     await this.supabaseClient?.auth.signOut({ scope: "others" });
     await this.supabaseClient?.auth.signOut({ scope: "local" });
-    posthog.reset();
     await this.supabaseClient?.auth.signOut();
   }
 

@@ -1,5 +1,5 @@
 import { useHeliconeAuthClient } from "@/packages/common/auth/client/AuthClientFactory";
-import { ArrowPathIcon, InboxArrowDownIcon } from "@heroicons/react/24/outline";
+import { ArrowPathIcon } from "@heroicons/react/24/outline";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import { BsGoogle } from "react-icons/bs";
@@ -7,18 +7,6 @@ import { BsGoogle } from "react-icons/bs";
 interface LoginProps {
   formState: "login" | "reset" | "signup";
 }
-
-const SignedUpConfirmation = ({ email }: { email: string }) => {
-  return (
-    <div className="flex max-w-[450px] flex-col items-center justify-center rounded-lg border border-black bg-gray-200 p-8 text-center text-lg text-black sm:text-lg">
-      <InboxArrowDownIcon className="mb-4 h-12 w-12 animate-bounce" />
-      <p>
-        Check your email ({email}) for a confirmation link. If you don&apos;t
-        see it, check your spam folder.
-      </p>{" "}
-    </div>
-  );
-};
 
 const Login = (props: LoginProps) => {
   const { formState: defaultFormState } = props;
@@ -29,8 +17,6 @@ const Login = (props: LoginProps) => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
-  const [showSignedUpConfirmation, setShowSignedUpConfirmation] =
-    useState<boolean>(false);
   const heliconeAuthClient = useHeliconeAuthClient();
   const router = useRouter();
 
@@ -61,12 +47,8 @@ const Login = (props: LoginProps) => {
     }
 
     setLoading(false);
-    setShowSignedUpConfirmation(true);
+    router.push("/welcome");
   };
-
-  if (showSignedUpConfirmation) {
-    return <SignedUpConfirmation email={email} />;
-  }
 
   return (
     <div className="flex w-full min-w-[300px] flex-col space-y-0 sm:min-w-[450px] sm:max-w-2xl">

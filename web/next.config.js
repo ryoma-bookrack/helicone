@@ -57,12 +57,8 @@ const nextConfig = {
     ];
   },
   async rewrites() {
-    return [
-      {
-        source: "/ingest/:path*",
-        destination: "https://app.posthog.com/:path*",
-      },
-    ];
+    // Self-host: no PostHog ingest proxy to app.posthog.com
+    return [];
   },
   experimental: {
     // appDir and runtime options have been removed as they're no longer needed in Next.js 14

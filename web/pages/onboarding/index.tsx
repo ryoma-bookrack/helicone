@@ -37,18 +37,7 @@ export default function OnboardingPage() {
 
   useEffect(() => {
     updateCurrentStep("ORGANIZATION");
-
-    if (
-      typeof window !== "undefined" &&
-      (window as any).gtag &&
-      !onboardingState?.hasTrackedGoogleAdsConversion
-    ) {
-      (window as any).gtag("event", "ads_conversion_Sign_Up_1", {
-        // <event_parameters>
-      });
-
-      updateOnboardingStatus({ hasTrackedGoogleAdsConversion: true });
-    }
+    // Self-host: no Google Ads conversion tracking
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

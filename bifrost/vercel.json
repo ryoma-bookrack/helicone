@@ -1,10 +1,6 @@
 {
   "rewrites": [
     {
-      "source": "/ingest/:path*",
-      "destination": "https://app.posthog.com/:path*"
-    },
-    {
       "source": "/data-is-beautiful",
       "destination": "https://us.helicone.ai/closed-ai"
     },
