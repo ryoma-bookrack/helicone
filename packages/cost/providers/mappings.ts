@@ -36,6 +36,9 @@ export const azurePattern =
 const llamaApiPattern = /^https:\/\/api\.llama\.com/;
 const nvidiaApiPattern = /^https:\/\/integrate\.api\.nvidia\.com/;
 const localProxyPattern = /^http:\/\/127\.0\.0\.1:\d+\/v\d+\/?$/;
+// Lab LAN: Helicone on another host targeting GPU box OpenAI-compatible /vN
+const labLanProxyPattern =
+  /^http:\/\/192\.168\.50\.(?:25[0-4]|2[0-4]\d|1\d{2}|[1-9]\d|[1-9]):\d+\/v\d+\/?$/;
 const heliconeProxyPattern = /^https:\/\/oai\.hconeai\.com/;
 const heliconeInferencePattern = /^https:\/\/inference\.helicone\.ai/;
 const amdbartekPattern = /^https:\/\/.*\.amdbartek\.dev/;
@@ -178,6 +181,10 @@ export const providers: {
   },
   {
     pattern: localProxyPattern,
+    provider: "LOCAL",
+  },
+  {
+    pattern: labLanProxyPattern,
     provider: "LOCAL",
   },
   {
