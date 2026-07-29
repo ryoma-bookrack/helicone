@@ -18,6 +18,11 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { env } from "next-runtime-env";
 import { FilterProvider } from "@/filterAST/context/filterContext";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import { ensureRandomUUIDPolyfill } from "@/lib/randomUUID";
+
+if (typeof window !== "undefined") {
+  ensureRandomUUIDPolyfill();
+}
 
 // Use system font stack for faster builds - Inter is loaded via CSS
 const inter = {

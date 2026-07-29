@@ -1,5 +1,6 @@
 import { useOrg } from "../../components/layout/org/organizationContext";
 import { $JAWN_API } from "../../lib/clients/jawn";
+import { env } from "next-runtime-env";
 
 // Types matching the backend
 export interface PurchasedCredits {
@@ -27,13 +28,16 @@ export interface CreditBalanceResponse {
 // A hook for the user's credit balance in cents
 export const useCredits = () => {
   const org = useOrg();
+  const isOnPrem = env("NEXT_PUBLIC_IS_ON_PREM") === "true";
 
   const result = $JAWN_API.useQuery(
     "get",
     "/v1/credits/balance",
     {},
     {
-      enabled: !!org?.currentOrg?.id,
+      // Self-host has no Helicone wallet / Stripe credits pipeline.
+      enabled: !isOnPrem && !!org?.currentOrg?.id,
+      retry: false,
     },
   );
 

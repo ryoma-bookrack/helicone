@@ -24,7 +24,10 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { useCallback, useEffect, useState } from "react";
-import { useOrgOnboarding } from "../../../services/hooks/useOrgOnboarding";
+import {
+  OnboardingState,
+  useOrgOnboarding,
+} from "../../../services/hooks/useOrgOnboarding";
 import { useOrg } from "../../layout/org/organizationContext";
 import { QuickstartStepCard } from "../../onboarding/QuickstartStep";
 import { Button } from "../../ui/button";
@@ -54,6 +57,7 @@ import PaymentModal from "../settings/PaymentModal";
 import { ProviderKeySettings } from "../settings/providerKeySettings";
 import HelixIntegrationDialog from "./HelixIntegrationDialog";
 import IntegrationGuide from "./integrationGuide";
+import { env } from "next-runtime-env";
 
 const QuickstartPage = () => {
   const org = useOrg();
@@ -68,17 +72,20 @@ const QuickstartPage = () => {
   const [isHelixDialogOpen, setIsHelixDialogOpen] = useState(false);
   const [isAutoTopoffModalOpen, setIsAutoTopoffModalOpen] = useState(false);
   const [isTestLoading, setIsTestLoading] = useState(false);
+  const [isSkipping, setIsSkipping] = useState(false);
   const [testResponse, setTestResponse] = useState<string | null>(null);
   const [testRequestId, setTestRequestId] = useState<string | null>(null);
   const [testError, setTestError] = useState<string | null>(null);
 
-  const { hasKeys, hasProviderKeys } = useOrgOnboarding(
+  const isOnPrem = env("NEXT_PUBLIC_IS_ON_PREM") === "true";
+  const { hasKeys, hasProviderKeys, updateOnboardingStatus } = useOrgOnboarding(
     org?.currentOrg?.id ?? "",
   );
 
   const { data: creditData } = useCredits();
   const hasCredits = (creditData?.balance ?? 0) > 0;
-  const hasBillingSetup = hasCredits || hasProviderKeys;
+  // Self-host: Stripe credits / cloud AI Gateway do not apply; unlock steps.
+  const hasBillingSetup = isOnPrem || hasCredits || hasProviderKeys;
   const { data: autoTopoffSettings } = useAutoTopoffSettings();
 
   const {
@@ -158,6 +165,18 @@ const QuickstartPage = () => {
     setTestRequestId(null);
 
     try {
+      // Cloud quickstart hits Helicone AI Gateway; self-host has no such service.
+      if (isOnPrem) {
+        setTestError(
+          "Self-host: Send Test Request uses Helicone cloud AI Gateway and will not work here. Send a request through your Jawn proxy (port 9041), or click Finish Quickstart below.",
+        );
+        setNotification(
+          "Use Jawn proxy or Finish Quickstart on self-host",
+          "error",
+        );
+        return;
+      }
+
       const jawn = getJawnClient(org?.currentOrg?.id);
       const result = await jawn.POST("/v1/test/gateway-request", {
         body: {
@@ -180,6 +199,25 @@ const QuickstartPage = () => {
       setNotification(errorMessage, "error");
     } finally {
       setIsTestLoading(false);
+    }
+  };
+
+  const handleFinishQuickstart = async () => {
+    setIsSkipping(true);
+    try {
+      await updateOnboardingStatus({
+        hasOnboarded: true,
+        hasIntegrated: true,
+        hasCompletedQuickstart: true,
+        currentStep: "REQUEST",
+      } as OnboardingState);
+      org?.refetchOrgs();
+      setNotification("Quickstart completed", "success");
+    } catch (error) {
+      console.error("Failed to finish quickstart:", error);
+      setNotification("Failed to finish quickstart", "error");
+    } finally {
+      setIsSkipping(false);
     }
   };
 
@@ -283,10 +321,12 @@ const QuickstartPage = () => {
                 <div className="mt-4 flex flex-col gap-4">
                   {/* Billing requirement message */}
                   <p className="text-xs italic text-muted-foreground">
-                    To use Helicone, you need to either add credits
-                    (pay-as-you-go) or configure your own provider API keys
-                    (BYOK). Choose one option below to continue.
+                    {isOnPrem
+                      ? "Self-host: billing credits are optional. You can skip this step and send traffic through your local Jawn proxy with Helicone-Target-URL."
+                      : "To use Helicone, you need to either add credits (pay-as-you-go) or configure your own provider API keys (BYOK). Choose one option below to continue."}
                   </p>
+                  {isOnPrem ? null : (
+                    <>
 
                   {/* PTB Option */}
                   <div
@@ -399,6 +439,8 @@ const QuickstartPage = () => {
                       )}
                     </button>
                   </div>
+                    </>
+                  )}
                 </div>
               )}
               {index === 1 && (
@@ -494,23 +536,50 @@ const QuickstartPage = () => {
                     <div
                       className={`rounded-sm border border-border p-3 ${org?.currentOrg?.has_integrated ? "bg-confirmative/10" : "bg-muted/30"}`}
                     >
-                      <div className="flex items-center gap-2">
-                        {org?.currentOrg?.has_integrated ? (
-                          <Check size={16} className="text-confirmative" />
-                        ) : (
-                          <Loader
-                            size={16}
-                            className="animate-spin text-muted-foreground"
-                          />
-                        )}
-                        <span
-                          className={`text-sm ${org?.currentOrg?.has_integrated ? "text-confirmative" : "text-muted-foreground"}`}
-                        >
-                          {org?.currentOrg?.has_integrated
-                            ? "Requests detected!"
-                            : "Listening for requests..."}
-                        </span>
+                      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                        <div className="flex items-center gap-2">
+                          {org?.currentOrg?.has_integrated ? (
+                            <Check size={16} className="text-confirmative" />
+                          ) : (
+                            <Loader
+                              size={16}
+                              className="animate-spin text-muted-foreground"
+                            />
+                          )}
+                          <span
+                            className={`text-sm ${org?.currentOrg?.has_integrated ? "text-confirmative" : "text-muted-foreground"}`}
+                          >
+                            {org?.currentOrg?.has_integrated
+                              ? "Requests detected!"
+                              : isOnPrem
+                                ? "Waiting for requests via Jawn (:9041)..."
+                                : "Listening for requests..."}
+                          </span>
+                        </div>
+                        {isOnPrem && !org?.currentOrg?.has_integrated ? (
+                          <Button
+                            size="sm"
+                            variant="action"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              void handleFinishQuickstart();
+                            }}
+                            disabled={isSkipping}
+                          >
+                            {isSkipping ? "Saving..." : "Finish Quickstart"}
+                          </Button>
+                        ) : null}
                       </div>
+                      {isOnPrem && !org?.currentOrg?.has_integrated ? (
+                        <p className="mt-2 text-xs text-muted-foreground">
+                          Cloud &quot;Send Test Request&quot; does not work
+                          on-prem. Proxy traffic through{" "}
+                          <code className="rounded bg-muted px-1">
+                            http://192.168.50.38:9041
+                          </code>{" "}
+                          or finish here and continue.
+                        </p>
+                      ) : null}
                     </div>
                   </div>
 

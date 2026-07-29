@@ -7,6 +7,7 @@ import {
   hqlTools,
 } from "@/lib/agent/tools";
 import { $JAWN_API } from "@/lib/clients/jawn";
+import { randomUUID } from "@/lib/randomUUID";
 import { OpenAIChatRequest } from "@helicone-package/llm-mapper/mappers/openai/chat-v2";
 import { useRouter } from "next/router";
 import React, { createContext, useContext, useEffect, useState } from "react";
@@ -131,7 +132,7 @@ export const HeliconeAgentProvider: React.FC<{
 
   useEffect(() => {
     if (!currentSessionId) {
-      const sessionId = crypto.randomUUID();
+      const sessionId = randomUUID();
       setCurrentSessionId(sessionId);
     }
   }, []);
@@ -361,7 +362,7 @@ export const HeliconeAgentProvider: React.FC<{
           }
         },
         createNewSession: (startingMessages?: Message[]) => {
-          const newSessionId = crypto.randomUUID();
+          const newSessionId = randomUUID();
           const newChatMessages = [
             {
               role: "assistant",

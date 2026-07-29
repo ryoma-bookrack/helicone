@@ -16,6 +16,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
 import { AuthBrandingPanel } from "./AuthBrandingPanel";
+import { env } from "next-runtime-env";
 
 type CustomerPortalContent = {
   domain: string;
@@ -150,6 +151,18 @@ const AuthForm = (props: AuthFormProps) => {
                   className="text-sky-500 hover:text-sky-700"
                 >
                   Sign in here.
+                </Link>
+              </p>
+            ) : null}
+            {authFormType === "signin" &&
+            env("NEXT_PUBLIC_IS_ON_PREM") === "true" ? (
+              <p className="mt-2 text-sm text-gray-600">
+                Don&apos;t have an account?{" "}
+                <Link
+                  href={"/secret-signup"}
+                  className="text-sky-500 hover:text-sky-700"
+                >
+                  Create account
                 </Link>
               </p>
             ) : null}

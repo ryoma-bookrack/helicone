@@ -3,6 +3,7 @@ import Parser from "rss-parser";
 import { $JAWN_API, getJawnClient } from "../../lib/clients/jawn";
 import { components } from "../../lib/clients/jawnTypes/private";
 import { logger } from "@/lib/telemetry/logger";
+import { env } from "next-runtime-env";
 
 const useCreateAlertBanner = (onSuccess?: () => void) => {
   const { mutate: createBanner, isPending: isCreatingBanner } = useMutation({
@@ -129,6 +130,8 @@ const useChangelog = () => {
 
   const { data, isLoading, error, refetch, isRefetching } = useQuery({
     queryKey: ["changelog"],
+    // Self-host: skip cloud changelog RSS (CORS / outbound noise in console).
+    enabled: env("NEXT_PUBLIC_IS_ON_PREM") !== "true",
     queryFn: async () => {
       try {
         const feed = await parser.parseURL(
@@ -140,6 +143,7 @@ const useChangelog = () => {
         throw err;
       }
     },
+    retry: false,
   });
 
   return {

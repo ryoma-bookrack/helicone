@@ -32,7 +32,9 @@ const SignIn = ({
   const { unauthorized } = router.query;
   const [refreshed, setRefreshed] = useState(false);
   const [redirectCount, setRedirectCount] = useState(0);
-  const [showSignIn, setShowSignIn] = useState(false);
+  // Self-host: skip Mintlify "signups disabled" gate; go straight to the form.
+  const isOnPrem = env("NEXT_PUBLIC_IS_ON_PREM") === "true";
+  const [showSignIn, setShowSignIn] = useState(isOnPrem);
 
   useEffect(() => {
     // Prevent infinite loops by limiting redirects
@@ -183,25 +185,43 @@ const SignIn = ({
                 <div className="flex flex-col items-center text-center gap-6">
                   <div className="flex flex-col gap-3">
                     <h2 className="text-2xl font-semibold text-gray-900">
-                      🚀 Helicone has joined Mintlify
+                      {isOnPrem
+                        ? "Helicone (self-hosted)"
+                        : "🚀 Helicone has joined Mintlify"}
                     </h2>
                     <p className="text-sm text-gray-600">
-                      New signups are disabled.{" "}
-                      <Link
-                        href="https://www.helicone.ai/blog/joining-mintlify"
-                        className="text-sky-500 hover:text-sky-700"
-                      >
-                        Learn more about what&apos;s next →
-                      </Link>
+                      {isOnPrem ? (
+                        "Sign in with an existing account, or create a new one."
+                      ) : (
+                        <>
+                          New signups are disabled.{" "}
+                          <Link
+                            href="https://www.helicone.ai/blog/joining-mintlify"
+                            className="text-sky-500 hover:text-sky-700"
+                          >
+                            Learn more about what&apos;s next →
+                          </Link>
+                        </>
+                      )}
                     </p>
                   </div>
 
-                  <button
-                    onClick={() => setShowSignIn(true)}
-                    className="flex items-center justify-center gap-2 rounded-md bg-sky-500 px-6 py-2.5 text-sm font-medium text-white shadow-sm hover:bg-sky-600 transition-colors"
-                  >
-                    🔑 Existing user? Sign in
-                  </button>
+                  <div className="flex w-full max-w-xs flex-col gap-3">
+                    <button
+                      onClick={() => setShowSignIn(true)}
+                      className="flex items-center justify-center gap-2 rounded-md bg-sky-500 px-6 py-2.5 text-sm font-medium text-white shadow-sm hover:bg-sky-600 transition-colors"
+                    >
+                      🔑 Existing user? Sign in
+                    </button>
+                    {isOnPrem ? (
+                      <Link
+                        href="/secret-signup"
+                        className="flex items-center justify-center gap-2 rounded-md border border-gray-300 bg-white px-6 py-2.5 text-sm font-medium text-gray-900 shadow-sm hover:bg-gray-50 transition-colors"
+                      >
+                        Create account
+                      </Link>
+                    ) : null}
+                  </div>
                 </div>
               </div>
             </div>

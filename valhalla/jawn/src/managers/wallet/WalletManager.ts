@@ -9,14 +9,28 @@ const WORKER_API_URL =
 
 const ADMIN_ACCESS_KEY = process.env.HELICONE_MANUAL_ACCESS_KEY;
 
+const ZERO_WALLET_STATE: WalletState = {
+  balance: 0,
+  effectiveBalance: 0,
+  totalCredits: 0,
+  totalDebits: 0,
+  totalEscrow: 0,
+  disallowList: [],
+};
+
 export class WalletManager {
-  constructor(private orgId: string) {
-    if (!ADMIN_ACCESS_KEY) {
-      throw new Error("Admin access key not configured");
-    }
-  }
+  constructor(private orgId: string) {}
 
   public async getWalletState(): Promise<Result<WalletState, string>> {
+    // Self-host / local: no Helicone wallet worker or admin key.
+    if (
+      !ADMIN_ACCESS_KEY ||
+      process.env.NEXT_PUBLIC_IS_ON_PREM === "true" ||
+      ENVIRONMENT !== "production"
+    ) {
+      return ok(ZERO_WALLET_STATE);
+    }
+
     try {
       // Use the admin endpoint that can query any org's wallet
       const controller = new AbortController();
@@ -55,22 +69,7 @@ export class WalletManager {
       return ok(convertedWalletState);
     } catch (error) {
       console.error("Error fetching wallet state:", error);
-
-      // Fallback for local development when Durable Objects don't work
-      if (ENVIRONMENT !== "production") {
-        console.warn("Using fallback wallet state for local development");
-        const fallbackState: WalletState = {
-          balance: 0,
-          effectiveBalance: 0,
-          totalCredits: 0,
-          totalDebits: 0,
-          totalEscrow: 0,
-          disallowList: [],
-        };
-        return ok(fallbackState);
-      }
-
-      return err(`Error fetching wallet state: ${error}`);
+      return ok(ZERO_WALLET_STATE);
     }
   }
 }

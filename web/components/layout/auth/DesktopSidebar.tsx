@@ -10,12 +10,9 @@ import {
   ChevronRightIcon,
 } from "@heroicons/react/24/outline";
 import {
-  MessageCircle,
   Rocket,
   Settings,
   Coins,
-  FileText,
-  ArrowUpRight,
   AlertTriangle,
 } from "lucide-react";
 import { useTheme } from "next-themes";
@@ -27,8 +24,8 @@ import OrgDropdown from "../orgDropdown";
 import NavItem from "./NavItem";
 import { ChangelogItem } from "./types";
 import SidebarQuickstepCard from "../SidebarQuickstartCard";
-import { useHeliconeAgent } from "@/components/templates/agent/HeliconeAgentContext";
 import { useCredits } from "@/services/hooks/useCredits";
+import { env } from "next-runtime-env";
 
 // Sidebar width constants
 const SIDEBAR_WIDTH_COLLAPSED = "w-12"; // 48px
@@ -54,13 +51,13 @@ const DesktopSidebar = ({
   NAVIGATION,
   sidebarRef,
 }: SidebarProps) => {
-  const { agentChatOpen, setAgentChatOpen } = useHeliconeAgent();
   const orgContext = useOrg();
   const router = useRouter();
+  const isOnPrem = env("NEXT_PUBLIC_IS_ON_PREM") === "true";
   const onboardingStatus = orgContext?.currentOrg
     ?.onboarding_status as unknown as OnboardingState;
 
-  // Fetch credit balance - defaults to 0 if it fails
+  // Fetch credit balance - defaults to 0 if it fails (skipped on self-host)
   const { data: creditData } = useCredits();
 
   const [isCollapsed, setIsCollapsed] = useLocalStorage(
@@ -399,98 +396,48 @@ const DesktopSidebar = ({
                 isCollapsed && "items-center",
               )}
             >
-              {/* Resources Section */}
-              <a
-                href="https://docs.helicone.ai"
-                target="_blank"
-                rel="noopener noreferrer"
-                className={cn(
-                  "flex items-center text-xs text-muted-foreground hover:bg-slate-100 hover:text-foreground dark:hover:bg-slate-800",
-                  isCollapsed
-                    ? "h-8 w-8 justify-center rounded-md"
-                    : "h-8 w-full justify-start gap-2 rounded-md px-3",
-                )}
-              >
-                <FileText size={16} className="text-muted-foreground" />
-                {!isCollapsed && (
-                  <>
-                    <span>Docs</span>
-                    <ArrowUpRight
-                      size={12}
-                      className="ml-auto text-muted-foreground"
-                    />
-                  </>
-                )}
-              </a>
-
-              {/* Partial-width divider */}
-              <div
-                className={cn(
-                  "my-2 h-px bg-slate-200 dark:bg-slate-700",
-                  isCollapsed ? "w-6" : "mx-3",
-                )}
-              />
-
               {orgContext?.currentOrg?.tier !== "demo" && (
                 <>
-                  <Button
-                    variant="ghost"
-                    size="none"
-                    onClick={() => setAgentChatOpen(!agentChatOpen)}
-                    className={cn(
-                      "flex items-center text-xs text-muted-foreground hover:bg-slate-100 hover:text-foreground dark:hover:bg-slate-800",
-                      isCollapsed
-                        ? "h-8 w-8 justify-center"
-                        : "h-8 w-full justify-start gap-2 px-3",
-                    )}
-                  >
-                    <div className="relative">
-                      <MessageCircle size={16} className="text-muted-foreground" />
-                      {agentChatOpen && (
-                        <span className="absolute -right-1 -top-1 h-1.5 w-1.5 rounded-full bg-blue-600 dark:bg-blue-400" />
-                      )}
-                    </div>
-                    {!isCollapsed && <span>Support</span>}
-                  </Button>
-
-                  <Button
-                    variant="ghost"
-                    size="none"
-                    onClick={() => router.push("/credits")}
-                    className={cn(
-                      "flex items-center text-xs hover:bg-slate-100 hover:text-foreground dark:hover:bg-slate-800",
-                      isCollapsed
-                        ? "h-8 w-8 justify-center"
-                        : "h-8 w-full justify-start gap-2 px-3",
-                      router.pathname.includes("/credits")
-                        ? "bg-blue-100 text-blue-700 hover:bg-blue-100 dark:bg-blue-900/50 dark:text-blue-300 dark:hover:bg-blue-900/50"
-                        : "text-muted-foreground",
-                    )}
-                  >
-                    <Coins
-                      size={16}
+                  {!isOnPrem ? (
+                    <Button
+                      variant="ghost"
+                      size="none"
+                      onClick={() => router.push("/credits")}
                       className={cn(
+                        "flex items-center text-xs hover:bg-slate-100 hover:text-foreground dark:hover:bg-slate-800",
+                        isCollapsed
+                          ? "h-8 w-8 justify-center"
+                          : "h-8 w-full justify-start gap-2 px-3",
                         router.pathname.includes("/credits")
-                          ? "text-blue-700 dark:text-blue-300"
+                          ? "bg-blue-100 text-blue-700 hover:bg-blue-100 dark:bg-blue-900/50 dark:text-blue-300 dark:hover:bg-blue-900/50"
                           : "text-muted-foreground",
                       )}
-                    />
-                    {!isCollapsed && (
-                      <span className="flex flex-1 items-center justify-between">
-                        <span>Credits</span>
-                        <span
-                          className={cn(
-                            "text-xs",
-                            router.pathname.includes("/credits")
-                              ? "text-blue-700 dark:text-blue-300"
-                              : "text-muted-foreground",
-                          )}
-                        >
-                          ${(creditData?.balance ?? 0).toFixed(2)}
+                    >
+                      <Coins
+                        size={16}
+                        className={cn(
+                          router.pathname.includes("/credits")
+                            ? "text-blue-700 dark:text-blue-300"
+                            : "text-muted-foreground",
+                        )}
+                      />
+                      {!isCollapsed && (
+                        <span className="flex flex-1 items-center justify-between">
+                          <span>Credits</span>
+                          <span
+                            className={cn(
+                              "text-xs",
+                              router.pathname.includes("/credits")
+                                ? "text-blue-700 dark:text-blue-300"
+                                : "text-muted-foreground",
+                            )}
+                          >
+                            ${(creditData?.balance ?? 0).toFixed(2)}
+                          </span>
                         </span>
-                      </span>
-                    )}
-                  </Button>
+                      )}
+                    </Button>
+                  ) : null}
 
                   <Button
                     variant="ghost"

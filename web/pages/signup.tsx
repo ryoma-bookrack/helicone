@@ -56,9 +56,13 @@ export default SignUp;
 export const getServerSideProps = async (
   context: GetServerSidePropsContext,
 ) => {
+  // Self-host: public /signup was disabled upstream; send users to the real form.
   if (env("NEXT_PUBLIC_IS_ON_PREM") === "true") {
     return {
-      props: {},
+      redirect: {
+        destination: "/secret-signup",
+        permanent: false,
+      },
     };
   }
 

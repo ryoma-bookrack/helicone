@@ -6,10 +6,12 @@ import {
   OnboardingState,
   useOrgOnboarding,
 } from "@/services/hooks/useOrgOnboarding";
+import { env } from "next-runtime-env";
 
 const SidebarQuickstepCard = () => {
   const router = useRouter();
   const orgContext = useOrg();
+  const isOnPrem = env("NEXT_PUBLIC_IS_ON_PREM") === "true";
   const {
     hasKeys,
     hasProviderKeys,
@@ -17,6 +19,10 @@ const SidebarQuickstepCard = () => {
     refetchProviderKeys,
     updateOnboardingStatus,
   } = useOrgOnboarding(orgContext?.currentOrg?.id ?? "");
+
+  // Self-host does not require vault provider keys to integrate via Target-URL.
+  const providerStepDone = isOnPrem || hasProviderKeys;
+  const canIntegrate = hasKeys === true && providerStepDone;
 
   return (
     <div
@@ -40,18 +46,16 @@ const SidebarQuickstepCard = () => {
         </QuickstartStep>
         <QuickstartStep
           stepNumber={2}
-          isCompleted={hasProviderKeys}
-          isActive={hasKeys === true && !hasProviderKeys}
+          isCompleted={providerStepDone}
+          isActive={hasKeys === true && !providerStepDone}
         >
-          Add provider key
+          {isOnPrem ? "Ready for proxy" : "Add provider key"}
         </QuickstartStep>
         <QuickstartStep
           stepNumber={3}
           isCompleted={!!orgContext?.currentOrg?.has_integrated}
           isActive={
-            hasKeys === true &&
-            hasProviderKeys &&
-            !orgContext?.currentOrg?.has_integrated
+            canIntegrate && !orgContext?.currentOrg?.has_integrated
           }
         >
           Integrate
