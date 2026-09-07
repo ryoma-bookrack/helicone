@@ -34,8 +34,6 @@ You can use this account to sign into Helicone at localhost:3000 via your browse
 
 - Helicone Webpage: localhost:3000
 - Helicone Jawn API/Proxy: localhost:8585
-- OpenAI Proxy Worker: localhost:8787 (when running workers separately)
-- Helicone API Worker: localhost:8788 (when running workers separately)
 
 # Maintenance
 
@@ -43,7 +41,6 @@ You can use this account to sign into Helicone at localhost:3000 via your browse
 
 ```
 docker build -t helicone/supabase-migration-runner -f dockerfiles/dockerfile_supabase_migration_runner ../supabase
-docker build -t helicone/worker -f dockerfiles/dockerfile_worker ../worker
 docker build -t helicone/web -f dockerfiles/dockerfile_web ../web
 docker build -t helicone/clickhouse-migration-runner -f dockerfiles/dockerfile_clickhouse_migration_runner ../clickhouse
 ```
@@ -103,21 +100,7 @@ Start the infrastructure components via docker compose:
 
 ```
 cd docker
-docker compose -f docker-compose-local.yml --profile include-worker up -d
-```
-
-### Workers
-
-*Note*: If you are developing locally on the workers, simply exclude the
-`--profile include-worker` arguments and instead start each worker you need
-manually from the command line with the following commands:
-
-```
-cd worker
-yarn
-# Start OpenAI Proxy Worker
-# WORKER_TYPEs: [OPENAI_PROXY, ANTHROPIC_PROXY, HELICONE_API]
-npx wrangler dev --local --var WORKER_TYPE:OPENAI_PROXY --port 8787 --test-scheduled
+docker compose -f docker-compose-local.yml up -d
 ```
 
 ### Jawn (Backend)
@@ -150,18 +133,14 @@ Change the Org to `Organization for Test` and then you should be able to see you
 
 Please do not hesitate to reach out on discord if you have any questions.
 
-Feel free to run some of the examples from `helicone/examples` against
-your new local Helicone instance!
-
-
-Alternatively, you can also test the API against your local via the following
+You can test the API against your local instance via the following
 `curl` command:
 
 ```
 export OPENAI_API_KEY="sk-..."
 export HELICONE_API_KEY="sk-..."
 curl --request POST \
-  --url http://localhost:8787/v1/chat/completions \
+  --url http://localhost:8585/v1/gateway/oai/v1/chat/completions \
   --header "Authorization: Bearer $OPENAI_API_KEY" \
   --header "Helicone-Auth: Bearer $HELICONE_API_KEY" \
   --header 'Content-Type: application/json' \
@@ -182,7 +161,7 @@ curl --request POST \
 
 - If you update the migration files, then do not forget to rebuild the 
   `clickhouse-migration-runner-local` Docker image!
-- Currently there are some stability issues with the local Kafka and worker
-  configurations, hence the `unstable` profile for those services. It's
+- Currently there are some stability issues with the local Kafka
+  configuration, hence the `kafka` profile for those services. It's
   recommended to keep it disabled for now, until the stability issues are
   resolved.

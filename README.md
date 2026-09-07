@@ -1,167 +1,125 @@
-<div align="center">
+# Helicone
 
-| 🔍 Observability | 🕸️ Agent Tracing | 🚂 LLM Routing |
-| :--------------: | :--------------: | :------------------: |
-|  💰 Cost & Latency Tracking  |   📚 Datasets & Fine-tuning    |    🎛️ Automatic Fallbacks   |
+基于 [Helicone](https://github.com/Helicone/helicone) 的私有化部署代码。
+提供 LLM 请求观测、成本/延迟分析、Prompt 管理，以及通过 Jawn 提供的 AI Gateway 代理。
 
-</div>
+本仓库已裁剪掉营销站、Cloudflare Worker、示例、SDK 发布和云端 CI 等无关内容，仅保留自托管运行所需部分。
 
-<p align="center" style="margin: 0; padding: 0;">
-  <img alt="helicone logo" src="https://marketing-assets-helicone.s3.us-west-2.amazonaws.com/Twitter_Cover_A1.png" style="display: block; margin: 0; padding: 0;">
-</p>
-</br>
+## 仓库结构
 
-<p align="center">
-  <a href='https://github.com/helicone/helicone/graphs/contributors'><img src='https://img.shields.io/github/contributors/helicone/helicone?style=flat-square' alt='Contributors' /></a>
-  <a href='https://github.com/helicone/helicone/stargazers'><img alt="GitHub stars" src="https://img.shields.io/github/stars/helicone/helicone?style=flat-square"/></a>
-  <a href='https://github.com/helicone/helicone/pulse'><img alt="GitHub commit activity" src="https://img.shields.io/github/commit-activity/m/helicone/helicone?style=flat-square"/></a>
-  <a href='https://github.com/helicone/helicone/issues?q=is%3Aissue+is%3Aclosed'><img alt="GitHub closed issues" src="https://img.shields.io/github/issues-closed/helicone/helicone?style=flat-square"/></a>
-  <a href='https://www.ycombinator.com/companies/helicone'><img alt="Y Combinator" src="https://img.shields.io/badge/Y%20Combinator-Helicone-orange?style=flat-square"/></a>
-</p>
-<p align="center">
-  <a href="https://docs.helicone.ai/">Docs</a> • <a href="https://www.helicone.ai/changelog">Changelog</a> • <a href="https://github.com/helicone/helicone/issues">Bug reports</a> • <a href="https://helicone.ai/demo">See Helicone in Action! (Free)</a>
-</p>
+| 目录 | 说明 |
+|------|------|
+| `web/` | 前端 Dashboard（Next.js） |
+| `valhalla/jawn/` | 后端 API、日志采集、LLM Proxy / Gateway |
+| `packages/` | 共享库（cost、filters、llm-mapper、prompts 等） |
+| `shared/` | Jawn 构建依赖的共享代码 |
+| `supabase/` | Postgres 数据库 migration |
+| `clickhouse/` | ClickHouse migration 与种子数据 |
+| `docker/` | 本地开发用 compose 与分服务 Dockerfile |
+| `Dockerfile` | all-in-one 单容器镜像构建 |
+| `supervisord.conf` | 容器内进程编排（Postgres、ClickHouse、Jawn、Web、MinIO） |
 
-## Helicone is an AI Gateway & LLM Observability Platform for AI Engineers
+## 架构
 
-- 🌐 **AI Gateway**: Access 100+ AI models with 1 API key through the OpenAI API with intelligent routing and automatic fallbacks. [Get started in 2 minutes.](https://docs.helicone.ai/gateway/overview)
-- 🔌 **Quick integration**: One-line of code to log all your requests from [OpenAI](https://www.helicone.ai/models?providers=openai), [Anthropic](https://www.helicone.ai/models?providers=anthropic), [LangChain](https://docs.helicone.ai/gateway/integrations/langchain), [Gemini](https://www.helicone.ai/models?providers=gemini%2Cgoogle-ai-studio), [Vercel AI SDK](https://docs.helicone.ai/gateway/integrations/vercel-ai-sdk), and [more](https://docs.helicone.ai/gateway/overview).
-- 📊 **Observe**: Inspect and debug traces & [sessions](https://docs.helicone.ai/features/sessions) for agents, chatbots, document processing pipelines, and more
-- 📈 **Analyze**: Track metrics like [cost](https://docs.helicone.ai/faq/how-we-calculate-cost#developer), latency, quality, and more. Export to [PostHog](https://docs.helicone.ai/getting-started/integration-method/posthog) in one-line for custom dashboards
-- 🎮 **Playground**: Rapidly test and iterate on prompts, sessions and traces in our UI.
-- 🧠 **Prompt Management**: [Version prompts](https://docs.helicone.ai/features/prompts) using production data. Deploy prompts through the AI Gateway without code changes. Your prompts remain under your control, always accessible.
-- 🎛️ **Fine-tune**: Fine-tune with one of our fine-tuning partners: [OpenPipe](https://openpipe.ai/) or [Autonomi](https://www.autonomi.ai/) (more coming soon)
-- 🛡️ **Enterprise Ready**: SOC 2 and GDPR compliant
+all-in-one 镜像内包含以下服务：
 
-> 🎁 Generous monthly [free tier](https://www.helicone.ai/pricing) (10k requests/month) - No credit card required!
->
-<img src="https://github.com/user-attachments/assets/e16332e9-d642-427e-b3ce-1a74a17f7b2c" alt="Open Sourced LLM Observability & AI Gateway Platform" width="600">
+| 服务 | 默认端口 | 作用 |
+|------|----------|------|
+| Web | 3000 | 管理界面 |
+| Jawn | 8585 | REST API、Gateway 代理、日志写入 |
+| Postgres | 5432（容器内） | 账号、组织、API Key |
+| ClickHouse | 8123（容器内） | 请求指标与查询 |
+| MinIO | 9080 | 请求/响应 body 对象存储 |
 
-## Quick Start ⚡️
-
-1. Get your API key by signing up [here](https://helicone.ai/signup) and add credits at [helicone.ai/credits](https://us.helicone.ai/credits)
-
-2. Update the `baseURL` in your code and add your API key.
-
-   ```typescript
-   import OpenAI from "openai";
-
-   const client = new OpenAI({
-     baseURL: "https://ai-gateway.helicone.ai",
-     apiKey: process.env.HELICONE_API_KEY,
-   });
-
-   const response = await client.chat.completions.create({
-     model: "gpt-4o-mini",  // claude-sonnet-4, gemini-2.0-flash or any model from https://www.helicone.ai/models
-     messages: [{ role: "user", content: "Hello!" }]
-   });
-   ```
-
-3. 🎉 You're all set! View your logs at [Helicone](https://us.helicone.ai/dashboard) and access 100+ models through one API.
-
-### Self-Hosting Open Source LLM Observability
-
-#### Docker
-
-Helicone is simple to self-host and update. To get started locally, just use our [docker-compose](https://docs.helicone.ai/getting-started/self-deploy-docker) file.
+Gateway 请求走 Jawn，例如：
 
 ```bash
-# Clone the repository
-git clone https://github.com/Helicone/helicone.git
-cd docker
-cp .env.example .env
-
-# Start the services
-./helicone-compose.sh helicone up
+curl -sS 'http://localhost:8585/v1/gateway/oai/v1/chat/completions' \
+  -H 'Content-Type: application/json' \
+  -H "Authorization: Bearer ${OPENAI_API_KEY}" \
+  -H "Helicone-Auth: Bearer ${HELICONE_API_KEY}" \
+  -d '{"model":"gpt-4o-mini","messages":[{"role":"user","content":"Hello"}]}'
 ```
 
-#### Helm
+## 自托管部署
 
-For Enterprise workloads, we also have a production-ready Helm chart available. To access, contact us at enterprise@helicone.ai.
+### 构建 all-in-one 镜像
 
-#### Manual (Not Recommended)
+在 `code/` 目录下：
 
-Manual deployment is not recommended. Please use Docker or Helm. If you must, follow the instructions [here](https://docs.helicone.ai/getting-started/self-deploy).
+```bash
+docker build -t helicone-all-in-one .
+```
 
-#### Architecture
+### 运行
 
-Helicone is comprised of five services:
+```bash
+docker run -d --name helicone \
+  -p 3000:3000 \
+  -p 8585:8585 \
+  -p 9080:9080 \
+  -e BETTER_AUTH_SECRET="$(openssl rand -base64 32)" \
+  helicone-all-in-one
+```
 
-- **Web**: Frontend Platform (NextJS)
-- **Worker**: Proxy Logging (Cloudflare Workers)
-- **Jawn**: Dedicated Server for serving collecting logs (Express + Tsoa)
-- **Supabase**: Application Database and Auth
-- **ClickHouse**: Analytics Database
-- **Minio**: Object Storage for logs.
+生产环境还需设置 `NEXT_PUBLIC_HELICONE_JAWN_SERVICE`、`S3_ENDPOINT` 等为浏览器可访问的公网或局域网地址。
+详见仓库根目录的 `README.md`（若使用外层 `docker compose` 与 `./data/` 持久化）。
 
-## Integrations 🔌
+### 分服务 compose（本地开发）
 
-### Inference Providers
+```bash
+cd docker
+cp .env.example .env
+docker compose up
+```
 
-| Integration                                                                            | Supports                                                                                                                                     | Description                                           |
-| -------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------- |
-| AI Gateway                                | [JS/TS, Python, cURL](https://docs.helicone.ai/gateway/overview)                                                                                                                          | Unified API for 100+ providers with intelligent routing, automatic fallbacks, and unified observability
-| Async Logging (OpenLLMetry)                                                            | [JS/TS](https://docs.helicone.ai/getting-started/integration-method/openllmetry), [Python](https://www.npmjs.com/package/@helicone/helicone) | Asynchronous logging for multiple LLM platforms       |
-| OpenAI                                                                                 | [JS/TS, Python](https://www.helicone.ai/models?providers=openai)              | Inference provider                                                     |
-| Azure OpenAI                                                                           | [JS/TS, Python](https://www.helicone.ai/models?providers=azure)                | Inference provider                                                     |
-| Anthropic                                                                              | [JS/TS, Python](https://www.helicone.ai/models?search=anthropic)        | Inference provider                                                     |
-| Ollama                                                                                 | [JS/TS](https://docs.helicone.ai/integrations/ollama/javascript)                                                                             | Run and use large language models locally             |
-| AWS Bedrock                                                                            | [JS/TS](https://www.helicone.ai/models?providers=azure%2Cbedrock)                                                                            | Inference provider                                                     |
-| Gemini API                                                                             | [JS/TS](https://www.helicone.ai/models?providers=google-ai-studio)                                                                         | Inference provider                                                     |
-| Gemini Vertex AI                                                                       | [JS/TS](https://www.helicone.ai/models?providers=vertex)                                                                      | Gemini models on Google Cloud's Vertex AI             |
-| Vercel AI                                                                              | [JS/TS](https://docs.helicone.ai/gateway/integrations/vercel-ai-sdk)                                                                           | AI SDK for building AI-powered applications           |
-| Anyscale | [JS/TS, Python](https://www.helicone.ai/models?providers=anyscale)                                                                                                                                | Inference provider                                                     |
-| TogetherAI | [JS/TS, Python](https://www.helicone.ai/models?providers=together)     | Inference provider                                                                                                                                | -                                                     |
-| Hyperbolic | [JS/TS, Python](https://www.helicone.ai/models?providers=hyperbolic)   | Inference provider                                                                                                                                | High-performance AI inference platform                |
-| Groq                                                                                   | [JS/TS, Python](https://www.helicone.ai/models?providers=groq)                  | High-performance models                               |
-| DeepInfra     | [JS/TS, Python](https://www.helicone.ai/models?providers=deepinfra)                                                                                                                                | Serverless AI inference for various models            |       |
-| Fireworks AI  | [JS/TS, Python](https://www.helicone.ai/models?providers=fireworks)                                                                                                                                | Fast inference API for open-source LLMs               |
+更多说明见 [`docker/README.md`](docker/README.md)。
 
-### Frameworks
+## 本地开发（源码调试）
 
-| Framework                                                             | Supports                                                            | Description                                                                             |
-| --------------------------------------------------------------------- | ------------------------------------------------------------------- | --------------------------------------------------------------------------------------- |
-| LangChain   | [JS/TS, Python](https://www.helicone.ai/models?providers=langchain)                                                       | Use AI Gateway with LangChain for unified provider access                               |
-| LlamaIndex | [Python](https://www.helicone.ai/models?providers=llamaindex)                                                              | Framework for building LLM-powered data applications                                    |
-| LangGraph   | [Python](https://www.helicone.ai/models?providers=langgraph)                                                              | Build stateful, multi-actor applications with LLMs                                       |
-| Vercel AI SDK | [JS/TS](https://www.helicone.ai/models?providers=vercel-ai-sdk)                                                               | AI SDK for building AI-powered applications                                              |
-| Semantic Kernel | [C#, Python](https://www.helicone.ai/models?providers=semantic-kernel)                                                          | Microsoft's AI orchestration framework                                                  |
-| CrewAI         | [Python](https://docs.helicone.ai/integrations/openai/crewai)                                                                   | Framework for orchestrating role-playing AI agents                                      |                                                           |
-| ModelFusion                            | [JS/TS](https://github.com/vercel/modelfusion/blob/main/docs/integration/observability/helicone.md) | Abstraction layer for integrating AI models into JavaScript and TypeScript applications |
-| PostHog | [JS/TS, Python, cURL](https://docs.helicone.ai/getting-started/integration-method/posthog) | Product analytics platform. Build custom dashboards.    |
-| RAGAS                     | [Python](https://docs.helicone.ai/other-integrations/ragas) | Evaluation framework for retrieval-augmented generation |
-| Open WebUI           | [JS/TS](https://docs.helicone.ai/other-integrations/open-webui) | Web interface for interacting with local LLMs           |
-| MetaGPT                | [YAML](https://docs.helicone.ai/other-integrations/meta-gpt) | Multi-agent framework                                   |
-| Open Devin           | [Docker](https://docs.helicone.ai/other-integrations/open-devin) | AI software engineer                                    |
-| Mem0 EmbedChain      | [Python](https://docs.helicone.ai/other-integrations/embedchain) | Framework for building RAG applications                 |
-| Dify                      | [No code required](https://docs.helicone.ai/other-integrations/dify) | LLMOps platform for AI-native application development   |
+需要 Node.js 20+ 与 Yarn。
 
-> This list may be out of date. Don't see your provider or framework? Check out the latest integrations in our [docs](https://docs.helicone.ai/gateway/integrations/overview). If not found there, request a new integration by contacting help@helicone.ai.
+1. 安装依赖：
 
-## Contributing
+```bash
+yarn install
+```
 
-We ❤️ our contributors! We warmly welcome contributions for documentation, integrations, costs, and feature requests.
+2. 启动基础设施（Postgres、ClickHouse、MinIO）：
 
-If you have an idea for how Helicone can be better, create a [GitHub issue](https://github.com/Helicone/helicone/issues).
+```bash
+cd docker && docker compose up -d db clickhouse minio minio-setup
+```
 
-## License
+3. 分别启动后端与前端：
 
-Helicone is licensed under the [Apache v2.0 License](LICENSE).
+```bash
+# 终端 1：Jawn
+cp valhalla/jawn/.env.example valhalla/jawn/.env
+cd valhalla/jawn && yarn dev
 
-## Additional Resources
+# 终端 2：Web
+cp web/.env.example.better-auth web/.env.better-auth
+cd web && yarn dev:local
+```
 
-- **LLM Cost API**: We have the largest open-source API pricing database with 300+ models and providers such as OpenAI, Anthropic and more. [Start querying here.](https://www.helicone.ai/llm-cost)
+4. 打开 http://localhost:3000/signup 注册账号。
 
-- **Data Management**: Manage and export your Helicone data with our [API](https://docs.helicone.ai/rest/user/post-v1userquery) or access it with our [MCP server](https://docs.helicone.ai/integrations/tools/mcp).
+自托管环境通常没有邮件服务，需在 Postgres 中手动将 `emailVerified` 设为 `true`。
 
-  - Guides: [ETL](https://docs.helicone.ai/use-cases/etl), [Request Exporting](https://docs.helicone.ai/use-cases/getting-user-requests)
+## 常用命令
 
-- **Data Ownership**: Learn about [Data Ownership and Autonomy](https://docs.helicone.ai/use-cases/data-autonomy)
+```bash
+yarn build:web          # 构建前端
+yarn workspace helicone run lint   # 前端 lint
+```
 
-For more information, visit our [documentation](https://docs.helicone.ai/).
+从 Supabase schema 重新生成 TypeScript 类型：
 
-# Contributors
+```bash
+./genSupabaseTypes.sh
+```
 
-<a href="https://github.com/Helicone/helicone/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=Helicone/helicone" />
-</a>
+## 许可证
+
+基于 Apache License 2.0，详见 [`LICENSE`](LICENSE)。

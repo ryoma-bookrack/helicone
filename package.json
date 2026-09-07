@@ -2,11 +2,9 @@
   "name": "helicone-monorepo",
   "private": true,
   "workspaces": [
-    "bifrost",
     "web",
     "packages/*",
     "valhalla/jawn",
-    "worker",
     "e2e"
   ],
   "engines": {
@@ -15,8 +13,8 @@
   "scripts": {
     "build:web": "yarn workspace helicone build",
     "prepare": "husky",
-    "lint": "sh -c 's=0; yarn -s workspace helicone run lint || s=1; yarn -s workspace bifrost run lint || s=1; exit $s'",
-    "lint:fix": "sh -c 's=0; yarn -s workspace helicone run lint-fix || s=1; yarn -s workspace bifrost run lint-fix || s=1; exit $s'"
+    "lint": "yarn workspace helicone run lint",
+    "lint:fix": "yarn workspace helicone run lint-fix"
   },
   "version": "0.1.0",
   "resolutions": {

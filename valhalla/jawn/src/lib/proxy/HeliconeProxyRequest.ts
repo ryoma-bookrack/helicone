@@ -1,6 +1,5 @@
 import { TemplateWithInputs } from "@helicone/prompts/dist/objectParser";
 import { IHeliconeHeaders } from "../../../../../shared/proxy/heliconeHeaders";
-import { approvedDomains } from "@helicone-package/cost/providers/mappings";
 import { Provider } from "@helicone-package/llm-mapper/types";
 
 import { parseJSXObject } from "@helicone/prompts";
@@ -140,13 +139,6 @@ export class HeliconeProxyRequestMapper {
     return await this.request.getText();
   }
 
-  private validateApiConfiguration(api_base: string | undefined): boolean {
-    return (
-      api_base === undefined ||
-      approvedDomains.some((domain) => domain.test(api_base))
-    );
-  }
-
   private getApiBase(): Result<string, string> {
     if (this.request.baseURLOverride) {
       return ok(this.request.baseURLOverride);
@@ -155,15 +147,7 @@ export class HeliconeProxyRequestMapper {
       this.request.heliconeHeaders.openaiBaseUrl ??
       this.request.heliconeHeaders.targetBaseUrl;
 
-    if (api_base && !this.validateApiConfiguration(api_base)) {
-      // return new Response(`Invalid API base "${api_base}"`, {
-      return {
-        data: null,
-        error: `Invalid API base "${api_base}"`,
-      };
-    }
-
-    // this is kind of legacy stuff. the correct way to add providers is to add it to `modifyEnvBasedOnPath` (04/28/2024)
+    // Self-host: allow any Target-URL / OpenAI-Api-Base (no approvedDomains whitelist)
     if (api_base) {
       return { data: api_base, error: null };
     } else if (

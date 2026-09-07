@@ -1,6 +1,6 @@
 /**
  * Pricing tier definitions for Helicone's usage-based billing
- * Used by: web/, bifrost/, and billing calculations
+ * Used by: web/ and billing calculations
  */
 
 export interface GBPricingTier {
