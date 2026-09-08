@@ -26,7 +26,6 @@ const BreadcrumbSeparator = () => (
 
 export const STEP_ROUTES: Record<OnboardingStep, string> = {
   ORGANIZATION: "/onboarding",
-  BILLING: "/onboarding/billing",
   REQUEST: "/onboarding/request",
 };
 

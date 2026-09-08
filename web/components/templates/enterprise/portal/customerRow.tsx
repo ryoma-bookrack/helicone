@@ -6,7 +6,7 @@ import { Fragment, useState } from "react";
 import { clsx } from "../../../shared/clsx";
 import { useGetOrgMembers } from "../../../../services/hooks/organizations";
 import { formatISO } from "date-fns";
-import { useRequestsOverTime } from "../../organization/plan/renderOrgPlan";
+import { useRequestsOverTime } from "@/services/hooks/useRequestsOverTime";
 import { useOrg } from "../../../layout/org/organizationContext";
 import { useRouter } from "next/router";
 import { OrgLimits } from "../../organization/createOrgForm";

@@ -1,0 +1,99 @@
+# Helicone all-in-one immutable runtime base (no app source or migrations).
+# Publish: harbor.ryoma.local/base/helicone-runtime:<tag>
+#
+# Tag format: <clickhouse>-<node>-flyway<flyway>-<revision>
+# Example:    24.3.13.40-20.19.4-flyway10.5.0-1
+
+ARG NODE_VERSION=20.19.4
+FROM node:${NODE_VERSION}-bookworm-slim AS node
+
+FROM clickhouse/clickhouse-server:24.3.13.40
+
+COPY --from=node /usr/local/bin/node /usr/local/bin/node
+COPY --from=node /usr/local/bin/npm /usr/local/bin/npm
+COPY --from=node /usr/local/bin/npx /usr/local/bin/npx
+COPY --from=node /usr/local/lib/node_modules /usr/local/lib/node_modules
+RUN ln -sf /usr/local/lib/node_modules/npm/bin/npm-cli.js /usr/local/bin/npm \
+    && ln -sf /usr/local/lib/node_modules/npm/bin/npx-cli.js /usr/local/bin/npx \
+    && npm install -g yarn@1.22.22 \
+    && node -v && yarn -v
+
+RUN apt-get update && apt-get install -y \
+    postgresql-common \
+    python3.11 \
+    python3.11-dev \
+    python3-pip \
+    openjdk-17-jre-headless \
+    wget \
+    unzip \
+    curl \
+    ca-certificates \
+    supervisor \
+    && /usr/share/postgresql-common/pgdg/apt.postgresql.org.sh -y \
+    && apt-get install -y \
+    postgresql-17 \
+    postgresql-client-17 \
+    postgresql-contrib-17 \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN wget -q -O flyway.tar.gz \
+    https://repo1.maven.org/maven2/org/flywaydb/flyway-commandline/10.5.0/flyway-commandline-10.5.0.tar.gz \
+    && mkdir -p /opt/flyway \
+    && tar -xzf flyway.tar.gz -C /opt/flyway --strip-components=1 \
+    && rm flyway.tar.gz \
+    && ln -sf /opt/flyway/flyway /usr/local/bin/flyway \
+    && flyway -v
+
+RUN pip3 install --no-cache-dir requests clickhouse-driver tabulate yarl
+
+ARG TARGETARCH
+RUN set -eu; \
+    ARCH="${TARGETARCH:-amd64}"; \
+    ARCH_DIR="linux-${ARCH}"; \
+    MINIO_URL="https://dl.min.io/server/minio/release/${ARCH_DIR}/minio"; \
+    MC_URL="https://dl.min.io/client/mc/release/${ARCH_DIR}/mc"; \
+    ALT_MINIO_URL="https://dl.minio.org.cn/server/minio/release/${ARCH_DIR}/minio"; \
+    ALT_MC_URL="https://dl.minio.org.cn/client/mc/release/${ARCH_DIR}/mc"; \
+    (curl -fSL --retry 5 --retry-delay 3 -o /usr/local/bin/minio "$MINIO_URL" \
+      || curl -fSL --retry 5 --retry-delay 3 -o /usr/local/bin/minio "$ALT_MINIO_URL") \
+    && chmod +x /usr/local/bin/minio \
+    && (curl -fSL --retry 5 --retry-delay 3 -o /usr/local/bin/mc "$MC_URL" \
+      || curl -fSL --retry 5 --retry-delay 3 -o /usr/local/bin/mc "$ALT_MC_URL") \
+    && chmod +x /usr/local/bin/mc \
+    && minio --version >/dev/null 2>&1 \
+    && mc --version >/dev/null 2>&1
+
+RUN mkdir -p /var/log/supervisor /data /app
+
+ENV FLYWAY_URL=jdbc:postgresql://localhost:5432/helicone_test \
+    FLYWAY_USER=postgres \
+    FLYWAY_PASSWORD=password \
+    FLYWAY_LOCATIONS=filesystem:/app/supabase/migrations,filesystem:/app/supabase/migrations_without_supabase \
+    FLYWAY_SQL_MIGRATION_PREFIX= \
+    FLYWAY_SQL_MIGRATION_SEPARATOR=_ \
+    FLYWAY_SQL_MIGRATION_SUFFIXES=.sql \
+    POSTGRES_DB=helicone_test \
+    POSTGRES_USER=postgres \
+    POSTGRES_PASSWORD=password \
+    CLICKHOUSE_DEFAULT_USER=default \
+    CLICKHOUSE_HOST=http://localhost:8123 \
+    MINIO_ROOT_USER=minioadmin \
+    MINIO_ROOT_PASSWORD=minioadmin \
+    NEXT_PUBLIC_HELICONE_JAWN_SERVICE=http://localhost:8585 \
+    S3_ENDPOINT=http://localhost:9080 \
+    S3_ACCESS_KEY=minioadmin \
+    S3_SECRET_KEY=minioadmin \
+    S3_BUCKET_NAME=request-response-storage \
+    S3_PROMPT_BUCKET_NAME=prompt-body-storage \
+    BETTER_AUTH_SECRET=change-me-in-production
+
+ARG NODE_VERSION=20.19.4
+LABEL org.opencontainers.image.title="helicone-runtime" \
+      org.opencontainers.image.description="Immutable Helicone all-in-one runtime base" \
+      org.helicone.runtime.clickhouse="24.3.13.40" \
+      org.helicone.runtime.node="${NODE_VERSION}" \
+      org.helicone.runtime.flyway="10.5.0" \
+      org.helicone.runtime.postgresql="17"
+
+WORKDIR /app

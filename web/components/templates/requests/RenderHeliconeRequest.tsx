@@ -108,15 +108,10 @@ export function RenderMappedRequest({
               Request/Response Bodies Not Stored
             </h3>
             <p className="max-w-md text-sm text-muted-foreground">
-              This request exceeded your free tier limit of 10,000 requests per
-              month. Only metadata (status, latency, tokens, cost) was recorded.
+              Request and response bodies were not stored for this request.
+              Only metadata (status, latency, tokens, cost) was recorded.
             </p>
           </div>
-          <Link href="/settings/billing">
-            <Button variant="default" size="sm">
-              Upgrade to Pro
-            </Button>
-          </Link>
         </div>
       </div>
     );

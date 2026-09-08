@@ -2,7 +2,6 @@ import { useOrg } from "@/components/layout/org/organizationContext";
 import { cn } from "@/lib/utils";
 import {
   BuildingOfficeIcon,
-  CreditCardIcon,
   DocumentTextIcon,
   NoSymbolIcon,
   UsersIcon,
@@ -25,12 +24,6 @@ const ORGANIZATION_TABS = [
     title: "Members",
     icon: UsersIcon,
     href: "/settings/members",
-  },
-  {
-    id: "billing",
-    title: "Billing",
-    icon: CreditCardIcon,
-    href: "/settings/billing",
   },
   {
     id: "reports",

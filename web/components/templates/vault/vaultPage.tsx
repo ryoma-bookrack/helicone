@@ -1,8 +1,6 @@
 // pages/Vault.tsx
 import AuthHeader from "@/components/shared/authHeader";
-import { FeatureUpgradeCard } from "@/components/shared/helicone/FeatureUpgradeCard";
-import { InfoBox } from "@/components/ui/helicone/infoBox";
-import { KeyIcon } from "@heroicons/react/24/outline";
+import { KeyIcon } from "lucide-react";
 import { useState } from "react";
 import {
   DecryptedProviderKey,
@@ -87,31 +85,6 @@ const VaultPage = ({
     },
   ];
 
-  if (
-    org?.currentOrg?.tier !== "enterprise" &&
-    org?.currentOrg?.tier !== "pro-20240913" &&
-    org?.currentOrg?.tier !== "pro-20250202" &&
-    org?.currentOrg?.tier !== "pro-20251210" &&
-    org?.currentOrg?.tier !== "team-20250130" &&
-    org?.currentOrg?.tier !== "team-20251210"
-  ) {
-    return (
-      <div className="flex min-h-[calc(100vh-200px)] flex-col items-center space-y-8">
-        <InfoBox variant="warning" className="mb-4 max-w-xl">
-          Vault is only available for Pro and Enterprise plans. If you have any
-          issues, please contact us at support@helicone.ai.
-        </InfoBox>
-        <FeatureUpgradeCard
-          title="Unlock Vault"
-          headerTagline="The Free plan does not include the Vault feature, but getting access is easy."
-          featureName="Vault"
-          icon={
-            <KeyIcon className="h-8 w-8 text-gray-900 dark:text-gray-100" />
-          }
-        />
-      </div>
-    );
-  }
   return (
     <>
       <AuthHeader title={"Vault"} />

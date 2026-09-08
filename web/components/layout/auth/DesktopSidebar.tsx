@@ -1,4 +1,3 @@
-import { ProFeatureWrapper } from "@/components/shared/ProBlockerComponents/ProFeatureWrapper";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { cn } from "@/lib/utils";
@@ -9,12 +8,7 @@ import {
   ChevronLeftIcon,
   ChevronRightIcon,
 } from "@heroicons/react/24/outline";
-import {
-  Rocket,
-  Settings,
-  Coins,
-  AlertTriangle,
-} from "lucide-react";
+import { Rocket, Settings } from "lucide-react";
 import { useTheme } from "next-themes";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -24,8 +18,6 @@ import OrgDropdown from "../orgDropdown";
 import NavItem from "./NavItem";
 import { ChangelogItem } from "./types";
 import SidebarQuickstepCard from "../SidebarQuickstartCard";
-import { useCredits } from "@/services/hooks/useCredits";
-import { env } from "next-runtime-env";
 
 // Sidebar width constants
 const SIDEBAR_WIDTH_COLLAPSED = "w-12"; // 48px
@@ -43,7 +35,6 @@ export interface NavigationItem {
 interface SidebarProps {
   NAVIGATION: NavigationItem[];
   changelog: ChangelogItem[];
-  setOpen: (open: boolean) => void;
   sidebarRef: React.RefObject<HTMLDivElement>;
 }
 
@@ -53,12 +44,8 @@ const DesktopSidebar = ({
 }: SidebarProps) => {
   const orgContext = useOrg();
   const router = useRouter();
-  const isOnPrem = env("NEXT_PUBLIC_IS_ON_PREM") === "true";
   const onboardingStatus = orgContext?.currentOrg
     ?.onboarding_status as unknown as OnboardingState;
-
-  // Fetch credit balance - defaults to 0 if it fails (skipped on self-host)
-  const { data: creditData } = useCredits();
 
   const [isCollapsed, setIsCollapsed] = useLocalStorage(
     "isSideBarCollapsed",
@@ -110,39 +97,11 @@ const DesktopSidebar = ({
     });
   }, [NAVIGATION, isCollapsed, expandedItems]);
 
-  // Check if free tier limit is exceeded for the current month
-  const isFreeLimitExceeded = useMemo(() => {
-    const freeLimitMonth = orgContext?.currentOrg?.free_limit_exceeded;
-    if (!freeLimitMonth || orgContext?.currentOrg?.tier !== "free") {
-      return false;
-    }
-    const currentMonth = new Date().toISOString().slice(0, 7); // "YYYY-MM"
-    return freeLimitMonth === currentMonth;
-  }, [orgContext?.currentOrg?.free_limit_exceeded, orgContext?.currentOrg?.tier]);
-
   const navItemsRef = useRef<HTMLDivElement>(null);
-  const [canShowInfoBox, setCanShowInfoBox] = useState(false);
-
-  // Function to calculate if there's enough space to show the InfoBox
-  const calculateAvailableSpace = () => {
-    if (sidebarRef.current && navItemsRef.current) {
-      const sidebarHeight = sidebarRef.current.offsetHeight;
-      const navItemsHeight = navItemsRef.current.offsetHeight;
-      const fixedContentHeight = 100; // Approximate height of fixed elements (header, footer)
-      const infoBoxHeight = 150; // Approximate height of the InfoBox
-
-      const availableHeight =
-        sidebarHeight - navItemsHeight - fixedContentHeight;
-
-      setCanShowInfoBox(availableHeight >= infoBoxHeight);
-    }
-  };
 
   const { theme, setTheme } = useTheme();
 
   useEffect(() => {
-    calculateAvailableSpace();
-
     const handleKeyDown = (event: KeyboardEvent) => {
       if (
         event.key === "b" &&
@@ -163,13 +122,9 @@ const DesktopSidebar = ({
       `${sidebarWidth}px`,
     );
 
-    // Add event listeners
-    window.addEventListener("resize", calculateAvailableSpace);
     window.addEventListener("keydown", handleKeyDown);
 
-    // Remove event listeners on cleanup
     return () => {
-      window.removeEventListener("resize", calculateAvailableSpace);
       window.removeEventListener("keydown", handleKeyDown);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -268,32 +223,6 @@ const DesktopSidebar = ({
             >
               {/* Navigation items */}
               <div className="flex flex-col">
-                {/* Free Limit Warning - Show at top when exceeded */}
-                {isFreeLimitExceeded && !isCollapsed && (
-                    <div className="mx-2 mb-2 mt-2 rounded-lg border border-destructive/50 bg-destructive/10 p-3">
-                      <div className="flex items-center gap-2 text-destructive">
-                        <AlertTriangle size={16} />
-                        <span className="text-sm font-medium">
-                          Free limit reached
-                        </span>
-                      </div>
-                      <p className="mt-1 text-xs text-muted-foreground">
-                        Request/response bodies are no longer being stored.
-                        Upgrade to continue logging full data.
-                      </p>
-                      <Link href="/settings/billing">
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          className="mt-2 w-full"
-                        >
-                          Upgrade Now
-                        </Button>
-                      </Link>
-                    </div>
-                  )}
-
-                {/* Quickstart Card - Only show if organization hasn't integrated */}
                 {onboardingStatus?.hasCompletedQuickstart === false &&
                   !isCollapsed && <SidebarQuickstepCard />}
 
@@ -350,43 +279,6 @@ const DesktopSidebar = ({
                     )}
                   </nav>
                 </div>
-
-                {/* InfoBox */}
-                {canShowInfoBox &&
-                  orgContext?.currentOrg?.tier === "free" &&
-                  !isFreeLimitExceeded &&
-                  (isCollapsed ? (
-                    <div className="px-2 py-2">
-                      <ProFeatureWrapper featureName="pro" enabled={false}>
-                        <Button
-                          variant="action"
-                          size="icon"
-                          className="h-8 w-full bg-sky-500 text-white hover:bg-sky-600"
-                        >
-                          <Rocket className="h-4 w-4" />
-                        </Button>
-                      </ProFeatureWrapper>
-                    </div>
-                  ) : (
-                    <div className="mx-2 mb-4 mt-2 flex flex-col items-start justify-between gap-4 rounded border border-slate-200 bg-slate-50 px-3 py-2 font-medium text-slate-500 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-400 md:flex-row md:items-center md:justify-center md:gap-2">
-                      <div className="flex flex-col gap-2">
-                        <h1 className="text-start text-xs leading-[1.35rem] tracking-tight">
-                          Unlock more features with{" "}
-                          <span className="font-bold text-sky-500">Pro</span>.
-                          No usage limits, sessions, user analytics, custom
-                          properties and much more.
-                        </h1>
-                        <ProFeatureWrapper featureName="pro" enabled={false}>
-                          <Button
-                            variant="action"
-                            className="h-8 w-full bg-sky-500 text-xs text-white hover:bg-sky-600"
-                          >
-                            Start Pro Free Trial
-                          </Button>
-                        </ProFeatureWrapper>
-                      </div>
-                    </div>
-                  ))}
               </div>
             </ScrollArea>
 
@@ -397,49 +289,7 @@ const DesktopSidebar = ({
               )}
             >
               {orgContext?.currentOrg?.tier !== "demo" && (
-                <>
-                  {!isOnPrem ? (
-                    <Button
-                      variant="ghost"
-                      size="none"
-                      onClick={() => router.push("/credits")}
-                      className={cn(
-                        "flex items-center text-xs hover:bg-slate-100 hover:text-foreground dark:hover:bg-slate-800",
-                        isCollapsed
-                          ? "h-8 w-8 justify-center"
-                          : "h-8 w-full justify-start gap-2 px-3",
-                        router.pathname.includes("/credits")
-                          ? "bg-blue-100 text-blue-700 hover:bg-blue-100 dark:bg-blue-900/50 dark:text-blue-300 dark:hover:bg-blue-900/50"
-                          : "text-muted-foreground",
-                      )}
-                    >
-                      <Coins
-                        size={16}
-                        className={cn(
-                          router.pathname.includes("/credits")
-                            ? "text-blue-700 dark:text-blue-300"
-                            : "text-muted-foreground",
-                        )}
-                      />
-                      {!isCollapsed && (
-                        <span className="flex flex-1 items-center justify-between">
-                          <span>Credits</span>
-                          <span
-                            className={cn(
-                              "text-xs",
-                              router.pathname.includes("/credits")
-                                ? "text-blue-700 dark:text-blue-300"
-                                : "text-muted-foreground",
-                            )}
-                          >
-                            ${(creditData?.balance ?? 0).toFixed(2)}
-                          </span>
-                        </span>
-                      )}
-                    </Button>
-                  ) : null}
-
-                  <Button
+                <Button
                     variant="ghost"
                     size="none"
                     onClick={() => router.push("/settings")}
@@ -463,7 +313,6 @@ const DesktopSidebar = ({
                     />
                     {!isCollapsed && <span>Configure</span>}
                   </Button>
-                </>
               )}
             </div>
           </div>

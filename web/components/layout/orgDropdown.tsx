@@ -10,7 +10,6 @@ import {
 import { Switch } from "@/components/ui/switch";
 import { cn } from "@/lib/utils";
 import { useHeliconeAuthClient } from "@/packages/common/auth/client/AuthClientFactory";
-import { getTierDisplayInfo } from "@/utils/pricingConfigs";
 import { Cog6ToothIcon } from "@heroicons/react/24/outline";
 import { LogOutIcon } from "lucide-react";
 import { useTheme } from "next-themes";
@@ -24,21 +23,16 @@ import {
   ORGANIZATION_COLORS,
   ORGANIZATION_ICONS,
 } from "../templates/organization/orgConstants";
-import { UpgradeProDialog } from "../templates/organization/plan/upgradeProDialog";
 import { useOrg } from "./org/organizationContext";
 import OrgMoreDropdown from "./orgMoreDropdown";
 
-interface OrgDropdownProps {}
-
-export default function OrgDropdown({}: OrgDropdownProps) {
+export default function OrgDropdown() {
   const orgContext = useOrg();
-
   const [createOpen, setCreateOpen] = useState(false);
   const [addOpen, setAddOpen] = useState(false);
   const router = useRouter();
   const heliconeAuthClient = useHeliconeAuthClient();
   const { setTheme, theme } = useTheme();
-
   const org = useOrg();
 
   const { ownedOrgs, memberOrgs, customerOrgs } = useMemo(() => {
@@ -77,26 +71,12 @@ export default function OrgDropdown({}: OrgDropdownProps) {
     [orgContext?.currentOrg?.color],
   );
 
-  const createNewOrgHandler = useCallback(() => {
-    setCreateOpen(true);
-  }, []);
-
-  const handleThemeChange = useCallback(() => {
-    setTheme(theme === "dark" ? "light" : "dark");
-  }, [theme, setTheme]);
-
   const handleSignOut = useCallback(() => {
     heliconeAuthClient.signOut().then(() => {
       router.push("/");
     });
   }, [heliconeAuthClient, router]);
 
-  // Get tier display info from the centralized config
-  const tierDisplayInfo = useMemo(() => {
-    return getTierDisplayInfo(orgContext?.currentOrg?.tier);
-  }, [orgContext?.currentOrg?.tier]);
-
-  const [upgradeOpen, setUpgradeOpen] = useState(false);
   return (
     <>
       <DropdownMenu modal={false}>
@@ -131,7 +111,7 @@ export default function OrgDropdown({}: OrgDropdownProps) {
               ownedOrgs={ownedOrgs}
               memberOrgs={memberOrgs}
               customerOrgs={customerOrgs}
-              createNewOrgHandler={createNewOrgHandler}
+              createNewOrgHandler={() => setCreateOpen(true)}
               currentOrgId={orgContext?.currentOrg?.id}
               setCurrentOrg={orgContext?.setCurrentOrg}
             />
@@ -139,25 +119,9 @@ export default function OrgDropdown({}: OrgDropdownProps) {
             {orgContext?.currentOrg?.tier !== "demo" && (
               <DropdownMenuItem
                 className="cursor-pointer text-xs"
-                onClick={() => {
-                  if (orgContext?.currentOrg?.tier === "free") {
-                    setUpgradeOpen(true);
-                  } else {
-                    setAddOpen(true);
-                  }
-                }}
+                onClick={() => setAddOpen(true)}
               >
                 Invite members
-              </DropdownMenuItem>
-            )}
-            {orgContext?.currentOrg?.tier !== "demo" && (
-              <DropdownMenuItem asChild className="cursor-pointer text-xs">
-                <Link href="/settings/billing" className="flex flex-row gap-2">
-                  <span>Billing</span>
-                  <span className={tierDisplayInfo.className}>
-                    {tierDisplayInfo.text}
-                  </span>
-                </Link>
               </DropdownMenuItem>
             )}
           </DropdownMenuGroup>
@@ -172,7 +136,9 @@ export default function OrgDropdown({}: OrgDropdownProps) {
                 <span>Dark mode</span>
                 <Switch
                   checked={theme === "dark"}
-                  onCheckedChange={handleThemeChange}
+                  onCheckedChange={() =>
+                    setTheme(theme === "dark" ? "light" : "dark")
+                  }
                   size="md"
                 />
               </div>
@@ -213,11 +179,6 @@ export default function OrgDropdown({}: OrgDropdownProps) {
         orgOwnerId={org?.currentOrg?.owner || ""}
         open={addOpen}
         setOpen={setAddOpen}
-      />
-      <UpgradeProDialog
-        open={upgradeOpen}
-        onOpenChange={setUpgradeOpen}
-        featureName="invite"
       />
     </>
   );

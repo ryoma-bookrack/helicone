@@ -9,6 +9,7 @@ import {
 } from "@anthropic-ai/sdk/resources/messages";
 import { DEMO_EMAIL } from "../../../../lib/constants";
 import { Result } from "@/packages/common/result";
+import { getJawnServiceUrl } from "@/lib/jawnUrl";
 
 export interface ChatParams {
   content: string | Array<TextBlockParam | ImageBlockParam>;
@@ -44,8 +45,10 @@ export default async function handler(
       (await getAnthropicKeyFromAdmin()) || process.env.ANTHROPIC_API_KEY;
   }
 
+  const jawnBase = getJawnServiceUrl();
+
   const anthropic = new Anthropic({
-    baseURL: "https://anthropic.helicone.ai/",
+    baseURL: `${jawnBase}/v1/gateway/anthropic/`,
     apiKey: anthropicAPIKey,
     defaultHeaders: {
       "Helicone-Auth": `Bearer ${process.env.TEST_HELICONE_API_KEY}`,

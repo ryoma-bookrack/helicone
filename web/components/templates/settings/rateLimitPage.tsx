@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useOrgPlanPage } from "../organization/plan/useOrgPlanPage";
+import { useOrgPlanPage } from "@/services/hooks/useOrgPlanPage";
 import {
   addMonths,
   endOfMonth,

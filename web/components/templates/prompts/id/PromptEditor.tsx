@@ -13,7 +13,6 @@ import CustomScrollbar, {
   CustomScrollbarRef,
 } from "@/components/shared/universal/Scrollbar";
 import VersionSelector from "@/components/shared/universal/VersionSelector";
-import { UpgradeProDialog } from "@/components/templates/organization/plan/upgradeProDialog";
 import { Button } from "@/components/ui/button";
 import { Drawer, DrawerContent, DrawerTrigger } from "@/components/ui/drawer";
 import {
@@ -160,7 +159,6 @@ export default function PromptEditor({
   const { createPrompt, isCreating: isCreatingPrompt } = useCreatePrompt();
 
   // FREE TIER LIMITS
-  const [upgradeDialogOpen, setUpgradeDialogOpen] = useState(false);
   const {
     playgroundRunCount,
     promptRunCount,
@@ -653,12 +651,10 @@ export default function PromptEditor({
     // Check limits based on mode
     if (editorMode === "fromPlayground") {
       if (!withinPlaygroundRunsLimit) {
-        setUpgradeDialogOpen(true);
         return;
       }
     } else {
       if (!withinPrompRunsLimit) {
-        setUpgradeDialogOpen(true);
         return;
       }
     }
@@ -927,7 +923,6 @@ export default function PromptEditor({
     if (!state) return;
 
     if (!withinPromptsLimit) {
-      setUpgradeDialogOpen(true);
       return;
     }
 
@@ -1516,20 +1511,6 @@ export default function PromptEditor({
           </ResizablePanelGroup>
         </ResizablePanel>
       </ResizablePanelGroup>
-
-      {/* Helicone Upgrade Dialog */}
-      <UpgradeProDialog
-        open={upgradeDialogOpen}
-        onOpenChange={setUpgradeDialogOpen}
-        featureName={editorMode === "fromPlayground" ? "Playground" : "Prompts"}
-        limitMessage={
-          !withinPromptsLimit
-            ? promptsLimitUpgradeMessage
-            : editorMode === "fromPlayground" && !withinPlaygroundRunsLimit
-              ? playgroundRunsUpgradeMessage
-              : promptRunsUpgradeMessage
-        }
-      />
 
       {/* Auto-improve Popup */}
       {promptId && !!state.version && (

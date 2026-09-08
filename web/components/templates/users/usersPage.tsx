@@ -15,7 +15,6 @@ import {
   SortLeafRequest,
 } from "../../../services/lib/sorts/requests/sorts";
 import ThemedTable from "../../shared/themed/table/themedTable";
-import { UpgradeProDialog } from "../organization/plan/upgradeProDialog";
 import { INITIAL_COLUMNS } from "./initialColumns";
 import { UserMetrics } from "./UserMetrics";
 import { Small } from "@/components/ui/typography";
@@ -114,7 +113,6 @@ const UsersPageV2 = (props: UsersPageV2Props) => {
     sortProp.sortDirection ?? "desc",
   );
   const [sortKey, setSortKey] = useQueryParam("sortKey", "last_active");
-  const [upgradeDialogOpen, setUpgradeDialogOpen] = useState(false);
   const [currentTab, setCurrentTab] = useLocalStorage<
     (typeof TABS)[number]["id"]
   >("user-details-tab", "users");
@@ -224,17 +222,6 @@ const UsersPageV2 = (props: UsersPageV2Props) => {
   const handleRowSelect = (row: UserMetric) => {
     if (hasAccess) {
       router.push(`/users/${encodeURIComponent(row.user_id)}`);
-      return;
-    }
-
-    const userIndex =
-      userMetrics.data?.users?.findIndex(
-        (u: { user_id: string }) => u.user_id === row.user_id,
-      ) ?? 0;
-    const isPremiumUser = userIndex >= freeLimit;
-
-    if (isPremiumUser) {
-      setUpgradeDialogOpen(true);
       return;
     }
 
@@ -359,12 +346,6 @@ const UsersPageV2 = (props: UsersPageV2Props) => {
         </TabsContent>
       </Tabs>
 
-      <UpgradeProDialog
-        open={upgradeDialogOpen}
-        onOpenChange={setUpgradeDialogOpen}
-        featureName="Users"
-        limitMessage={upgradeMessage}
-      />
     </main>
   );
 };

@@ -1,6 +1,6 @@
 import * as React from "react";
 import { CalendarIcon } from "@heroicons/react/20/solid";
-import { addDays, format, addHours, differenceInDays } from "date-fns";
+import { addDays, format, addHours } from "date-fns";
 import { DateRange } from "react-day-picker";
 
 import { cn } from "@/lib/utils";
@@ -18,8 +18,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useProFeature } from "@/hooks/useProFeature";
-import { UpgradeProDialog } from "@/components/templates/organization/plan/upgradeProDialog";
 import { useEffect, useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Alert, AlertDescription } from "@/components/ui/alert";
@@ -50,9 +48,7 @@ export function ThemedTimeFilterShadCN({
   onClearTimeFilter,
 }: ThemedTimeFilterShadCNProps) {
   const [date, setDate] = useState<DateRange | undefined>(undefined);
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isInvertedRange, setIsInvertedRange] = useState(false);
-  const { hasAccess } = useProFeature("time_filter");
 
   useEffect(() => {
     setDate(
@@ -109,16 +105,6 @@ export function ThemedTimeFilterShadCN({
     if (newDate?.from && newDate?.to) {
       // Check if range is inverted but allow it
       setIsInvertedRange(newDate.from > newDate.to);
-
-      const daysDifference = differenceInDays(
-        newDate.from > newDate.to ? newDate.from : newDate.to,
-        newDate.from > newDate.to ? newDate.to : newDate.from,
-      );
-
-      if (daysDifference > 31 && !hasAccess) {
-        setIsDialogOpen(true);
-        return;
-      }
 
       setDate(newDate);
       onDateChange(newDate);
@@ -456,11 +442,6 @@ export function ThemedTimeFilterShadCN({
           )}
         </PopoverContent>
       </Popover>
-      <UpgradeProDialog
-        open={isDialogOpen}
-        onOpenChange={setIsDialogOpen}
-        featureName="time_filter"
-      />
     </div>
   );
 }

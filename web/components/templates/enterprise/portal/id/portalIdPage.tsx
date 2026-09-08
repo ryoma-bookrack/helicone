@@ -16,7 +16,7 @@ import { DeleteOrgModal } from "../../../organization/deleteOrgModal";
 import EditCustomerOrgModal from "../editCustomerOrgModal";
 import HcBreadcrumb from "../../../../ui/hcBreadcrumb";
 import { formatISO } from "date-fns";
-import { useRequestsOverTime } from "../../../organization/plan/renderOrgPlan";
+import { useRequestsOverTime } from "@/services/hooks/useRequestsOverTime";
 import StyledAreaChart from "../../../dashboard/styledAreaChart";
 import {
   ORGANIZATION_COLORS,

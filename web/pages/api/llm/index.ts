@@ -5,20 +5,20 @@ import { getOpenAIKeyFromAdmin } from "@/lib/clients/settings";
 import OpenAI from "openai";
 import { zodResponseFormat } from "openai/helpers/zod";
 import { logger } from "@/lib/telemetry/logger";
+import { getJawnServiceUrl } from "@/lib/jawnUrl";
 
 // Cache for the OpenAI client to avoid recreating it on every request
 let openaiClient: OpenAI | null = null;
-let isOnPrem = false;
 
-// Function to get or create the OpenAI client
 async function getOpenAIClient(
   orgId: string,
   userEmail: string,
 ): Promise<OpenAI> {
-  // Return cached client if available
   if (openaiClient) {
     return openaiClient;
   }
+
+  const jawnBase = getJawnServiceUrl();
 
   const result = await dbExecute<{
     id: string;
@@ -38,12 +38,8 @@ async function getOpenAIClient(
 
   // Create and cache the client
   openaiClient = new OpenAI({
-    baseURL: isOnPrem
-      ? "https://oai.helicone.ai/v1/"
-      : "https://openrouter.helicone.ai/api/v1/",
-    apiKey: process.env.NEXT_PUBLIC_IS_ON_PREM
-      ? await getOpenAIKeyFromAdmin()
-      : result.data?.[0]?.decrypted_provider_key || "",
+    baseURL: `${jawnBase}/v1/gateway/oai/v1/`,
+    apiKey: await getOpenAIKeyFromAdmin(),
     defaultHeaders: {
       "Helicone-Auth": `Bearer ${process.env.TEST_HELICONE_API_KEY || ""}`,
       "Helicone-User-Id": orgId,
@@ -135,13 +131,7 @@ async function handler({ req, res, userData }: HandlerWrapperOptions<any>) {
 
     const response = await openai.chat.completions.create(
       {
-        provider: isOnPrem
-          ? undefined
-          : {
-              sort: "throughput",
-              order: ["Fireworks"],
-            },
-        model: isOnPrem ? params.model.split("/")[1] : params.model,
+        model: params.model.split("/")[1] ?? params.model,
         messages: params.messages,
         temperature: params.temperature,
         max_tokens: params.maxTokens,

@@ -5,14 +5,11 @@ import { OnboardingHeader } from "@/components/onboarding/OnboardingHeader";
 import { OrganizationStep } from "@/components/onboarding/Steps/OrganizationStep";
 import { MembersStep } from "@/components/onboarding/Steps/MembersStep";
 import useNotification from "@/components/shared/notification/useNotification";
-import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { H1, Muted } from "@/components/ui/typography";
-import { getJawnClient } from "@/lib/clients/jawn";
 import { useOrgOnboarding } from "@/services/hooks/useOrgOnboarding";
 import { useAddOrgMemberMutation } from "@/services/hooks/organizations";
-import { useQuery } from "@tanstack/react-query";
-import { Info, Loader2 } from "lucide-react";
+import { Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
@@ -27,7 +24,6 @@ export default function OnboardingPage() {
     draftMembers,
     setDraftMembers,
     updateCurrentStep,
-    updateOnboardingStatus,
     saveOrganizationName,
   } = useOrgOnboarding(org?.currentOrg?.id ?? "");
 
@@ -37,26 +33,8 @@ export default function OnboardingPage() {
 
   useEffect(() => {
     updateCurrentStep("ORGANIZATION");
-    // Self-host: no Google Ads conversion tracking
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  const subscription = useQuery({
-    queryKey: ["subscription", org?.currentOrg?.id],
-    queryFn: async () => {
-      const jawn = getJawnClient();
-      const subscription = await jawn.GET("/v1/stripe/subscription");
-      return subscription;
-    },
-    enabled: !!org?.currentOrg?.id,
-    refetchOnMount: true,
-    refetchOnWindowFocus: true,
-  });
-
-  const isSubscribed =
-    subscription.data?.data?.status === "active" ||
-    subscription.data?.data?.status === "trialing" ||
-    subscription.data?.data?.status === "incomplete";
 
   const sendMemberInvitations = async () => {
     if (draftMembers.length === 0)
@@ -113,7 +91,6 @@ export default function OnboardingPage() {
   const handleCreateOrganization = async () => {
     if (!draftName) return;
 
-    // Save the organization name WITHOUT clearing the draft
     await saveOrganizationName();
 
     setNotification(
@@ -123,12 +100,10 @@ export default function OnboardingPage() {
       "success",
     );
 
-    // Show members section
     setHasCreatedOrg(true);
   };
 
   const handleContinue = async () => {
-    // Send member invitations if any
     if (draftMembers.length > 0) {
       const result = await sendMemberInvitations();
 
@@ -154,11 +129,10 @@ export default function OnboardingPage() {
       }
     }
 
-    // Navigate to quickstart
     router.push("/quickstart");
   };
 
-  if (subscription.isLoading || isLoading) {
+  if (isLoading) {
     return (
       <div className="flex min-h-dvh w-full flex-col items-center">
         <OnboardingHeader />
@@ -177,24 +151,10 @@ export default function OnboardingPage() {
         <div className="flex flex-col gap-4">
           <div className="flex flex-col gap-2">
             <H1>Welcome to Helicone! 👋</H1>
-            <Muted>
-              {isSubscribed
-                ? "Update your organization name below."
-                : "Glad to have you here. Create your first organization."}
-            </Muted>
+            <Muted>Glad to have you here. Create your first organization.</Muted>
           </div>
 
           <OrganizationStep />
-
-          {isSubscribed && (
-            <Alert className="border-[hsl(var(--border))] bg-[hsl(var(--muted))]">
-              <Info size={16} />
-              <AlertDescription className="text-[hsl(var(--muted-foreground))]">
-                Already subscribed! You can update your organization name here.
-                Visit settings for plan or member changes.
-              </AlertDescription>
-            </Alert>
-          )}
 
           {hasCreatedOrg && (
             <>

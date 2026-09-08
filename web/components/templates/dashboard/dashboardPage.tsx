@@ -45,7 +45,6 @@ import {
   MetricsPanel,
   MetricsPanelProps,
 } from "../../shared/metrics/metricsPanel";
-import UpgradeProModal from "../../shared/upgradeProModal";
 import { formatLargeNumber } from "../../shared/utils/numberFormat";
 import useSearchParams from "../../shared/utils/useSearchParams";
 import UnauthorizedView from "../requests/UnauthorizedView";
@@ -133,8 +132,6 @@ const DashboardPage = (props: DashboardPageProps) => {
     })(),
   );
   const [timeFilter, setTimeFilter] = useState<TimeFilter>(getTimeFilter());
-
-  const [open, setOpen] = useState(false);
 
   const timeIncrement = useMemo(
     () => getTimeInterval(timeFilter),
@@ -1298,7 +1295,6 @@ const DashboardPage = (props: DashboardPageProps) => {
               setOpen={setOpenSuggestGraph}
             />
 
-            <UpgradeProModal open={open} setOpen={setOpen} />
           </div>
         )}
       </div>

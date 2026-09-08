@@ -1,8 +1,8 @@
 import { UseQueryResult } from "@tanstack/react-query";
 import { Result, resultMap } from "@/packages/common/result";
-import { TimeIncrement } from "../../../../lib/timeCalculations/fetchTimeData";
-import { RateLimitOverTime } from "../../../../pages/api/metrics/RateLimitOverTime";
-import { useBackendMetricCall } from "../../../../services/hooks/useBackendFunction";
+import { TimeIncrement } from "@/lib/timeCalculations/fetchTimeData";
+import { RateLimitOverTime } from "@/pages/api/metrics/RateLimitOverTime";
+import { useBackendMetricCall } from "@/services/hooks/useBackendFunction";
 import { FilterNode } from "@helicone-package/filters/filterDefs";
 
 export interface RateLimitPageData {

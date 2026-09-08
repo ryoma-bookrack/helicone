@@ -56,7 +56,6 @@ export const universalTools = [
               "/settings/api-keys",
               "/settings/alerts",
               "/settings/reports",
-              "/settings/billing",
               "/settings/members",
               "/settings/providers",
               "/settings/ai-gateway",

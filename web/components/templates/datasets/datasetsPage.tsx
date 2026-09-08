@@ -3,10 +3,7 @@ import { useGetHeliconeDatasets } from "../../../services/hooks/dataset/helicone
 import AuthHeader from "../../shared/authHeader";
 import { SimpleTable } from "../../shared/table/simpleTable";
 import { EmptyStateCard } from "@/components/shared/helicone/EmptyStateCard";
-import { useFeatureLimit } from "@/hooks/useFreeTierLimit";
 import React, { useState } from "react";
-import { UpgradeProDialog } from "../../templates/organization/plan/upgradeProDialog";
-import { FreeTierLimitBanner } from "@/components/shared/FreeTierLimitBanner";
 import { SortDirection } from "@/services/lib/sorts/requests/sorts";
 import { Trash } from "lucide-react";
 import {
@@ -60,12 +57,6 @@ const DatasetsPage = (props: DatasetsPageProps) => {
   // For delete functionality
   const jawnClient = useJawnClient();
   const { setNotification } = useNotification();
-
-  const [upgradeDialogOpen, setUpgradeDialogOpen] = useState(false);
-  const { canCreate, freeLimit, upgradeMessage } = useFeatureLimit(
-    "datasets",
-    datasets?.length || 0,
-  );
 
   const router = useRouter();
 
@@ -184,14 +175,6 @@ const DatasetsPage = (props: DatasetsPageProps) => {
         <>
           <AuthHeader title={"Datasets"} />
 
-          {!canCreate && (
-            <FreeTierLimitBanner
-              feature="datasets"
-              itemCount={datasets.length}
-              freeLimit={freeLimit}
-            />
-          )}
-
           <SimpleTable
             data={datasets || []}
             columns={columns}
@@ -228,13 +211,6 @@ const DatasetsPage = (props: DatasetsPageProps) => {
               </DialogFooter>
             </DialogContent>
           </Dialog>
-
-          <UpgradeProDialog
-            open={upgradeDialogOpen}
-            onOpenChange={setUpgradeDialogOpen}
-            featureName="Datasets"
-            limitMessage={upgradeMessage}
-          />
         </>
       )}
     </>

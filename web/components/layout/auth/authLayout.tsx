@@ -15,7 +15,6 @@ import { Rocket } from "lucide-react";
 import { useRouter } from "next/router";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useChangelog } from "../../../services/hooks/admin";
-import UpgradeProModal from "../../shared/upgradeProModal";
 import { Row } from "../common";
 import { useOrg } from "../org/organizationContext";
 import MetaData from "../public/authMetaData";
@@ -32,9 +31,7 @@ const AuthLayout = (props: AuthLayoutProps) => {
   const router = useRouter();
   const { pathname } = router;
 
-  const [open, setOpen] = useState(false);
   const [chatWindowOpen, setChatWindowOpen] = useState(false);
-  const [bannerDismissed, setBannerDismissed] = useState(false);
   const agentChatPanelRef = useRef<any>(null);
 
   const auth = useHeliconeAuthClient();
@@ -106,34 +103,6 @@ const AuthLayout = (props: AuthLayoutProps) => {
       } as BannerType;
     }
 
-    // Gateway discount banner for eligible orgs
-    const isEligibleForDiscount =
-      orgContext?.currentOrg?.gateway_discount_enabled === true;
-    const gatewayBannerDismissed =
-      bannerDismissed ||
-      (typeof window !== "undefined" &&
-        sessionStorage.getItem("gateway-discount-banner-dismissed") === "true");
-
-    if (isEligibleForDiscount && !gatewayBannerDismissed) {
-      return {
-        message: "Save 10-20% on your inference costs for 6 months",
-        title: "Limited Offer: Switch to Helicone AI Gateway",
-        active: true,
-        onClick: () => {
-          window.open(
-            "https://cal.com/cole-gottdank/inference-discount",
-            "_blank",
-            "noopener,noreferrer",
-          );
-        },
-        dismissible: true,
-        onDismiss: () => {
-          sessionStorage.setItem("gateway-discount-banner-dismissed", "true");
-          setBannerDismissed(true);
-        },
-      } as BannerType;
-    }
-
     if (orgContext?.currentOrg?.tier === "demo") {
       return {
         message: (
@@ -155,7 +124,7 @@ const AuthLayout = (props: AuthLayoutProps) => {
       } as BannerType;
     }
     return null;
-  }, [alertBanners?.data, orgContext, router, bannerDismissed]);
+  }, [alertBanners?.data, orgContext, router]);
 
   const { changelog } = useChangelog();
 
@@ -191,7 +160,6 @@ const AuthLayout = (props: AuthLayoutProps) => {
                       }))
                     : []
                 }
-                setOpen={setOpen}
               />
             </div>
 
@@ -237,9 +205,6 @@ const AuthLayout = (props: AuthLayoutProps) => {
             </div>
           </Row>
         </div>
-
-        <UpgradeProModal open={open} setOpen={setOpen} />
-        {/* <AcceptTermsModal /> */}
       </MetaData>
     </HeliconeAgentProvider>
   );

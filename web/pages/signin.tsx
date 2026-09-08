@@ -1,17 +1,12 @@
 import LoadingAnimation from "@/components/shared/loadingAnimation";
 import { useHeliconeAuthClient } from "@/packages/common/auth/client/AuthClientFactory";
-import { GetServerSidePropsContext } from "next";
-import { env } from "next-runtime-env";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import PublicMetaData from "../components/layout/public/publicMetaData";
 import useNotification from "../components/shared/notification/useNotification";
 import AuthForm from "../components/templates/auth/authForm";
-import { AuthBrandingPanel } from "../components/templates/auth/AuthBrandingPanel";
 import { Result } from "@/packages/common/result";
 import { logger } from "@/lib/telemetry/logger";
-import Link from "next/link";
-import Image from "next/image";
 
 const SignIn = ({
   customerPortal,
@@ -32,12 +27,8 @@ const SignIn = ({
   const { unauthorized } = router.query;
   const [refreshed, setRefreshed] = useState(false);
   const [redirectCount, setRedirectCount] = useState(0);
-  // Self-host: skip Mintlify "signups disabled" gate; go straight to the form.
-  const isOnPrem = env("NEXT_PUBLIC_IS_ON_PREM") === "true";
-  const [showSignIn, setShowSignIn] = useState(isOnPrem);
 
   useEffect(() => {
-    // Prevent infinite loops by limiting redirects
     if (redirectCount >= 3) {
       logger.error(
         {
@@ -56,7 +47,6 @@ const SignIn = ({
       heliconeAuthClient.user?.id
     ) {
       if (!refreshed) {
-        // FIX: Clear the unauthorized parameter when redirecting to prevent infinite loop
         const { unauthorized: _, ...cleanQuery } = router.query;
         router
           .push({
@@ -69,7 +59,6 @@ const SignIn = ({
             setRedirectCount((prev) => prev + 1);
           });
       } else {
-        // If already refreshed, redirect to dashboard
         const { unauthorized: _, ...cleanQuery } = router.query;
         router.push({
           pathname: "/dashboard",
@@ -81,7 +70,7 @@ const SignIn = ({
       const { pi_session, unauthorized: _, ...restQuery } = router.query;
       router.push({
         pathname: pi_session ? "/pi/onboarding" : "/dashboard",
-        query: restQuery, // FIX: Don't include unauthorized in the query
+        query: restQuery,
       });
     }
   }, [
@@ -95,10 +84,8 @@ const SignIn = ({
 
   return (
     <PublicMetaData
-      description={
-        "How developers build AI applications. Get observability, tooling, fine-tuning, and evaluations out of the box."
-      }
-      ogImageUrl={"https://www.helicone.ai/static/helicone-og.webp"}
+      description="Helicone self-hosted observability dashboard."
+      ogImageUrl="/static/logo.svg"
     >
       <div>
         {heliconeAuthClient.user?.id ? (
@@ -106,173 +93,29 @@ const SignIn = ({
             <LoadingAnimation />
             <h1 className="text-4xl font-semibold">Getting your dashboard</h1>
           </div>
-        ) : showSignIn ? (
+        ) : (
           <AuthForm
             handleEmailSubmit={async (email: string, password: string) => {
               const { error } = await heliconeAuthClient.signInWithPassword({
-                email: email,
-                password: password,
+                email,
+                password,
               });
 
               if (error) {
                 setNotification(error, "error");
-                logger.error(
-                  {
-                    error,
-                    email,
-                  },
-                  "Email sign in failed",
-                );
+                logger.error({ error, email }, "Email sign in failed");
                 return;
               }
               setNotification("Success. Redirecting...", "success");
               router.push("/dashboard");
             }}
-            handleGoogleSubmit={async () => {
-              const { error } = await heliconeAuthClient.signInWithOAuth({
-                provider: "google",
-              });
-              if (error) {
-                setNotification("Error logging in. Please try again.", "error");
-                logger.error(
-                  {
-                    error,
-                  },
-                  "Google OAuth sign in failed",
-                );
-                return;
-              }
-              setNotification("Successfully signed in.", "success");
-            }}
-            handleGithubSubmit={async () => {
-              const { error } = await heliconeAuthClient.signInWithOAuth({
-                provider: "github",
-              });
-              if (error) {
-                setNotification("Error logging in. Please try again.", "error");
-                logger.error(
-                  {
-                    error,
-                  },
-                  "GitHub OAuth sign in failed",
-                );
-                return;
-              }
-              setNotification("Successfully signed in.", "success");
-            }}
-            showSSOButton={true}
-            authFormType={"signin"}
+            authFormType="signin"
             customerPortalContent={customerPortalContent}
           />
-        ) : (
-          <div className="flex h-screen w-full">
-            <AuthBrandingPanel />
-
-            <div className="flex w-full flex-col items-center justify-center bg-white p-6 md:w-1/2 md:p-12">
-              <div className="w-full max-w-md">
-                <div className="mb-8 flex justify-center md:hidden">
-                  <Link href="https://www.helicone.ai/" className="flex">
-                    <Image
-                      src={"/static/logo.svg"}
-                      alt="Helicone"
-                      height={80}
-                      width={80}
-                      priority={true}
-                    />
-                  </Link>
-                </div>
-
-                <div className="flex flex-col items-center text-center gap-6">
-                  <div className="flex flex-col gap-3">
-                    <h2 className="text-2xl font-semibold text-gray-900">
-                      {isOnPrem
-                        ? "Helicone (self-hosted)"
-                        : "🚀 Helicone has joined Mintlify"}
-                    </h2>
-                    <p className="text-sm text-gray-600">
-                      {isOnPrem ? (
-                        "Sign in with an existing account, or create a new one."
-                      ) : (
-                        <>
-                          New signups are disabled.{" "}
-                          <Link
-                            href="https://www.helicone.ai/blog/joining-mintlify"
-                            className="text-sky-500 hover:text-sky-700"
-                          >
-                            Learn more about what&apos;s next →
-                          </Link>
-                        </>
-                      )}
-                    </p>
-                  </div>
-
-                  <div className="flex w-full max-w-xs flex-col gap-3">
-                    <button
-                      onClick={() => setShowSignIn(true)}
-                      className="flex items-center justify-center gap-2 rounded-md bg-sky-500 px-6 py-2.5 text-sm font-medium text-white shadow-sm hover:bg-sky-600 transition-colors"
-                    >
-                      🔑 Existing user? Sign in
-                    </button>
-                    {isOnPrem ? (
-                      <Link
-                        href="/secret-signup"
-                        className="flex items-center justify-center gap-2 rounded-md border border-gray-300 bg-white px-6 py-2.5 text-sm font-medium text-gray-900 shadow-sm hover:bg-gray-50 transition-colors"
-                      >
-                        Create account
-                      </Link>
-                    ) : null}
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
         )}
       </div>
     </PublicMetaData>
   );
-};
-
-export const getServerSideProps = async (
-  context: GetServerSidePropsContext,
-) => {
-  if (env("NEXT_PUBLIC_IS_ON_PREM") === "true") {
-    return {
-      props: {},
-    };
-  }
-
-  // if the base path contains localhost or contains vercel, do nothing
-  if (
-    context.req.headers.host?.includes("localhost") ||
-    context.req.headers.host?.includes("vercel")
-  ) {
-    return {
-      props: {},
-    };
-  }
-
-  // if the base path contains us or eu in the basepath, do nothing
-  if (
-    context.req.headers.host?.includes("us") ||
-    context.req.headers.host?.includes("eu")
-  ) {
-    return {
-      props: {},
-    };
-  }
-
-  // default to the configured app URL signin if no other conditions are met
-  const appUrl =
-    process.env.NEXT_PUBLIC_APP_URL ||
-    (process.env.NODE_ENV === "development"
-      ? "http://localhost:3000"
-      : "https://us.helicone.ai");
-  return {
-    redirect: {
-      destination: `${appUrl}/signin`,
-      permanent: true,
-    },
-  };
 };
 
 export default SignIn;

@@ -55,39 +55,6 @@ const SecretSignUp = () => {
           setNotification("Account created. Redirecting...", "success");
           router.push("/welcome");
         }}
-        handleGoogleSubmit={async () => {
-          const { error } = await heliconeAuthClient.signInWithOAuth({
-            provider: "google",
-            options: {
-              redirectTo: `${origin}/onboarding`,
-            },
-          });
-          if (error) {
-            setNotification(
-              "Error creating your account. Please try again.",
-              "error",
-            );
-            logger.error({ error }, "Google OAuth sign up failed");
-            return;
-          }
-        }}
-        handleGithubSubmit={async () => {
-          const { error } = await heliconeAuthClient.signInWithOAuth({
-            provider: "github",
-            options: {
-              redirectTo: `${origin}/onboarding`,
-            },
-          });
-          if (error) {
-            setNotification(
-              "Error creating your account. Please try again.",
-              "error",
-            );
-            logger.error({ error }, "GitHub OAuth sign up failed");
-            return;
-          }
-        }}
-        showSSOButton={true}
         authFormType={"signup"}
       />
     </PublicMetaData>
