@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { ReactElement, useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import AuthLayout from "../../components/layout/auth/authLayout";
@@ -48,6 +49,9 @@ const PLACEHOLDER_EVALUATOR = {
 };
 
 const EvaluatorDetail = () => {
+  const { t } = useTranslation("evals");
+  const { t: tCommon } = useTranslation("common");
+
   const router = useRouter();
   const { id } = router.query;
   const { evaluators } = useEvaluators();
@@ -96,7 +100,7 @@ const EvaluatorDetail = () => {
 
   // Update mutation
   const updateEvaluator = useLLMEvaluatorSubmit(() => {
-    notification.setNotification("Evaluator updated successfully", "success");
+    notification.setNotification(t("ui.evaluatorUpdatedSuccessfully"), "success");
     evaluators.refetch();
   });
 
@@ -106,7 +110,7 @@ const EvaluatorDetail = () => {
       const evaluator = evaluators.data.data.data.find((e) => e.id === id);
 
       if (!evaluator) {
-        notification.setNotification("Evaluator not found", "error");
+        notification.setNotification(t("ui.evaluatorNotFound2"), "error");
         router.push("/evaluators");
         return;
       }
@@ -245,7 +249,7 @@ const EvaluatorDetail = () => {
         },
         "Error updating evaluator",
       );
-      notification.setNotification("Failed to update evaluator", "error");
+      notification.setNotification(t("ui.failedToUpdateEvaluator"), "error");
     }
   };
 
@@ -300,7 +304,7 @@ const EvaluatorDetail = () => {
   return (
     <div>
       <AuthHeader
-        title="Edit Evaluator"
+        title={t("ui.editEvaluator")}
         breadcrumb={{
           title: "Evaluators",
           href: "/evaluators",
@@ -330,7 +334,7 @@ const EvaluatorDetail = () => {
                 }}
               >
                 <Play size={14} />
-                <span>Test Evaluator</span>
+                <span>{t("ui.testEvaluator")}</span>
               </Button>
 
               {hasOnlineEvaluators ? (
@@ -353,7 +357,7 @@ const EvaluatorDetail = () => {
                   }}
                 >
                   <Plus size={14} />
-                  <span>Add Online Evaluator</span>
+                  <span>{t("ui.addOnlineEvaluator")}</span>
                 </Button>
               )}
             </div>

@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { TimeFilter } from "@/types/timeFilter";
 import { AreaChart, MultiSelect, MultiSelectItem } from "@tremor/react";
 import { useSearchParams } from "next/navigation";
@@ -33,6 +34,9 @@ const PromptMetricsTab = ({
   id,
   promptUserDefinedId,
 }: PromptMetricsTabProps) => {
+  const { t } = useTranslation("prompts");
+  const { t: tCommon } = useTranslation("common");
+
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -153,7 +157,7 @@ const PromptMetricsTab = ({
   return (
     <div className="flex flex-col space-y-16 px-4 py-4">
       <div className="flex h-full w-full flex-col space-y-4">
-        <h2 className="text-2xl font-semibold text-secondary">Usage Metrics</h2>
+        <h2 className="text-2xl font-semibold text-secondary">{t("ui.usageMetrics")}</h2>
         <div className="flex w-full items-center justify-between">
           <ThemedTimeFilter
             timeFilterOptions={[
@@ -174,7 +178,7 @@ const PromptMetricsTab = ({
 
         <div>
           <StyledAreaChart
-            title={"Total Requests"}
+            title={t("ui.totalRequests")}
             value={total}
             isDataOverTimeLoading={isPromptRequestsLoading}
             withAnimation={true}
@@ -200,14 +204,12 @@ const PromptMetricsTab = ({
         </div>
       </div>
       <div className="flex h-full w-full flex-col space-y-4">
-        <h2 className="text-2xl font-semibold text-secondary">
-          Experiment Logs
-        </h2>
+        <h2 className="text-2xl font-semibold text-secondary">{t("ui.experimentLogs")}</h2>
         <div className="flex w-full items-center justify-between">
           <div className="flex w-full flex-wrap items-center space-x-2">
             <div className="w-full max-w-[16rem]">
               <MultiSelect
-                placeholder="Dataset"
+                placeholder={t("ui.dataset")}
                 value={selectedDatasets}
                 onValueChange={(value) => {
                   setSelectedDatasets(value);
@@ -222,7 +224,7 @@ const PromptMetricsTab = ({
             </div>
             <div className="w-full max-w-[16rem]">
               <MultiSelect
-                placeholder="Model"
+                placeholder={t("ui.model")}
                 value={selectedModels}
                 onValueChange={(value) => {
                   setSelectedModels(value);
@@ -243,15 +245,13 @@ const PromptMetricsTab = ({
                   setSelectedDatasets([]);
                   setSelectedModels([]);
                 }}
-              >
-                Clear All
-              </Button>
+              >{t("ui.clearAll")}</Button>
             </div>
           </div>
         </div>
         {isExperimentsLoading ? (
           <div className="flex h-48 items-center justify-center">
-            <LoadingAnimation title="Loading Experiments..." />
+            <LoadingAnimation title={t("ui.loadingExperiments2")} />
           </div>
         ) : (
           <SimpleTable
@@ -259,7 +259,7 @@ const PromptMetricsTab = ({
             columns={[
               {
                 key: "id",
-                header: "ID",
+                header: t("ui.id"),
                 render: (item) => (
                   <span className="text-black underline dark:text-white">
                     {item.id}
@@ -268,31 +268,31 @@ const PromptMetricsTab = ({
               },
               {
                 key: "status",
-                header: "Status",
+                header: t("ui.status"),
                 render: (item) => (
                   <StatusBadge statusType={item.status || "unknown"} />
                 ),
               },
               {
                 key: "createdAt",
-                header: "Created At",
+                header: t("ui.createdAt"),
                 render: (item) => (
                   <span>{getUSDateFromString(item.createdAt)}</span>
                 ),
               },
               {
                 key: "datasetName",
-                header: "Dataset",
+                header: t("ui.dataset"),
                 render: (item) => item.datasetName,
               },
               {
                 key: "model",
-                header: "Model",
+                header: t("ui.model"),
                 render: (item) => <ModelPill model={item.model || "unknown"} />,
               },
               {
                 key: "runCount",
-                header: "Run Count",
+                header: t("ui.runCount"),
                 render: (item) => item.runCount || 0,
               },
             ]}

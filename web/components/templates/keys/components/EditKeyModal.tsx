@@ -2,6 +2,7 @@ import { useState, useEffect, useMemo } from "react";
 import { clsx } from "../../../shared/clsx";
 import ThemedModal from "../../../shared/themed/themedModal";
 import { useKeys } from "../useKeys";
+import { useTranslation } from "react-i18next";
 
 interface EditKeyModalProps {
   open: boolean;
@@ -10,6 +11,7 @@ interface EditKeyModalProps {
 }
 
 const EditKeyModal = ({ open, setOpen, selectedKey }: EditKeyModalProps) => {
+  const { t } = useTranslation(["keys", "common"]);
   const [editName, setEditName] = useState<string>("");
 
   const { editKey, keys } = useKeys();
@@ -30,11 +32,11 @@ const EditKeyModal = ({ open, setOpen, selectedKey }: EditKeyModalProps) => {
     <ThemedModal open={open} setOpen={setOpen}>
       <div className="flex w-[400px] flex-col gap-4">
         <p className="text-lg font-semibold text-gray-900 dark:text-gray-100">
-          Edit Helicone Key
+          {t("keys:modal.editTitle")}
         </p>
         <div className="w-full space-y-1.5 text-sm">
           <label htmlFor="api-key" className="text-gray-500">
-            Key Name
+            {t("keys:modal.keyName")}
           </label>
           <input
             type="text"
@@ -53,7 +55,7 @@ const EditKeyModal = ({ open, setOpen, selectedKey }: EditKeyModalProps) => {
             onClick={() => setOpen(false)}
             className="flex flex-row items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-semibold text-gray-900 shadow-sm hover:bg-gray-50 hover:text-gray-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-500 dark:border-gray-700 dark:bg-black dark:text-gray-100 dark:hover:bg-gray-900 dark:hover:text-gray-300"
           >
-            Cancel
+            {t("common:actions.cancel")}
           </button>
           <button
             onClick={async () => {
@@ -65,7 +67,7 @@ const EditKeyModal = ({ open, setOpen, selectedKey }: EditKeyModalProps) => {
             }}
             className="flex items-center rounded-md bg-black px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-gray-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white dark:bg-white dark:text-black dark:hover:bg-gray-200"
           >
-            Update
+            {t("keys:modal.update")}
           </button>
         </div>
       </div>

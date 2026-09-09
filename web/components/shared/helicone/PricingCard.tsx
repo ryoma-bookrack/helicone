@@ -1,4 +1,5 @@
 import { cn } from "@/lib/utils";
+import { useTranslation } from "react-i18next";
 
 interface PricingCardProps {
   title: string;
@@ -27,6 +28,8 @@ export const PricingCard = ({
   onClick,
   isLoading,
 }: PricingCardProps) => {
+  const { t } = useTranslation("common");
+
   const variants = {
     default: {
       container: "bg-[hsl(var(--sidebar-accent))]",
@@ -122,7 +125,7 @@ export const PricingCard = ({
         <div
           className={cn("text-xl font-semibold leading-normal", styles.title)}
         >
-          {isLoading ? "Loading..." : title}
+          {isLoading ? t("actions.loading") : title}
         </div>
         {iconSrc ? (
           <div className="relative h-6 w-6 overflow-hidden">
@@ -130,7 +133,7 @@ export const PricingCard = ({
             <img
               className="absolute left-0 top-0 h-5 w-5"
               src={iconSrc}
-              alt={`${title} icon`}
+              alt={t("aria.iconAlt", { title })}
             />
           </div>
         ) : (
@@ -152,10 +155,10 @@ export const PricingCard = ({
           <div className={cn("shrink-0 px-3", styles.badge)}>
             <div className="whitespace-nowrap text-center text-sm font-normal">
               {isBestValue
-                ? "BEST VALUE"
+                ? t("pricing.bestValue")
                 : isPopular
-                  ? "POPULAR"
-                  : "CURRENT PLAN"}
+                  ? t("pricing.popular")
+                  : t("pricing.currentPlan")}
             </div>
           </div>
         )}

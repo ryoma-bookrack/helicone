@@ -107,11 +107,38 @@ cd web && yarn dev:local
 
 自托管环境通常没有邮件服务，需在 Postgres 中手动将 `emailVerified` 设为 `true`。
 
+## 国际化 (i18n)
+
+前端使用 **react-i18next** + Next.js 内置 locale 路由，默认语言为**中文**。
+
+| 项目 | 说明 |
+|------|------|
+| 翻译文件 | `web/public/locales/{zh,en}/*.json`，按功能域分 namespace |
+| 默认路由 | 中文无前缀，如 `/dashboard` |
+| 英文路由 | 带 `/en` 前缀，如 `/en/dashboard` |
+| 语言切换 | 登录后点击左下角组织菜单中的语言开关；公开页在导航栏切换 |
+
+在组件中使用翻译：
+
+```tsx
+import { useTranslation } from "next-i18next";
+
+const { t } = useTranslation("requests");
+return <h1>{t("page.title")}</h1>;
+```
+
+新增文案时，在 `public/locales/zh/{namespace}.json` 与 `public/locales/en/{namespace}.json` 中同时添加语义化 key，然后运行：
+
+```bash
+yarn workspace helicone run check-i18n
+```
+
 ## 常用命令
 
 ```bash
 yarn build:web          # 构建前端
 yarn workspace helicone run lint   # 前端 lint
+yarn workspace helicone run check-i18n   # 校验翻译 key 完整性
 ```
 
 从 Supabase schema 重新生成 TypeScript 类型：

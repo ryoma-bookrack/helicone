@@ -1,3 +1,4 @@
+import { formatStandardDateTime } from "@/lib/i18n/format";
 import { useOrg } from "@/components/layout/org/organizationContext";
 import { EmptyStateCard } from "@/components/shared/helicone/EmptyStateCard";
 import {
@@ -18,6 +19,7 @@ import { BarChart } from "@tremor/react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { getTimeMap } from "../../../lib/timeCalculations/constants";
 import { useGetUnauthorized } from "../../../services/hooks/dashboard";
 import { TimeFilter } from "@helicone-package/filters/filterDefs";
@@ -68,10 +70,12 @@ type SelectedCachedRequest = {
   sourceRequest: HeliconeRequest;
 };
 
-const topRequestsColumns: ColumnDef<CacheRequest>[] = [
+const getTopRequestsColumns = (
+  t: ReturnType<typeof useTranslation<"cache">>["t"],
+): ColumnDef<CacheRequest>[] => [
   {
     accessorKey: "prompt",
-    header: "Request",
+    header: t("columns.request"),
     cell: (info) => (
       <div className="max-w-[300px] truncate font-medium text-gray-900 dark:text-gray-100">
         {info.getValue() as string}
@@ -81,13 +85,13 @@ const topRequestsColumns: ColumnDef<CacheRequest>[] = [
   },
   {
     accessorKey: "model",
-    header: "Model",
+    header: t("columns.model"),
     cell: (info) => <ModelPill model={info.getValue() as string} />,
     minSize: 150,
   },
   {
     accessorKey: "count",
-    header: "Cache Hits",
+    header: t("columns.cacheHits"),
     cell: (info) => (
       <span className="font-semibold">{info.getValue() as number}</span>
     ),
@@ -95,20 +99,20 @@ const topRequestsColumns: ColumnDef<CacheRequest>[] = [
   },
   {
     accessorKey: "first_used",
-    header: "First Used",
+    header: t("columns.firstUsed"),
     cell: (info) => (
       <span className="text-sm text-muted-foreground">
-        {new Date(info.getValue() as Date).toLocaleString()}
+        {formatStandardDateTime(info.getValue() as Date)}
       </span>
     ),
     minSize: 150,
   },
   {
     accessorKey: "last_used",
-    header: "Last Used",
+    header: t("columns.lastUsed"),
     cell: (info) => (
       <span className="text-sm text-muted-foreground">
-        {new Date(info.getValue() as Date).toLocaleString()}
+        {formatStandardDateTime(info.getValue() as Date)}
       </span>
     ),
     minSize: 150,
@@ -116,6 +120,8 @@ const topRequestsColumns: ColumnDef<CacheRequest>[] = [
 ];
 
 const CachePage = (props: CachePageProps) => {
+  const { t } = useTranslation("cache");
+  const topRequestsColumns = useMemo(() => getTopRequestsColumns(t), [t]);
   const { currentPage, pageSize, sort, defaultIndex = "0" } = props;
   const [timePeriod, setTimePeriod] = useState<number>(30);
   const [timeFilter, _] = useState<TimeFilter>({
@@ -222,21 +228,21 @@ const CachePage = (props: CachePageProps) => {
   const metrics = [
     {
       id: "caches",
-      label: "Total Cache Hits",
+      label: t("metrics.totalCacheHits"),
       value: `${chMetrics.totalCacheHits.data?.data ?? 0} hits`,
       isLoading: isAnyLoading,
       icon: CircleStackIcon,
     },
     {
       id: "savings",
-      label: "Cost Savings",
+      label: t("metrics.costSavings"),
       value: `$${formatNumber(chMetrics.totalSavings.data?.data ?? 0)}`,
       isLoading: isAnyLoading,
       icon: BanknotesIcon,
     },
     {
       id: "time-saved",
-      label: "Time Saved",
+      label: t("metrics.timeSaved"),
       value: formatTimeSaved(chMetrics.timeSaved.data?.data ?? 0),
       isLoading: isAnyLoading,
       icon: ClockIcon,
@@ -262,13 +268,13 @@ const CachePage = (props: CachePageProps) => {
         showFold={false}
         leftSection={
           <section className="flex flex-row items-center gap-4">
-            <div className="font-semibold">Cache</div>
+            <div className="font-semibold">{t("title")}</div>
             <Select
               value={timePeriod.toString()}
               onValueChange={(value) => setTimePeriod(Number(value))}
             >
               <SelectTrigger className="h-8 w-[160px] shadow-sm">
-                <SelectValue placeholder="Select time period" />
+                <SelectValue placeholder={t("selectTimePeriod")} />
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="3">Last 3 days</SelectItem>
@@ -428,7 +434,7 @@ const CachePage = (props: CachePageProps) => {
                     FilterAST.condition("cache_enabled", "is", true),
                   ),
                 );
-                filterStore.setActiveFilterName("Cache Enabled Requests");
+                filterStore.setActiveFilterName(t("cacheEnabledFilter"));
                 router.push("/requests");
               }}
             >
@@ -498,13 +504,13 @@ const CachePage = (props: CachePageProps) => {
               <div className="col-span-1 flex flex-col justify-between border-b border-gray-200 py-2 text-sm font-medium dark:border-gray-800">
                 <dt className="text-gray-500">First Used</dt>
                 <dd className="text-gray-900 dark:text-gray-100">
-                  {new Date(selectedRequest?.first_used || "").toLocaleString()}
+                  {formatStandardDateTime(selectedRequest?.first_used || "")}
                 </dd>
               </div>
               <div className="col-span-1 flex flex-col justify-between border-b border-gray-200 py-2 text-sm font-medium dark:border-gray-800">
                 <dt className="text-gray-500">Last Used</dt>
                 <dd className="text-gray-900 dark:text-gray-100">
-                  {new Date(selectedRequest?.last_used || "").toLocaleString()}
+                  {formatStandardDateTime(selectedRequest?.last_used || "")}
                 </dd>
               </div>
             </dl>

@@ -1,4 +1,5 @@
 import { Badge } from "@/components/ui/badge";
+import { useTranslation } from "react-i18next";
 
 interface StatusBadgeProps {
   statusType: string;
@@ -8,6 +9,7 @@ interface StatusBadgeProps {
 
 const StatusBadge = (props: StatusBadgeProps) => {
   const { statusType, errorCode } = props;
+  const { t } = useTranslation("requests");
 
   let colorClass: string;
 
@@ -17,7 +19,7 @@ const StatusBadge = (props: StatusBadgeProps) => {
         "bg-orange-50 dark:bg-orange-900 text-orange-700 dark:text-orange-300 ring-1 ring-inset ring-orange-600/20";
       return (
         <Badge variant="status" asPill={false} className={colorClass}>
-          Cached
+          {t("status.cached")}
         </Badge>
       );
     case "success":
@@ -26,7 +28,7 @@ const StatusBadge = (props: StatusBadgeProps) => {
         "bg-green-50 dark:bg-green-900 text-green-700 dark:text-green-300 ring-1 ring-inset ring-green-600/20";
       return (
         <Badge variant="status" asPill={false} className={colorClass}>
-          Success
+          {t("status.success")}
         </Badge>
       );
     case "pending":
@@ -35,7 +37,7 @@ const StatusBadge = (props: StatusBadgeProps) => {
         "bg-gray-50 dark:bg-gray-900 text-gray-700 dark:text-gray-300 ring-1 ring-inset ring-gray-600/20";
       return (
         <Badge variant="status" asPill={false} className={colorClass}>
-          Pending
+          {t("status.pending")}
         </Badge>
       );
     case "RUNNING":
@@ -43,7 +45,7 @@ const StatusBadge = (props: StatusBadgeProps) => {
         "bg-blue-200 dark:bg-gray-900 text-gray-700 dark:text-gray-300 ring-1 ring-inset ring-gray-600/20";
       return (
         <Badge variant="status" asPill={false} className={colorClass}>
-          Running
+          {t("status.running")}
         </Badge>
       );
 
@@ -53,7 +55,7 @@ const StatusBadge = (props: StatusBadgeProps) => {
           "bg-gray-50 dark:bg-gray-900 text-gray-700 dark:text-gray-300 ring-1 ring-inset ring-gray-600/20";
         return (
           <Badge variant="status" asPill={false} className={colorClass}>
-            Pending
+            {t("status.pending")}
           </Badge>
         );
       } else if (errorCode === -3) {
@@ -61,7 +63,7 @@ const StatusBadge = (props: StatusBadgeProps) => {
           "bg-orange-50 dark:bg-orange-900 text-orange-700 dark:text-orange-300 ring-1 ring-inset ring-orange-600/20";
         return (
           <Badge variant="status" asPill={false} className={colorClass}>
-            Cancelled
+            {t("status.cancelled")}
           </Badge>
         );
       } else if (errorCode === -1) {
@@ -69,7 +71,7 @@ const StatusBadge = (props: StatusBadgeProps) => {
           "bg-red-50 dark:bg-red-900 text-red-700 dark:text-red-300 ring-1 ring-inset ring-red-600/20";
         return (
           <Badge variant="status" asPill={false} className={colorClass}>
-            Timeout
+            {t("status.timeout")}
           </Badge>
         );
       } else if (errorCode === -4) {
@@ -77,7 +79,7 @@ const StatusBadge = (props: StatusBadgeProps) => {
           "bg-yellow-50 dark:bg-yellow-900 text-yellow-700 dark:text-yellow-300 ring-1 ring-inset ring-red-600/20";
         return (
           <Badge variant="status" asPill={false} className={colorClass}>
-            Threat
+            {t("status.threat")}
           </Badge>
         );
       } else {
@@ -85,7 +87,7 @@ const StatusBadge = (props: StatusBadgeProps) => {
           "bg-red-50 dark:bg-red-900 text-red-700 dark:text-red-300 ring-1 ring-inset ring-red-600/20";
         return (
           <Badge variant="status" asPill={false} className={colorClass}>
-            {`${errorCode} Error`}
+            {t("status.error", { code: errorCode })}
           </Badge>
         );
       }
@@ -94,7 +96,7 @@ const StatusBadge = (props: StatusBadgeProps) => {
         "bg-gray-50 dark:bg-gray-900 text-gray-700 dark:text-gray-300 ring-1 ring-inset ring-gray-600/20";
       return (
         <Badge variant="status" asPill={false} className={colorClass}>
-          Unknown
+          {t("status.unknown")}
         </Badge>
       );
   }

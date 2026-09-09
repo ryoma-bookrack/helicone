@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Link } from "lucide-react";
 import React from "react";
+import { useTranslation } from "react-i18next";
 import { useFilterAST } from "../context/filterContext";
 import useNotification from "@/components/shared/notification/useNotification";
 import { Row } from "@/components/layout/common/row";
@@ -8,6 +9,8 @@ import { Row } from "@/components/layout/common/row";
 interface SaveFilterButtonProps {}
 
 const SaveFilterButton: React.FC<SaveFilterButtonProps> = () => {
+  const { t } = useTranslation("filters");
+  const { t: tc } = useTranslation("common");
   const { crud, store: filterStore, helpers } = useFilterAST();
   const notification = useNotification();
 
@@ -15,7 +18,7 @@ const SaveFilterButton: React.FC<SaveFilterButtonProps> = () => {
     return (
       <Row className="gap-2">
         <div className="flex items-center rounded-md border border-slate-200 bg-slate-50 px-1.5 py-0.5 text-xs text-muted-foreground dark:border-slate-800 dark:bg-slate-900">
-          Saving...
+          {t("saving")}
         </div>
         <Button
           variant="outline"
@@ -25,7 +28,7 @@ const SaveFilterButton: React.FC<SaveFilterButtonProps> = () => {
           }}
           className="text-[10px] font-normal"
         >
-          Save New
+          {t("saveNew")}
         </Button>
       </Row>
     );
@@ -41,7 +44,7 @@ const SaveFilterButton: React.FC<SaveFilterButtonProps> = () => {
         }}
         className="text-[10px] font-normal"
       >
-        Save New
+        {t("saveNew")}
       </Button>
     );
   }
@@ -56,13 +59,13 @@ const SaveFilterButton: React.FC<SaveFilterButtonProps> = () => {
             if (filterStore.activeFilterId) {
               helpers.updateFilterById(filterStore.activeFilterId, {
                 filter: filterStore.filter,
-                name: filterStore.activeFilterName || "Untitled Filter",
+                name: filterStore.activeFilterName || t("untitledFilter"),
               });
             }
           }}
           className="text-[10px] font-normal"
         >
-          Save
+          {tc("actions.save")}
         </Button>
         <Button
           variant="outline"
@@ -72,7 +75,7 @@ const SaveFilterButton: React.FC<SaveFilterButtonProps> = () => {
           }}
           className="text-[10px] font-normal"
         >
-          Save New
+          {t("saveNew")}
         </Button>
       </Row>
     );
@@ -87,10 +90,7 @@ const SaveFilterButton: React.FC<SaveFilterButtonProps> = () => {
           const url = helpers.getShareableUrl();
           if (url) {
             navigator.clipboard.writeText(url);
-            notification.setNotification(
-              "Filter URL copied to clipboard",
-              "success",
-            );
+            notification.setNotification(t("notifications.urlCopied"), "success");
           }
         }}
       >
@@ -104,7 +104,7 @@ const SaveFilterButton: React.FC<SaveFilterButtonProps> = () => {
         }}
         className="text-[10px] font-normal"
       >
-        Save New
+        {t("saveNew")}
       </Button>
     </Row>
   );

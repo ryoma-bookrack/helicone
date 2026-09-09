@@ -10,6 +10,7 @@ import { H3, Muted, Small } from "@/components/ui/typography";
 import { formatCurrency as remoteFormatCurrency } from "@/lib/uiUtils";
 import { format } from "date-fns";
 import { Loader2 } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 const formatCurrency = (amount: number | undefined) => {
   if (amount === undefined) return "$0.00";
@@ -28,27 +29,28 @@ interface WalletAnalyticsChartsProps {
   error?: string | null;
 }
 
-const depositsChartConfig = {
-  amount: {
-    label: "Deposits",
-    color: "hsl(var(--chart-1))",
-  },
-} satisfies ChartConfig;
-
-const spendChartConfig = {
-  amount: {
-    label: "Spend",
-    color: "hsl(var(--chart-2))",
-  },
-} satisfies ChartConfig;
-
 export function WalletAnalyticsCharts({
   deposits,
   spend,
   isLoading = false,
   error = null,
 }: WalletAnalyticsChartsProps) {
-  // Format data for charts
+  const { t } = useTranslation("admin");
+
+  const depositsChartConfig = {
+    amount: {
+      label: t("walletAnalytics.depositsLabel"),
+      color: "hsl(var(--chart-1))",
+    },
+  } satisfies ChartConfig;
+
+  const spendChartConfig = {
+    amount: {
+      label: t("walletAnalytics.spendLabel"),
+      color: "hsl(var(--chart-2))",
+    },
+  } satisfies ChartConfig;
+
   const depositsData = deposits.map((d) => ({
     date: new Date(d.timestamp).getTime(),
     dateLabel: format(new Date(d.timestamp), "MMM d, ha"),
@@ -61,7 +63,6 @@ export function WalletAnalyticsCharts({
     amount: d.amount,
   }));
 
-  // Calculate totals
   const totalDeposits = deposits.reduce((sum, d) => sum + d.amount, 0);
   const totalSpend = spend.reduce((sum, d) => sum + d.amount, 0);
 
@@ -70,7 +71,7 @@ export function WalletAnalyticsCharts({
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
         <Card>
           <CardHeader>
-            <H3>Deposits Over Time</H3>
+            <H3>{t("walletAnalytics.depositsOverTime")}</H3>
           </CardHeader>
           <CardContent>
             <div className="flex h-[220px] items-center justify-center">
@@ -83,7 +84,7 @@ export function WalletAnalyticsCharts({
         </Card>
         <Card>
           <CardHeader>
-            <H3>Spend Over Time</H3>
+            <H3>{t("walletAnalytics.spendOverTime")}</H3>
           </CardHeader>
           <CardContent>
             <div className="flex h-[220px] items-center justify-center">
@@ -103,7 +104,7 @@ export function WalletAnalyticsCharts({
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
         <Card>
           <CardHeader>
-            <H3>Deposits Over Time</H3>
+            <H3>{t("walletAnalytics.depositsOverTime")}</H3>
           </CardHeader>
           <CardContent>
             <div className="flex h-[220px] items-center justify-center">
@@ -113,7 +114,7 @@ export function WalletAnalyticsCharts({
         </Card>
         <Card>
           <CardHeader>
-            <H3>Spend Over Time</H3>
+            <H3>{t("walletAnalytics.spendOverTime")}</H3>
           </CardHeader>
           <CardContent>
             <div className="flex h-[220px] items-center justify-center">
@@ -127,13 +128,12 @@ export function WalletAnalyticsCharts({
 
   return (
     <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-      {/* Deposits Chart */}
       <Card>
         <CardHeader>
           <div className="flex items-center justify-between">
-            <H3>Deposits Over Time</H3>
+            <H3>{t("walletAnalytics.depositsOverTime")}</H3>
             <div className="flex flex-col items-end">
-              <Muted>Total</Muted>
+              <Muted>{t("common.total")}</Muted>
               <span className="text-lg font-semibold">
                 {formatCurrency(totalDeposits)}
               </span>
@@ -144,7 +144,7 @@ export function WalletAnalyticsCharts({
           {depositsData.length === 0 ? (
             <div className="flex h-[220px] items-center justify-center">
               <Small className="text-muted-foreground">
-                No deposit data available
+                {t("walletAnalytics.noDepositData")}
               </Small>
             </div>
           ) : (
@@ -196,13 +196,12 @@ export function WalletAnalyticsCharts({
         </CardContent>
       </Card>
 
-      {/* Spend Chart */}
       <Card>
         <CardHeader>
           <div className="flex items-center justify-between">
-            <H3>Spend Over Time (ClickHouse)</H3>
+            <H3>{t("walletAnalytics.spendOverTimeClickhouse")}</H3>
             <div className="flex flex-col items-end">
-              <Muted>Total</Muted>
+              <Muted>{t("common.total")}</Muted>
               <span className="text-lg font-semibold">
                 {formatCurrency(totalSpend)}
               </span>
@@ -213,7 +212,7 @@ export function WalletAnalyticsCharts({
           {spendData.length === 0 ? (
             <div className="flex h-[220px] items-center justify-center">
               <Small className="text-muted-foreground">
-                No spend data available
+                {t("walletAnalytics.noSpendData")}
               </Small>
             </div>
           ) : (

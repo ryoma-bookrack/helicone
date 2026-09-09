@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { formatLargeNumber } from "../../../shared/utils/numberFormat";
 import { sortAndColorData } from "./utils";
 import { useExpandableBarList } from "./barListPanel";
@@ -11,6 +12,7 @@ interface ErrorsPanelProps {
 }
 
 const ErrorsPanel = (props: ErrorsPanelProps) => {
+  const { t } = useTranslation("dashboard");
   const { accumulatedStatusCounts, totalRequests } = props;
 
   const totalErrors = accumulatedStatusCounts.reduce(
@@ -36,8 +38,8 @@ const ErrorsPanel = (props: ErrorsPanelProps) => {
       const percentage = (value / totalErrors) * 100;
       return `${percentage.toFixed(1)}%`;
     },
-    modalTitle: "All Errors",
-    modalValueLabel: "Percentage",
+    modalTitle: t("panels.allErrors"),
+    modalValueLabel: t("panels.percentage"),
   });
 
   const errorPercentage = (totalErrors / totalRequests) * 100 || 0;
@@ -48,13 +50,15 @@ const ErrorsPanel = (props: ErrorsPanelProps) => {
         <div className="flex h-full flex-col">
           <div className="flex items-start justify-between">
             <div className="flex flex-col space-y-0.5">
-              <p className="text-sm text-muted-foreground">All Errors</p>
+              <p className="text-sm text-muted-foreground">{t("panels.allErrors")}</p>
               <div className="flex items-baseline gap-2">
                 <p className="text-xl font-semibold text-foreground">
                   {formatLargeNumber(totalErrors)}
                 </p>
                 <p className="text-xs text-muted-foreground">
-                  {errorPercentage.toFixed(2)}% of requests
+                  {t("panels.percentOfRequests", {
+                    value: errorPercentage.toFixed(2),
+                  })}
                 </p>
               </div>
             </div>
@@ -63,10 +67,10 @@ const ErrorsPanel = (props: ErrorsPanelProps) => {
           <div className="flex flex-grow flex-col overflow-hidden pt-4">
             <div className="flex flex-row items-center justify-between pb-2">
               <p className="text-xs font-semibold text-foreground">
-                Error Type
+                {t("panels.errorType")}
               </p>
               <p className="text-xs font-semibold text-foreground">
-                Percentage
+                {t("panels.percentage")}
               </p>
             </div>
             <div className="flex-grow overflow-y-auto">{barList}</div>

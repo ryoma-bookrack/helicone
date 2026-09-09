@@ -2,6 +2,7 @@ import React from "react";
 import { ChevronRight } from "lucide-react";
 import { Integration } from "./types";
 import { LOGOS } from "./connectionSVG";
+import { useTranslation } from "react-i18next";
 
 interface IntegrationRowProps {
   integration: Integration;
@@ -13,13 +14,14 @@ const IntegrationRow: React.FC<IntegrationRowProps> = ({
   integration,
   onIntegrationClick,
 }) => {
+  const { t } = useTranslation("connections");
   const Logo = LOGOS[integration.title as keyof typeof LOGOS];
 
   const getStatusText = () => {
-    if (!integration.configured) return "No configuration";
+    if (!integration.configured) return t("status.noConfiguration");
     return integration.enabled
-      ? "Configuration active"
-      : "Configuration - not active";
+      ? t("status.active")
+      : t("status.notActive");
   };
 
   const getStatusColor = () => {

@@ -13,6 +13,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Result } from "@/packages/common/result";
 
 interface ThemedTextDropDownProps {
@@ -32,6 +33,7 @@ export function ThemedTextDropDown(props: ThemedTextDropDownProps) {
     hideTabModes = false,
   } = props;
 
+  const { t } = useTranslation("common");
   const [query, setQuery] = useState("");
   const [tabMode, _setTabMode] = useState<"smart" | "raw">("smart");
   const [open, setOpen] = useState(false);
@@ -64,13 +66,13 @@ export function ThemedTextDropDown(props: ThemedTextDropDownProps) {
               className="w-full justify-between text-xs"
               size="md_sleek"
             >
-              {value || "Select or enter a value"}
+              {value || t("select.selectOrEnter")}
             </Button>
           </PopoverTrigger>
           <PopoverContent className="w-full p-0">
             <Command>
               <CommandInput
-                placeholder="Select or enter a value"
+                placeholder={t("select.selectOrEnter")}
                 value={query}
                 onValueChange={(value) => {
                   setQuery(value);
@@ -80,7 +82,7 @@ export function ThemedTextDropDown(props: ThemedTextDropDownProps) {
               />
               <CommandList>
                 {filteredOptions.length === 0 && (
-                  <CommandEmpty>No results found.</CommandEmpty>
+                  <CommandEmpty>{t("empty.noResults")}</CommandEmpty>
                 )}
                 <CommandGroup>
                   {filteredOptions.map((option, i) => (
@@ -106,7 +108,7 @@ export function ThemedTextDropDown(props: ThemedTextDropDownProps) {
             onChange(e.target.value);
           }}
           className="w-full rounded-md border border-gray-300 px-2 py-1 text-sm"
-          placeholder="Enter a value"
+          placeholder={t("form.enterValue")}
         />
       )}
     </div>

@@ -3,6 +3,7 @@ import { PromptVersionReference } from "@/types/prompt-state";
 import { formatDate } from "@/utils/date";
 import { toKebabCase } from "@/utils/strings";
 import { useCallback, useEffect, useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
 import {
   PiArrowCircleUpBold,
   PiCaretDownBold,
@@ -40,6 +41,7 @@ export default function VersionSelector({
   onIdEdit: onIdChange,
 }: VersionSelectorProps) {
   const { setNotification } = useNotification();
+  const { t } = useTranslation("common");
   const [isEditing, setIsEditing] = useState(false);
   const [editValue, setEditValue] = useState(id);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -120,7 +122,7 @@ export default function VersionSelector({
             onBlur={() => handleEditComplete(false)}
             autoFocus
             className="-ml-[calc(0.625rem-2px)] w-fit max-w-56 appearance-none rounded-full bg-white px-2.5 text-lg outline-none focus:border-transparent focus:ring-2 focus:ring-heliblue dark:bg-slate-950"
-            aria-label="Edit prompt id"
+            aria-label={t("prompts.versionSelector.editPromptId")}
           />
         ) : (
           <div className="flex flex-row items-center gap-2 [&:has(>div:nth-child(2):hover,>div:nth-child(3):hover)_h1]:text-heliblue">
@@ -129,7 +131,7 @@ export default function VersionSelector({
 
             {/* Copy Button */}
             <Tooltip
-              content="Copy Prompt ID"
+              content={t("prompts.versionSelector.copyPromptId")}
               position="bottom"
               margin="2"
               glass={false}
@@ -138,7 +140,7 @@ export default function VersionSelector({
                 className="flex items-center justify-center text-slate-700 transition-transform hover:text-heliblue active:scale-95"
                 onClick={() => {
                   navigator.clipboard.writeText(id);
-                  setNotification("Copied Prompt ID to clipboard", "success");
+                  setNotification(t("prompts.versionSelector.copiedPromptId"), "success");
                 }}
               >
                 <PiCopyBold className="h-4 w-4" />
@@ -147,7 +149,7 @@ export default function VersionSelector({
 
             {/* Rename Button */}
             <Tooltip
-              content="Change Prompt ID"
+              content={t("prompts.versionSelector.changePromptId")}
               position="bottom"
               margin="2"
               glass={false}
@@ -165,7 +167,7 @@ export default function VersionSelector({
 
             {/* Promote Button */}
             <Tooltip
-              content="Promote Version to Production"
+              content={t("prompts.versionSelector.promoteToProduction")}
               position="bottom"
               margin="2"
               glass={false}
@@ -275,6 +277,8 @@ function VersionItem({
   isLoading?: boolean;
   isLast?: boolean;
 }) {
+  const { t } = useTranslation("common");
+
   if (isLoading) {
     return (
       <div className="w-full animate-pulse space-y-2 px-2.5 py-1.5 text-left text-sm">
@@ -299,7 +303,9 @@ function VersionItem({
       {/* Master Indicator */}
       {majorVersion === masterVersion && (
         <div className="flex flex-row items-center gap-1">
-          <h3 className="text-xs text-slate-500">Production</h3>
+          <h3 className="text-xs text-slate-500">
+            {t("prompts.versionSelector.production")}
+          </h3>
           <div className="h-2 w-2 rounded-full bg-heliblue" />
         </div>
       )}

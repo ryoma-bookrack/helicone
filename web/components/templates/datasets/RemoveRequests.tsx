@@ -1,4 +1,5 @@
 import React from "react";
+import { useTranslation } from "react-i18next";
 import {
   Dialog,
   DialogContent,
@@ -22,21 +23,24 @@ const RemoveRequestsModal: React.FC<RemoveRequestsModalProps> = ({
   requestCount,
   onConfirm,
 }) => {
+  const { t } = useTranslation("datasets");
+  const { t: tCommon } = useTranslation("common");
+
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogContent className="space-y-4 px-6 py-8 sm:max-w-[425px]">
         <DialogHeader className="space-y-8">
           <DialogTitle>
-            Remove {requestCount} requests from dataset?
+            {t("removeModal.title", { count: requestCount })}
           </DialogTitle>
           <DialogDescription>
-            You won&apos;t be able to undo this action.
+            {t("removeModal.description")}
           </DialogDescription>
         </DialogHeader>
         <DialogFooter>
           <div className="flex w-full flex-row justify-between gap-2">
             <Button variant="outline" onClick={() => setOpen(false)}>
-              Cancel
+              {tCommon("actions.cancel")}
             </Button>
             <Button
               variant="destructive"
@@ -46,7 +50,7 @@ const RemoveRequestsModal: React.FC<RemoveRequestsModalProps> = ({
               }}
               className="bg-red-500 text-white hover:bg-red-600"
             >
-              Confirm remove
+              {t("removeModal.confirmRemove")}
             </Button>
           </div>
         </DialogFooter>

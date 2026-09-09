@@ -1,43 +1,17 @@
 /* eslint-disable @next/next/no-img-element */
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { useTranslation } from "react-i18next";
 
 const centerImages = [
   "/static/onboarding-design-1.svg",
   "/static/onboarding-design-2.svg",
 ];
 
-const quotes = [
-  {
-    text: "The ability to test prompt variations on production traffic without touching a line of code is magical. It feels like we're cheating; it's just that good!",
-    highlights: [
-      {
-        text: "It feels like we're cheating; it's just that good!",
-        color: "text-slate-800",
-      },
-    ],
-    author: "Nishant Shukla",
-    title: "Sr. Director of AI at QA Wolf",
-    image: "/static/qawolf-logo.svg",
-  },
-  {
-    text: "Thank you for an excellent observability platform! I pretty much use it for all my AI apps now.",
-    highlights: [
-      {
-        text: "I pretty much use it for all my AI apps now.",
-        color: "text-slate-800",
-      },
-    ],
-    author: "Hassan El Mghari",
-    title: "DevRel Lead at Together AI",
-    image: "/static/together-logo.svg",
-  },
-];
-
 const highlightText = (
   text: string,
-  highlights: { text: string; color: string }[]
+  highlights: { text: string; color: string }[],
 ) => {
   if (!highlights || highlights.length === 0) return <>{text}</>;
 
@@ -54,14 +28,14 @@ const highlightText = (
 
     if (index > lastIndex) {
       result.push(
-        <span key={`text-${lastIndex}`}>{text.substring(lastIndex, index)}</span>
+        <span key={`text-${lastIndex}`}>{text.substring(lastIndex, index)}</span>,
       );
     }
 
     result.push(
       <span key={`highlight-${index}`} className="text-slate-800">
         {highlight.text}
-      </span>
+      </span>,
     );
 
     lastIndex = index + highlight.text.length;
@@ -69,7 +43,7 @@ const highlightText = (
 
   if (lastIndex < text.length) {
     result.push(
-      <span key={`text-${lastIndex}`}>{text.substring(lastIndex)}</span>
+      <span key={`text-${lastIndex}`}>{text.substring(lastIndex)}</span>,
     );
   }
 
@@ -77,10 +51,46 @@ const highlightText = (
 };
 
 export const AuthBrandingPanel = () => {
+  const { t } = useTranslation("auth");
   const [selectedImage, setSelectedImage] = useState(centerImages[0]);
-  const [selectedQuote, setSelectedQuote] = useState(quotes[0]);
   const [showQuote, setShowQuote] = useState(false);
   const [isContentLoaded, setIsContentLoaded] = useState(false);
+
+  const quotes = useMemo(
+    () => [
+      {
+        text: t("branding.quote1.text"),
+        highlights: [
+          {
+            text: t("branding.quote1.highlight"),
+            color: "text-slate-800",
+          },
+        ],
+        author: t("branding.quote1.author"),
+        title: t("branding.quote1.title"),
+        image: "/static/qawolf-logo.svg",
+      },
+      {
+        text: t("branding.quote2.text"),
+        highlights: [
+          {
+            text: t("branding.quote2.highlight"),
+            color: "text-slate-800",
+          },
+        ],
+        author: t("branding.quote2.author"),
+        title: t("branding.quote2.title"),
+        image: "/static/together-logo.svg",
+      },
+    ],
+    [t],
+  );
+
+  const [selectedQuote, setSelectedQuote] = useState(quotes[0]);
+
+  useEffect(() => {
+    setSelectedQuote(quotes[0]);
+  }, [quotes]);
 
   useEffect(() => {
     const preloadImages = async () => {
@@ -113,7 +123,7 @@ export const AuthBrandingPanel = () => {
     };
 
     preloadImages();
-  }, []);
+  }, [quotes]);
 
   return (
     <div className="relative hidden flex-col justify-between overflow-hidden bg-gradient-to-br from-slate-100 to-sky-100 p-10 md:m-4 md:flex md:w-1/2 md:rounded-3xl">
@@ -122,7 +132,7 @@ export const AuthBrandingPanel = () => {
           <Link href="https://www.helicone.ai/" className="flex">
             <Image
               src="/static/logo-no-border.png"
-              alt="Helicone - Open-source LLM observability and monitoring platform for developers."
+              alt={t("branding.logoAlt")}
               height={100}
               width={100}
               priority={true}
@@ -136,7 +146,7 @@ export const AuthBrandingPanel = () => {
           >
             <Image
               src="/static/product-of-the-day.svg"
-              alt="#1 Product of the Day"
+              alt={t("branding.productOfTheDayAlt")}
               width={120}
               height={26}
             />
@@ -144,12 +154,11 @@ export const AuthBrandingPanel = () => {
         </div>
       </div>
 
-      {/* Center Image - Only shown when showQuote is false */}
       {!showQuote && isContentLoaded && (
         <div className="absolute inset-0 z-10 transition-opacity duration-300">
           <Image
             src={selectedImage}
-            alt="Helicone Featured Image"
+            alt={t("branding.featuredImageAlt")}
             fill
             style={{ objectFit: "cover" }}
             className="h-full w-full"
@@ -158,7 +167,6 @@ export const AuthBrandingPanel = () => {
         </div>
       )}
 
-      {/* Quote - Only shown when showQuote is true */}
       {showQuote && isContentLoaded ? (
         <>
           <div className="relative z-20 w-full space-y-3">
@@ -169,7 +177,6 @@ export const AuthBrandingPanel = () => {
             <h1 className="text-4xl font-bold text-slate-300">&quot;</h1>
           </div>
 
-          {/* Name and logo - Only shown with quote */}
           <div className="relative z-20 flex items-center gap-3 space-y-1">
             <Image
               src={selectedQuote.image}
@@ -190,18 +197,15 @@ export const AuthBrandingPanel = () => {
         </>
       ) : (
         <>
-          {/* Empty middle section when showing image */}
           <div className="flex-grow"></div>
 
-          {/* Attribution at bottom when showing image */}
           <div className="relative z-20 flex items-center gap-3 space-y-1">
             <div>
               <p className="text-md max-w-md text-slate-500">
-                Designed for the entire LLM lifecycle
+                {t("branding.lifecycleTitle")}
               </p>
               <p className="max-w-md text-sm text-slate-400">
-                The CI workflow to take your LLM application from MVP to
-                production.
+                {t("branding.lifecycleDescription")}
               </p>
             </div>
           </div>

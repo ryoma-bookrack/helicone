@@ -5,6 +5,7 @@ import { Message } from "@helicone-package/llm-mapper/types";
 import { parseImprovedMessages } from "@/utils/messages";
 import { PiBrainBold } from "react-icons/pi";
 import ReactMarkdown from "react-markdown";
+import { useTranslation } from "react-i18next";
 
 interface Improvement {
   content: string;
@@ -36,16 +37,15 @@ export default function AutoImprove({
   onCancel,
   updateState,
 }: AutoImproveProps) {
+  const { t } = useTranslation("common");
+
   return (
     <div className="flex h-full min-h-[42rem] w-full flex-col items-center justify-between gap-4 p-4">
       {/* Starting View */}
       {!improvement && (
         <div className="flex flex-col items-center justify-center gap-4">
           <p className="max-w-lg text-pretty text-center text-sm text-secondary">
-            <span className="font-semibold">Auto-Improve</span> will read your
-            prompt to understand how it comes off now vs its instructional
-            intent. Then it will suggest improvements to get it closer to its
-            full potential.
+            {t("prompts.autoImprove.introDetailed")}
           </p>
           <Button
             variant="action"
@@ -57,7 +57,7 @@ export default function AutoImprove({
             disabled={isImproving}
           >
             <PiBrainBold className="mr-2 h-4 w-4" />
-            Start Auto-Improve
+            {t("prompts.autoImprove.start")}
           </Button>
         </div>
       )}
@@ -76,7 +76,7 @@ export default function AutoImprove({
               </ReactMarkdown>
             ) : (
               <p className="text-sm text-secondary">
-                Connecting you with our systems...
+                {t("prompts.autoImprove.connecting")}
               </p>
             )}
           </ScrollArea>
@@ -90,7 +90,7 @@ export default function AutoImprove({
           {/* Current Version */}
           <div className="flex w-full max-w-[50%] flex-col gap-4 pr-2">
             <h3 className="font-semibold text-red-500">
-              V{version} <span className="">(Current)</span>
+              V{version} <span className="">{t("prompts.autoImprove.current")}</span>
             </h3>
             <ScrollArea className="h-96">
               <div className="flex flex-col gap-2">
@@ -108,7 +108,8 @@ export default function AutoImprove({
           {/* Suggested Version */}
           <div className="flex w-full max-w-[50%] flex-col gap-4 pl-2">
             <h3 className="font-semibold text-green-500">
-              V{version + 1} <span className="">(Suggested)</span>
+              V{version + 1}{" "}
+              <span className="">{t("prompts.autoImprove.suggested")}</span>
             </h3>
             <ScrollArea className="h-96">
               <div className="flex flex-col gap-2">
@@ -131,13 +132,13 @@ export default function AutoImprove({
       {improvement && !isImproving && (
         <div className="flex justify-center gap-2">
           <Button variant="outline" onClick={onCancel}>
-            Cancel
+            {t("actions.cancel")}
           </Button>
           <Button
             className="bg-green-500 hover:bg-green-500/90 dark:bg-green-500 dark:hover:bg-green-500/90"
             onClick={onApplyImprovement}
           >
-            Save Suggested Version
+            {t("prompts.autoImprove.saveSuggested")}
           </Button>
         </div>
       )}

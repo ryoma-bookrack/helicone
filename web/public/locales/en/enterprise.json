@@ -1,0 +1,78 @@
+{
+  "portal": {
+    "title": "Customer Portal",
+    "tabs": {
+      "customers": "Customers",
+      "analytics": "Analytics",
+      "branding": "Branding"
+    },
+    "searchPlaceholder": "Search Customer Name...",
+    "addCustomer": "Add Customer",
+    "addNewCustomer": "Add New Customer",
+    "empty": {
+      "title": "No customers exist!",
+      "description": "Create a new customer to get started or reach out to our support team for help getting started.",
+      "contactSupport": "Contact Support"
+    },
+    "analytics": {
+      "title": "Analytics coming soon!",
+      "description": "You will soon be able to get an understanding of how your customers are using your product and how you can improve their experience."
+    },
+    "branding": {
+      "title": "Branding coming soon!",
+      "description": "Customize your branding and make your portal your own. Your customers will be able to see your logo and colors along with your own domain."
+    },
+    "columns": {
+      "name": "Name",
+      "createdAt": "Created At",
+      "status": "Status",
+      "members": "Members",
+      "requests30Days": "Requests (30 days)"
+    },
+    "status": {
+      "active": "active"
+    },
+    "actions": {
+      "view": "View",
+      "edit": "Edit"
+    },
+    "editCustomer": "Edit Customer",
+    "notAvailable": "n/a",
+    "limits": {
+      "title": "Limits",
+      "costs": "Costs",
+      "requests": "Requests",
+      "timeRange": "Time Range",
+      "monthly": "Monthly",
+      "unlimited": "unlimited"
+    },
+    "details": {
+      "title": "Details",
+      "createdAt": "Created At",
+      "organizationId": "Organization ID",
+      "owner": "Owner",
+      "members": "Members"
+    },
+    "tabsDetail": {
+      "usage": "Usage",
+      "members": "Members",
+      "keys": "Keys"
+    },
+    "requestsOverTime": "Requests Over Time",
+    "providerKeys": {
+      "title": "Provider Keys",
+      "tooltip": "Provider Keys are used to authenticate your requests to the API. This key is securely stored using our vault technologies, with the state of the art encryption.",
+      "empty": "Please create a provider key.",
+      "learnMore": "Learn more.",
+      "addNewKey": "Add new key",
+      "deleteTitle": "Delete Provider Key",
+      "deleteDescription": "This Provider Key will be deleted from your account. All proxy keys that are mapped to this provider key will be deleted as well. Are you sure you want to delete this provider key?",
+      "deleteSuccess": "Provider Key Deleted",
+      "deleteError": "Error Deleting Provider Key",
+      "serverSize": "Server size"
+    }
+  },
+  "vault": {
+    "title": "Developer Vault"
+  }
+}

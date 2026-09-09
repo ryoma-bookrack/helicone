@@ -5,8 +5,10 @@ import { generateAPIKeyHelper } from "@/utils/generateAPIKeyHelper";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/router";
 import { $JAWN_API } from "@/lib/clients/jawn";
+import { useTranslation } from "react-i18next";
 
 export const useKeys = () => {
+  const { t } = useTranslation("keys");
   const org = useOrg();
   const queryClient = useQueryClient();
   const { setNotification } = useNotification();
@@ -54,14 +56,14 @@ export const useKeys = () => {
       return { res: await res, apiKey };
     },
     onSuccess: () => {
-      setNotification("Successfully created API key", "success");
+      setNotification(t("notifications.createSuccess"), "success");
       queryClient.invalidateQueries({
         queryKey: ["keys", org?.currentOrg?.id],
       });
       keys.refetch();
     },
     onError: () => {
-      setNotification("Failed to create API key", "error");
+      setNotification(t("notifications.createFailed"), "error");
     },
   });
 

@@ -15,6 +15,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { logger } from "@/lib/telemetry/logger";
+import { useTranslation } from "react-i18next";
 
 export type SearchableInputOption = {
   label: string;
@@ -36,12 +37,16 @@ export const SearchableInput: React.FC<SearchableInputProps> = ({
   value,
   onValueChange,
   onSearch,
-  placeholder = "Type to search...",
-  emptyMessage = "No results found.",
+  placeholder,
+  emptyMessage,
   disabled = false,
   className,
   debounceMs = 300,
 }) => {
+  const { t } = useTranslation("filters");
+  const { t: tc } = useTranslation("common");
+  const resolvedPlaceholder = placeholder ?? t("search.typeToSearch");
+  const resolvedEmptyMessage = emptyMessage ?? tc("empty.noResults");
   const [inputValue, setInputValue] = useState(value);
   const [open, setOpen] = useState(false);
   const [options, setOptions] = useState<SearchableInputOption[]>([]);
@@ -122,7 +127,7 @@ export const SearchableInput: React.FC<SearchableInputProps> = ({
               onBlur={handleBlur}
               onKeyDown={handleKeyDown}
               onFocus={() => onSearch(inputValue).then(setOptions)}
-              placeholder={placeholder}
+              placeholder={resolvedPlaceholder}
               disabled={disabled}
               className={cn("h-8 w-full px-2 text-xs", className)}
             />
@@ -140,7 +145,7 @@ export const SearchableInput: React.FC<SearchableInputProps> = ({
           <Command className="border border-border">
             <CommandList className="max-h-[200px] overflow-auto">
               <CommandEmpty className="py-2 text-xs">
-                {emptyMessage}
+                {resolvedEmptyMessage}
               </CommandEmpty>
               <CommandGroup>
                 {options.map((option) => (

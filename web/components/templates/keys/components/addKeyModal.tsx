@@ -13,6 +13,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { InfoIcon } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 interface AddKeyModalProps {
   open: boolean;
@@ -21,6 +22,7 @@ interface AddKeyModalProps {
 
 const AddKeyModal = (props: AddKeyModalProps) => {
   const { open, setOpen } = props;
+  const { t } = useTranslation(["keys", "common"]);
 
   const [returnedKey, setReturnedKey] = useState<string | null>(null);
 
@@ -43,7 +45,7 @@ const AddKeyModal = (props: AddKeyModalProps) => {
     ) as HTMLInputElement;
 
     if (!keyName || keyName.value === "") {
-      setNotification("Please enter in a key name", "error");
+      setNotification(t("keys:notifications.enterKeyName"), "error");
       return;
     }
 
@@ -71,11 +73,11 @@ const AddKeyModal = (props: AddKeyModalProps) => {
           className="flex w-[400px] flex-col space-y-8"
         >
           <h1 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
-            Create Key
+            {t("keys:modal.createTitle")}
           </h1>
           <div className="w-full space-y-1.5 text-sm">
             <label htmlFor="key-name" className="text-gray-500">
-              Key Name
+              {t("keys:modal.keyName")}
             </label>
             <input
               type="text"
@@ -83,12 +85,12 @@ const AddKeyModal = (props: AddKeyModalProps) => {
               id="key-name"
               className="block w-full rounded-md border border-gray-300 bg-gray-100 p-2 text-sm text-gray-900 shadow-sm dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100"
               required
-              placeholder="Key Name"
+              placeholder={t("keys:modal.keyNamePlaceholder")}
             />
           </div>
           <div className="w-full space-y-1.5 text-sm">
             <label htmlFor="key-permissions" className="text-gray-500">
-              Permissions
+              {t("keys:modal.permissions")}
             </label>
 
             <ul className="flex items-center gap-4 text-sm font-semibold">
@@ -102,7 +104,7 @@ const AddKeyModal = (props: AddKeyModalProps) => {
                     className="mr-1 rounded-sm"
                     defaultChecked={true}
                   />
-                  Read
+                  {t("keys:modal.read")}
                 </label>
               </li>
               <li>
@@ -116,11 +118,10 @@ const AddKeyModal = (props: AddKeyModalProps) => {
                     disabled
                     defaultChecked={true}
                     style={{
-                      // dark gray
                       backgroundColor: "gray",
                     }}
                   />
-                  Write
+                  {t("keys:modal.write")}
                 </label>
               </li>
             </ul>
@@ -128,7 +129,7 @@ const AddKeyModal = (props: AddKeyModalProps) => {
 
           <div className="w-full space-y-1.5 text-sm">
             <label htmlFor="rate-limit" className="text-gray-500">
-              Rate Limiting
+              {t("keys:modal.rateLimiting")}
             </label>
             <div className="flex items-start">
               <div className="flex h-5 items-center">
@@ -145,7 +146,7 @@ const AddKeyModal = (props: AddKeyModalProps) => {
                     htmlFor="rate-limit"
                     className="font-medium text-gray-700 dark:text-gray-300"
                   >
-                    Enable UI rate limits
+                    {t("keys:modal.enableUiRateLimits")}
                   </label>
                   <TooltipProvider>
                     <Tooltip>
@@ -154,15 +155,14 @@ const AddKeyModal = (props: AddKeyModalProps) => {
                       </TooltipTrigger>
                       <TooltipContent className="max-w-xs">
                         <p>
-                          This will prefix the key with &quot;rl-&quot; and
-                          apply rate limits configured in the dashboard.{" "}
+                          {t("keys:modal.rateLimitTooltip")}{" "}
                           <a
                             href="/docs/rate-limiting"
                             target="_blank"
                             rel="noopener noreferrer"
                             className="text-blue-600 hover:underline"
                           >
-                            View documentation
+                            {t("keys:modal.viewDocumentation")}
                           </a>
                         </p>
                       </TooltipContent>
@@ -170,14 +170,14 @@ const AddKeyModal = (props: AddKeyModalProps) => {
                   </TooltipProvider>
                 </div>
                 <p className="mt-1 text-xs text-gray-400 dark:text-gray-500">
-                  May affect request latency.{" "}
+                  {t("keys:modal.rateLimitLatency")}{" "}
                   <a
                     href="/docs/rate-limiting#performance"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-blue-500 hover:underline"
                   >
-                    Learn more
+                    {t("keys:modal.learnMore")}
                   </a>
                 </p>
               </div>
@@ -190,7 +190,7 @@ const AddKeyModal = (props: AddKeyModalProps) => {
               type="button"
               className="flex flex-row items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-semibold text-gray-900 shadow-sm hover:bg-gray-50 hover:text-gray-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-500 dark:border-gray-700 dark:bg-black dark:text-gray-100 dark:hover:bg-gray-900 dark:hover:text-gray-300"
             >
-              Cancel
+              {t("common:actions.cancel")}
             </button>
             <button
               type="submit"
@@ -199,18 +199,17 @@ const AddKeyModal = (props: AddKeyModalProps) => {
               {addKey.isPending && (
                 <ArrowPathIcon className="mr-1.5 h-4 w-4 animate-spin" />
               )}
-              Create Key
+              {t("keys:modal.createKey")}
             </button>
           </div>
         </form>
       ) : (
         <div className="flex w-[400px] flex-col space-y-4">
           <h1 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
-            Your Helicone Key
+            {t("keys:modal.yourKeyTitle")}
           </h1>
           <p className="text-sm text-gray-500">
-            Please copy this key and store it somewhere safe. You will not be
-            able to see it again.
+            {t("keys:modal.yourKeyDescription")}
           </p>
           <div className="w-full space-y-1.5 text-sm">
             <div className="flex w-full flex-row items-center gap-4">
@@ -226,7 +225,7 @@ const AddKeyModal = (props: AddKeyModalProps) => {
                 className="flex items-center rounded-md bg-black p-2 text-sm font-semibold text-white shadow-sm hover:bg-gray-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white dark:bg-white dark:text-black dark:hover:bg-gray-200"
                 onClick={() => {
                   navigator.clipboard.writeText(returnedKey);
-                  setNotification("Copied to clipboard!", "success");
+                  setNotification(t("keys:notifications.copiedToClipboard"), "success");
                 }}
               >
                 <ClipboardDocumentListIcon className="h-5 w-5 text-white dark:text-black" />
@@ -243,7 +242,7 @@ const AddKeyModal = (props: AddKeyModalProps) => {
               type="button"
               className="flex items-center rounded-md bg-black px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-gray-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white dark:bg-white dark:text-black dark:hover:bg-gray-200"
             >
-              Close
+              {t("common:actions.close")}
             </button>
           </div>
         </div>

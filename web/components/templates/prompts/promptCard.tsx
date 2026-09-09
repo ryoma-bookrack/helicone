@@ -1,3 +1,4 @@
+import { formatStandardDateTime } from "@/lib/i18n/format";
 import { DocumentTextIcon } from "@heroicons/react/24/outline";
 import {
   usePrompt,
@@ -85,7 +86,7 @@ const PromptCard = (props: PromptCardProps) => {
       </div>
       <p className="text-sm text-gray-500">
         Last Used:{" "}
-        {new Date(promptInfo?.created_at || "").toLocaleString("en-US")}
+        {formatStandardDateTime(promptInfo?.created_at || "")}
       </p>
       <div className="pb-4 pt-12">
         {isPromptRequestsLoading ? (
@@ -125,7 +126,7 @@ const PromptCard = (props: PromptCardProps) => {
       </div>
       <p className="text-sm text-gray-500">
         Created:{" "}
-        {new Date(promptInfo?.created_at || "").toLocaleString("en-US")}
+        {formatStandardDateTime(promptInfo?.created_at || "")}
       </p>
     </div>
   );

@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { useState } from "react";
 import {
   Popover,
@@ -56,6 +57,9 @@ export default function PromptForm({
   onSavePrompt,
   autoOpen,
 }: PromptFormProps) {
+  const { t } = useTranslation("playground");
+  const { t: tCommon } = useTranslation("common");
+
   const [promptName, setPromptName] = useState("");
   const [commitMessage, setCommitMessage] = useState("Update.");
   const [isPromptFormPopoverOpen, setIsPromptFormPopoverOpen] = useState(false);
@@ -115,9 +119,7 @@ export default function PromptForm({
           href="https://docs.helicone.ai/gateway/prompt-integration"
           target="_blank"
           className="absolute right-4 top-4 flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground"
-        >
-          View docs
-          <SquareArrowOutUpRight className="h-3 w-3" />
+        >{t("ui.viewDocs")}<SquareArrowOutUpRight className="h-3 w-3" />
         </Link>
         <div className="flex w-full flex-col gap-4 py-4">
           {saveAndVersion && (
@@ -127,13 +129,9 @@ export default function PromptForm({
                   <TooltipTrigger>
                     <InfoIcon className="h-3 w-3 text-muted-foreground" />
                   </TooltipTrigger>
-                  <TooltipContent align="start">
-                    Create a new prompt instead of versioning the current one.
-                  </TooltipContent>
+                  <TooltipContent align="start">{t("ui.createANewPromptInsteadOfVersioningTheCu")}</TooltipContent>
                 </Tooltip>
-                <Label htmlFor="save-as-new-prompt" className="text-sm">
-                  Save as new prompt
-                </Label>
+                <Label htmlFor="save-as-new-prompt" className="text-sm">{t("ui.saveAsNewPrompt")}</Label>
                 <Switch
                   className="data-[state=checked]:bg-foreground"
                   size="sm"
@@ -150,7 +148,7 @@ export default function PromptForm({
             <>
               <div className="flex flex-col gap-2">
                 <div className="flex items-center gap-2">
-                  <Label htmlFor="promptName">Prompt Name</Label>
+                  <Label htmlFor="promptName">{t("ui.promptName")}</Label>
                 </div>
                 <Input
                   id="promptName"
@@ -165,14 +163,12 @@ export default function PromptForm({
 
               <div className="flex flex-col gap-2">
                 <div className="flex items-center gap-2">
-                  <Label>Tags</Label>
+                  <Label>{t("ui.tags")}</Label>
                   <Tooltip>
                     <TooltipTrigger>
                       <InfoIcon className="h-3 w-3 text-muted-foreground" />
                     </TooltipTrigger>
-                    <TooltipContent align="start">
-                      Add tags to help organize and filter your prompts
-                    </TooltipContent>
+                    <TooltipContent align="start">{t("ui.addTagsToHelpOrganizeAndFilterYourPrompt")}</TooltipContent>
                   </Tooltip>
                 </div>
                 <TagsFilter
@@ -185,7 +181,7 @@ export default function PromptForm({
                     id="customTags"
                     value={customTags}
                     onChange={(e) => setCustomTags(e.target.value)}
-                    placeholder="Tags separated by commas (e.g. tag1, tag2, tag3)"
+                    placeholder={t("ui.tagsSeparatedByCommasEGTag1Tag2Tag3")}
                   />
                 </div>
               </div>
@@ -194,7 +190,7 @@ export default function PromptForm({
 
           <div className="flex flex-col gap-2">
             <div className="flex items-center gap-2">
-              <Label htmlFor="commitMessage">Commit Message</Label>
+              <Label htmlFor="commitMessage">{t("ui.commitMessage")}</Label>
             </div>
             <Input
               id="commitMessage"
@@ -202,7 +198,7 @@ export default function PromptForm({
               onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                 setCommitMessage(e.target.value)
               }
-              placeholder="Update."
+              placeholder={t("ui.update")}
               className="w-full"
             />
           </div>
@@ -220,9 +216,7 @@ export default function PromptForm({
                       minor version.
                     </TooltipContent>
                   </Tooltip>
-                  <Label htmlFor="upgrade-major-version" className="text-sm">
-                    Upgrade major version
-                  </Label>
+                  <Label htmlFor="upgrade-major-version" className="text-sm">{t("ui.upgradeMajorVersion")}</Label>
                   <Switch
                     className="data-[state=checked]:bg-foreground"
                     size="sm"
@@ -236,7 +230,7 @@ export default function PromptForm({
 
               <div className="flex flex-col gap-2">
                 <div className="flex items-center gap-2">
-                  <Label>Environment</Label>
+                  <Label>{t("ui.environment")}</Label>
                   <Tooltip>
                     <TooltipTrigger>
                       <InfoIcon className="h-3 w-3 text-muted-foreground" />
@@ -267,9 +261,9 @@ export default function PromptForm({
                   </PopoverTrigger>
                   <PopoverContent className="w-full p-0">
                     <Command>
-                      <CommandInput placeholder="Search environments..." />
+                      <CommandInput placeholder={t("ui.searchEnvironments")} />
                       <CommandList>
-                        <CommandEmpty>No environments found.</CommandEmpty>
+                        <CommandEmpty>{t("ui.noEnvironmentsFound")}</CommandEmpty>
                         <CommandGroup>
                           <CommandItem
                             onSelect={() => {
@@ -286,9 +280,7 @@ export default function PromptForm({
                                   ? "opacity-100"
                                   : "opacity-0",
                               )}
-                            />
-                            No environment
-                          </CommandItem>
+                            />{t("ui.noEnvironment")}</CommandItem>
                           {environments.map((env) => (
                             <CommandItem
                               key={env}
@@ -320,7 +312,7 @@ export default function PromptForm({
                 </Popover>
                 <div className="mt-2 flex flex-col gap-2">
                   <Input
-                    placeholder="Or enter custom environment name..."
+                    placeholder={t("ui.orEnterCustomEnvironmentName")}
                     value={customEnvironment}
                     onChange={(e) => {
                       setCustomEnvironment(e.target.value);

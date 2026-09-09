@@ -3,6 +3,7 @@ import { ClipboardIcon } from "@heroicons/react/24/outline";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { TextInput } from "@tremor/react";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { getJawnClient } from "../../../../lib/clients/jawn";
 import useNotification from "../../../shared/notification/useNotification";
 
@@ -10,7 +11,7 @@ interface OrgMemberProps {}
 
 const OrgMember = (props: OrgMemberProps) => {
   const {} = props;
-
+  const { t } = useTranslation("admin");
   const { setNotification } = useNotification();
 
   const {
@@ -57,14 +58,13 @@ const OrgMember = (props: OrgMemberProps) => {
         },
       });
       if (error) {
-        setNotification("Failed to add admins to org", "error");
+        setNotification(t("panels.orgMember.addAdminsFailed"), "error");
       } else {
-        setNotification("Admins added to org", "success");
+        setNotification(t("panels.orgMember.addAdminsSuccess"), "success");
       }
     },
   });
 
-  // states
   const [orgName, setOrgName] = useState("");
   const [orgId, setOrgId] = useState("");
   const [adminIds, setAdminIds] = useState<string[]>();
@@ -72,14 +72,14 @@ const OrgMember = (props: OrgMemberProps) => {
   return (
     <>
       <h2 className="text-lg font-semibold text-white">
-        Org Member Control Center
+        {t("panels.orgMember.title")}
       </h2>
       <div className="flex flex-col space-y-2">
-        <p className="text-sm">Organization Lookup by Name</p>
+        <p className="text-sm">{t("panels.orgMember.lookupByName")}</p>
         <div className="grid grid-cols-4 gap-4">
           <div className="col-span-2">
             <TextInput
-              placeholder="Organization Name"
+              placeholder={t("common.organizationName")}
               value={orgName}
               onValueChange={setOrgName}
             />
@@ -89,14 +89,17 @@ const OrgMember = (props: OrgMemberProps) => {
               size={"xs"}
               onClick={async () => {
                 if (!orgName) {
-                  setNotification("Organization name is required", "error");
+                  setNotification(
+                    t("panels.orgMember.orgNameRequired"),
+                    "error",
+                  );
                   return;
                 }
                 findOrgs(orgName);
               }}
               disabled={isFindingOrgs}
             >
-              Search for Org Id
+              {t("panels.orgMember.searchForOrgId")}
             </Button>
           </div>
         </div>
@@ -109,9 +112,8 @@ const OrgMember = (props: OrgMemberProps) => {
               <span>-</span>
               <button
                 onClick={() => {
-                  // copy to clipboard
                   navigator.clipboard.writeText(org.id);
-                  setNotification("Copied to clipboard", "success");
+                  setNotification(t("common.copiedToClipboard"), "success");
                 }}
                 className="flex items-center text-sm text-white underline"
               >
@@ -123,16 +125,16 @@ const OrgMember = (props: OrgMemberProps) => {
       </div>
 
       <div className="flex flex-col space-y-2 border-t-2 border-gray-300 pt-4">
-        <p className="text-sm">Add Admin to Organization by Id</p>
+        <p className="text-sm">{t("panels.orgMember.addAdminById")}</p>
         <div className="w-1/2">
           <TextInput
-            placeholder="Organization Id"
+            placeholder={t("common.organizationId")}
             value={orgId}
             onValueChange={setOrgId}
           />
         </div>
         <ul className="pt-4">
-          <p className="text-sm">Admins</p>
+          <p className="text-sm">{t("panels.orgMember.admins")}</p>
           {data?.data?.map((admin, index) => (
             <li key={index} className="flex items-center space-x-2 py-1">
               <input
@@ -161,17 +163,17 @@ const OrgMember = (props: OrgMemberProps) => {
             size={"xs"}
             onClick={async () => {
               if (!orgId) {
-                setNotification("Organization Id is required", "error");
+                setNotification(t("panels.orgMember.orgIdRequired"), "error");
                 return;
               }
               if (!adminIds) {
-                setNotification("Admins are required", "error");
+                setNotification(t("panels.orgMember.adminsRequired"), "error");
                 return;
               }
               addAdminToOrg({ orgId, adminIds });
             }}
           >
-            Add Admin(s) to Org
+            {t("panels.orgMember.addAdminsToOrg")}
           </Button>
         </div>
       </div>

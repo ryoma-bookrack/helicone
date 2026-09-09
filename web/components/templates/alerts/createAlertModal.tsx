@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { useJawnClient } from "../../../lib/clients/jawnHook";
 import { getHeliconeCookie } from "../../../lib/cookies";
 import useNotification from "../../shared/notification/useNotification";
@@ -15,6 +16,7 @@ interface EditAlertModalProps {
 
 export const EditAlertModal = (props: EditAlertModalProps) => {
   const { open, setOpen, onSuccess, currentAlert } = props;
+  const { t } = useTranslation("alerts");
 
   const { setNotification } = useNotification();
   const jawn = useJawnClient();
@@ -38,7 +40,10 @@ export const EditAlertModal = (props: EditAlertModalProps) => {
     });
 
     if (error) {
-      setNotification(`Failed to edit alert ${error}`, "error");
+      setNotification(
+        t("notifications.editFailed", { error: String(error) }),
+        "error",
+      );
       return;
     }
 
@@ -51,16 +56,13 @@ export const EditAlertModal = (props: EditAlertModalProps) => {
     });
 
     if (deleteError) {
-      setNotification(
-        "There was an error editing your alert! Refresh your page to try again..",
-        "error",
-      );
+      setNotification(t("notifications.editError"), "error");
       return;
     }
 
     onSuccess();
     setOpen(false);
-    setNotification("Successfully edited alert", "success");
+    setNotification(t("notifications.editSuccess"), "success");
   };
 
   return (
@@ -85,6 +87,7 @@ interface CreateAlertModalProps {
 
 export const CreateAlertModal = (props: CreateAlertModalProps) => {
   const { open, setOpen, onSuccess } = props;
+  const { t } = useTranslation("alerts");
 
   const jawn = useJawnClient();
   const { setNotification } = useNotification();
@@ -92,7 +95,7 @@ export const CreateAlertModal = (props: CreateAlertModalProps) => {
   const handleCreateAlert = async (req: AlertRequest) => {
     const authFromCookie = getHeliconeCookie();
     if (authFromCookie.error || !authFromCookie.data) {
-      setNotification("Please login to create an alert", "error");
+      setNotification(t("notifications.loginRequired"), "error");
       return;
     }
 
@@ -114,11 +117,14 @@ export const CreateAlertModal = (props: CreateAlertModalProps) => {
     });
 
     if (error) {
-      setNotification(`Failed to create alert ${error}`, "error");
+      setNotification(
+        t("notifications.createFailed", { error: String(error) }),
+        "error",
+      );
       return;
     }
 
-    setNotification("Successfully created alert", "success");
+    setNotification(t("notifications.createSuccess"), "success");
     setOpen(false);
     onSuccess();
   };

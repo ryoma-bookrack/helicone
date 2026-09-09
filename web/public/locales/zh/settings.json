@@ -1,0 +1,80 @@
+{
+  "providers": {
+    "title": "提供商",
+    "description": "为不同的 LLM 提供商配置 API 密钥",
+    "loading": "加载中...",
+    "adminRequired": "需要管理员权限",
+    "adminRequiredDescription": "只有组织管理员可以管理提供商 API 密钥。请联系您的组织管理员获取访问权限。",
+    "searchPlaceholder": "搜索提供商...",
+    "sortLabel": "排序：{{option}}",
+    "sortRelevance": "相关度",
+    "sortAlphabetical": "A-Z",
+    "sortAlphabeticalFull": "字母顺序 (A-Z)",
+    "sortRecentlyUsed": "最近使用",
+    "noResults": "未找到匹配的提供商。"
+  },
+  "password": {
+    "title": "修改密码",
+    "subtitle": "更新您的账户密码以确保账户安全",
+    "cardTitle": "密码设置",
+    "cardDescription": "输入当前密码并设置新密码",
+    "currentPassword": "当前密码",
+    "currentPasswordPlaceholder": "输入当前密码",
+    "newPassword": "新密码",
+    "newPasswordPlaceholder": "输入新密码",
+    "confirmPassword": "确认新密码",
+    "confirmPasswordPlaceholder": "再次输入新密码",
+    "passwordHint": "密码长度至少为 8 个字符",
+    "changing": "修改中...",
+    "changePassword": "修改密码",
+    "success": "密码修改成功！",
+    "errors": {
+      "allFieldsRequired": "所有字段均为必填",
+      "passwordMismatch": "两次输入的新密码不一致",
+      "passwordTooShort": "新密码长度至少为 8 个字符",
+      "changeFailed": "密码修改失败，请重试。"
+    }
+  },
+  "reports": {
+    "title": "报告",
+    "schedule": "每周一 <strong>UTC 10:00</strong> 接收周报摘要。",
+    "emails": "邮箱",
+    "slackChannels": "Slack 频道",
+    "emailsSelected_one": "已选择 {{count}} 个邮箱",
+    "emailsSelected_other": "已选择 {{count}} 个邮箱",
+    "selectEmails": "选择接收告警的邮箱",
+    "searchEmails": "搜索邮箱...",
+    "noEmailsFound": "未找到邮箱。",
+    "channelsSelected_one": "已选择 {{count}} 个频道",
+    "channelsSelected_other": "已选择 {{count}} 个频道",
+    "selectChannels": "选择接收告警的 Slack 频道",
+    "searchChannels": "搜索频道...",
+    "noChannelsFound": "未找到频道。",
+    "privateChannelHint": "如果频道是私有的，您需要在频道中 @Helicone 来添加机器人。",
+    "connectSlack": "连接 Slack",
+    "notifications": {
+      "selectEmailOrChannel": "请至少选择一个邮箱或 Slack 频道",
+      "loginRequired": "请先登录以创建告警",
+      "updateFailed": "更新报告失败 {{error}}",
+      "configureSuccess": "报告配置成功",
+      "createFailed": "创建报告失败 {{error}}",
+      "enableSuccess": "报告已启用"
+    }
+  },
+  "rateLimits": {
+    "neverDropped": "您的请求不会被丢弃，始终会返回给客户端。Helicone 会尽最大努力确保用户收到响应。",
+    "summary": "以下是贵组织上月速率限制<strong>记录</strong>情况的摘要。这仅表示部分请求已处理但未记录到仪表盘（因达到速率限制）。如需提高速率限制，请联系我们：",
+    "emailCopied": "邮箱已复制到剪贴板",
+    "chartTitle": "本月速率限制",
+    "chartCategory": "rate-limits",
+    "tiersTitle": "速率限制等级",
+    "tierColumn": "等级",
+    "rateLimitsColumn": "速率限制",
+    "freeTier": "免费版",
+    "proTier": "Pro",
+    "enterpriseTier": "企业版",
+    "freeLimit": "834 条日志 / 5 秒",
+    "proLimit": "8334 条日志 / 5 秒",
+    "enterpriseLimit": "自定义"
+  }
+}

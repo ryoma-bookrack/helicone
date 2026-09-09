@@ -46,12 +46,17 @@ import {
 } from "../ui/select";
 import { cn } from "@/lib/utils";
 import { logger } from "@/lib/telemetry/logger";
+import { useTranslation } from "react-i18next";
 
 // Allowed OpenAI endpoints for data residency
-const OPENAI_ENDPOINTS = [
-  { value: "", label: "Default (api.openai.com)" },
-  { value: "https://us.api.openai.com", label: "US Data Residency (us.api.openai.com)" },
-] as const;
+const getOpenAiEndpoints = (t: (key: string) => string) =>
+  [
+    { value: "", label: t("config.defaultEndpoint") },
+    {
+      value: "https://us.api.openai.com",
+      label: t("config.usDataResidency"),
+    },
+  ] as const;
 
 // ====== Types ======
 interface ProviderCardProps {
@@ -78,6 +83,7 @@ const ProviderInstance: React.FC<ProviderInstanceProps> = ({
   onSaveSuccess,
   onRequestSaveConfirm,
 }) => {
+  const { t } = useTranslation(["providers", "common"]);
   const { setNotification } = useNotification();
   const {
     isSavingKey,
@@ -126,8 +132,11 @@ const ProviderInstance: React.FC<ProviderInstanceProps> = ({
   // Generate default name for new instances
   const defaultKeyName =
     isMultipleMode && !existingKey
-      ? `${provider.name} API Key ${instanceIndex + 1}`
-      : `${provider.name} API Key`;
+      ? t("providers:card.defaultKeyNameNumbered", {
+          name: provider.name,
+          number: instanceIndex + 1,
+        })
+      : t("providers:card.defaultKeyName", { name: provider.name });
 
   // ====== Initialize config values and key name ======
   useEffect(() => {
@@ -153,7 +162,7 @@ const ProviderInstance: React.FC<ProviderInstanceProps> = ({
       initialConfig = {
         region: "",
         crossRegion: "false",
-        note: "Auto-routing sets the default region to global, which optimizes for latency and availability. If cross region is not enabled, or the model does not support global routing, the selected region will be used.",
+        note: t("providers:config.vertexNote"),
       };
     }
 
@@ -181,7 +190,7 @@ const ProviderInstance: React.FC<ProviderInstanceProps> = ({
     if (!existingKey && isMultipleMode) {
       setKeyName(defaultKeyName);
     }
-  }, [existingKey, provider.id, defaultKeyName, isMultipleMode]);
+  }, [existingKey, provider.id, defaultKeyName, isMultipleMode, t]);
 
   // Reset key view when saving or after successful save
   useEffect(() => {
@@ -238,7 +247,7 @@ const ProviderInstance: React.FC<ProviderInstanceProps> = ({
         setIsViewingKey(true);
       } catch (error) {
         logger.error({ error, keyId: existingKey.id }, "Error viewing key");
-        setNotification("Failed to retrieve key", "error");
+        setNotification(t("providers:notifications.retrieveKeyFailed"), "error");
       } finally {
         setIsLoading(false);
       }
@@ -273,7 +282,7 @@ const ProviderInstance: React.FC<ProviderInstanceProps> = ({
           { error, keyId: existingKey.id },
           "Error fetching key for edit",
         );
-        setNotification("Failed to load key for editing", "error");
+        setNotification(t("providers:notifications.loadKeyForEditFailed"), "error");
       } finally {
         setIsLoading(false);
       }
@@ -292,8 +301,8 @@ const ProviderInstance: React.FC<ProviderInstanceProps> = ({
   const handleCopyToClipboard = (text: string) => {
     navigator.clipboard
       .writeText(text)
-      .then(() => setNotification("API key copied to clipboard", "success"))
-      .catch(() => setNotification("Failed to copy to clipboard", "error"));
+      .then(() => setNotification(t("providers:notifications.keyCopied"), "success"))
+      .catch(() => setNotification(t("providers:notifications.copyFailed"), "error"));
   };
 
   const handleUpdateConfigField = (key: string, value: string) => {
@@ -353,7 +362,7 @@ const ProviderInstance: React.FC<ProviderInstanceProps> = ({
           { error, providerName: provider.name },
           "Error saving provider key",
         );
-        setNotification("Failed to save provider key", "error");
+        setNotification(t("providers:notifications.saveKeyFailed"), "error");
       }
     }
   };
@@ -367,7 +376,7 @@ const ProviderInstance: React.FC<ProviderInstanceProps> = ({
       (provider.id === "bedrock" && !keyValue && !secretKeyValue) ||
       (provider.id !== "bedrock" && !keyValue)
     ) {
-      setNotification("Please enter at least one key value", "error");
+      setNotification(t("providers:notifications.enterKeyValue"), "error");
       return;
     }
 
@@ -386,7 +395,7 @@ const ProviderInstance: React.FC<ProviderInstanceProps> = ({
         { error, providerName: provider.name },
         "Error updating provider key",
       );
-      setNotification("Failed to update provider key", "error");
+      setNotification(t("providers:notifications.updateKeyFailed"), "error");
     }
   };
 
@@ -416,7 +425,7 @@ const ProviderInstance: React.FC<ProviderInstanceProps> = ({
     if (provider.id === "openai") {
       configFields = [
         {
-          label: "Endpoint Region",
+          label: t("providers:config.endpointRegion"),
           key: "baseUri",
           placeholder: "",
           type: "select",
@@ -425,27 +434,35 @@ const ProviderInstance: React.FC<ProviderInstanceProps> = ({
     } else if (provider.id === "azure") {
       configFields = [
         {
-          label: "Base URI",
+          label: t("providers:config.baseUri"),
           key: "baseUri",
-          placeholder: "https://your-resource-name.openai.azure.com",
+          placeholder: t("providers:config.baseUriPlaceholder"),
         },
-        { label: "API Version", key: "apiVersion", placeholder: "2023-05-15" },
         {
-          label: "Deployment Name",
+          label: t("providers:config.apiVersion"),
+          key: "apiVersion",
+          placeholder: t("providers:config.apiVersionPlaceholder"),
+        },
+        {
+          label: t("providers:config.deploymentName"),
           key: "deploymentName",
-          placeholder: "gpt-35-turbo",
+          placeholder: t("providers:config.deploymentNamePlaceholder"),
         },
         {
-          label: "Helicone Model Id",
+          label: t("providers:config.heliconeModelId"),
           key: "heliconeModelId",
-          placeholder: "e.g gpt-4o",
+          placeholder: t("providers:config.heliconeModelIdPlaceholder"),
         },
       ];
     } else if (provider.id === "bedrock") {
       configFields = [
-        { label: "Region", key: "region", placeholder: "us-west-2" },
         {
-          label: "Cross Region",
+          label: t("providers:config.region"),
+          key: "region",
+          placeholder: t("providers:config.regionPlaceholderBedrock"),
+        },
+        {
+          label: t("providers:config.crossRegion"),
           key: "crossRegion",
           placeholder: "false",
           type: "boolean",
@@ -454,12 +471,12 @@ const ProviderInstance: React.FC<ProviderInstanceProps> = ({
     } else if (provider.id === "vertex") {
       configFields = [
         {
-          label: "Region",
+          label: t("providers:config.region"),
           key: "region",
-          placeholder: "us-central1, us-east1, europe-west4, etc.",
+          placeholder: t("providers:config.regionPlaceholderVertex"),
         },
         {
-          label: "Cross Region",
+          label: t("providers:config.crossRegion"),
           key: "crossRegion",
           placeholder: "false",
           type: "boolean",
@@ -494,8 +511,8 @@ const ProviderInstance: React.FC<ProviderInstanceProps> = ({
                   >
                     {field.key === "crossRegion"
                       ? provider.id === "vertex"
-                        ? "Auto-route globally"
-                        : "Cross Region"
+                        ? t("providers:config.autoRouteGlobally")
+                        : t("providers:config.crossRegion")
                       : field.label}
                   </Label>
                 </div>
@@ -508,10 +525,10 @@ const ProviderInstance: React.FC<ProviderInstanceProps> = ({
                   disabled={isEditMode && !isEditingKey}
                 >
                   <SelectTrigger className="h-7 text-xs">
-                    <SelectValue placeholder="Select endpoint region" />
+                    <SelectValue placeholder={t("providers:card.selectEndpointRegion")} />
                   </SelectTrigger>
                   <SelectContent>
-                    {OPENAI_ENDPOINTS.map((endpoint) => (
+                    {getOpenAiEndpoints(t).map((endpoint) => (
                       <SelectItem
                         key={endpoint.value || "default"}
                         value={endpoint.value || "default"}
@@ -570,13 +587,13 @@ const ProviderInstance: React.FC<ProviderInstanceProps> = ({
               ) : isMultipleMode ? (
                 <div className="text-xs font-medium">
                   {existingKey?.provider_key_name ||
-                    `Instance ${instanceIndex + 1}`}
+                    t("providers:card.instance", { index: instanceIndex + 1 })}
                 </div>
               ) : null}
               {isEditMode && existingKey?.cuid && (
                 <div className="flex items-center gap-1">
                   <span className="text-[10px] text-muted-foreground">
-                    Key ID:
+                    {t("providers:card.keyId")}
                   </span>
                   <TooltipProvider>
                     <Tooltip>
@@ -594,7 +611,7 @@ const ProviderInstance: React.FC<ProviderInstanceProps> = ({
                           <Copy className="h-2.5 w-2.5 text-muted-foreground opacity-0 group-hover:opacity-100" />
                         </button>
                       </TooltipTrigger>
-                      <TooltipContent>Copy Key ID</TooltipContent>
+                      <TooltipContent>{t("providers:card.copyKeyId")}</TooltipContent>
                     </Tooltip>
                   </TooltipProvider>
                 </div>
@@ -616,7 +633,7 @@ const ProviderInstance: React.FC<ProviderInstanceProps> = ({
                       <Trash2 className="h-3 w-3" />
                     </Button>
                   </TooltipTrigger>
-                  <TooltipContent>Remove instance</TooltipContent>
+                  <TooltipContent>{t("providers:card.removeInstance")}</TooltipContent>
                 </Tooltip>
               </TooltipProvider>
             )}
@@ -625,12 +642,12 @@ const ProviderInstance: React.FC<ProviderInstanceProps> = ({
           {/* Key input row */}
           <div className="flex items-end gap-1">
             <div className="relative flex-1">
-              {provider.id === "bedrock" && <Label>Access key</Label>}
+              {provider.id === "bedrock" && <Label>{t("providers:card.accessKey")}</Label>}
               {provider.auth === "service_account" && !isEditMode && (
                 <div>
-                  <Label>Service Account JSON</Label>
+                  <Label>{t("providers:card.serviceAccountJson")}</Label>
                   <Textarea
-                    placeholder="Paste your service account JSON here..."
+                    placeholder={t("providers:card.serviceAccountPlaceholder")}
                     value={keyValue}
                     onChange={(e) =>
                       handleServiceAccountJsonChange(e.target.value)
@@ -640,12 +657,12 @@ const ProviderInstance: React.FC<ProviderInstanceProps> = ({
                   />
                   {keyValue && (
                     <Small className="mt-2 text-xs text-muted-foreground">
-                      Service account loaded ✓
+                      {t("providers:card.serviceAccountLoaded")}
                     </Small>
                   )}
                   {!keyValue && (
                     <Small className="mt-1 text-xs text-muted-foreground">
-                      Paste your service account JSON from Google Cloud Console
+                      {t("providers:card.serviceAccountHint")}
                     </Small>
                   )}
                 </div>
@@ -655,9 +672,9 @@ const ProviderInstance: React.FC<ProviderInstanceProps> = ({
                   type={isViewingKey || isEditingKey ? "text" : "password"}
                   placeholder={
                     isEditMode && !isEditingKey
-                      ? "••••••••••••••••"
+                      ? t("providers:card.maskedKey")
                       : isEditingKey
-                        ? "Enter new API key..."
+                        ? t("providers:card.enterNewApiKey")
                         : provider.apiKeyPlaceholder
                   }
                   value={isViewingKey && decryptedKey ? decryptedKey : keyValue}
@@ -668,11 +685,11 @@ const ProviderInstance: React.FC<ProviderInstanceProps> = ({
               )}
               {provider.auth === "service_account" && isEditMode && (
                 <div>
-                  <Label>Service Account JSON</Label>
+                  <Label>{t("providers:card.serviceAccountJson")}</Label>
                   {isEditingKey ? (
                     <>
                       <Textarea
-                        placeholder="Paste new service account JSON here..."
+                        placeholder={t("providers:card.serviceAccountNewPlaceholder")}
                         value={keyValue}
                         onChange={(e) =>
                           handleServiceAccountJsonChange(e.target.value)
@@ -681,7 +698,7 @@ const ProviderInstance: React.FC<ProviderInstanceProps> = ({
                       />
                       {keyValue && (
                         <Small className="mt-1 text-xs text-muted-foreground">
-                          Service account loaded ✓
+                          {t("providers:card.serviceAccountLoaded")}
                         </Small>
                       )}
                     </>
@@ -689,14 +706,14 @@ const ProviderInstance: React.FC<ProviderInstanceProps> = ({
                     <>
                       <Input
                         type="password"
-                        placeholder="Service account configured"
-                        value="••••••••••••••••"
+                        placeholder={t("providers:card.serviceAccountConfigured")}
+                        value={t("providers:card.maskedKey")}
                         className="h-7 flex-1 py-1 text-xs"
                         disabled={true}
                       />
                       {configValues.projectId && (
                         <Small className="mt-1 text-xs text-muted-foreground">
-                          Project ID:{" "}
+                          {t("providers:card.projectId")}{" "}
                           <span className="font-mono">
                             {configValues.projectId}
                           </span>
@@ -734,7 +751,7 @@ const ProviderInstance: React.FC<ProviderInstanceProps> = ({
                           (isEditingKey && keyValue)
                         )
                       }
-                      title="Copy"
+                      title={t("providers:card.copy")}
                     >
                       <Copy className="h-3 w-3" />
                     </button>
@@ -745,7 +762,7 @@ const ProviderInstance: React.FC<ProviderInstanceProps> = ({
                         type="button"
                         onClick={() => handleCopyToClipboard(keyValue)}
                         className="rounded p-1 text-muted-foreground hover:bg-muted hover:text-foreground"
-                        title="Copy"
+                        title={t("providers:card.copy")}
                       >
                         <Copy className="h-3 w-3" />
                       </button>
@@ -758,7 +775,7 @@ const ProviderInstance: React.FC<ProviderInstanceProps> = ({
                       onClick={handleToggleKeyVisibility}
                       className="rounded p-1 text-muted-foreground hover:bg-muted hover:text-foreground"
                       disabled={isLoading}
-                      title={isViewingKey ? "Hide" : "View"}
+                      title={isViewingKey ? t("providers:card.hide") : t("providers:card.view")}
                     >
                       {isLoading ? (
                         <span className="h-3 w-3 animate-spin rounded-full border-2 border-current border-t-transparent" />
@@ -774,14 +791,14 @@ const ProviderInstance: React.FC<ProviderInstanceProps> = ({
             </div>
             {provider.id === "bedrock" && (
               <div className="relative flex-1">
-                <Label>Secret key</Label>
+                <Label>{t("providers:card.secretKey")}</Label>
                 <Input
                   type={isViewingKey || isEditingKey ? "text" : "password"}
                   placeholder={
                     isEditMode && !isEditingKey
-                      ? "••••••••••••••••"
+                      ? t("providers:card.maskedKey")
                       : isEditingKey
-                        ? "Enter new secret key..."
+                        ? t("providers:card.enterNewSecretKey")
                         : "..."
                   }
                   value={
@@ -813,7 +830,7 @@ const ProviderInstance: React.FC<ProviderInstanceProps> = ({
                           (isEditingKey && secretKeyValue)
                         )
                       }
-                      title="Copy"
+                      title={t("providers:card.copy")}
                     >
                       <Copy className="h-3 w-3" />
                     </button>
@@ -824,7 +841,7 @@ const ProviderInstance: React.FC<ProviderInstanceProps> = ({
                         type="button"
                         onClick={() => handleCopyToClipboard(secretKeyValue)}
                         className="rounded p-1 text-muted-foreground hover:bg-muted hover:text-foreground"
-                        title="Copy"
+                        title={t("providers:card.copy")}
                       >
                         <Copy className="h-3 w-3" />
                       </button>
@@ -837,7 +854,7 @@ const ProviderInstance: React.FC<ProviderInstanceProps> = ({
                       onClick={handleToggleKeyVisibility}
                       className="rounded p-1 text-muted-foreground hover:bg-muted hover:text-foreground"
                       disabled={isLoading}
-                      title={isViewingKey ? "Hide" : "View"}
+                      title={isViewingKey ? t("providers:card.hide") : t("providers:card.view")}
                     >
                       {isLoading ? (
                         <span className="h-3 w-3 animate-spin rounded-full border-2 border-current border-t-transparent" />
@@ -865,7 +882,7 @@ const ProviderInstance: React.FC<ProviderInstanceProps> = ({
               htmlFor={`byok-${provider.id}-${existingKey?.id || instanceIndex}`}
               className="cursor-pointer text-xs font-normal"
             >
-              Enable for AI Gateway (BYOK)
+              {t("providers:card.byok")}
             </Label>
           </div>
 
@@ -890,11 +907,10 @@ const ProviderInstance: React.FC<ProviderInstanceProps> = ({
                 onClick={handleCancelEdit}
                 className="h-7 px-3 text-xs"
               >
-                Cancel
+                {t("common:actions.cancel")}
               </Button>
             )}
 
-            {/* Edit button - only for existing keys when not editing */}
             {isEditMode && !isEditingKey && (
               <Button
                 type="button"
@@ -909,13 +925,12 @@ const ProviderInstance: React.FC<ProviderInstanceProps> = ({
                 ) : (
                   <>
                     <Pencil className="mr-1 h-3 w-3" />
-                    Edit
+                    {t("common:actions.edit")}
                   </>
                 )}
               </Button>
             )}
 
-            {/* Save/Add button - only show when adding new or editing */}
             {(!isEditMode || isEditingKey) && (
               <Button
                 onClick={handleSaveKey}
@@ -924,27 +939,26 @@ const ProviderInstance: React.FC<ProviderInstanceProps> = ({
                 className="h-7 px-3 text-xs"
               >
                 {isSavingKey ? (
-                  "Saving..."
+                  t("providers:card.saving")
                 ) : isSavedLocal && !hasUnsavedChanges ? (
                   <>
                     <Check className="mr-1 h-3 w-3" />
-                    Saved
+                    {t("providers:card.saved")}
                   </>
                 ) : isEditMode ? (
                   <>
                     <Save className="mr-1 h-3 w-3" />
-                    Save
+                    {t("common:actions.save")}
                   </>
                 ) : (
                   <>
                     <Plus className="mr-1 h-3 w-3" />
-                    Add
+                    {t("providers:card.add")}
                   </>
                 )}
               </Button>
             )}
 
-            {/* Delete button - only show for existing keys when not editing */}
             {isEditMode && existingKey && !isEditingKey && (
               <AlertDialog>
                 <AlertDialogTrigger asChild>
@@ -960,26 +974,27 @@ const ProviderInstance: React.FC<ProviderInstanceProps> = ({
                     ) : (
                       <>
                         <Trash2 className="mr-1 h-3 w-3" />
-                        Delete
+                        {t("common:actions.delete")}
                       </>
                     )}
                   </Button>
                 </AlertDialogTrigger>
                 <AlertDialogContent>
                   <AlertDialogHeader>
-                    <AlertDialogTitle>Delete Provider Key</AlertDialogTitle>
+                    <AlertDialogTitle>{t("providers:card.deleteKeyTitle")}</AlertDialogTitle>
                     <AlertDialogDescription>
-                      Are you sure you want to delete this {provider.name} key?
-                      This action cannot be undone.
+                      {t("providers:card.deleteKeyDescription", {
+                        name: provider.name,
+                      })}
                     </AlertDialogDescription>
                   </AlertDialogHeader>
                   <AlertDialogFooter>
-                    <AlertDialogCancel>Cancel</AlertDialogCancel>
+                    <AlertDialogCancel>{t("common:actions.cancel")}</AlertDialogCancel>
                     <AlertDialogAction
                       onClick={() => deleteProviderKey.mutate(existingKey.id)}
                       className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
                     >
-                      Delete
+                      {t("common:actions.delete")}
                     </AlertDialogAction>
                   </AlertDialogFooter>
                 </AlertDialogContent>
@@ -994,6 +1009,7 @@ const ProviderInstance: React.FC<ProviderInstanceProps> = ({
 
 // ====== Main Provider Card Component ======
 export const ProviderCard: React.FC<ProviderCardProps> = ({ provider }) => {
+  const { t } = useTranslation(["providers", "common"]);
   const [isExpanded, setIsExpanded] = useState(false);
   const [hasUnsavedForm, setHasUnsavedForm] = useState(false);
   const [showSaveConfirm, setShowSaveConfirm] = useState(false);
@@ -1046,7 +1062,7 @@ export const ProviderCard: React.FC<ProviderCardProps> = ({ provider }) => {
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src={provider.logoUrl}
-                alt={`${provider.name} logo`}
+                alt={t("providers:card.logoAlt", { name: provider.name })}
                 className="h-4 w-4 object-contain"
                 onError={(e) => {
                   e.currentTarget.src = "/assets/home/providers/anthropic.png";
@@ -1062,12 +1078,13 @@ export const ProviderCard: React.FC<ProviderCardProps> = ({ provider }) => {
             <div className="text-xs text-muted-foreground">
               {existingKeys.length > 0 ? (
                 <span className="text-green-600 dark:text-green-400">
-                  {existingKeys.length} key
-                  {existingKeys.length !== 1 ? "s" : ""} configured
+                  {t("providers:card.keysConfigured", {
+                    count: existingKeys.length,
+                  })}
                 </span>
               ) : (
                 <span className="text-muted-foreground">
-                  No keys configured
+                  {t("providers:card.noKeysConfigured")}
                 </span>
               )}
             </div>
@@ -1118,7 +1135,7 @@ export const ProviderCard: React.FC<ProviderCardProps> = ({ provider }) => {
                 {hasUnsavedForm && (
                   <div className="border-t border-border/30 pt-3">
                     <div className="mb-2 text-xs text-muted-foreground">
-                      Add new instance:
+                      {t("providers:card.addNewInstance")}
                     </div>
                     <ProviderInstance
                       provider={provider}
@@ -1145,7 +1162,7 @@ export const ProviderCard: React.FC<ProviderCardProps> = ({ provider }) => {
                       className="flex items-center gap-2"
                     >
                       <Plus className="h-3.5 w-3.5" />
-                      Add new key
+                      {t("providers:card.addNewKey")}
                     </Button>
                   </div>
                 )}
@@ -1159,17 +1176,15 @@ export const ProviderCard: React.FC<ProviderCardProps> = ({ provider }) => {
       <AlertDialog open={showSaveConfirm} onOpenChange={setShowSaveConfirm}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Update Provider Key</AlertDialogTitle>
+            <AlertDialogTitle>{t("providers:card.updateKeyTitle")}</AlertDialogTitle>
             <AlertDialogDescription>
-              Are you sure you want to update this {provider.name} key? This
-              will replace the existing key with the new value you&apos;ve
-              entered.
+              {t("providers:card.updateKeyDescription", { name: provider.name })}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogCancel>{t("common:actions.cancel")}</AlertDialogCancel>
             <AlertDialogAction onClick={handleConfirmSave}>
-              Update Key
+              {t("providers:card.updateKey")}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

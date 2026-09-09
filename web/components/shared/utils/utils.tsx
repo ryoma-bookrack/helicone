@@ -1,3 +1,5 @@
+import { formatStandardDateTime } from "@/lib/i18n/format";
+
 const monthNames = [
   "Jan",
   "Feb",
@@ -40,38 +42,18 @@ const getUSDate = (date: Date, includeTimeZone: boolean = false) => {
   return formattedDate;
 };
 
+/** @deprecated Prefer getStandardDateFromString */
 const getUSDateFromString = (
   value: string,
-  includeTimeZone: boolean = false,
-) => {
-  const date = new Date(value);
-  return getUSDate(date, includeTimeZone);
-};
+  _includeTimeZone: boolean = false,
+) => formatStandardDateTime(value);
 
-const get24HourFromDate = (date: Date) => {
-  return date.toLocaleString(undefined, {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
-    hourCycle: "h23",
-    timeZoneName: "short",
-  });
-};
+const getStandardDateFromString = (value: string) =>
+  formatStandardDateTime(value);
 
-const get24HourFromString = (value: string) => {
-  const date = new Date(value);
-  return date.toLocaleString(undefined, {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
-    hourCycle: "h23",
-    timeZoneName: "short",
-  });
-};
+const get24HourFromDate = (date: Date) => formatStandardDateTime(date);
+
+const get24HourFromString = (value: string) => formatStandardDateTime(value);
 
 const getUSDateMin = (value: string) => {
   const date = new Date(value);
@@ -109,6 +91,7 @@ export {
   capitalizeWords,
   getUSDate,
   getUSDateFromString,
+  getStandardDateFromString,
   get24HourFromDate,
   get24HourFromString,
   getUSDateMin,

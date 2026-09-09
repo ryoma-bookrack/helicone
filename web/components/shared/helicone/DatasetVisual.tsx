@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import {
   Table,
   TableHeader,
@@ -10,59 +10,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { BeakerIcon, SparklesIcon } from "@heroicons/react/24/outline";
 import { DownloadIcon } from "lucide-react";
-
-const defaultTableData = [
-  {
-    name: "Dataset for fine-tuning",
-    createdAt: "8/28/2024, 2:36:44 PM",
-    rows: "1,000",
-  },
-  {
-    name: "Dataset for evaluation",
-    createdAt: "8/28/2024, 2:36:44 PM",
-    rows: "25",
-  },
-  {
-    name: "Dataset for experiments",
-    createdAt: "8/28/2024, 2:36:44 PM",
-    rows: "25",
-  },
-  {
-    name: "Bad data",
-    createdAt: "8/28/2024, 2:36:44 PM",
-    rows: "16",
-  },
-  {
-    name: "Paid user dataset",
-    createdAt: "8/28/2024, 2:36:44 PM",
-    rows: "200",
-  },
-  {
-    name: "Production dataset",
-    createdAt: "8/28/2024, 2:36:44 PM",
-    rows: "500",
-  },
-  {
-    name: "Test dataset",
-    createdAt: "8/28/2024, 2:36:44 PM",
-    rows: "50",
-  },
-  {
-    name: "Customer feedback",
-    createdAt: "8/28/2024, 2:36:44 PM",
-    rows: "150",
-  },
-  {
-    name: "Support queries",
-    createdAt: "8/28/2024, 2:36:44 PM",
-    rows: "300",
-  },
-  {
-    name: "Training examples",
-    createdAt: "8/28/2024, 2:36:44 PM",
-    rows: "750",
-  },
-];
+import { useTranslation } from "react-i18next";
 
 interface DatasetVisualProps {
   numRows?: number;
@@ -73,6 +21,64 @@ export const DatasetVisual = ({
   numRows = 6,
   hideButtons = false,
 }: DatasetVisualProps) => {
+  const { t } = useTranslation("common");
+
+  const defaultTableData = useMemo(
+    () => [
+      {
+        name: t("visuals.datasets.fineTuning"),
+        createdAt: "8/28/2024, 2:36:44 PM",
+        rows: "1,000",
+      },
+      {
+        name: t("visuals.datasets.evaluation"),
+        createdAt: "8/28/2024, 2:36:44 PM",
+        rows: "25",
+      },
+      {
+        name: t("visuals.datasets.experiments"),
+        createdAt: "8/28/2024, 2:36:44 PM",
+        rows: "25",
+      },
+      {
+        name: t("visuals.datasets.badData"),
+        createdAt: "8/28/2024, 2:36:44 PM",
+        rows: "16",
+      },
+      {
+        name: t("visuals.datasets.paidUser"),
+        createdAt: "8/28/2024, 2:36:44 PM",
+        rows: "200",
+      },
+      {
+        name: t("visuals.datasets.production"),
+        createdAt: "8/28/2024, 2:36:44 PM",
+        rows: "500",
+      },
+      {
+        name: t("visuals.datasets.test"),
+        createdAt: "8/28/2024, 2:36:44 PM",
+        rows: "50",
+      },
+      {
+        name: t("visuals.datasets.customerFeedback"),
+        createdAt: "8/28/2024, 2:36:44 PM",
+        rows: "150",
+      },
+      {
+        name: t("visuals.datasets.supportQueries"),
+        createdAt: "8/28/2024, 2:36:44 PM",
+        rows: "300",
+      },
+      {
+        name: t("visuals.datasets.trainingExamples"),
+        createdAt: "8/28/2024, 2:36:44 PM",
+        rows: "750",
+      },
+    ],
+    [t],
+  );
+
   let displayData = defaultTableData.slice(0, numRows);
 
   if (hideButtons == false) {
@@ -91,13 +97,13 @@ export const DatasetVisual = ({
             <TableHeader>
               <TableRow>
                 <TableHead className="text-md h-8 border-b border-r border-[hsl(var(--border))] bg-[hsl(var(--muted))] px-4 py-2 font-semibold text-[hsl(var(--foreground))]">
-                  Name
+                  {t("visuals.datasets.name")}
                 </TableHead>
                 <TableHead className="text-md h-8 border-b border-r border-[hsl(var(--border))] bg-[hsl(var(--muted))] px-4 py-2 font-semibold text-[hsl(var(--foreground))]">
-                  Created At
+                  {t("visuals.datasets.createdAt")}
                 </TableHead>
                 <TableHead className="text-md h-8 border-b border-[hsl(var(--border))] bg-[hsl(var(--muted))] px-4 py-2 font-semibold text-[hsl(var(--foreground))]">
-                  Rows
+                  {t("visuals.datasets.rows")}
                 </TableHead>
               </TableRow>
             </TableHeader>
@@ -121,7 +127,6 @@ export const DatasetVisual = ({
         <div className="pointer-events-none absolute bottom-0 left-0 right-0 h-20 bg-gradient-to-t from-[hsl(var(--background))] to-transparent" />
       </div>
 
-      {/* Action Buttons */}
       {!hideButtons && (
         <div className="z-10 -mt-6 h-full w-full px-2 pb-2">
           <div className="h-full w-full rounded-2xl bg-[hsl(var(--primary))] px-2 py-2">
@@ -132,7 +137,7 @@ export const DatasetVisual = ({
                 className="pointer-events-none flex-1 basis-0 rounded-xl bg-[hsl(var(--primary))]/80 p-6 text-sm font-semibold text-[hsl(var(--primary-foreground))] md:text-lg"
               >
                 <BeakerIcon className="mr-2 h-5 w-5 shrink-0" />
-                Experiment
+                {t("visuals.datasets.experiment")}
               </Button>
               <Button
                 variant="ghost"
@@ -140,7 +145,7 @@ export const DatasetVisual = ({
                 className="pointer-events-none flex-1 basis-0 rounded-xl bg-[hsl(var(--primary))]/80 p-6 text-sm font-semibold text-[hsl(var(--primary-foreground))] md:text-lg"
               >
                 <SparklesIcon className="mr-2 h-5 w-5 shrink-0" />
-                Fine-tune
+                {t("visuals.datasets.fineTune")}
               </Button>
               <Button
                 variant="secondary"
@@ -148,7 +153,7 @@ export const DatasetVisual = ({
                 className="pointer-events-none flex-1 basis-0 rounded-xl bg-[hsl(var(--background))] p-6 text-sm font-semibold text-[hsl(var(--primary))] md:text-lg"
               >
                 <DownloadIcon className="mr-2 h-5 w-5 shrink-0" />
-                Export
+                {t("export.export")}
               </Button>
             </div>
           </div>

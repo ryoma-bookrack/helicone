@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import {
@@ -61,6 +62,9 @@ export const OnlineEvaluatorsSection = ({
   open,
   onOpenChange,
 }: OnlineEvaluatorsSectionProps) => {
+  const { t } = useTranslation("evals");
+  const { t: tCommon } = useTranslation("common");
+
   const emptyState = onlineEvaluators.length === 0;
 
   const [showCreateForm, setShowCreateForm] = useState(false);
@@ -126,7 +130,7 @@ export const OnlineEvaluatorsSection = ({
       <Dialog open={open} onOpenChange={onOpenChange}>
         <DialogContent className="max-w-4xl">
           <DialogHeader>
-            <DialogTitle>Online Evaluators</DialogTitle>
+            <DialogTitle>{t("ui.onlineEvaluators")}</DialogTitle>
             <DialogDescription className="flex items-center gap-2">
               Run this evaluator automatically on your API requests based on
               filters and sampling rates.
@@ -153,15 +157,14 @@ export const OnlineEvaluatorsSection = ({
                   <TagIcon className="h-6 w-6 text-muted-foreground" />
                 </div>
                 <div className="text-center">
-                  <H4>No online evaluators yet</H4>
+                  <H4>{t("ui.noOnlineEvaluatorsYet")}</H4>
                   <P className="mx-auto mt-1 max-w-md text-muted-foreground">
                     Create your first online evaluator to automatically evaluate
                     your API requests in production.
                   </P>
                 </div>
                 <Button onClick={() => setShowCreateForm(true)}>
-                  <PlusIcon className="mr-2 h-4 w-4" /> Create Online Evaluator
-                </Button>
+                  <PlusIcon className="mr-2 h-4 w-4" />{t("ui.createOnlineEvaluator")}</Button>
               </Card>
             ) : (
               <>
@@ -210,10 +213,10 @@ export const OnlineEvaluatorsSection = ({
                                 size="icon"
                                 className="h-6 w-6 text-muted-foreground hover:bg-primary/5 hover:text-primary"
                                 onClick={() => setEditingEvaluator(item.id)}
-                                title="Edit evaluator"
+                                title={t("ui.editEvaluator2")}
                               >
                                 <PencilIcon className="h-3 w-3" />
-                                <span className="sr-only">Edit</span>
+                                <span className="sr-only">{tCommon("actions.edit")}</span>
                               </Button>
                               <AlertDialog>
                                 <AlertDialogTrigger asChild>
@@ -227,9 +230,7 @@ export const OnlineEvaluatorsSection = ({
                                 </AlertDialogTrigger>
                                 <AlertDialogContent>
                                   <AlertDialogHeader>
-                                    <AlertDialogTitle>
-                                      Delete Online Evaluator
-                                    </AlertDialogTitle>
+                                    <AlertDialogTitle>{t("ui.deleteOnlineEvaluator")}</AlertDialogTitle>
                                     <AlertDialogDescription>
                                       This will delete the online evaluator and
                                       your requests will no longer be evaluated
@@ -237,17 +238,13 @@ export const OnlineEvaluatorsSection = ({
                                     </AlertDialogDescription>
                                   </AlertDialogHeader>
                                   <AlertDialogFooter>
-                                    <AlertDialogCancel>
-                                      Cancel
-                                    </AlertDialogCancel>
+                                    <AlertDialogCancel>{tCommon("actions.cancel")}</AlertDialogCancel>
                                     <AlertDialogAction
                                       onClick={() =>
                                         deleteOnlineEvaluator.mutate(item.id)
                                       }
                                       className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
-                                    >
-                                      Delete
-                                    </AlertDialogAction>
+                                    >{tCommon("actions.delete")}</AlertDialogAction>
                                   </AlertDialogFooter>
                                 </AlertDialogContent>
                               </AlertDialog>
@@ -278,9 +275,7 @@ export const OnlineEvaluatorsSection = ({
                                 {propertyFilters.length > 0 ? (
                                   <div>
                                     <p className="mb-1.5 flex items-center text-xs font-medium text-muted-foreground">
-                                      <TagIcon className="mr-1 h-3 w-3" />
-                                      Property Filters
-                                    </p>
+                                      <TagIcon className="mr-1 h-3 w-3" />{t("ui.propertyFilters")}</p>
                                     <div className="flex flex-wrap gap-1.5">
                                       {propertyFilters.map((property) => (
                                         <Badge
@@ -325,8 +320,7 @@ export const OnlineEvaluatorsSection = ({
                     className="w-full justify-center border-dashed py-6 text-muted-foreground hover:border-dashed hover:bg-muted/10 hover:text-foreground"
                     onClick={() => setShowCreateForm(true)}
                   >
-                    <PlusIcon className="mr-2 h-4 w-4" /> Add Another Evaluator
-                  </Button>
+                    <PlusIcon className="mr-2 h-4 w-4" />{t("ui.addAnotherEvaluator")}</Button>
                 </div>
               </>
             )}
@@ -338,7 +332,7 @@ export const OnlineEvaluatorsSection = ({
       <Dialog open={showCreateForm} onOpenChange={setShowCreateForm}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Create Online Evaluator</DialogTitle>
+            <DialogTitle>{t("ui.createOnlineEvaluator")}</DialogTitle>
             <DialogDescription>
               Create a new online evaluator to automatically evaluate your
               requests based on specific criteria.

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { useTranslation } from "react-i18next";
 import { SVGProps } from "react";
 import { BsDiscord } from "react-icons/bs";
 
@@ -40,6 +41,7 @@ const meta = {
 
 const Footer = (props: FooterProps) => {
   const {} = props;
+  const { t } = useTranslation("marketing");
 
   return (
     <footer className="border-t border-gray-200 bg-inherit dark:border-gray-700 dark:bg-black">
@@ -60,25 +62,25 @@ const Footer = (props: FooterProps) => {
         </div>
         <div className="mt-8 flex flex-row space-x-4 md:order-1 md:mt-0">
           <p className="text-center text-xs leading-5 text-gray-500 dark:text-gray-300">
-            &copy; 2025 Helicone, Inc. All rights reserved.
+            {t("footer.copyright")}
           </p>
           <Link
             href="/privacy"
             className="text-center text-xs leading-5 text-gray-500 dark:text-gray-300"
           >
-            Privacy Policy
+            {t("footer.privacyPolicy")}
           </Link>
           <Link
             href="/terms"
             className="text-center text-xs leading-5 text-gray-500 dark:text-gray-300"
           >
-            Terms of Use
+            {t("footer.termsOfUse")}
           </Link>
           <Link
             href="/career"
             className="text-center text-xs leading-5 text-gray-500 dark:text-gray-300"
           >
-            Work with us
+            {t("footer.workWithUs")}
           </Link>
         </div>
       </div>

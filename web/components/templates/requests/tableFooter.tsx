@@ -14,6 +14,7 @@ import {
   ChevronRight,
 } from "lucide-react";
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { useDebounce } from "../../../services/hooks/debounce";
 
 interface TableFooterProps {
@@ -38,6 +39,7 @@ export default function TableFooter(props: TableFooterProps) {
     pageSizeOptions,
     showCount = false,
   } = props;
+  const { t } = useTranslation("requests");
 
   const totalPages = Math.ceil(count / pageSize);
   const [page, setPage] = useState<number>(currentPage);
@@ -51,10 +53,9 @@ export default function TableFooter(props: TableFooterProps) {
   }, [debouncedPage, currentPage, onPageChange]);
   return (
     <footer className="flex w-full flex-row items-center justify-between gap-4 border-t border-border bg-slate-100 px-4 py-2 text-xs dark:bg-slate-900">
-      {/* Left Actions */}
       <div className="flex flex-row items-center gap-1">
         <p className="hidden font-medium text-muted-foreground sm:block">
-          Rows
+          {t("table.rows")}
         </p>
         <Select
           defaultValue={pageSize.toString()}
@@ -73,7 +74,6 @@ export default function TableFooter(props: TableFooterProps) {
         </Select>
       </div>
 
-      {/* Center Actions */}
       <div className="flex items-center gap-1">
         <Button
           variant="outline"
@@ -95,7 +95,7 @@ export default function TableFooter(props: TableFooterProps) {
         </Button>
         <div className="flex flex-row items-center space-x-1">
           {isCountLoading ? (
-            <p className="font-medium text-muted-foreground">Loading...</p>
+            <p className="font-medium text-muted-foreground">{t("table.loading")}</p>
           ) : count > 0 ? (
             <div className="flex items-center gap-1">
               <Input
@@ -116,10 +116,12 @@ export default function TableFooter(props: TableFooterProps) {
                 max={totalPages}
               />
               <p className="whitespace-nowrap font-medium text-muted-foreground">
-                of {totalPages}
+                {t("table.of", { total: totalPages })}
               </p>
               {showCount && (
-                <p className="text-[10px] font-medium text-muted-foreground">{`(${count} total)`}</p>
+                <p className="text-[10px] font-medium text-muted-foreground">
+                  {t("table.totalCount", { count })}
+                </p>
               )}
             </div>
           ) : (
@@ -146,7 +148,6 @@ export default function TableFooter(props: TableFooterProps) {
         </Button>
       </div>
 
-      {/* Right Actions (empty) */}
       <div className="w-[107px]" />
     </footer>
   );

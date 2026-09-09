@@ -5,8 +5,9 @@ import StatusBadge from "../../../templates/requests/statusBadge";
 import { formatNumber } from "../../../templates/users/initialColumns";
 import { clsx } from "../../clsx";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import CostPill from "../../../templates/requests/costPill";
-import { getUSDateFromString } from "../../utils/utils";
+import { getStandardDateFromString } from "../../utils/utils";
 import { MappedLLMRequest } from "@helicone-package/llm-mapper/types";
 
 interface RequestRowProps {
@@ -20,6 +21,7 @@ interface RequestRowProps {
 
 const RequestRow = (props: RequestRowProps) => {
   const { index, length, isSelected, row, onSelectRow, properties } = props;
+  const { t } = useTranslation("common");
 
   const [isExpanded, setIsExpanded] = useState(false);
 
@@ -44,7 +46,7 @@ const RequestRow = (props: RequestRowProps) => {
     >
       <div className="flex flex-row items-center space-x-4">
         <p className="text-sm font-semibold">
-          {getUSDateFromString(row.heliconeMetadata.createdAt)}
+          {getStandardDateFromString(row.heliconeMetadata.createdAt)}
         </p>
         <StatusBadge
           statusType={row.heliconeMetadata.status.statusType}
@@ -83,14 +85,15 @@ const RequestRow = (props: RequestRowProps) => {
       {isSelected && isExpanded && (
         <div className="flex flex-col space-y-4 text-gray-900 dark:text-gray-100">
           <p className="text-sm">
-            <span className="font-semibold">User:</span>{" "}
+            <span className="font-semibold">{t("table.userLabel")}</span>{" "}
             {row.heliconeMetadata.user}
           </p>
           <p className="text-sm">
-            <span className="font-semibold">Total Tokens:</span>{" "}
+            <span className="font-semibold">{t("table.totalTokensLabel")}</span>{" "}
             {row.heliconeMetadata.totalTokens}{" "}
             <span className="text-xs text-gray-500">
-              (Completion: {row.heliconeMetadata.completionTokens} / Prompt:{" "}
+              ({t("table.completionLabel")}{" "}
+              {row.heliconeMetadata.completionTokens} / {t("table.promptLabel")}{" "}
               {row.heliconeMetadata.promptTokens})
             </span>
           </p>

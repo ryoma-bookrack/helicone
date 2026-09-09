@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -48,6 +49,8 @@ const AddOnlineEvaluatorForm = ({
     propertyFilters: { key: string; value: string }[];
   };
 }) => {
+  const { t } = useTranslation("evals");
+  const { t: tCommon } = useTranslation("common");
   const [sampleRate, setSampleRate] = useState(
     initialValues?.sampleRate || 100,
   );
@@ -65,6 +68,9 @@ const AddOnlineEvaluatorForm = ({
   }, [initialValues]);
 
   const addPropertyFilter = () => {
+  const { t } = useTranslation("evals");
+  const { t: tCommon } = useTranslation("common");
+
     setPropertyFilters([...propertyFilters, { key: "", value: "" }]);
   };
 
@@ -115,7 +121,7 @@ const AddOnlineEvaluatorForm = ({
             />
           </div>
           <div className="space-y-2">
-            <Label>Properties Filters</Label>
+            <Label>{t("ui.propertiesFilters")}</Label>
             <br />
             <i className="text-xs">
               This uses{" "}
@@ -159,9 +165,9 @@ const AddOnlineEvaluatorForm = ({
                     </PopoverTrigger>
                     <PopoverContent className="w-[200px] p-0" align="start">
                       <Command>
-                        <CommandInput placeholder="Search property..." />
+                        <CommandInput placeholder={t("ui.searchProperty")} />
                         <CommandList>
-                          <CommandEmpty>No property found.</CommandEmpty>
+                          <CommandEmpty>{t("ui.noPropertyFound")}</CommandEmpty>
                           <CommandGroup>
                             {properties.properties?.map((property) => (
                               <CommandItem
@@ -185,7 +191,7 @@ const AddOnlineEvaluatorForm = ({
                 </div>
                 <div className="col-span-2 flex items-center space-x-2">
                   <Input
-                    placeholder="Value"
+                    placeholder={t("ui.value")}
                     value={filter.value}
                     onChange={(e) =>
                       updatePropertyFilter(index, filter.key, e.target.value)
@@ -202,15 +208,12 @@ const AddOnlineEvaluatorForm = ({
               </div>
             ))}
             <Button variant="outline" onClick={addPropertyFilter}>
-              <Plus className="mr-2 h-4 w-4" /> Add Property
-            </Button>
+              <Plus className="mr-2 h-4 w-4" />{t("ui.addProperty")}</Button>
           </div>
         </div>
       )}
       <DialogFooter>
-        <Button variant="outline" onClick={close}>
-          Cancel
-        </Button>
+        <Button variant="outline" onClick={close}>{tCommon("actions.cancel")}</Button>
         <Button
           onClick={() => onSubmit({ config: { sampleRate, propertyFilters } })}
           disabled={isLoading}

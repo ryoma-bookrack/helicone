@@ -1,3 +1,5 @@
+import { useTranslation } from "react-i18next";
+
 interface TagsSummaryProps {
   tags: string[];
   maxCharacters?: number;
@@ -9,8 +11,11 @@ const TagsSummary = ({
   maxCharacters,
   className = "",
 }: TagsSummaryProps) => {
+  const { t } = useTranslation("prompts");
+  const { t: tCommon } = useTranslation("common");
+
   if (tags.length === 0) {
-    return <span className="text-xs text-muted-foreground">No tags</span>;
+    return <span className="text-xs text-muted-foreground">{t("ui.noTags")}</span>;
   }
 
   const visibleTags = [];

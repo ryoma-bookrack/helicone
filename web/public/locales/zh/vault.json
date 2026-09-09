@@ -1,0 +1,90 @@
+{
+  "page": {
+    "title": "密钥库"
+  },
+  "providerKeys": {
+    "title": "提供商密钥",
+    "addButton": "添加提供商密钥",
+    "description": "这些密钥用于向提供商进行身份验证。",
+    "portalDescription": "您输入的密钥将添加到 API 请求的 `Authorization` 请求头中。选择要与此组织关联的密钥",
+    "emptyAction": "添加提供商密钥",
+    "columns": {
+      "name": "名称",
+      "key": "密钥",
+      "provider": "提供商"
+    }
+  },
+  "proxyKeys": {
+    "title": "Helicone 代理密钥",
+    "addButton": "创建代理密钥",
+    "description": "这些密钥将在您的应用中替换提供商密钥，确保所有使用量都记录在 Helicone 中。",
+    "emptyAction": "添加代理密钥",
+    "columns": {
+      "name": "名称",
+      "providerKeyName": "提供商密钥名称"
+    }
+  },
+  "limits": {
+    "label": "限制",
+    "addNew": "添加新限制",
+    "cost": "费用",
+    "count": "次数",
+    "costPlaceholder": "费用 (USD)",
+    "countPlaceholder": "次数",
+    "timeWindowPlaceholder": "时间窗口",
+    "for": "持续",
+    "seconds": "秒",
+    "minutes": "分钟",
+    "hours": "小时",
+    "days": "天",
+    "spent": "已花费 ${{spent}} / ${{limit}}",
+    "requests": "{{count}} / {{limit}} 次请求",
+    "at": "@ {{window}}"
+  },
+  "createProviderKey": {
+    "title": "创建提供商密钥",
+    "provider": "提供商",
+    "selectProvider": "选择提供商",
+    "custom": "自定义",
+    "openai": "OpenAI",
+    "providerKey": "提供商密钥",
+    "providerKeyTooltip": "这是从提供商获取的密钥，用于身份验证和调用提供商 API。",
+    "authHeaderHint": "此密钥将放在 <code>authorization</code> 请求头中，并带有 <code>Bearer</code> 前缀。",
+    "providerKeyPlaceholder": "sk-",
+    "keyName": "密钥名称",
+    "keyNamePlaceholder": "提供商密钥名称",
+    "createButton": "创建提供商密钥"
+  },
+  "createProxyKey": {
+    "title": "创建代理密钥",
+    "proxyKeyName": "代理密钥名称",
+    "proxyKeyNamePlaceholder": "代理密钥名称",
+    "providerKeyName": "提供商密钥名称",
+    "createButton": "创建代理密钥",
+    "yourKeyTitle": "您的代理密钥",
+    "yourKeyDescription": "请复制此密钥并安全保存。您将无法再次查看。"
+  },
+  "deleteProviderKey": {
+    "title": "删除提供商密钥",
+    "description": "此提供商密钥将从您的账户中删除。所有映射到此提供商密钥的代理密钥也将被删除。确定要删除吗？"
+  },
+  "deleteProxyKey": {
+    "title": "删除代理密钥",
+    "description": "此代理密钥将从您的账户中删除。确定要删除吗？"
+  },
+  "notifications": {
+    "enterKeyName": "请输入密钥名称",
+    "enterProviderKey": "请输入提供商密钥",
+    "membersNotAllowed": "普通成员无权创建提供商密钥",
+    "providerKeyCreated": "提供商密钥创建成功",
+    "providerKeyCreateFailed": "创建失败，您只能拥有 1 个提供商密钥",
+    "error": "错误：{{error}}",
+    "providerKeyDeleted": "提供商密钥已删除",
+    "providerKeyDeleteFailed": "删除提供商密钥失败",
+    "proxyKeyCreated": "代理密钥已创建",
+    "proxyKeyCreateFailed": "创建代理密钥失败",
+    "proxyKeyDeleted": "代理密钥已删除",
+    "proxyKeyDeleteFailed": "删除代理密钥失败",
+    "copiedToClipboard": "已复制到剪贴板！"
+  }
+}

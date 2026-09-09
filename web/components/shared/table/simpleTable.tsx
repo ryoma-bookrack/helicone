@@ -11,6 +11,7 @@ import { clsx } from "../clsx";
 import { useState } from "react";
 import { ArrowDown, ArrowUp } from "lucide-react";
 import { useColumnResize } from "@/hooks/useColumnResize";
+import { useTranslation } from "react-i18next";
 
 export type ColumnConfig<T> = {
   key: keyof T | undefined;
@@ -38,7 +39,7 @@ export function SimpleTable<T>(props: SimpleTableProps<T>) {
   const {
     data,
     columns,
-    emptyMessage = "No data available",
+    emptyMessage,
     onSelect,
     defaultSortKey,
     defaultSortDirection = "desc",
@@ -47,6 +48,9 @@ export function SimpleTable<T>(props: SimpleTableProps<T>) {
     currentSortDirection,
     tableId,
   } = props;
+
+  const { t } = useTranslation("common");
+  const resolvedEmptyMessage = emptyMessage ?? t("empty.noData");
 
   const [internalSortConfig, setInternalSortConfig] = useState<{
     key: keyof T | undefined;
@@ -106,7 +110,9 @@ export function SimpleTable<T>(props: SimpleTableProps<T>) {
       <div className="h-full bg-slate-50 dark:bg-slate-950">
         {sortedData.length === 0 ? (
           <div className="flex h-48 w-full items-center justify-center border-border bg-white px-4 py-2 dark:bg-black">
-            <p className="text-slate-500 dark:text-slate-400">{emptyMessage}</p>
+            <p className="text-slate-500 dark:text-slate-400">
+              {resolvedEmptyMessage}
+            </p>
           </div>
         ) : (
           <Table className="min-w-full bg-white dark:bg-black">

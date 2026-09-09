@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import {
   Popover,
@@ -78,6 +79,9 @@ export function ExperimentTable({
 }: {
   experimentTableId: string;
 }) {
+  const { t } = useTranslation("prompts");
+  const { t: tCommon } = useTranslation("common");
+
   const {
     experimentTableQuery,
     promptVersionTemplateData,
@@ -186,9 +190,7 @@ export function ExperimentTable({
                         }),
                       );
                     }}
-                  >
-                    Run all cells
-                  </DropdownMenuItem>
+                  >{t("ui.runAllCells")}</DropdownMenuItem>
                   <DropdownMenuItem
                     onSelect={async () => {
                       await Promise.all(
@@ -206,9 +208,7 @@ export function ExperimentTable({
                         }),
                       );
                     }}
-                  >
-                    Run unexecuted cells
-                  </DropdownMenuItem>
+                  >{t("ui.runUnexecutedCells")}</DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
             </div>
@@ -242,7 +242,7 @@ export function ExperimentTable({
       columnHelper.group({
         id: "inputs__outer",
         header: () => (
-          <PromptColumnHeader label="Inputs" promptVersionId="inputs" />
+          <PromptColumnHeader label={t("ui.inputs")} promptVersionId="inputs" />
         ),
         columns: [
           columnHelper.accessor("inputs", {
@@ -525,16 +525,12 @@ export function ExperimentTable({
         <div className="flex items-center gap-5">
           {!(table.getIsSomeRowsSelected() || table.getIsAllRowsSelected()) ? (
             <div className="flex items-center gap-2">
-              <span className="text-sm font-medium text-slate-700 dark:text-slate-300">
-                Show scores
-              </span>
+              <span className="text-sm font-medium text-slate-700 dark:text-slate-300">{t("ui.showScores")}</span>
               <Switch
                 checked={showScores}
                 onCheckedChange={handleShowScoresChange}
               />
-              <span className="ml-4 text-sm font-medium text-slate-700 dark:text-slate-300">
-                Wrap text
-              </span>
+              <span className="ml-4 text-sm font-medium text-slate-700 dark:text-slate-300">{t("ui.wrapText")}</span>
               <Switch
                 checked={wrapText.data ?? false}
                 onCheckedChange={(checked) => {
@@ -714,9 +710,7 @@ export function ExperimentTable({
                           <TableCell
                             colSpan={columnDef.length}
                             className="h-24 text-center"
-                          >
-                            No results.
-                          </TableCell>
+                          >{t("ui.noResults")}</TableCell>
                         </TableRow>
                       )}
                     </TableBody>
@@ -729,9 +723,7 @@ export function ExperimentTable({
                       size="sm"
                       className="mt-0 flex flex-row space-x-2 self-start text-slate-800 shadow-none"
                     >
-                      <PlusIcon className="h-4 w-4" />
-                      Add row
-                    </Button>
+                      <PlusIcon className="h-4 w-4" />{t("ui.addRow")}</Button>
                   </PopoverTrigger>
                   <PopoverContent className="w-full px-2 py-2">
                     <AddRowPopover

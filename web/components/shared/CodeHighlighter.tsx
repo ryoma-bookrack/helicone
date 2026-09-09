@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { codeToHtml } from "shiki";
 import { Copy, Check } from "lucide-react";
 import useNotification from "./notification/useNotification";
@@ -18,6 +19,7 @@ export function CodeHighlighter({
   const [html, setHtml] = useState<string>("");
   const [copied, setCopied] = useState(false);
   const { setNotification } = useNotification();
+  const { t } = useTranslation("common");
 
   useEffect(() => {
     async function highlight() {
@@ -51,10 +53,10 @@ export function CodeHighlighter({
     try {
       await navigator.clipboard.writeText(code);
       setCopied(true);
-      setNotification("Code copied to clipboard", "success");
+      setNotification(t("notifications.codeCopied"), "success");
       setTimeout(() => setCopied(false), 2000);
     } catch (err) {
-      setNotification("Failed to copy code", "error");
+      setNotification(t("notifications.codeCopyFailed"), "error");
     }
   };
 
@@ -63,7 +65,7 @@ export function CodeHighlighter({
       <button
         onClick={handleCopy}
         className="absolute right-2 top-2 z-10 rounded-md bg-gray-800 p-1.5 text-gray-400 opacity-0 transition-opacity hover:bg-gray-700 hover:text-gray-300 group-hover:opacity-100"
-        aria-label="Copy code"
+        aria-label={t("aria.copyCode")}
       >
         {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
       </button>

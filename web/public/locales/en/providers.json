@@ -1,0 +1,109 @@
+{
+  "page": {
+    "title": "Providers",
+    "searchPlaceholder": "Search providers...",
+    "sortLabel": "Sort: {{option}}",
+    "sortRelevance": "Relevance",
+    "sortAlphabetical": "A-Z",
+    "sortAlphabeticalFull": "Alphabetical (A-Z)",
+    "sortRecentlyUsed": "Recently Used",
+    "noResults": "No providers found matching your search."
+  },
+  "card": {
+    "logoAlt": "{{name}} logo",
+    "keysConfigured_one": "{{count}} key configured",
+    "keysConfigured_other": "{{count}} keys configured",
+    "noKeysConfigured": "No keys configured",
+    "addNewInstance": "Add new instance:",
+    "addNewKey": "Add new key",
+    "instance": "Instance {{index}}",
+    "defaultKeyName": "{{name}} API Key",
+    "defaultKeyNameNumbered": "{{name}} API Key {{number}}",
+    "keyId": "Key ID:",
+    "copyKeyId": "Copy Key ID",
+    "removeInstance": "Remove instance",
+    "byok": "Enable for AI Gateway (BYOK)",
+    "accessKey": "Access key",
+    "secretKey": "Secret key",
+    "serviceAccountJson": "Service Account JSON",
+    "serviceAccountPlaceholder": "Paste your service account JSON here...",
+    "serviceAccountLoaded": "Service account loaded ✓",
+    "serviceAccountHint": "Paste your service account JSON from Google Cloud Console",
+    "serviceAccountNewPlaceholder": "Paste new service account JSON here...",
+    "serviceAccountConfigured": "Service account configured",
+    "projectId": "Project ID:",
+    "maskedKey": "••••••••••••••••",
+    "enterNewApiKey": "Enter new API key...",
+    "enterNewSecretKey": "Enter new secret key...",
+    "copy": "Copy",
+    "view": "View",
+    "hide": "Hide",
+    "saved": "Saved",
+    "saving": "Saving...",
+    "add": "Add",
+    "deleteKeyTitle": "Delete Provider Key",
+    "deleteKeyDescription": "Are you sure you want to delete this {{name}} key? This action cannot be undone.",
+    "updateKeyTitle": "Update Provider Key",
+    "updateKeyDescription": "Are you sure you want to update this {{name}} key? This will replace the existing key with the new value you've entered.",
+    "updateKey": "Update Key",
+    "selectEndpointRegion": "Select endpoint region"
+  },
+  "config": {
+    "endpointRegion": "Endpoint Region",
+    "defaultEndpoint": "Default (api.openai.com)",
+    "usDataResidency": "US Data Residency (us.api.openai.com)",
+    "baseUri": "Base URI",
+    "baseUriPlaceholder": "https://your-resource-name.openai.azure.com",
+    "apiVersion": "API Version",
+    "apiVersionPlaceholder": "2023-05-15",
+    "deploymentName": "Deployment Name",
+    "deploymentNamePlaceholder": "gpt-35-turbo",
+    "heliconeModelId": "Helicone Model Id",
+    "heliconeModelIdPlaceholder": "e.g gpt-4o",
+    "region": "Region",
+    "regionPlaceholderBedrock": "us-west-2",
+    "regionPlaceholderVertex": "us-central1, us-east1, europe-west4, etc.",
+    "crossRegion": "Cross Region",
+    "autoRouteGlobally": "Auto-route globally",
+    "vertexNote": "Auto-routing sets the default region to global, which optimizes for latency and availability. If cross region is not enabled, or the model does not support global routing, the selected region will be used."
+  },
+  "notifications": {
+    "retrieveKeyFailed": "Failed to retrieve key",
+    "loadKeyForEditFailed": "Failed to load key for editing",
+    "keyCopied": "API key copied to clipboard",
+    "copyFailed": "Failed to copy to clipboard",
+    "enterKeyValue": "Please enter at least one key value",
+    "saveKeyFailed": "Failed to save provider key",
+    "updateKeyFailed": "Failed to update provider key"
+  },
+  "pricing": {
+    "legacyAddons": {
+      "prompts": {
+        "name": "Prompts",
+        "description": "Track, version and iterate."
+      },
+      "experiments": {
+        "name": "Experiments",
+        "description": "Test prompts at scale."
+      },
+      "evals": {
+        "name": "Evals",
+        "description": "Quantify LLM outputs."
+      }
+    },
+    "tiers": {
+      "free": "Free",
+      "pro": "Pro",
+      "team": "Team",
+      "enterprise": "Enterprise",
+      "growth": "Growth"
+    },
+    "tierDisplay": {
+      "upgrade": "Upgrade",
+      "pro": "Pro",
+      "team": "Team",
+      "growth": "Growth",
+      "enterprise": "Enterprise"
+    }
+  }
+}

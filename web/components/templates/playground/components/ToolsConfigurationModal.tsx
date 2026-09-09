@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -40,6 +41,9 @@ export default function ToolsConfigurationModal({
   onToolsChange,
   isScrolled,
 }: ToolsConfigurationModalProps) {
+  const { t } = useTranslation("playground");
+  const { t: tCommon } = useTranslation("common");
+
   const [toolsDialogOpen, setToolsDialogOpen] = useState(false);
   const [selectedToolIndex, setSelectedToolIndex] = useState<number | null>(
     tools ? (tools.length > 0 ? 0 : null) : null,
@@ -127,7 +131,7 @@ export default function ToolsConfigurationModal({
             </Button>
           </DialogTrigger>
         </TooltipTrigger>
-        <TooltipContent>Tools Configuration</TooltipContent>
+        <TooltipContent>{t("ui.toolsConfiguration")}</TooltipContent>
       </Tooltip>
       <DialogContent
         className={clsx(
@@ -139,9 +143,7 @@ export default function ToolsConfigurationModal({
           <div className="flex items-center">
             <FlaskConicalIcon className="mr-2.5 h-5 w-5 text-slate-500" />
             <DialogTitle>
-              <h3 className="mr-3 text-base font-medium text-slate-950 dark:text-white">
-                Tools Configuration
-              </h3>
+              <h3 className="mr-3 text-base font-medium text-slate-950 dark:text-white">{t("ui.toolsConfiguration")}</h3>
             </DialogTitle>
           </div>
         </div>
@@ -149,10 +151,8 @@ export default function ToolsConfigurationModal({
           <div className="flex flex-1 flex-col items-center justify-center gap-4 p-20">
             <div className="flex flex-col items-center gap-2 text-center">
               <FlaskConicalIcon className="h-8 w-8 text-slate-400" />
-              <p className="text-sm text-slate-500">No tools configured</p>
-              <p className="text-xs text-slate-400">
-                Add a tool to get started
-              </p>
+              <p className="text-sm text-slate-500">{t("ui.noToolsConfigured")}</p>
+              <p className="text-xs text-slate-400">{t("ui.addAToolToGetStarted")}</p>
             </div>
             <Button
               variant="outline"
@@ -169,16 +169,14 @@ export default function ToolsConfigurationModal({
                 setSelectedToolIndex(0);
               }}
             >
-              <PlusIcon className="h-4 w-4" />
-              Add Tool
-            </Button>
+              <PlusIcon className="h-4 w-4" />{t("ui.addTool")}</Button>
           </div>
         ) : (
           <div className="flex h-full w-full gap-4 py-4">
             {/* Tools List */}
             <div className="flex w-64 flex-col gap-2 border-r pr-4">
               <div className="flex items-center justify-between">
-                <h3 className="font-medium">Tools</h3>
+                <h3 className="font-medium">{t("ui.tools")}</h3>
                 <Button
                   variant="ghost"
                   size="icon"
@@ -229,9 +227,7 @@ export default function ToolsConfigurationModal({
                             );
                           }
                         }}
-                      >
-                        Delete
-                      </ContextMenuItem>
+                      >{tCommon("actions.delete")}</ContextMenuItem>
                     </ContextMenuContent>
                   </ContextMenu>
                 ))}
@@ -245,8 +241,8 @@ export default function ToolsConfigurationModal({
                     <div className="flex justify-between">
                       <Tabs defaultValue="form" className="w-full">
                         <TabsList>
-                          <TabsTrigger value="form">Form</TabsTrigger>
-                          <TabsTrigger value="json">JSON</TabsTrigger>
+                          <TabsTrigger value="form">{t("ui.form")}</TabsTrigger>
+                          <TabsTrigger value="json">{t("ui.json")}</TabsTrigger>
                         </TabsList>
                         <TabsContent value="form" className="mt-4">
                           <div className="flex flex-col gap-2">
@@ -254,9 +250,7 @@ export default function ToolsConfigurationModal({
                               <Label
                                 className="justify-start text-sm text-slate-500"
                                 htmlFor="name"
-                              >
-                                Name
-                              </Label>
+                              >{t("ui.name")}</Label>
                               <Input
                                 id="name"
                                 value={currentTools[selectedToolIndex].name}
@@ -269,9 +263,7 @@ export default function ToolsConfigurationModal({
                               <Label
                                 className="justify-start text-sm text-slate-500"
                                 htmlFor="description"
-                              >
-                                Description
-                              </Label>
+                              >{t("ui.description")}</Label>
                               <Input
                                 id="description"
                                 value={
@@ -286,9 +278,7 @@ export default function ToolsConfigurationModal({
                               <Label
                                 className="justify-start text-sm text-slate-500"
                                 htmlFor="parameters"
-                              >
-                                Parameters (JSON Schema)
-                              </Label>
+                              >{t("ui.parametersJsonSchema")}</Label>
                               <MarkdownEditor
                                 id="parameters"
                                 language="json"
@@ -336,7 +326,7 @@ export default function ToolsConfigurationModal({
         {currentTools.length > 0 && (
           <DialogFooter className="flex w-full justify-between">
             <DialogClose asChild>
-              <Button variant="outline">Cancel</Button>
+              <Button variant="outline">{tCommon("actions.cancel")}</Button>
             </DialogClose>
             <Button
               onClick={() => {
@@ -354,12 +344,10 @@ export default function ToolsConfigurationModal({
                   }
                   setToolsDialogOpen(false);
                 } catch (error) {
-                  setNotification("Invalid JSON", "error");
+                  setNotification(t("ui.invalidJson"), "error");
                 }
               }}
-            >
-              Save
-            </Button>
+            >{tCommon("actions.save")}</Button>
           </DialogFooter>
         )}
       </DialogContent>

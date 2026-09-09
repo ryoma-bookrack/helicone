@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { Col } from "@/components/layout/common";
 import { generateOpenAITemplate } from "@/components/templates/evals/CreateNewEvaluator/evaluatorHelpers";
 import { Button } from "@/components/ui/button";
@@ -143,18 +144,20 @@ const BasicInformationSection = ({
   ) => void;
   notification: ReturnType<typeof useNotification>;
   existingEvaluator?: boolean;
-}) => (
+}) => {
+  const { t } = useTranslation("evals");
+  return (
   <div className="space-y-3">
     <SectionHeader
-      title="Basic Information"
+      title={t("ui.basicInformation")}
       description="Define your evaluator's name and purpose"
     />
 
     <div className="space-y-3">
-      <FormField id="name" label="Evaluator Name">
+      <FormField id="name" label={t("ui.evaluatorName")}>
         <Input
           id="name"
-          placeholder="Enter evaluator name"
+          placeholder={t("ui.enterEvaluatorName")}
           value={configFormParams.name}
           className="border-input"
           readOnly={existingEvaluator}
@@ -166,21 +169,16 @@ const BasicInformationSection = ({
           }}
         />
         {existingEvaluator && (
-          <div className="mt-1 text-xs text-muted-foreground">
-            Evaluator names cannot be changed after creation
-          </div>
+          <div className="mt-1 text-xs text-muted-foreground">{t("ui.evaluatorNamesCannotBeChangedAfterCreati")}</div>
         )}
       </FormField>
 
-      <FormField id="description" label="Description">
+      <FormField id="description" label={t("ui.description")}>
         <>
-          <Muted className="mb-1 block text-xs">
-            Descriptions are used by the LLM to understand what the evaluator
-            does.
-          </Muted>
+          <Muted className="mb-1 block text-xs">{t("ui.descriptionsAreUsedByTheLlmToUnderstandW")}</Muted>
           <Textarea
             id="description"
-            placeholder="Check if the response is appropriate"
+            placeholder={t("ui.checkIfTheResponseIsAppropriate")}
             value={configFormParams.description}
             className="h-32 border-input"
             onChange={(e) =>
@@ -191,7 +189,8 @@ const BasicInformationSection = ({
       </FormField>
     </div>
   </div>
-);
+  );
+};
 
 // Choice Scores Component
 const ChoiceScoresSection = ({
@@ -202,10 +201,12 @@ const ChoiceScoresSection = ({
   updateConfigFormParams: (
     updates: Partial<LLMEvaluatorConfigFormPreset>,
   ) => void;
-}) => (
+}) => {
+  const { t } = useTranslation("evals");
+  return (
   <div className="rounded-md bg-muted/10 p-3">
     <div className="mb-2 flex items-center justify-between">
-      <Label>Choice Scores</Label>
+      <Label>{t("ui.choiceScores")}</Label>
       <Tooltip>
         <TooltipTrigger>
           <InfoIcon className="h-4 w-4 text-muted-foreground" />
@@ -232,9 +233,7 @@ const ChoiceScoresSection = ({
         }
         className="w-full"
       >
-        <PlusIcon className="mr-2 h-4 w-4" />
-        Add Choice Scores
-      </Button>
+        <PlusIcon className="mr-2 h-4 w-4" />{t("ui.addChoiceScores")}</Button>
     ) : (
       <div className="space-y-2">
         {configFormParams.choiceScores.map((item, index) => (
@@ -267,7 +266,7 @@ const ChoiceScoresSection = ({
                   choiceScores,
                 });
               }}
-              placeholder="Description"
+              placeholder={t("ui.description")}
               className="flex-grow"
             />
             <div className="flex gap-1">
@@ -313,7 +312,8 @@ const ChoiceScoresSection = ({
       </div>
     )}
   </div>
-);
+  );
+};
 
 // Range Configuration Component - more compact
 const RangeConfigSection = ({
@@ -324,14 +324,14 @@ const RangeConfigSection = ({
   updateConfigFormParams: (
     updates: Partial<LLMEvaluatorConfigFormPreset>,
   ) => void;
-}) => (
+}) => {
+  const { t } = useTranslation("evals");
+  return (
   <div className="rounded-md bg-muted/10 p-2">
-    <Label className="mb-1 block text-sm">Range Configuration</Label>
+    <Label className="mb-1 block text-sm">{t("ui.rangeConfiguration")}</Label>
     <div className="grid grid-cols-2 gap-3">
       <div>
-        <Label htmlFor="min-range" className="text-xs text-muted-foreground">
-          Minimum Value
-        </Label>
+        <Label htmlFor="min-range" className="text-xs text-muted-foreground">{t("ui.minimumValue")}</Label>
         <Input
           id="min-range"
           type="number"
@@ -345,9 +345,7 @@ const RangeConfigSection = ({
         />
       </div>
       <div>
-        <Label htmlFor="max-range" className="text-xs text-muted-foreground">
-          Maximum Value
-        </Label>
+        <Label htmlFor="max-range" className="text-xs text-muted-foreground">{t("ui.maximumValue")}</Label>
         <Input
           id="max-range"
           type="number"
@@ -362,7 +360,8 @@ const RangeConfigSection = ({
       </div>
     </div>
   </div>
-);
+  );
+};
 
 // Scoring Type Section Component - more compact
 const ScoringTypeSection = ({
@@ -374,6 +373,7 @@ const ScoringTypeSection = ({
     updates: Partial<LLMEvaluatorConfigFormPreset>,
   ) => void;
 }) => {
+  const { t } = useTranslation("evals");
   const scoringTypeTooltip = {
     boolean:
       "Boolean scorers allow you to assign a score to a response based on whether it is true or false.",
@@ -386,14 +386,14 @@ const ScoringTypeSection = ({
   return (
     <div className="space-y-3">
       <SectionHeader
-        title="Scoring Type"
-        description="Choose how your evaluator will score responses"
+        title={t("ui.scoringType")}
+        description={t("ui.chooseHowYourEvaluatorWillScoreResponses")}
       />
 
       <div className="flex flex-col space-y-3">
         <FormField
           id="scoring-type"
-          label="Scoring Type"
+          label={t("ui.scoringType")}
           tooltip={scoringTypeTooltip[configFormParams.expectedValueType]}
         >
           <Select
@@ -425,18 +425,12 @@ const ScoringTypeSection = ({
             }}
           >
             <SelectTrigger id="scoring-type">
-              <SelectValue placeholder="Select a scoring type" />
+              <SelectValue placeholder={t("ui.selectAScoringType")} />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="boolean">
-                Boolean Scorer (true/false)
-              </SelectItem>
-              <SelectItem value="choice">
-                Choice Scorer (predefined options)
-              </SelectItem>
-              <SelectItem value="range">
-                Range Scorer (numeric range)
-              </SelectItem>
+              <SelectItem value="boolean">{t("ui.booleanScorerTrueFalse")}</SelectItem>
+              <SelectItem value="choice">{t("ui.choiceScorerPredefinedOptions")}</SelectItem>
+              <SelectItem value="range">{t("ui.rangeScorerNumericRange")}</SelectItem>
             </SelectContent>
           </Select>
         </FormField>
@@ -480,29 +474,30 @@ const VariablesSection = ({
     updates: Partial<LLMEvaluatorConfigFormPreset>,
   ) => void;
 }) => {
+  const { t } = useTranslation("evals");
   const variableOptions = [
     {
       id: "inputs",
-      label: "Inputs",
-      description: "Include prompt input variables",
+      label: t("ui.inputs"),
+      description: t("ui.includePromptInputVariables"),
       checked: configFormParams.includedVariables.inputs,
     },
     {
       id: "promptTemplate",
-      label: "Prompt Template",
-      description: "Include the prompt template",
+      label: t("ui.promptTemplate"),
+      description: t("ui.includeThePromptTemplate"),
       checked: configFormParams.includedVariables.promptTemplate,
     },
     {
       id: "inputBody",
-      label: "Input Body",
-      description: "Include the full request body",
+      label: t("ui.inputBody"),
+      description: t("ui.includeTheFullRequestBody"),
       checked: configFormParams.includedVariables.inputBody,
     },
     {
       id: "outputBody",
-      label: "Output Body",
-      description: "Include the full response body",
+      label: t("ui.outputBody"),
+      description: t("ui.includeTheFullResponseBody"),
       checked: configFormParams.includedVariables.outputBody,
     },
   ];
@@ -510,8 +505,8 @@ const VariablesSection = ({
   return (
     <div className="space-y-3">
       <SectionHeader
-        title="Included Variables"
-        description="Select which variables to include in the evaluation"
+        title={t("ui.includedVariables")}
+        description={t("ui.selectWhichVariablesToIncludeInTheEvalua")}
       />
 
       <div className="grid grid-cols-2 gap-2">
@@ -563,15 +558,17 @@ const ModelTestingSection = ({
     openTestPanel: () => void;
   };
   existingEvaluatorId?: string;
-}) => (
+}) => {
+  const { t } = useTranslation("evals");
+  return (
   <div className="space-y-3">
     <SectionHeader
-      title="Model & Testing"
-      description="Select the model and test your evaluator"
+      title={t("ui.modelTesting")}
+      description={t("ui.selectTheModelAndTestYourEvaluator")}
     />
 
     <div>
-      <FormField id="model" label="Model" className="flex-1">
+      <FormField id="model" label={t("ui.model")} className="flex-1">
         <Select
           defaultValue="gpt-4o"
           value={configFormParams.model}
@@ -582,7 +579,7 @@ const ModelTestingSection = ({
           }
         >
           <SelectTrigger className="w-full">
-            <SelectValue placeholder="Select a model" />
+            <SelectValue placeholder={t("ui.selectAModel")} />
           </SelectTrigger>
           <SelectContent>
             {modelOptions.map((model) => (
@@ -595,11 +592,10 @@ const ModelTestingSection = ({
       </FormField>
     </div>
 
-    <Muted className="text-xs">
-      You will be charged for the LLM usage of this evaluator.
-    </Muted>
+    <Muted className="text-xs">{t("ui.youWillBeChargedForTheLlmUsageOfThisEval")}</Muted>
   </div>
-);
+  );
+};
 
 // Main Component - more compact spacing
 export const LLMEvaluatorConfigForm: React.FC<{
@@ -607,6 +603,8 @@ export const LLMEvaluatorConfigForm: React.FC<{
   existingEvaluatorId?: string;
   openTestPanel?: () => void;
 }> = ({ existingEvaluatorId, onSubmit, openTestPanel }) => {
+  const { t } = useTranslation("evals");
+  const { t: tCommon } = useTranslation("common");
   const notification = useNotification();
   const evalPanelStore = useEvalPanelStore();
   const { isSubmitting, hideFormButtons } = useEvalFormStore();
@@ -643,7 +641,7 @@ export const LLMEvaluatorConfigForm: React.FC<{
   // Define the handleSubmit function for the Create/Update button
   const handleSubmit = () => {
     if (!llmConfig.name) {
-      notification.setNotification("Evaluator name is required", "error");
+      notification.setNotification(t("ui.evaluatorNameIsRequired"), "error");
       return;
     }
 

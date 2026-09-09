@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { ArrowPathIcon } from "@heroicons/react/20/solid";
 import { useState } from "react";
 import ThemedModal from "../../shared/themed/themedModal";
@@ -12,6 +13,9 @@ interface PromptDeleteProps {
 }
 
 const PromptDelete = (props: PromptDeleteProps) => {
+  const { t } = useTranslation("prompts");
+  const { t: tCommon } = useTranslation("common");
+
   const { promptId, promptName, onSuccess } = props;
   const [open, setOpen] = useState(false);
   const jawnClient = useJawnClient();
@@ -40,18 +44,14 @@ const PromptDelete = (props: PromptDeleteProps) => {
           <p className="text-lg font-semibold text-gray-900 dark:text-gray-100">
             Delete Prompt: {promptName}
           </p>
-          <p className="w-[400px] whitespace-pre-wrap text-sm text-gray-500">
-            Are you sure you want to delete this prompt?
-          </p>
+          <p className="w-[400px] whitespace-pre-wrap text-sm text-gray-500">{t("ui.areYouSureYouWantToDeleteThisPrompt")}</p>
           <div className="mt-4 flex w-full justify-end gap-4">
             <button
               onClick={() => {
                 setOpen(false);
               }}
               className="flex flex-row items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-semibold text-gray-900 shadow-sm hover:bg-gray-50 hover:text-gray-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-500 dark:border-gray-700 dark:bg-black dark:text-gray-100 dark:hover:bg-gray-900 dark:hover:text-gray-300"
-            >
-              Cancel
-            </button>
+            >{tCommon("actions.cancel")}</button>
             <button
               onClick={(e) => {
                 e.stopPropagation();
@@ -68,15 +68,15 @@ const PromptDelete = (props: PromptDeleteProps) => {
                   })
                   .then((res) => {
                     if (res.error) {
-                      setNotification("Error deleting prompt", "error");
+                      setNotification(t("ui.errorDeletingPrompt"), "error");
                     } else {
-                      setNotification("Prompt deleted", "success");
+                      setNotification(t("ui.promptDeleted"), "success");
                       onSuccess();
                       setOpen(false);
                     }
                   })
                   .catch((err) => {
-                    setNotification("Error deleting prompt", "error");
+                    setNotification(t("ui.errorDeletingPrompt"), "error");
                   })
                   .finally(() => {
                     setIsLoading(false);

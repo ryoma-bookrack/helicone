@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
@@ -19,6 +20,9 @@ const PlaygroundVariablesPanel = ({
   values,
   onUpdateValue,
 }: PlaygroundVariablesPanelProps) => {
+  const { t } = useTranslation("playground");
+  const { t: tCommon } = useTranslation("common");
+
   const [editObjectModes, setEditObjectModes] = useState<Set<string>>(
     new Set(),
   );
@@ -49,12 +53,12 @@ const PlaygroundVariablesPanel = ({
     <ScrollArea className="h-full w-full">
       <div className="flex h-full flex-col">
         <div className="border-b border-border p-4">
-          <h2 className="text-sm font-medium">Prompt Variables</h2>
+          <h2 className="text-sm font-medium">{t("ui.promptVariables")}</h2>
         </div>
         <div className="p-4">
           {variables.size === 0 ? (
             <div className="flex h-32 items-center justify-center text-muted-foreground">
-              <p className="text-sm">No template variables detected</p>
+              <p className="text-sm">{t("ui.noTemplateVariablesDetected")}</p>
             </div>
           ) : (
             <div className="flex flex-col divide-y divide-border">
@@ -78,9 +82,7 @@ const PlaygroundVariablesPanel = ({
                       <Label
                         htmlFor={`edit-object-${name}`}
                         className="text-xs text-muted-foreground"
-                      >
-                        Edit Object
-                      </Label>
+                      >{t("ui.editObject")}</Label>
                       <Switch
                         id={`edit-object-${name}`}
                         className="data-[state=checked]:bg-foreground"

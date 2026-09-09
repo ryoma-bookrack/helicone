@@ -19,14 +19,20 @@ import {
 } from "@/utils/providerUtils";
 import FoldedHeader from "../shared/FoldedHeader";
 import { useOrg } from "@/components/layout/org/organizationContext";
+import { useTranslation } from "react-i18next";
 
 export const ProvidersPage: React.FC = () => {
-  // Local UI state
+  const { t } = useTranslation("providers");
   const [searchQuery, setSearchQuery] = useState("");
   const [sortOption, setSortOption] = useState<SortOption>("relevance");
   const org = useOrg();
 
-  // Filter and sort the providers based on user selections
+  const sortLabels: Record<SortOption, string> = {
+    relevance: t("page.sortRelevance"),
+    alphabetical: t("page.sortAlphabetical"),
+    "recently-used": t("page.sortRecentlyUsed"),
+  };
+
   const filteredProviders = sortProviders(
     filterProviders(
       filterPubliclyVisibleProviders(providers, org?.currentOrg?.id),
@@ -42,7 +48,7 @@ export const ProvidersPage: React.FC = () => {
         showFold={false}
         leftSection={
           <Small className="font-bold text-gray-500 dark:text-slate-300">
-            Providers
+            {t("page.title")}
           </Small>
         }
       />
@@ -51,7 +57,7 @@ export const ProvidersPage: React.FC = () => {
           <div className="relative flex-1">
             <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
             <Input
-              placeholder="Search providers..."
+              placeholder={t("page.searchPlaceholder")}
               value={searchQuery}
               onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                 setSearchQuery(e.target.value)
@@ -66,25 +72,20 @@ export const ProvidersPage: React.FC = () => {
                 className="flex min-w-[150px] items-center justify-between gap-1"
               >
                 <span>
-                  Sort:{" "}
-                  {sortOption === "relevance"
-                    ? "Relevance"
-                    : sortOption === "alphabetical"
-                      ? "A-Z"
-                      : "Recently Used"}
+                  {t("page.sortLabel", { option: sortLabels[sortOption] })}
                 </span>
                 <ChevronDown className="h-4 w-4" />
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
               <DropdownMenuItem onClick={() => setSortOption("relevance")}>
-                Relevance
+                {t("page.sortRelevance")}
               </DropdownMenuItem>
               <DropdownMenuItem onClick={() => setSortOption("alphabetical")}>
-                Alphabetical (A-Z)
+                {t("page.sortAlphabeticalFull")}
               </DropdownMenuItem>
               <DropdownMenuItem onClick={() => setSortOption("recently-used")}>
-                Recently Used
+                {t("page.sortRecentlyUsed")}
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
@@ -93,7 +94,7 @@ export const ProvidersPage: React.FC = () => {
         <div className="grid grid-cols-1 gap-2">
           {filteredProviders.length === 0 ? (
             <div className="col-span-full py-6 text-center text-muted-foreground">
-              No providers found matching your search.
+              {t("page.noResults")}
             </div>
           ) : (
             filteredProviders.map((provider) => (

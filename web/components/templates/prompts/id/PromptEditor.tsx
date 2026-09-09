@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { FreeTierLimitBanner } from "@/components/shared/FreeTierLimitBanner";
 import LoadingAnimation from "@/components/shared/loadingAnimation";
 import useNotification from "@/components/shared/notification/useNotification";
@@ -115,6 +116,9 @@ export default function PromptEditor({
   requestId,
   basePrompt,
 }: PromptEditorProps) {
+  const { t } = useTranslation("prompts");
+  const { t: tCommon } = useTranslation("common");
+
   /* -------------------------------------------------------------------------- */
   /*                                    State                                   */
   /* -------------------------------------------------------------------------- */
@@ -579,7 +583,7 @@ export default function PromptEditor({
         );
 
         if (result.error) {
-          setNotification("Failed to promote version", "error");
+          setNotification(t("ui.failedToPromoteVersion"), "error");
           return;
         }
 
@@ -602,7 +606,7 @@ export default function PromptEditor({
           { error, versionId: version.id },
           "Error promoting version",
         );
-        setNotification("Failed to promote version", "error");
+        setNotification(t("ui.failedToPromoteVersion"), "error");
       }
     },
     [jawnClient, promptVersionsData, refetchPromptVersions, setNotification],
@@ -627,7 +631,7 @@ export default function PromptEditor({
         );
 
         if (result.error) {
-          setNotification("Failed to update prompt ID.", "error");
+          setNotification(t("ui.failedToUpdatePromptId"), "error");
           return;
         }
 
@@ -717,7 +721,7 @@ export default function PromptEditor({
         );
 
         if (result?.error || !result?.data) {
-          setNotification("Error saving prompt", "error");
+          setNotification(t("ui.errorSavingPrompt"), "error");
           return;
         }
 
@@ -725,7 +729,7 @@ export default function PromptEditor({
         await refetchPromptVersions();
       } catch (error) {
         logger.error({ error, promptVersionId: latestVersionId }, "Save error");
-        setNotification("Failed to save and run prompt", "error");
+        setNotification(t("ui.failedToSaveAndRunPrompt"), "error");
         return;
       }
     }
@@ -777,7 +781,7 @@ export default function PromptEditor({
         abortController.current = null;
       }
     } catch (error) {
-      setNotification("Failed to save prompt state", "error");
+      setNotification(t("ui.failedToSavePromptState"), "error");
       setIsStreaming(false);
     }
   }, [
@@ -848,7 +852,7 @@ export default function PromptEditor({
     } catch (error) {
       if (error instanceof Error && error.name !== "AbortError") {
         logger.error({ error }, "Error generating improvements");
-        setNotification("Failed to generate improvements", "error");
+        setNotification(t("ui.failedToGenerateImprovements"), "error");
       }
     } finally {
       setIsImproving(false);
@@ -896,7 +900,7 @@ export default function PromptEditor({
       );
 
       if (result?.error || !result?.data) {
-        setNotification("Error saving improved prompt", "error");
+        setNotification(t("ui.errorSavingImprovedPrompt"), "error");
         return;
       }
 
@@ -904,11 +908,11 @@ export default function PromptEditor({
       loadVersionData(result.data.data);
       await refetchPromptVersions();
 
-      setNotification("Successfully applied improvements", "success");
+      setNotification(t("ui.successfullyAppliedImprovements"), "success");
       setIsAutoImproveOpen(false);
     } catch (error) {
       logger.error({ error }, "Error applying improvements");
-      setNotification("Failed to apply improvements", "error");
+      setNotification(t("ui.failedToApplyImprovements"), "error");
     }
   }, [
     state,
@@ -948,12 +952,12 @@ export default function PromptEditor({
 
       const res = await createPrompt(prompt, metadata);
       if (res?.id) {
-        setNotification("Prompt created successfully", "success");
+        setNotification(t("ui.promptCreatedSuccessfully"), "success");
         router.push(`/prompts/${res.id}`);
       }
     } catch (error) {
       logger.error({ error }, "Error creating prompt");
-      setNotification("Failed to create prompt", "error");
+      setNotification(t("ui.failedToCreatePrompt"), "error");
     }
   }, [state, withinPromptsLimit, createPrompt, router, setNotification]);
 
@@ -1176,9 +1180,7 @@ export default function PromptEditor({
             <Drawer>
               <DrawerTrigger>
                 <Button variant="link">
-                  <PiChartBarBold className="mr-2 h-4 w-4" />
-                  Metrics
-                </Button>
+                  <PiChartBarBold className="mr-2 h-4 w-4" />{t("ui.metrics")}</Button>
               </DrawerTrigger>
               <DrawerContent className="h-[75vh] w-full">
                 <ScrollArea className="h-full">
@@ -1202,9 +1204,7 @@ export default function PromptEditor({
                     <div
                       className={`h-2 w-2 animate-pulse rounded-full bg-amber-500`}
                     />
-                    <span className="text-sm font-semibold text-secondary">
-                      Unsaved Changes
-                    </span>
+                    <span className="text-sm font-semibold text-secondary">{t("ui.unsavedChanges")}</span>
                   </div>
                 </TooltipTrigger>
                 <TooltipContent side="bottom">
@@ -1243,13 +1243,11 @@ export default function PromptEditor({
                   className="h-4 w-4 rounded-sm"
                   width={16}
                   height={16}
-                />
-                Configure OpenRouter
-              </Button>
+                />{t("ui.configureOpenrouter")}</Button>
             </DialogTrigger>
             <DialogContent className="sm:max-w-xl">
               <DialogHeader>
-                <DialogTitle>Configure OpenRouter</DialogTitle>
+                <DialogTitle>{t("ui.configureOpenrouter")}</DialogTitle>
               </DialogHeader>
               <div className="mb-4 text-sm text-muted-foreground">
                 OpenRouter provides access to multiple LLM models through a
@@ -1269,9 +1267,7 @@ export default function PromptEditor({
               onClick={() => setIsAutoImproveOpen(true)}
               disabled={state.isDirty || !canRun}
             >
-              <PiBrainBold className="mr-2 h-4 w-4" />
-              Auto-Improve
-            </Button>
+              <PiBrainBold className="mr-2 h-4 w-4" />{t("ui.autoImprove")}</Button>
           )}
 
           {/* From Request, Playground, or Imported From Code: Save As Prompt Button */}
@@ -1287,9 +1283,7 @@ export default function PromptEditor({
             >
               {isCreatingPrompt ? (
                 <>
-                  <PiSpinnerGapBold className="mr-2 h-4 w-4 animate-spin" />
-                  Saving...
-                </>
+                  <PiSpinnerGapBold className="mr-2 h-4 w-4 animate-spin" />{t("ui.saving")}</>
               ) : editorMode === "fromCode" ? (
                 "Save as Editor Prompt"
               ) : (
@@ -1342,9 +1336,7 @@ export default function PromptEditor({
               </Button>
             </TooltipTrigger>
             {!hasOpenRouter && (
-              <TooltipContent side="bottom">
-                Add OpenRouter API Key to use this feature
-              </TooltipContent>
+              <TooltipContent side="bottom">{t("ui.addOpenrouterApiKeyToUseThisFeature")}</TooltipContent>
             )}
           </Tooltip>
 
@@ -1363,7 +1355,7 @@ export default function PromptEditor({
               }}
             >
               <FlaskConicalIcon className="mr-2 h-4 w-4" />
-              <span>Experiment</span>
+              <span>{t("ui.experiment")}</span>
             </Button>
           )}
 
@@ -1515,7 +1507,7 @@ export default function PromptEditor({
       {/* Auto-improve Popup */}
       {promptId && !!state.version && (
         <UniversalPopup
-          title="Auto-Improve (Beta)"
+          title={t("ui.autoImproveBeta")}
           width="w-full max-w-7xl"
           isOpen={isAutoImproveOpen}
           onClose={() => {

@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { useState } from "react";
 import { PopoverContent } from "@/components/ui/popover";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -10,6 +11,9 @@ import useNotification from "../../../../../shared/notification/useNotification"
 import { useJawnClient } from "../../../../../../lib/clients/jawnHook";
 
 export const NewExperimentPopover = () => {
+  const { t } = useTranslation("prompts");
+  const { t: tCommon } = useTranslation("common");
+
   const notification = useNotification();
   const jawn = useJawnClient();
   const [basePrompt, setBasePrompt] = useState<PromptObject>({
@@ -73,7 +77,7 @@ export const NewExperimentPopover = () => {
     }
 
     if (!basePrompt.model) {
-      notification.setNotification("Please select a model", "error");
+      notification.setNotification(t("ui.pleaseSelectAModel"), "error");
       return;
     }
 
@@ -87,12 +91,12 @@ export const NewExperimentPopover = () => {
       },
     });
     if (res.error || !res.data) {
-      notification.setNotification("Failed to create prompt", "error");
+      notification.setNotification(t("ui.failedToCreatePrompt"), "error");
       return;
     }
 
     if (!res.data?.data?.id || !res.data?.data?.prompt_version_id) {
-      notification.setNotification("Failed to create prompt", "error");
+      notification.setNotification(t("ui.failedToCreatePrompt"), "error");
       return;
     }
 
@@ -103,7 +107,7 @@ export const NewExperimentPopover = () => {
       },
     });
     if (!dataset.data?.data?.datasetId) {
-      notification.setNotification("Failed to create dataset", "error");
+      notification.setNotification(t("ui.failedToCreateDataset"), "error");
       return;
     }
 
@@ -130,7 +134,7 @@ export const NewExperimentPopover = () => {
       },
     });
     if (!experimentTableResult.data?.data?.experimentId) {
-      notification.setNotification("Failed to create experiment", "error");
+      notification.setNotification(t("ui.failedToCreateExperiment"), "error");
       return;
     }
 
@@ -149,10 +153,10 @@ export const NewExperimentPopover = () => {
         <div className="space-y-4">
           <div className="flex flex-row space-x-2">
             <BeakerIcon className="h-6 w-6" />
-            <h3 className="text-md font-semibold">Original Prompt</h3>
+            <h3 className="text-md font-semibold">{t("ui.originalPrompt")}</h3>
           </div>
           <Input
-            placeholder="Prompt Name"
+            placeholder={t("ui.promptName")}
             value={promptName}
             onChange={(e) => setPromptName(e.target.value)}
           />

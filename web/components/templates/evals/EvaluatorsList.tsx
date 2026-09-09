@@ -1,3 +1,5 @@
+import { formatStandardDateTime } from "@/lib/i18n/format";
+import { useTranslation } from "react-i18next";
 import React, { useState, useEffect } from "react";
 import { useEvaluators } from "./EvaluatorHook";
 import AuthHeader from "@/components/shared/authHeader";
@@ -25,6 +27,9 @@ import { cn } from "@/lib/utils";
 import { useRouter } from "next/navigation";
 
 export default function EvaluatorsList() {
+  const { t } = useTranslation("evals");
+  const { t: tCommon } = useTranslation("common");
+
   const { evaluators, deleteEvaluator } = useEvaluators();
   const notification = useNotification();
   const org = useOrg();
@@ -109,13 +114,7 @@ export default function EvaluatorsList() {
   }, [evaluators.data, org?.currentOrg?.id]);
 
   // Helper to format date strings
-  const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString("en-US", {
-      year: "numeric",
-      month: "short",
-      day: "numeric",
-    });
-  };
+  const formatDate = (dateString: string) => formatStandardDateTime(dateString);
 
   // Handle delete with confirmation
   const handleDelete = async (id: string, name: string) => {
@@ -129,7 +128,7 @@ export default function EvaluatorsList() {
           "success",
         );
       } catch (error) {
-        notification.setNotification("Failed to delete evaluator", "error");
+        notification.setNotification(t("ui.failedToDeleteEvaluator"), "error");
       }
     }
   };
@@ -139,7 +138,7 @@ export default function EvaluatorsList() {
     return (
       <div className="w-full p-6">
         <div className="mb-6 flex items-center justify-between">
-          <H2>Evaluators</H2>
+          <H2>{t("ui.evaluators")}</H2>
         </div>
         <Card className="w-full p-6">
           <div className="animate-pulse space-y-4">
@@ -162,7 +161,7 @@ export default function EvaluatorsList() {
       <>
         <div>
           <AuthHeader
-            title="Evaluators"
+            title={t("ui.evaluators")}
             actions={[
               <Link href="/evaluators/new" key="create-evaluator">
                 <Button
@@ -170,23 +169,19 @@ export default function EvaluatorsList() {
                   size="sm"
                   className="items-center gap-1"
                 >
-                  <PiPlusBold className="h-3.5 w-3.5" />
-                  Create Evaluator
-                </Button>
+                  <PiPlusBold className="h-3.5 w-3.5" />{t("ui.createEvaluator")}</Button>
               </Link>,
             ]}
           />
           <div className="p-6">
             <GenericEmptyState
-              title="Create Your First Evaluator"
-              description="Create an evaluator to score your LLM outputs and measure their quality."
+              title={t("ui.createYourFirstEvaluator")}
+              description={t("ui.createAnEvaluatorToScoreYourLlmOutputsAn")}
               icon={<LineChart size={28} className="text-accent-foreground" />}
               className="w-full"
               actions={
                 <Link href="/evaluators/new">
-                  <Button variant="default">
-                    Create Evaluator
-                    <PiPlusBold className="ml-2 h-4 w-4" />
+                  <Button variant="default">{t("ui.createEvaluator")}<PiPlusBold className="ml-2 h-4 w-4" />
                   </Button>
                 </Link>
               }
@@ -200,13 +195,11 @@ export default function EvaluatorsList() {
   return (
     <div>
       <AuthHeader
-        title="Evaluators"
+        title={t("ui.evaluators")}
         actions={[
           <Link href="/evaluators/new" key="create-evaluator">
             <Button variant="action" size="sm" className="items-center gap-1">
-              <PiPlusBold className="h-3.5 w-3.5" />
-              Create Evaluator
-            </Button>
+              <PiPlusBold className="h-3.5 w-3.5" />{t("ui.createEvaluator")}</Button>
           </Link>,
         ]}
       />
@@ -216,24 +209,12 @@ export default function EvaluatorsList() {
             <Table>
               <TableHeader className="bg-muted/30">
                 <TableRow className="border-b border-border hover:bg-transparent dark:border-slate-800">
-                  <TableHead className="px-4 py-2.5 text-sm font-semibold">
-                    Name
-                  </TableHead>
-                  <TableHead className="px-4 py-2.5 text-sm font-semibold">
-                    Type
-                  </TableHead>
-                  <TableHead className="px-4 py-2.5 text-sm font-semibold">
-                    Scoring
-                  </TableHead>
-                  <TableHead className="w-28 px-4 py-2.5 text-sm font-semibold">
-                    Status
-                  </TableHead>
-                  <TableHead className="px-4 py-2.5 text-sm font-semibold">
-                    Created
-                  </TableHead>
-                  <TableHead className="px-4 py-2.5 text-right text-sm font-semibold">
-                    Actions
-                  </TableHead>
+                  <TableHead className="px-4 py-2.5 text-sm font-semibold">{t("ui.name")}</TableHead>
+                  <TableHead className="px-4 py-2.5 text-sm font-semibold">{t("ui.type")}</TableHead>
+                  <TableHead className="px-4 py-2.5 text-sm font-semibold">{t("ui.scoring")}</TableHead>
+                  <TableHead className="w-28 px-4 py-2.5 text-sm font-semibold">{t("ui.status")}</TableHead>
+                  <TableHead className="px-4 py-2.5 text-sm font-semibold">{t("ui.created")}</TableHead>
+                  <TableHead className="px-4 py-2.5 text-right text-sm font-semibold">{t("ui.actions")}</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -329,9 +310,7 @@ export default function EvaluatorsList() {
                               "border-muted/50 bg-muted/10 text-muted-foreground",
                               "inline-flex h-6 items-center whitespace-nowrap px-3 py-1 text-xs",
                             )}
-                          >
-                            Offline
-                          </Badge>
+                          >{t("ui.offline")}</Badge>
                         )}
                       </TableCell>
                       <TableCell className="px-4 py-3 text-sm text-muted-foreground">

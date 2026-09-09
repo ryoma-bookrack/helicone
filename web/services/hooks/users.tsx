@@ -1,3 +1,4 @@
+import { formatStandardDate } from "@/lib/i18n/format";
 import { useQuery } from "@tanstack/react-query";
 import { useOrg } from "@/components/layout/org/organizationContext";
 import { useFilterAST } from "@/filterAST/context/filterContext";
@@ -72,19 +73,11 @@ const useUserId = (userId: string) => {
         response,
         requestOverTime: requestOverTime?.data?.data?.map((d: any) => ({
           requests: +d.count,
-          date: new Date(d.time).toLocaleDateString("en-US", {
-            year: "numeric",
-            month: "short",
-            day: "numeric",
-          }),
+          date: formatStandardDate(d.time),
         })),
         costOverTime: costOverTime?.data?.data?.map((d: any) => ({
           cost: +d.cost,
-          date: new Date(d.time).toLocaleDateString("en-US", {
-            year: "numeric",
-            month: "short",
-            day: "numeric",
-          }),
+          date: formatStandardDate(d.time),
         })),
       };
     },

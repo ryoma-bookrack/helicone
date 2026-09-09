@@ -1,0 +1,114 @@
+{
+  "page": {
+    "title": "Connections",
+    "description": "Connect and configure integrations to enhance your Helicone experience",
+    "searchPlaceholder": "Search integrations...",
+    "noResults": "No integrations found matching your search."
+  },
+  "sort": {
+    "label": "Sort: {{option}}",
+    "relevance": "Relevance",
+    "alphabetical": "Alphabetical",
+    "type": "Type",
+    "status": "Status"
+  },
+  "status": {
+    "noConfiguration": "No configuration",
+    "active": "Configuration active",
+    "notActive": "Configuration - not active"
+  },
+  "integration": {
+    "configure": "Configure",
+    "description": "Integrate with {{name}}'s services."
+  },
+  "types": {
+    "destination": "destination",
+    "fineTuning": "fine-tuning"
+  },
+  "segment": {
+    "enable": "Enable Segment Integration",
+    "apiKey": "Segment API Key",
+    "apiKeyPlaceholder": "Enter your Segment API key",
+    "testEvent": "Test event",
+    "saveConfiguration": "Save Configuration"
+  },
+  "openPipe": {
+    "enable": "Enable OpenPipe Integration",
+    "apiKey": "OpenPipe API Key",
+    "apiKeyPlaceholder": "Enter your OpenPipe API key",
+    "autoSync": "Enable Auto Dataset Syncing",
+    "comingSoon": "comming soon",
+    "saveConfiguration": "Save Configuration"
+  },
+  "stripe": {
+    "title": "Stripe Integration",
+    "description": "Connect your Stripe account to Helicone using a Restricted Access Key",
+    "enable": "Enable Stripe Integration",
+    "howToTitle": "How to get your Stripe Restricted Access Key",
+    "step1": "Go to your Stripe Dashboard and navigate to <strong>Developers → API keys</strong>",
+    "step2": "Click <strong>Create restricted key</strong>",
+    "step3": "Give your key a descriptive name like \"Helicone Integration\"",
+    "step4Intro": "Set the following permissions:",
+    "billingPermission": "<strong>Billing</strong>: Write access (required for meter events)",
+    "meterEventsPermission": "<strong>Meter events</strong>: Write access",
+    "customersPermission": "<strong>Customers</strong>: Read access (optional, for validation)",
+    "step5": "Click <strong>Create key</strong>",
+    "step6": "Copy the key (it starts with \"rk_live_\" or \"rk_test_\") and paste it below",
+    "note": "<strong>Note:</strong> Use a test key (rk_test_) for development and a live key (rk_live_) for production.",
+    "meterSettings": "Meter Settings",
+    "eventName": "Event Name",
+    "eventNameHint": "The event name to use when sending data to Stripe",
+    "testMeterEvents": "Test Meter Events",
+    "testMeterEventsHint": "Test your meter event configuration without saving",
+    "stripeCustomerId": "Stripe Customer ID",
+    "testEvent": "Test Event",
+    "testEventHint": "This will send a test meter event to Stripe using your current settings",
+    "testSuccessful": "Test Successful",
+    "testFailed": "Test Failed",
+    "testSuccessMessage": "Test meter event sent successfully!",
+    "testFailedNotification": "Test failed: {{error}}",
+    "unknownError": "Unknown error",
+    "saveFirstToTest": "Please save your configuration first to test",
+    "nextSteps": "Next Steps",
+    "nextStepsIntro": "After saving your configuration, add the following header to your Helicone requests to track usage in Stripe:",
+    "nextStepsReplace": "Replace <code>cus_12345678</code> with your actual Stripe customer ID. This will link your Helicone usage to the correct Stripe customer for billing.",
+    "learnMore": "<strong>Learn more:</strong> <link>Helicone Headers Documentation</link>",
+    "rakLabel": "Stripe Restricted Access Key (RAK)",
+    "rakHint": "Your key is encrypted and stored securely",
+    "saveConfiguration": "Save Configuration"
+  },
+  "fineTune": {
+    "title": "Fine-tune with OpenPipe",
+    "description": "Configure your fine-tuning job for the dataset: {{datasetName}}",
+    "fineTuneName": "Fine-tune Name (Slug)",
+    "fineTuneNamePlaceholder": "Enter a name for your fine-tuned model",
+    "baseModel": "Base Model",
+    "selectBaseModel": "Select a base model",
+    "batchSize": "Batch Size",
+    "batchSizeTooltip": "Number of samples processed in each training step. Use \"auto\" for automatic selection.",
+    "learningRateMultiplier": "Learning Rate Multiplier",
+    "learningRateTooltip": "Adjusts the learning rate. Higher values may lead to faster learning but risk overshooting.",
+    "numEpochs": "Number of Epochs",
+    "numEpochsTooltip": "Number of complete passes through the training dataset. More epochs may improve results but increase training time.",
+    "processing": "Processing",
+    "startFineTuning": "Start Fine-tuning",
+    "processLogs": "Process Logs:",
+    "copyLogs": "Copy logs to clipboard",
+    "logs": {
+      "starting": "Starting fine-tuning process...",
+      "fetchingRows": "Fetching additional rows...",
+      "fetchedRows": "Fetched {{count}} rows.",
+      "creatingDataset": "Creating dataset in OpenPipe...",
+      "datasetCreated": "Dataset created with ID: {{id}}",
+      "uploadingData": "Uploading data to OpenPipe...",
+      "uploadSuccess": "Data uploaded successfully.",
+      "creatingJob": "Creating fine-tune job...",
+      "jobCreated": "Fine-tune job created with ID: {{id}}",
+      "error": "Error: {{error}}"
+    },
+    "notifications": {
+      "success": "Fine-tune job created successfully!",
+      "error": "Error in fine-tuning process. Please try again."
+    }
+  }
+}

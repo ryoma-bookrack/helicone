@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { Col, Row } from "@/components/layout/common";
 import { ONBOARDING_STEPS } from "@/components/layout/onboardingContext";
 import { Badge } from "@/components/ui/badge";
@@ -20,6 +21,7 @@ import { memo, useEffect, useState } from "react";
 
 const ScoresEvaluatorsConfig = memo(
   ({ experimentId }: { experimentId: string }) => {
+    const { t } = useTranslation("experiments");
     const {
       evaluators,
       addEvaluator,
@@ -74,16 +76,14 @@ const ScoresEvaluatorsConfig = memo(
               ONBOARDING_STEPS.EXPERIMENTS_CLICK_ADD_EVAL.stepNumber
             }
           >
-            <SelectValue placeholder="Select an evaluator" />
+            <SelectValue placeholder={t("ui.selectAnEvaluator")} />
           </SelectTrigger>
 
           <SelectContent>
             <SelectItem
               className="cursor-default gap-2 px-2 text-xs"
               value={"helicone-new-custom"}
-            >
-              Create New Custom Evaluator
-            </SelectItem>
+            >{t("ui.createNewCustomEvaluator")}</SelectItem>
 
             {/* <SelectSeparator /> */}
             <SelectGroup>
@@ -94,9 +94,7 @@ const ScoresEvaluatorsConfig = memo(
                       (e) => e.id === evaluator.id,
                     ).length,
                 )?.length > 0 && (
-                  <SelectLabel className="px-2 py-1 text-xs font-medium text-slate-500">
-                    Existing Evaluators
-                  </SelectLabel>
+                  <SelectLabel className="px-2 py-1 text-xs font-medium text-slate-500">{t("ui.existingEvaluators")}</SelectLabel>
                 )}
 
               {allEvaluators?.data?.data
@@ -154,7 +152,7 @@ const ScoresEvaluatorsConfig = memo(
                 className="gap-2 border-yellow-200 bg-yellow-50 text-xs text-yellow-500 dark:border-yellow-800 dark:bg-yellow-950"
               >
                 <TriangleAlertIcon className="h-3 w-3" />
-                <span>For latest scores, re-run evaluators</span>
+                <span>{t("ui.forLatestScoresReRunEvaluators")}</span>
               </Badge>
             )}
             {showSuccess && (
@@ -163,7 +161,7 @@ const ScoresEvaluatorsConfig = memo(
                 className="gap-2 border-green-200 bg-green-50 text-xs text-green-500 dark:border-green-800 dark:bg-green-950"
               >
                 <CheckIcon className="h-3 w-3" />
-                <span>Evaluators ran successfully</span>
+                <span>{t("ui.evaluatorsRanSuccessfully")}</span>
               </Badge>
             )}
             {showError && (
@@ -172,7 +170,7 @@ const ScoresEvaluatorsConfig = memo(
                 className="gap-2 border-red-200 bg-red-50 text-xs text-red-500 dark:border-red-800 dark:bg-red-950"
               >
                 <TriangleAlertIcon className="h-3 w-3" />
-                <span>Error running evaluators</span>
+                <span>{t("ui.errorRunningEvaluators")}</span>
               </Badge>
             )}
             <Button

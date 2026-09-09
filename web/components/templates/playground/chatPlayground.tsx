@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import {
   ArrowPathIcon,
   PaperAirplaneIcon,
@@ -53,6 +54,9 @@ interface ChatPlaygroundProps {
 }
 
 const ChatPlayground = (props: ChatPlaygroundProps) => {
+  const { t } = useTranslation("playground");
+  const { t: tCommon } = useTranslation("common");
+
   const {
     chat,
     models,
@@ -104,12 +108,12 @@ const ChatPlayground = (props: ChatPlaygroundProps) => {
 
   const handleSubmit = async (history: ExtendedMessage[]) => {
     if (models.length < 1) {
-      setNotification("Please select a model", "error");
+      setNotification(t("ui.pleaseSelectAModel"), "error");
       return;
     }
 
     //if (!providerAPIKey) {
-    //  setNotification("Please enter your API key to access provider.", "error");
+    //  setNotification(t("ui.pleaseEnterYourApiKeyToAccessProvider"), "error");
     //  return;
     //}
     setIsLoading(true);
@@ -295,7 +299,7 @@ const ChatPlayground = (props: ChatPlaygroundProps) => {
                   ): void {}}
                   disabled={true}
                 />
-                <Tooltip title="Delete Row" placement="top">
+                <Tooltip title={t("ui.deleteRow")} placement="top">
                   <button
                     onClick={() => {
                       // delete all of model messages
@@ -436,7 +440,7 @@ const ChatPlayground = (props: ChatPlaygroundProps) => {
                 ): void {}}
                 disabled={true}
               />
-              <Tooltip title="Delete Row" placement="top">
+              <Tooltip title={t("ui.deleteRow")} placement="top">
                 <button
                   onClick={() => {
                     // delete all of model messages
@@ -563,9 +567,7 @@ const ChatPlayground = (props: ChatPlaygroundProps) => {
               variant="outline"
               size="sm"
             >
-              <PlusIcon className="mr-2 h-4 w-4" />
-              Add Message
-            </Button>
+              <PlusIcon className="mr-2 h-4 w-4" />{t("ui.addMessage")}</Button>
             <Dialog open={isPreviewOpen} onOpenChange={setIsPreviewOpen}>
               <DialogTrigger asChild>
                 <Button
@@ -573,13 +575,11 @@ const ChatPlayground = (props: ChatPlaygroundProps) => {
                   variant="outline"
                   size="sm"
                 >
-                  <EyeIcon className="mr-2 h-4 w-4" />
-                  Preview Payload
-                </Button>
+                  <EyeIcon className="mr-2 h-4 w-4" />{t("ui.previewPayload")}</Button>
               </DialogTrigger>
               <DialogContent className="sm:max-w-[425px]">
                 <DialogHeader>
-                  <DialogTitle>Preview Payload</DialogTitle>
+                  <DialogTitle>{t("ui.previewPayload")}</DialogTitle>
                 </DialogHeader>
                 <pre className="max-h-96 overflow-auto rounded bg-gray-100 p-4 text-sm dark:bg-gray-700">
                   {previewPayload}
@@ -600,9 +600,7 @@ const ChatPlayground = (props: ChatPlaygroundProps) => {
               variant="outline"
               size="sm"
             >
-              <ArrowPathIcon className="mr-2 h-4 w-4" />
-              Reset
-            </Button>
+              <ArrowPathIcon className="mr-2 h-4 w-4" />{t("ui.reset")}</Button>
             {!customNavBar && (
               <Button
                 onClick={() => {
@@ -627,9 +625,7 @@ const ChatPlayground = (props: ChatPlaygroundProps) => {
           id="step-inc"
           className="sticky bottom-0 flex w-full justify-between border-t border-gray-300 bg-gray-100 py-4 dark:border-gray-700 dark:bg-[#17191d]"
         >
-          <Button variant={"secondary"} onClick={() => customNavBar.onBack()}>
-            Back
-          </Button>
+          <Button variant={"secondary"} onClick={() => customNavBar.onBack()}>{tCommon("actions.back")}</Button>
           <Button
             size={"sm"}
             onClick={() => {
@@ -638,9 +634,7 @@ const ChatPlayground = (props: ChatPlaygroundProps) => {
               }
               customNavBar.onContinue();
             }}
-          >
-            Continue
-          </Button>
+          >{t("ui.continue")}</Button>
         </div>
       )}
     </>

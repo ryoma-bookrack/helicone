@@ -9,12 +9,14 @@ import { useIntegration } from "@/services/hooks/useIntegrations";
 
 import useNotification from "@/components/shared/notification/useNotification";
 import { $JAWN_API } from "@/lib/clients/jawn";
+import { Trans, useTranslation } from "react-i18next";
 
 interface StripeConfigProps {
   onClose: () => void;
 }
 
 const StripeConfig: React.FC<StripeConfigProps> = ({ onClose }) => {
+  const { t } = useTranslation(["connections", "common"]);
   const [apiKey, setApiKey] = useState("");
   const [showApiKey, setShowApiKey] = useState(false);
   const [eventName, setEventName] = useState("token-billing-tokens");
@@ -41,12 +43,12 @@ const StripeConfig: React.FC<StripeConfigProps> = ({ onClose }) => {
         const message =
           typeof data.data === "string"
             ? data.data
-            : "Test meter event sent successfully!";
+            : t("connections:stripe.testSuccessMessage");
         setTestResult({ type: "success", message });
-        setNotification("Test meter event sent successfully!", "success");
+        setNotification(t("connections:stripe.testSuccessMessage"), "success");
       },
       onError: (error: any) => {
-        let errorMessage = "Unknown error";
+        let errorMessage = t("connections:stripe.unknownError");
 
         if (typeof error === "string") {
           errorMessage = error;
@@ -61,7 +63,10 @@ const StripeConfig: React.FC<StripeConfigProps> = ({ onClose }) => {
         }
 
         setTestResult({ type: "error", message: errorMessage });
-        setNotification(`Test failed: ${errorMessage}`, "error");
+        setNotification(
+          t("connections:stripe.testFailedNotification", { error: errorMessage }),
+          "error",
+        );
       },
     },
   );
@@ -113,7 +118,7 @@ const StripeConfig: React.FC<StripeConfigProps> = ({ onClose }) => {
         },
       });
     } else {
-      const errorMessage = "Please save your configuration first to test";
+      const errorMessage = t("connections:stripe.saveFirstToTest");
       setTestResult({ type: "error", message: errorMessage });
       setNotification(errorMessage, "error");
     }
@@ -122,9 +127,9 @@ const StripeConfig: React.FC<StripeConfigProps> = ({ onClose }) => {
   return (
     <div className="space-y-6">
       <div className="space-y-2">
-        <h2 className="text-2xl font-semibold">Stripe Integration</h2>
+        <h2 className="text-2xl font-semibold">{t("connections:stripe.title")}</h2>
         <p className="text-sm text-muted-foreground">
-          Connect your Stripe account to Helicone using a Restricted Access Key
+          {t("connections:stripe.description")}
         </p>
       </div>
 
@@ -143,72 +148,78 @@ const StripeConfig: React.FC<StripeConfigProps> = ({ onClose }) => {
           disabled={isLoading}
           className="data-[state=checked]:bg-green-500"
         />
-        <Label htmlFor="stripeIntegration">Enable Stripe Integration</Label>
+        <Label htmlFor="stripeIntegration">{t("connections:stripe.enable")}</Label>
       </div>
 
       <div className="space-y-4 rounded-lg border border-border bg-muted/50 p-4">
-        <h3 className="text-sm font-medium">
-          How to get your Stripe Restricted Access Key
-        </h3>
+        <h3 className="text-sm font-medium">{t("connections:stripe.howToTitle")}</h3>
         <div className="space-y-3 text-sm text-muted-foreground">
           <ol className="list-inside list-decimal space-y-2">
             <li>
-              Go to your Stripe Dashboard and navigate to{" "}
-              <span className="font-medium text-foreground">
-                Developers → API keys
-              </span>
+              <Trans
+                i18nKey="stripe.step1"
+                ns="connections"
+                components={{ strong: <span className="font-medium text-foreground" /> }}
+              />
             </li>
             <li>
-              Click{" "}
-              <span className="font-medium text-foreground">
-                Create restricted key
-              </span>
+              <Trans
+                i18nKey="stripe.step2"
+                ns="connections"
+                components={{ strong: <span className="font-medium text-foreground" /> }}
+              />
             </li>
+            <li>{t("connections:stripe.step3")}</li>
             <li>
-              Give your key a descriptive name like &quot;Helicone
-              Integration&quot;
-            </li>
-            <li>
-              Set the following permissions:
+              {t("connections:stripe.step4Intro")}
               <ul className="ml-6 mt-1 list-inside list-disc space-y-1">
                 <li>
-                  <span className="font-medium text-foreground">Billing</span>:
-                  Write access (required for meter events)
+                  <Trans
+                    i18nKey="stripe.billingPermission"
+                    ns="connections"
+                    components={{ strong: <span className="font-medium text-foreground" /> }}
+                  />
                 </li>
                 <li>
-                  <span className="font-medium text-foreground">
-                    Meter events
-                  </span>
-                  : Write access
+                  <Trans
+                    i18nKey="stripe.meterEventsPermission"
+                    ns="connections"
+                    components={{ strong: <span className="font-medium text-foreground" /> }}
+                  />
                 </li>
                 <li>
-                  <span className="font-medium text-foreground">Customers</span>
-                  : Read access (optional, for validation)
+                  <Trans
+                    i18nKey="stripe.customersPermission"
+                    ns="connections"
+                    components={{ strong: <span className="font-medium text-foreground" /> }}
+                  />
                 </li>
               </ul>
             </li>
             <li>
-              Click{" "}
-              <span className="font-medium text-foreground">Create key</span>
+              <Trans
+                i18nKey="stripe.step5"
+                ns="connections"
+                components={{ strong: <span className="font-medium text-foreground" /> }}
+              />
             </li>
-            <li>
-              Copy the key (it starts with &quot;rk_live_&quot; or
-              &quot;rk_test_&quot;) and paste it below
-            </li>
+            <li>{t("connections:stripe.step6")}</li>
           </ol>
           <p className="mt-3 text-xs">
-            <span className="font-medium text-foreground">Note:</span> Use a
-            test key (rk_test_) for development and a live key (rk_live_) for
-            production.
+            <Trans
+              i18nKey="stripe.note"
+              ns="connections"
+              components={{ strong: <span className="font-medium text-foreground" /> }}
+            />
           </p>
         </div>
       </div>
 
       <div className="space-y-4 rounded-lg border border-border bg-card p-4">
-        <h3 className="text-sm font-medium">Meter Settings</h3>
+        <h3 className="text-sm font-medium">{t("connections:stripe.meterSettings")}</h3>
 
         <div className="space-y-2">
-          <Label htmlFor="eventName">Event Name</Label>
+          <Label htmlFor="eventName">{t("connections:stripe.eventName")}</Label>
           <Input
             id="eventName"
             type="text"
@@ -218,7 +229,7 @@ const StripeConfig: React.FC<StripeConfigProps> = ({ onClose }) => {
             disabled={isLoading}
           />
           <p className="text-xs text-muted-foreground">
-            The event name to use when sending data to Stripe
+            {t("connections:stripe.eventNameHint")}
           </p>
         </div>
       </div>
@@ -226,15 +237,15 @@ const StripeConfig: React.FC<StripeConfigProps> = ({ onClose }) => {
       <div className="space-y-4 rounded-lg border border-dashed border-muted-foreground/50 bg-muted/30 p-4">
         <div className="flex items-center justify-between">
           <div>
-            <h3 className="text-sm font-medium">Test Meter Events</h3>
+            <h3 className="text-sm font-medium">{t("connections:stripe.testMeterEvents")}</h3>
             <p className="text-xs text-muted-foreground">
-              Test your meter event configuration without saving
+              {t("connections:stripe.testMeterEventsHint")}
             </p>
           </div>
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="testCustomerId">Stripe Customer ID</Label>
+          <Label htmlFor="testCustomerId">{t("connections:stripe.stripeCustomerId")}</Label>
           <div className="flex gap-2">
             <Input
               id="testCustomerId"
@@ -257,12 +268,11 @@ const StripeConfig: React.FC<StripeConfigProps> = ({ onClose }) => {
               {testMeterEvent.isPending ? (
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
               ) : null}
-              Test Event
+              {t("connections:stripe.testEvent")}
             </Button>
           </div>
           <p className="text-xs text-muted-foreground">
-            This will send a test meter event to Stripe using your current
-            settings
+            {t("connections:stripe.testEventHint")}
           </p>
         </div>
 
@@ -283,8 +293,8 @@ const StripeConfig: React.FC<StripeConfigProps> = ({ onClose }) => {
               <div className="flex-1">
                 <p className="font-medium">
                   {testResult.type === "success"
-                    ? "Test Successful"
-                    : "Test Failed"}
+                    ? t("connections:stripe.testSuccessful")
+                    : t("connections:stripe.testFailed")}
                 </p>
                 <p className="mt-1 text-xs opacity-90">{testResult.message}</p>
               </div>
@@ -294,36 +304,41 @@ const StripeConfig: React.FC<StripeConfigProps> = ({ onClose }) => {
       </div>
 
       <div className="space-y-4 rounded-lg border border-border bg-card p-4">
-        <h3 className="text-sm font-medium">Next Steps</h3>
+        <h3 className="text-sm font-medium">{t("connections:stripe.nextSteps")}</h3>
         <div className="space-y-3 text-sm text-muted-foreground">
-          <p>
-            After saving your configuration, add the following header to your
-            Helicone requests to track usage in Stripe:
-          </p>
+          <p>{t("connections:stripe.nextStepsIntro")}</p>
           <div className="font-mono rounded-md bg-muted p-3 text-xs">
             <code>x-stripe-customer-id: cus_12345678</code>
           </div>
           <p>
-            Replace <code className="rounded bg-muted px-1">cus_12345678</code>{" "}
-            with your actual Stripe customer ID. This will link your Helicone
-            usage to the correct Stripe customer for billing.
+            <Trans
+              i18nKey="stripe.nextStepsReplace"
+              ns="connections"
+              components={{ code: <code className="rounded bg-muted px-1" /> }}
+            />
           </p>
           <p className="text-xs">
-            <span className="font-medium text-foreground">Learn more:</span>{" "}
-            <a
-              href="https://docs.helicone.ai/getting-started/integration-method/gateway-headers"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-primary hover:underline"
-            >
-              Helicone Headers Documentation
-            </a>
+            <Trans
+              i18nKey="stripe.learnMore"
+              ns="connections"
+              components={{
+                strong: <span className="font-medium text-foreground" />,
+                link: (
+                  <a
+                    href="https://docs.helicone.ai/getting-started/integration-method/gateway-headers"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-primary hover:underline"
+                  />
+                ),
+              }}
+            />
           </p>
         </div>
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="stripeKey">Stripe Restricted Access Key (RAK)</Label>
+        <Label htmlFor="stripeKey">{t("connections:stripe.rakLabel")}</Label>
         <div className="relative">
           <Input
             id="stripeKey"
@@ -351,20 +366,20 @@ const StripeConfig: React.FC<StripeConfigProps> = ({ onClose }) => {
           </Button>
         </div>
         <p className="text-xs text-muted-foreground">
-          Your key is encrypted and stored securely
+          {t("connections:stripe.rakHint")}
         </p>
       </div>
 
       <div className="flex justify-end space-x-2">
         <Button variant="outline" onClick={onClose} disabled={isSaving}>
-          Cancel
+          {t("common:actions.cancel")}
         </Button>
         <Button
           onClick={handleSave}
           disabled={isSaving || isLoading || !apiKey}
         >
           {isSaving ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
-          Save Configuration
+          {t("connections:stripe.saveConfiguration")}
         </Button>
       </div>
     </div>

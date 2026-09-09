@@ -5,6 +5,7 @@ import {
   useOrgOnboarding,
 } from "@/services/hooks/useOrgOnboarding";
 import { ChevronRightIcon, LogOut, Moon, Sun } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { useTheme } from "next-themes";
 import Image from "next/image";
 import { useRouter } from "next/router";
@@ -34,6 +35,7 @@ interface OnboardingHeaderProps {
 }
 
 export const OnboardingHeader = ({ children }: OnboardingHeaderProps) => {
+  const { t } = useTranslation("onboarding");
   const router = useRouter();
   const org = useOrg();
   const heliconeAuthClient = useHeliconeAuthClient();
@@ -53,8 +55,8 @@ export const OnboardingHeader = ({ children }: OnboardingHeaderProps) => {
   }, [org?.currentOrg?.has_onboarded, isLoading, router]);
 
   const steps: { label: string; step: OnboardingStep }[] = [
-    { label: "Create organization", step: "ORGANIZATION" },
-    { label: "Send a request", step: "REQUEST" },
+    { label: t("header.steps.createOrg"), step: "ORGANIZATION" },
+    { label: t("header.steps.sendRequest"), step: "REQUEST" },
   ];
 
   const currentStepIndex = steps.findIndex(
@@ -95,7 +97,7 @@ export const OnboardingHeader = ({ children }: OnboardingHeaderProps) => {
           <div className="flex-shrink-0">
             <Image
               src="/static/helicone-icon.svg"
-              alt="Helicone Logo"
+              alt={t("header.logoAlt")}
               width={20}
               height={20}
             />
@@ -137,15 +139,15 @@ export const OnboardingHeader = ({ children }: OnboardingHeaderProps) => {
           <button
             onClick={handleSignOut}
             className="flex flex-shrink-0 items-center gap-1 text-xs text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--foreground))]"
-            aria-label="Sign Out"
+            aria-label={t("header.signOutAria")}
           >
-            <span className="hidden sm:inline">Sign Out</span>
+            <span className="hidden sm:inline">{t("header.signOut")}</span>
             <LogOut className="h-3.5 w-3.5" />
           </button>
           <button
             onClick={handleThemeChange}
             className="text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--foreground))]"
-            aria-label="Toggle theme"
+            aria-label={t("header.toggleThemeAria")}
           >
             {theme === "dark" ? <Sun size={16} /> : <Moon size={16} />}
           </button>

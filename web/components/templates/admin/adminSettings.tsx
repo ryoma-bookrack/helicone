@@ -1,4 +1,5 @@
 import { useState, useMemo } from "react";
+import { useTranslation } from "react-i18next";
 import DOMPurify from "dompurify";
 import { $JAWN_API } from "../../../lib/clients/jawn";
 import { Button } from "@/components/ui/button";
@@ -28,6 +29,7 @@ interface GroupedSettingsType {
 }
 
 const AdminSettings = () => {
+  const { t } = useTranslation("admin");
   const { data: settingsData, refetch } = $JAWN_API.useQuery(
     "get",
     "/v1/admin/settings",
@@ -244,8 +246,8 @@ const AdminSettings = () => {
   return (
     <div className="mx-auto flex w-full max-w-5xl flex-col p-4">
       <div className="mb-6">
-        <H1>Admin Settings</H1>
-        <Lead>Manage system-wide configuration settings</Lead>
+        <H1>{t("settings.title")}</H1>
+        <Lead>{t("settings.description")}</Lead>
       </div>
 
       <div className="mb-6 flex flex-col gap-4">
@@ -271,7 +273,7 @@ const AdminSettings = () => {
           </div>
           <Input
             className="pl-10"
-            placeholder="Search settings by name or value..."
+            placeholder={t("settings.searchPlaceholder")}
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />
@@ -289,7 +291,7 @@ const AdminSettings = () => {
       {showNewSettingForm && (
         <div className="mb-6 rounded-md border bg-slate-50 p-4 dark:bg-slate-900">
           <div className="mb-4 flex items-center justify-between">
-            <P className="font-medium">Add New Setting</P>
+            <P className="font-medium">{t("settings.addNewSetting")}</P>
             <Button
               variant="ghost"
               size="xs"
@@ -303,13 +305,13 @@ const AdminSettings = () => {
           </div>
           <div className="flex flex-col gap-3">
             <div>
-              <Small className="mb-1 block">Setting Name</Small>
+              <Small className="mb-1 block">{t("settings.settingName")}</Small>
               <Input
                 value={newSetting.name}
                 onChange={(e) =>
                   setNewSetting({ ...newSetting, name: e.target.value })
                 }
-                placeholder="Enter setting name (use prefix:name format for grouping)"
+                placeholder={t("settings.settingNamePlaceholder")}
                 className="mb-2"
               />
               {isSecretSetting(newSetting.name) && (
@@ -320,7 +322,7 @@ const AdminSettings = () => {
               )}
             </div>
             <div>
-              <Small className="mb-1 block">Settings Value (JSON)</Small>
+              <Small className="mb-1 block">{t("settings.settingsValueJson")}</Small>
               <div className="h-48 rounded-md border">
                 <MarkdownEditor
                   text={newSetting.settings}

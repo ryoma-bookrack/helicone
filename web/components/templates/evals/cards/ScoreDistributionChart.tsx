@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import React from "react";
 import { EvaluatorStats } from "../hooks/useEvaluatorStats";
 import {
@@ -24,6 +25,7 @@ export const ScoreDistributionChart: React.FC<ScoreDistributionChartProps> = ({
   distributionData,
   className = "",
 }) => {
+  const { t } = useTranslation("evals");
   // Check if we have real data
   const hasData = distributionData && distributionData.length > 0;
 
@@ -31,7 +33,7 @@ export const ScoreDistributionChart: React.FC<ScoreDistributionChartProps> = ({
   if (!hasData) {
     return (
       <div className={`flex h-24 items-center justify-center ${className}`}>
-        <Small className="text-muted-foreground">No data available</Small>
+        <Small className="text-muted-foreground">{t("ui.noDataAvailable")}</Small>
       </div>
     );
   }

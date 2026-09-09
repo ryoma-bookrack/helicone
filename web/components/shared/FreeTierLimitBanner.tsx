@@ -3,51 +3,17 @@ import { AlertCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { FreeTierLimitWrapper } from "@/components/shared/FreeTierLimitWrapper";
 import { FeatureId, SubfeatureId } from "@/lib/features";
+import { useTranslation } from "react-i18next";
 
 interface FreeTierLimitBannerProps {
-  /**
-   * The feature ID
-   */
   feature: FeatureId;
-
-  /**
-   * Optional subfeature ID
-   */
   subfeature?: SubfeatureId;
-
-  /**
-   * The current number of items
-   */
   itemCount: number;
-
-  /**
-   * The maximum number of items allowed in the free tier
-   */
   freeLimit: number;
-
-  /**
-   * Custom message to display. If not provided, a default message will be shown.
-   */
   message?: string;
-
-  /**
-   * Whether to round the edges of the banner
-   */
   rounded?: boolean;
-
-  /**
-   * Additional classes to apply to the banner
-   */
   className?: string;
-
-  /**
-   * Custom text for the upgrade button
-   */
   buttonText?: string;
-
-  /**
-   * The size of the upgrade button
-   */
   buttonSize?: "xs" | "sm" | "default" | "lg";
 }
 
@@ -59,12 +25,17 @@ export function FreeTierLimitBanner({
   message,
   rounded = false,
   className = "",
-  buttonText = "Upgrade",
+  buttonText,
   buttonSize = "sm",
 }: FreeTierLimitBannerProps) {
-  const defaultMessage = `You've used ${itemCount}/${freeLimit} ${feature}${
-    subfeature ? ` ${subfeature}` : ""
-  }. Upgrade for unlimited access.`;
+  const { t } = useTranslation("common");
+  const featureLabel = `${feature}${subfeature ? ` ${subfeature}` : ""}`;
+  const defaultMessage = t("freeTier.defaultMessage", {
+    itemCount,
+    freeLimit,
+    feature: featureLabel,
+  });
+  const resolvedButtonText = buttonText ?? t("actions.upgrade");
 
   return (
     <div
@@ -91,7 +62,7 @@ export function FreeTierLimitBanner({
                 size={buttonSize}
                 className="bg-yellow-700 text-white hover:bg-yellow-800"
               >
-                {buttonText}
+                {resolvedButtonText}
               </Button>
             </FreeTierLimitWrapper>
           ) : (
@@ -101,7 +72,7 @@ export function FreeTierLimitBanner({
                 size={buttonSize}
                 className="bg-yellow-700 text-white hover:bg-yellow-800"
               >
-                {buttonText}
+                {resolvedButtonText}
               </Button>
             </FreeTierLimitWrapper>
           )}

@@ -12,6 +12,7 @@ import {
 import { XSmall } from "@/components/ui/typography";
 import Link from "next/link";
 import { memo, useEffect, useMemo, useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
 import {
   LuCheck,
   LuExternalLink,
@@ -79,6 +80,7 @@ export default function ScrollableBadges({
   tooltipText,
   tooltipLink,
 }: ScrollableBadgesProps) {
+  const { t } = useTranslation("common");
   const [isAdding, setIsAdding] = useState(false);
   const [newKey, setNewKey] = useState("");
   const [newValue, setNewValue] = useState("");
@@ -259,7 +261,7 @@ export default function ScrollableBadges({
                     value={newKey}
                     onChange={(e) => setNewKey(e.target.value)}
                     onKeyDown={handleKeyDown}
-                    placeholder="Key"
+                    placeholder={t("form.key")}
                     className="h-6 w-20 px-2 text-xs"
                   />
                 )}
@@ -270,7 +272,7 @@ export default function ScrollableBadges({
                   value={newValue}
                   onChange={(e) => setNewValue(e.target.value)}
                   onKeyDown={handleKeyDown}
-                  placeholder={mode === "singleValue" ? "Value" : "Value"}
+                  placeholder={t("form.value")}
                   className="h-6 w-20 px-2 text-xs"
                   autoFocus={mode === "singleValue"} // Autofocus value input in singleValue mode
                 />

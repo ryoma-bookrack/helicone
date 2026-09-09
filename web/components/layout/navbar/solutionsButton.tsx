@@ -13,84 +13,84 @@ import {
 } from "@heroicons/react/20/solid";
 import { Fragment } from "react";
 import Link from "next/link";
+import { useTranslation } from "react-i18next";
 
-const solutions: {
-  name: string;
-  description: string;
-  href: string;
-  icon: React.ForwardRefExoticComponent<
-    React.SVGProps<SVGSVGElement> & {
-      title?: string | undefined;
-      titleId?: string | undefined;
-    }
-  >;
-  color: string;
-  new?: boolean;
-  target?: string;
-}[] = [
+const SOLUTION_KEYS = [
+  "customerPortal",
+  "fineTuning",
+  "dataSegmentation",
+  "debugging",
+  "dataEtl",
+  "internalAuditing",
+  "githubActions",
+] as const;
+
+const SOLUTION_CONFIG: Record<
+  (typeof SOLUTION_KEYS)[number],
   {
-    name: "Customer Portal",
-    description: "Share Helicone usage with customers",
+    href: string;
+    icon: React.ForwardRefExoticComponent<
+      React.SVGProps<SVGSVGElement> & {
+        title?: string | undefined;
+        titleId?: string | undefined;
+      }
+    >;
+    color: string;
+    new?: boolean;
+    target?: string;
+  }
+> = {
+  customerPortal: {
     href: "/features/customer-portal",
     icon: UserGroupIcon,
     color: "text-sky-500",
     new: true,
     target: "_self",
   },
-  {
-    name: "Fine-Tuning",
-    description: "Reduce costs and improve quality",
+  fineTuning: {
     href: "/features/fine-tuning",
     icon: CommandLineIcon,
     color: "text-rose-500",
     new: true,
     target: "_self",
   },
-  {
-    name: "Data Segmentation",
-    description: "Get insights into costs & behaviors.",
+  dataSegmentation: {
     href: "https://docs.helicone.ai/use-cases/segmentation",
     icon: ChartPieIcon,
     color: "text-violet-500",
   },
-  {
-    name: "Debugging",
-    description: "Identify and rectify errors quickly.",
+  debugging: {
     href: "https://docs.helicone.ai/use-cases/debugging",
     icon: BugAntIcon,
     color: "text-pink-500",
   },
-  {
-    name: "Data ETL and Extraction",
-    description: "Turn Helicone into a data warehouse.",
+  dataEtl: {
     href: "https://docs.helicone.ai/use-cases/etl",
     icon: CircleStackIcon,
     color: "text-slate-500",
   },
-  {
-    name: "Internal Auditing",
-    description: "Ensure compliance and security.",
+  internalAuditing: {
     href: "https://docs.helicone.ai/use-cases/data-autonomy",
     icon: DocumentMagnifyingGlassIcon,
     color: "text-amber-500",
   },
-  {
-    name: "Github Actions",
-    description: "Automate and cache your CI pipelines.",
+  githubActions: {
     href: "https://docs.helicone.ai/use-cases/github-actions",
     icon: CodeBracketSquareIcon,
     color: "text-indigo-500",
   },
-];
+};
 
 export default function SolutionsButton() {
+  const { t } = useTranslation("marketing");
+
   return (
     <div className="">
       <Popover className="relative">
         {({ open }) => (
           <>
             <Popover.Button className="flex flex-row items-center rounded-md px-3 py-1.5 font-medium text-gray-700 hover:text-black focus:outline-none">
-              <span>Solutions</span>
+              <span>{t("nav.solutions")}</span>
               <ChevronRightIcon
                 className={`${open ? "rotate-90" : "text-opacity-70"} ml-1 h-4 w-4 transition duration-150 ease-in-out group-hover:text-opacity-80`}
                 aria-hidden="true"
@@ -109,37 +109,40 @@ export default function SolutionsButton() {
                 <div className="overflow-hidden rounded-lg shadow-2xl ring-1 ring-black ring-opacity-10">
                   <div className="relative grid grid-cols-1 gap-8 bg-white p-7 lg:grid-cols-2">
                     <p className="col-span-2 -mb-2 text-sm font-medium text-gray-700">
-                      Use Cases
+                      {t("nav.useCases")}
                     </p>
-                    {solutions.map((item) => (
-                      <Link
-                        key={item.name}
-                        href={item.href}
-                        target={item.target || "_blank"}
-                        rel="noopener noreferrer"
-                        className="-m-3 flex items-center rounded-lg p-2 transition duration-150 ease-in-out hover:bg-gray-200 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-50"
-                      >
-                        <div className="flex h-6 w-6 shrink-0 items-center justify-center text-white">
-                          <item.icon
-                            aria-hidden="true"
-                            className={item.color}
-                          />
-                        </div>
-                        <div className="ml-4">
-                          <div className="items-center text-sm font-medium text-gray-900">
-                            {item.name}
-                            {item.new && (
-                              <span className="ml-1 text-xs font-semibold text-green-500">
-                                New
-                              </span>
-                            )}
+                    {SOLUTION_KEYS.map((key) => {
+                      const item = SOLUTION_CONFIG[key];
+                      return (
+                        <Link
+                          key={key}
+                          href={item.href}
+                          target={item.target || "_blank"}
+                          rel="noopener noreferrer"
+                          className="-m-3 flex items-center rounded-lg p-2 transition duration-150 ease-in-out hover:bg-gray-200 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-50"
+                        >
+                          <div className="flex h-6 w-6 shrink-0 items-center justify-center text-white">
+                            <item.icon
+                              aria-hidden="true"
+                              className={item.color}
+                            />
                           </div>
-                          <p className="text-xs text-gray-500">
-                            {item.description}
-                          </p>
-                        </div>
-                      </Link>
-                    ))}
+                          <div className="ml-4">
+                            <div className="items-center text-sm font-medium text-gray-900">
+                              {t(`nav.solutionsItems.${key}.name`)}
+                              {item.new && (
+                                <span className="ml-1 text-xs font-semibold text-green-500">
+                                  {t("nav.new")}
+                                </span>
+                              )}
+                            </div>
+                            <p className="text-xs text-gray-500">
+                              {t(`nav.solutionsItems.${key}.description`)}
+                            </p>
+                          </div>
+                        </Link>
+                      );
+                    })}
                   </div>
                   <div className="bg-gray-100 p-4">
                     <Link
@@ -148,11 +151,11 @@ export default function SolutionsButton() {
                     >
                       <span className="flex items-center">
                         <span className="text-sm font-semibold text-gray-900">
-                          Checkout our blog
+                          {t("nav.checkoutBlog")}
                         </span>
                       </span>
                       <span className="mt-1 block text-sm text-gray-500">
-                        Learn more about what is possible with our technology
+                        {t("nav.checkoutBlogDescription")}
                       </span>
                     </Link>
                   </div>

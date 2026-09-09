@@ -7,6 +7,7 @@ import {
 } from "@/components/ui/tooltip";
 import { Tool } from "@helicone-package/llm-mapper/types";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { PiPlusBold, PiToolboxBold, PiTrashBold } from "react-icons/pi";
 import GlassHeader from "../universal/GlassHeader";
 import UniversalPopup from "../universal/Popup";
@@ -22,6 +23,7 @@ interface ToolPanelProps {
 }
 
 export default function ToolPanel({ tools, onToolsChange }: ToolPanelProps) {
+  const { t } = useTranslation("common");
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [toolJson, setToolJson] = useState(
     '{\n  "name": "",\n  "description": "",\n  "parameters": {\n    "type": "object",\n    "properties": {},\n    "required": []\n  }\n}',
@@ -64,7 +66,7 @@ export default function ToolPanel({ tools, onToolsChange }: ToolPanelProps) {
     <div className="flex flex-col">
       {/* Header */}
       <GlassHeader className="h-14 px-4">
-        <h2 className="font-semibold text-secondary">Tools</h2>
+        <h2 className="font-semibold text-secondary">{t("prompts.tools.title")}</h2>
         <TooltipProvider delayDuration={100}>
           <Tooltip>
             <TooltipTrigger asChild>
@@ -80,7 +82,7 @@ export default function ToolPanel({ tools, onToolsChange }: ToolPanelProps) {
               </div>
             </TooltipTrigger>
             <TooltipContent>
-              <p>New Tool</p>
+              <p>{t("prompts.tools.newTool")}</p>
             </TooltipContent>
           </Tooltip>
         </TooltipProvider>
@@ -114,7 +116,7 @@ export default function ToolPanel({ tools, onToolsChange }: ToolPanelProps) {
                     </Button>
                   </TooltipTrigger>
                   <TooltipContent>
-                    <p>Delete Tool</p>
+                    <p>{t("prompts.tools.deleteTool")}</p>
                   </TooltipContent>
                 </Tooltip>
               </TooltipProvider>
@@ -123,14 +125,14 @@ export default function ToolPanel({ tools, onToolsChange }: ToolPanelProps) {
         ))}
         {tools.length === 0 && (
           <div className="text-tertiary py-2 text-center text-sm">
-            No <span className="font-semibold">Tools</span> configured.
+            {t("prompts.tools.emptyState")}
           </div>
         )}
       </div>
 
       {/* Tool Creation Popup */}
       <UniversalPopup
-        title="New Tool"
+        title={t("prompts.tools.newTool")}
         isOpen={isPopupOpen}
         onClose={() => setIsPopupOpen(false)}
         width="max-w-5xl w-full"
@@ -146,17 +148,17 @@ export default function ToolPanel({ tools, onToolsChange }: ToolPanelProps) {
           </div>
           <div className="flex flex-row items-center justify-end gap-2">
             {!isValidJson(toolJson) && (
-              <p className="text-sm text-red-500">Invalid JSON</p>
+              <p className="text-sm text-red-500">{t("prompts.tools.invalidJson")}</p>
             )}
             <Button variant="outline" onClick={() => setIsPopupOpen(false)}>
-              Cancel
+              {t("actions.cancel")}
             </Button>
             <Button
               variant="action"
               onClick={handleAddTool}
               disabled={!isValidJson(toolJson)}
             >
-              Save Tool
+              {t("prompts.tools.saveTool")}
             </Button>
           </div>
         </div>

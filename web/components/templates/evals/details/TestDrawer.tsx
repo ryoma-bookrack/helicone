@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { useEffect, useState, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -20,6 +21,9 @@ interface TestDrawerProps {
 }
 
 export function TestDrawer({ evaluatorId, isOpen, onClose }: TestDrawerProps) {
+  const { t } = useTranslation("evals");
+  const { t: tCommon } = useTranslation("common");
+
   const [testMode, setTestMode] = useState<"requestId" | "manual">("requestId");
   const [requestId, setRequestId] = useState("");
   const [result, setResult] = useState<any>(null);
@@ -96,7 +100,7 @@ export function TestDrawer({ evaluatorId, isOpen, onClose }: TestDrawerProps) {
         }
       } catch (error) {
         logger.error({ error, requestId }, "Failed to fetch request data");
-        notification.setNotification("Failed to fetch request data", "error");
+        notification.setNotification(t("ui.failedToFetchRequestData"), "error");
       }
       return null;
     },
@@ -125,7 +129,7 @@ export function TestDrawer({ evaluatorId, isOpen, onClose }: TestDrawerProps) {
   // Handle test execution
   const handleRunTest = async () => {
     if (!evaluatorQuery.data) {
-      notification.setNotification("Evaluator details not loaded", "error");
+      notification.setNotification(t("ui.evaluatorDetailsNotLoaded"), "error");
       return;
     }
 
@@ -383,7 +387,7 @@ export function TestDrawer({ evaluatorId, isOpen, onClose }: TestDrawerProps) {
         {/* Header */}
         <div className="flex-shrink-0 border-b p-4">
           <div className="flex items-center justify-between">
-            <h3 className="font-medium">Test Evaluator</h3>
+            <h3 className="font-medium">{t("ui.testEvaluator")}</h3>
             <Button variant="ghost" size="icon" onClick={onClose}>
               <X className="h-4 w-4" />
             </Button>
@@ -400,9 +404,7 @@ export function TestDrawer({ evaluatorId, isOpen, onClose }: TestDrawerProps) {
                   : "hover:bg-muted/50"
               }`}
               onClick={() => setTestMode("requestId")}
-            >
-              Request ID
-            </button>
+            >{t("ui.requestId")}</button>
             <button
               className={`flex-1 rounded-r-md px-4 py-2 text-sm ${
                 testMode === "manual"
@@ -410,9 +412,7 @@ export function TestDrawer({ evaluatorId, isOpen, onClose }: TestDrawerProps) {
                   : "hover:bg-muted/50"
               }`}
               onClick={() => setTestMode("manual")}
-            >
-              Custom Input
-            </button>
+            >{t("ui.customInput")}</button>
           </div>
         </div>
 
@@ -424,18 +424,14 @@ export function TestDrawer({ evaluatorId, isOpen, onClose }: TestDrawerProps) {
           {/* Request ID Input */}
           {testMode === "requestId" && (
             <div className="space-y-2 p-4">
-              <label htmlFor="request-id" className="block text-sm font-medium">
-                Request ID
-              </label>
+              <label htmlFor="request-id" className="block text-sm font-medium">{t("ui.requestId")}</label>
               <Input
                 id="request-id"
-                placeholder="Enter request ID"
+                placeholder={t("ui.enterRequestId")}
                 value={requestId}
                 onChange={(e) => setRequestId(e.target.value)}
               />
-              <p className="text-xs text-muted-foreground">
-                Enter the ID of a request to test the evaluator against
-              </p>
+              <p className="text-xs text-muted-foreground">{t("ui.enterTheIdOfARequestToTestTheEvaluatorAg")}</p>
             </div>
           )}
 
@@ -448,12 +444,8 @@ export function TestDrawer({ evaluatorId, isOpen, onClose }: TestDrawerProps) {
                 className="w-full"
               >
                 <TabsList className="grid h-9 w-full grid-cols-2 bg-muted/30 p-0">
-                  <TabsTrigger value="inputBody" className="text-xs">
-                    Input Body
-                  </TabsTrigger>
-                  <TabsTrigger value="outputBody" className="text-xs">
-                    Output Body
-                  </TabsTrigger>
+                  <TabsTrigger value="inputBody" className="text-xs">{t("ui.inputBody")}</TabsTrigger>
+                  <TabsTrigger value="outputBody" className="text-xs">{t("ui.outputBody")}</TabsTrigger>
                 </TabsList>
 
                 <TabsContent
@@ -492,11 +484,11 @@ export function TestDrawer({ evaluatorId, isOpen, onClose }: TestDrawerProps) {
           {/* Results Section - Only shown when there are results */}
           {result && (
             <div className="border-t p-4" ref={resultsRef}>
-              <h3 className="mb-3 text-sm font-medium">Test Results</h3>
+              <h3 className="mb-3 text-sm font-medium">{t("ui.testResults")}</h3>
               <div className="max-h-[180px] overflow-y-auto rounded-md border bg-background p-3">
                 {isLoading ? (
                   <div className="py-4 text-center">
-                    <Muted>Running test...</Muted>
+                    <Muted>{t("ui.runningTest")}</Muted>
                   </div>
                 ) : result._type === "error" &&
                   result.error &&
@@ -504,15 +496,15 @@ export function TestDrawer({ evaluatorId, isOpen, onClose }: TestDrawerProps) {
                   <div className="flex items-center gap-2 rounded-md bg-muted p-3">
                     <CheckCircle2 className="h-5 w-5 shrink-0 text-primary" />
                     <div>
-                      <H4 className="text-sm">Score</H4>
-                      <div className="text-lg font-semibold">True</div>
+                      <H4 className="text-sm">{t("ui.score")}</H4>
+                      <div className="text-lg font-semibold">{t("ui.true")}</div>
                     </div>
                   </div>
                 ) : result._type === "error" ? (
                   <div className="flex items-start gap-2 rounded-md border border-destructive/20 bg-destructive/10 p-3">
                     <AlertCircle className="mt-0.5 h-5 w-5 shrink-0 text-destructive" />
                     <div>
-                      <H4 className="text-sm text-destructive">Error</H4>
+                      <H4 className="text-sm text-destructive">{t("ui.error")}</H4>
                       <pre className="mt-1 whitespace-pre-wrap text-xs">
                         {typeof result.error === "object"
                           ? JSON.stringify(result.error, null, 2)
@@ -524,7 +516,7 @@ export function TestDrawer({ evaluatorId, isOpen, onClose }: TestDrawerProps) {
                   <div className="flex items-center gap-2 rounded-md bg-muted p-3">
                     <CheckCircle2 className="h-5 w-5 shrink-0 text-primary" />
                     <div>
-                      <H4 className="text-sm">Score</H4>
+                      <H4 className="text-sm">{t("ui.score")}</H4>
                       <div className="text-lg font-semibold">
                         {result.output}
                       </div>
@@ -534,7 +526,7 @@ export function TestDrawer({ evaluatorId, isOpen, onClose }: TestDrawerProps) {
                   <div className="flex items-center gap-2 rounded-md bg-muted p-3">
                     <CheckCircle2 className="h-5 w-5 shrink-0 text-primary" />
                     <div>
-                      <H4 className="text-sm">Score</H4>
+                      <H4 className="text-sm">{t("ui.score")}</H4>
                       <div className="text-lg font-semibold">
                         {typeof result.data === "boolean"
                           ? result.data

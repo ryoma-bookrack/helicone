@@ -1,0 +1,449 @@
+{
+  "locale": {
+    "english": "English",
+    "switchToChinese": "切换到中文",
+    "switchToEnglish": "Switch to English"
+  },
+  "time": {
+    "justNow": "刚刚",
+    "minutesAgo": "{{count}} 分钟前",
+    "hoursAgo": "{{count}} 小时前"
+  },
+  "actions": {
+    "save": "保存",
+    "cancel": "取消",
+    "delete": "删除",
+    "edit": "编辑",
+    "create": "创建",
+    "update": "更新",
+    "confirm": "确认",
+    "close": "关闭",
+    "back": "返回",
+    "next": "下一步",
+    "submit": "提交",
+    "copy": "复制",
+    "copied": "已复制",
+    "search": "搜索",
+    "filter": "筛选",
+    "export": "导出",
+    "import": "导入",
+    "refresh": "刷新",
+    "loading": "加载中...",
+    "retry": "重试",
+    "viewAll": "查看全部",
+    "learnMore": "了解更多",
+    "getStarted": "开始使用",
+    "signOut": "退出登录",
+    "settings": "设置",
+    "inviteMembers": "邀请成员",
+    "darkMode": "深色模式",
+    "clear": "清除",
+    "upgrade": "升级",
+    "apply": "应用",
+    "expand": "展开",
+    "shrink": "收起"
+  },
+  "empty": {
+    "noData": "暂无数据",
+    "noResults": "未找到结果",
+    "noOptions": "未找到选项。"
+  },
+  "errors": {
+    "generic": "出了点问题，请重试",
+    "notFound": "未找到",
+    "unauthorized": "未授权",
+    "notFoundTitle": "404 错误",
+    "notFoundDescription": "您访问的页面不存在或已被移动。",
+    "goHome": "返回首页",
+    "uselessWebLink": "The Useless Web",
+    "boundary": {
+      "title": "出了点问题。",
+      "description": "抱歉给您带来不便。错误已记录，我们会尽快处理。",
+      "detailsHeading": "错误详情：",
+      "copyFullReport": "复制完整错误报告",
+      "componentStackHeading": "组件堆栈：",
+      "copyStack": "复制堆栈",
+      "copyComponentStack": "复制组件堆栈",
+      "reloadPage": "重新加载页面"
+    }
+  },
+  "aria": {
+    "progress": "进度",
+    "dismiss": "关闭",
+    "toggleSidebar": "切换侧边栏",
+    "sidebarTitle": "侧边栏",
+    "sidebarDescription": "显示移动端侧边栏。",
+    "carousel": "轮播",
+    "carouselSlide": "幻灯片",
+    "previousSlide": "上一张",
+    "nextSlide": "下一张",
+    "copyToClipboard": "复制 {{label}} 到剪贴板",
+    "copyCode": "复制代码",
+    "progress": "进度",
+    "removeOption": "移除选项",
+    "useSetting": "使用设置",
+    "actions": "操作",
+    "toggleExpandAllRows": "切换展开所有行",
+    "iconAlt": "{{title}} 图标"
+  },
+  "date": {
+    "pickDate": "选择日期",
+    "unknownDate": "未知日期"
+  },
+  "select": {
+    "option": "选择选项",
+    "selectAnOption": "选择一个选项",
+    "selectOrEnter": "选择或输入值",
+    "categories": "分类"
+  },
+  "form": {
+    "firstName": "名",
+    "lastName": "姓",
+    "emailAddress": "邮箱地址",
+    "companyName": "公司名称",
+    "companyDescriptionLabel": "请描述您的公司业务以及计划如何使用 Helicone。",
+    "submitError": "提交表单失败，请稍后重试。",
+    "submitSuccess": "表单提交成功！",
+    "useCouponCode": "使用优惠码：",
+    "scheduleCall": "预约通话",
+    "enterValue": "输入值",
+    "key": "键",
+    "value": "值"
+  },
+  "notifications": {
+    "codeCopied": "代码已复制到剪贴板",
+    "codeCopyFailed": "复制代码失败",
+    "copiedToClipboard": "已复制到剪贴板"
+  },
+  "deprecation": {
+    "title": "弃用通知",
+    "message": "我们将弃用 {{feature}} 功能，该功能将于 2025 年 9 月 1 日从平台移除。"
+  },
+  "freeTier": {
+    "defaultMessage": "您已使用 {{itemCount}}/{{freeLimit}} {{feature}}。升级以获得无限访问。"
+  },
+  "trial": {
+    "upgrade": "升级",
+    "startTrial": "开始试用",
+    "enableTitle": "启用 {{featureName}}",
+    "startTitle": "开始 {{featureName}} 试用",
+    "enableDescription": "升级您的计划以启用 {{featureName}}。",
+    "startDescription": "开始免费试用以访问 {{featureName}}。",
+    "confirmEnableDescription": "是否要启用 {{featureName}}？这将添加到您当前的订阅中。",
+    "confirmStartDescription": "是否要开始 {{featureName}} 试用？试用期间可随时取消。"
+  },
+  "languages": {
+    "javascript": "JavaScript",
+    "python": "Python",
+    "curl": "cURL"
+  },
+  "integration": {
+    "usingAnotherSdk": "使用其他 SDK？"
+  },
+  "live": {
+    "live": "实时",
+    "startLive": "开始实时"
+  },
+  "pricing": {
+    "bestValue": "最佳价值",
+    "popular": "热门",
+    "currentPlan": "当前计划"
+  },
+  "demo": {
+    "buttonText": "演示 🚀",
+    "removeDemo": "移除演示",
+    "welcomeBanner": "欢迎使用 Helicone 演示！完成入门流程以探索所有功能。",
+    "welcomeBannerFull": "欢迎使用 Helicone 演示！完成入门流程以在最后一步解锁完整演示。"
+  },
+  "export": {
+    "exportData": "导出数据",
+    "selectFormat": "选择格式",
+    "csv": "CSV",
+    "jsonl": "JSONL",
+    "export": "导出",
+    "exporting": "导出中",
+    "exportFormat": "导出 {{format}}",
+    "csvTitle": "导出 CSV",
+    "csvDescription": "CSV 导出限制为 500 行，因为请求数据量巨大。如需更大导出，请使用我们的",
+    "limitDescription": "导出限制为 {{maxRows}} 行，因为请求数据量巨大。如需更大导出，请使用我们的",
+    "exportWarning": "导出可能需要较长时间。导出开始后请勿关闭此窗口。",
+    "exportWarningData": "导出时间取决于数据量。导出开始后请勿关闭此窗口。",
+    "apiLink": "API",
+    "downloadSuccess": "{{format}} 下载成功！",
+    "downloadError": "导出 {{format}} 失败，请重试。"
+  },
+  "table": {
+    "loading": "加载数据中...",
+    "userLabel": "用户：",
+    "totalTokensLabel": "总 Token：",
+    "completionLabel": "Completion：",
+    "promptLabel": "Prompt：",
+    "sort": "排序",
+    "selectColumn": "选择列",
+    "rowSelected": "已选择 {{count}} 行",
+    "rowsSelected": "已选择 {{count}} 行"
+  },
+  "tableHeader": {
+    "filters": "筛选",
+    "columns": "列",
+    "onlySelectedColumns": "仅选中的列",
+    "allEventProperties": "所有事件属性",
+    "propertiesOnExport": "导出时的属性",
+    "notificationMethod": "通知方式",
+    "closeSearch": "关闭搜索",
+    "openSearch": "打开搜索",
+    "manageColumns": "管理列",
+    "exportData": "导出数据",
+    "toggleView": "切换视图"
+  },
+  "columns": {
+    "manageColumns": "管理列",
+    "columnReorder": "列排序",
+    "orderingNote": "排序仅影响您的请求表格",
+    "presetNote": "注意：如果某些内容未显示，或列处于意外状态，请点击右侧面板左下角的「返回预设」。",
+    "backToPreset": "返回预设",
+    "backToPresetNote": "返回预设以恢复默认列",
+    "allColumns": "所有列",
+    "default": "默认",
+    "deselectAll": "取消全选",
+    "selectAll": "全选"
+  },
+  "tooltips": {
+    "clickToCopy": "点击复制"
+  },
+  "timeFilter": {
+    "pickDateTime": "选择日期和时间",
+    "quickSelect": "快速选择：",
+    "customRange": "自定义范围：",
+    "datePicker": "日期选择器：",
+    "hours": "小时",
+    "days": "天",
+    "weeks": "周",
+    "now": "- 现在",
+    "startAfterEndWarning": "警告：开始日期晚于结束日期"
+  },
+  "modals": {
+    "productHunt": {
+      "launchTitle": "Product Hunt 发布！🎉",
+      "promoTitle": "发布促销 🎉",
+      "helpTitle": "我们需要您的帮助！🫶",
+      "launchedMessage": "我们今日在 Product Hunt 发布，期待您的支持！",
+      "creditMessage": "我们为所有新的 Growth 用户提供 $500 额度。",
+      "upvoteMessage": "要查看优惠码，请为我们点赞！",
+      "promoDescription": "今日升级至 Growth 可获得 $500 额度。使用优惠码",
+      "creditExpires": "*额度 6 个月后过期。",
+      "launchCardMessage": "我们今日发布，期待您的支持！🙏"
+    }
+  },
+  "features": {
+    "sessions": {
+      "llm": "LLM",
+      "tool": "工具",
+      "image": "图片",
+      "threat": "威胁",
+      "vectorDb": "向量数据库",
+      "assistant": "助手",
+      "moderation": "审核",
+      "embedding": "嵌入"
+    }
+  },
+  "visuals": {
+    "rateLimitBackground": "速率限制背景",
+    "codeExample": {
+      "webhook": "Webhook",
+      "properties": "属性",
+      "users": "用户"
+    },
+    "datasets": {
+      "fineTuning": "微调数据集",
+      "testing": "测试数据集",
+      "evaluation": "评估数据集",
+      "experiments": "实验数据集",
+      "badData": "异常数据",
+      "paidUser": "付费用户数据集",
+      "production": "生产数据集",
+      "test": "测试数据集",
+      "customerFeedback": "客户反馈",
+      "supportQueries": "支持查询",
+      "trainingExamples": "训练样本",
+      "name": "名称",
+      "createdAt": "创建时间",
+      "rows": "行数",
+      "experiment": "实验",
+      "fineTune": "微调"
+    }
+  },
+  "emptyStates": {
+    "default": {
+      "title": "暂无数据",
+      "description": "开始通过 Helicone 发送请求以在此查看分析数据。",
+      "ctaPrimary": "开始使用",
+      "ctaSecondary": "查看文档"
+    },
+    "prompts": {
+      "title": "创建您的第一个 Prompt",
+      "description": "通过 AI 网关设计、版本管理和部署 Prompt，无需修改代码。",
+      "ctaPrimary": "创建第一个 Prompt",
+      "ctaSecondary": "查看文档"
+    },
+    "sessions": {
+      "title": "追踪您的第一个会话",
+      "description": "要开始追踪您的 Agent 工作流，只需添加以下请求头：",
+      "ctaSecondary": "查看文档"
+    },
+    "cache": {
+      "title": "缓存常见响应",
+      "description": "缓存可降低 API 成本并提高响应速度。使用以下参数控制缓存行为：",
+      "ctaSecondary": "查看文档"
+    },
+    "rateLimits": {
+      "title": "配置您的速率限制",
+      "description": "请求达到您配置的限额后将显示在此处。使用一个简单的请求头监控 API 使用量：",
+      "ctaPrimary": "创建速率限制",
+      "ctaSecondary": "查看文档"
+    },
+    "users": {
+      "title": "开始追踪用户指标",
+      "description": "使用一个简单的请求头开始追踪每个用户的请求量和使用模式：",
+      "ctaSecondary": "查看文档"
+    },
+    "properties": {
+      "title": "创建您的第一个自定义属性",
+      "description": "为请求添加自定义元数据。追踪指标和用户行为以获得更深入的洞察。",
+      "ctaSecondary": "查看文档"
+    },
+    "datasets": {
+      "title": "创建您的第一个数据集",
+      "description": "从请求数据中整理数据集以微调 LLM 或测试 Prompt。",
+      "ctaPrimary": "前往请求",
+      "ctaSecondary": "查看文档"
+    },
+    "webhooks": {
+      "title": "未配置 Webhook",
+      "description": "设置 Webhook 以自动化工作流并与外部工具集成。",
+      "ctaPrimary": "添加 Webhook",
+      "ctaSecondary": "查看文档"
+    },
+    "alerts": {
+      "title": "创建您的第一个告警",
+      "description": "当出现问题时，通过 Slack 或邮件接收实时通知。",
+      "ctaPrimary": "创建告警"
+    },
+    "hql": {
+      "title": "申请 HQL 访问权限",
+      "description": "使用 HQL（Helicone 查询语言）查询 Helicone 数据。分析请求、Token、成本和整个 LLM 使用中的自定义属性。",
+      "ctaPrimary": "申请访问",
+      "ctaSecondary": "查看文档"
+    }
+  },
+  "prompts": {
+    "autoImprove": {
+      "intro": "Auto-Improve 使用 AI 根据您的评估结果建议改进 Prompt。",
+      "introDetailed": "Auto-Improve 会阅读您的 Prompt，了解其当前效果与预期意图的差异，然后建议改进以更接近其全部潜力。",
+      "start": "开始 Auto-Improve",
+      "connecting": "正在连接系统...",
+      "current": "（当前）",
+      "suggested": "（建议）",
+      "saveSuggested": "保存建议版本"
+    },
+    "evals": {
+      "title": "评估",
+      "addEval": "添加评估",
+      "emptyState": "尚未配置评估器。",
+      "emptyStateDetailed": "使用评估衡量 Prompt 的表现。点击「添加评估」按钮选择或创建一个。",
+      "selectEvaluators": "选择评估器",
+      "selectEvaluatorsCount": "选择评估器 ({{count}})",
+      "selectEvaluatorsDescription": "选择要添加的评估器，或创建新的自定义评估器。",
+      "createCustom": "创建新的自定义评估器",
+      "opensInNewTab": "（在新标签页中打开）"
+    },
+    "inputs": {
+      "title": "输入",
+      "emptyState": "未配置输入。",
+      "emptyStateDetailed": "使用输入让 Prompt 动态化。输入 {{name}} 或在消息中高亮值后按 ⌘E。",
+      "importFromProduction": "从生产环境导入特定值",
+      "importRandomFromProduction": "从生产环境随机导入值",
+      "noProductionData": "无生产数据可用",
+      "importVariablePlaceholder": "从生产环境导入变量值...",
+      "enterDefaultPlaceholder": "输入 {{name}} 的默认值...",
+      "namePlaceholder": "输入名称..."
+    },
+    "messages": {
+      "loadError": "无法加载 Prompt 版本，请重试。",
+      "loadErrorTitle": "无法加载 Prompt 版本...",
+      "reloadPrompt": "请加载或导入其他版本后重试。",
+      "importHelp": "了解更多关于从代码导入的信息。",
+      "addMessagePair": "添加消息对",
+      "addPrefillMessage": "添加预填充消息"
+    },
+    "parameters": {
+      "title": "参数",
+      "creatorModelProvider": "创建者 / 模型 / 提供商",
+      "creator": "创建者",
+      "model": "模型",
+      "provider": "提供商",
+      "reasoningEffort": "推理力度",
+      "maxTokens": "最大 Token",
+      "temperature": "温度",
+      "effort": "力度",
+      "low": "低",
+      "medium": "中",
+      "high": "高",
+      "responseFormat": "响应格式",
+      "jsonSchema": "JSON Schema",
+      "text": "文本",
+      "stopSequences": "停止序列",
+      "addStopSequence": "添加停止序列"
+    },
+    "response": {
+      "title": "响应",
+      "addToMessages": "将响应添加到消息",
+      "render": "渲染",
+      "placeholder": "响应将显示在此处..."
+    },
+    "responseFormat": {
+      "invalidSchema": "无效的 JSON Schema",
+      "editTitle": "编辑响应格式 Schema",
+      "saveSchema": "保存 Schema"
+    },
+    "toolbar": {
+      "typeHere": "在此输入...",
+      "makeIntoInput": "转为输入",
+      "wrapInDelimiters": "用分隔符包裹",
+      "performEdit": "执行编辑",
+      "inputNamePlaceholder": "输入名称...",
+      "delimiterPlaceholder": "分隔符名称...",
+      "editDescriptionPlaceholder": "描述您的编辑...",
+      "promptPlaceholder": "输入您的 Prompt..."
+    },
+    "tools": {
+      "title": "工具",
+      "newTool": "新建工具",
+      "deleteTool": "删除工具",
+      "emptyState": "未配置工具。",
+      "invalidJson": "无效的 JSON",
+      "saveTool": "保存工具"
+    },
+    "toolEditor": {
+      "name": "名称",
+      "description": "描述",
+      "required": "必填",
+      "enterToolName": "输入工具名称",
+      "parameters": "参数 ({{count}})",
+      "addParameter": "添加参数",
+      "noParameters": "尚未添加参数。",
+      "parameterName": "参数名称",
+      "parameterDescription": "参数描述",
+      "saveTool": "保存工具"
+    },
+    "versionSelector": {
+      "editPromptId": "编辑 Prompt ID",
+      "copyPromptId": "复制 Prompt ID",
+      "changePromptId": "更改 Prompt ID",
+      "promoteToProduction": "将版本提升至生产环境",
+      "production": "生产环境",
+      "copiedPromptId": "Prompt ID 已复制到剪贴板"
+    },
+    "imageMessage": "图片消息"
+  }
+}

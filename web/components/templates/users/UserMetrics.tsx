@@ -10,6 +10,7 @@ import {
 import { useLocalStorage } from "@/services/hooks/localStorage";
 import { BarChart, Card, Title } from "@tremor/react";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 
 import { Row } from "../../layout/common";
 import { Col } from "../../layout/common/col";
@@ -69,6 +70,7 @@ const Chart: React.FC<ChartProps> = ({
 );
 
 export const UserMetrics = () => {
+  const { t } = useTranslation("users");
   const [pSize, setPSize] = useLocalStorage<
     "p50" | "p75" | "p95" | "p99" | "p99.9"
   >("session-details-pSize", "p75");
@@ -83,7 +85,7 @@ export const UserMetrics = () => {
           htmlFor="percentile-select"
           className="text-slate-500 dark:text-slate-500"
         >
-          Select Percentile
+          {t("metrics.selectPercentile")}
         </Label>
         <Row className="items-center gap-2">
           <Select
@@ -93,7 +95,7 @@ export const UserMetrics = () => {
             value={pSize}
           >
             <SelectTrigger id="percentile-select" className="w-full">
-              <SelectValue placeholder="Percentile" />
+              <SelectValue placeholder={t("metrics.percentile")} />
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="p50">p50</SelectItem>
@@ -113,7 +115,7 @@ export const UserMetrics = () => {
               iconClassName="w-2 h-2"
             />
             <Label className="text-xs font-medium leading-none text-slate-500 peer-disabled:cursor-not-allowed peer-disabled:opacity-70 dark:text-slate-500">
-              Interquartile
+              {t("metrics.interquartile")}
             </Label>
           </Row>
         </Row>
@@ -139,7 +141,7 @@ export const UserMetrics = () => {
       >
         <div key="requests-count-distribution">
           <Chart
-            title="Requests count distribution"
+            title={t("metrics.requestsDistribution")}
             data={
               data?.data?.data?.request_count?.map((userCount) => {
                 const start = Math.ceil(Number(userCount.range_start ?? 0));
@@ -156,12 +158,12 @@ export const UserMetrics = () => {
               `${formatLargeNumber(value, true)} users`
             }
             isLoading={isLoading}
-            xAxisLabel="Requests per user"
+            xAxisLabel={t("metrics.requestsPerUser")}
           />
         </div>
         <div key="cost-distribution">
           <Chart
-            title="Cost distribution"
+            title={t("metrics.costDistribution")}
             data={
               data?.data?.data?.user_cost?.map((userCost) => {
                 const start = Number(userCost.range_start ?? 0);
@@ -180,10 +182,10 @@ export const UserMetrics = () => {
             category="cost"
             color="green"
             valueFormatter={(value) =>
-              `${formatLargeNumber(value, true)} users`
+              t("metrics.usersUnit", { value: formatLargeNumber(value, true) })
             }
             isLoading={isLoading}
-            xAxisLabel="Cost per user"
+            xAxisLabel={t("metrics.costPerUser")}
           />
         </div>
       </ResponsiveGridLayout>

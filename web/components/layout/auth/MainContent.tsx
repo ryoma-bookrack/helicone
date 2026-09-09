@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { clsx } from "../../shared/clsx";
-import { getUSDate } from "../../shared/utils/utils";
+import { getStandardDateFromString } from "../../shared/utils/utils";
 
 interface MainContentProps {
   children: React.ReactNode;
@@ -183,7 +183,7 @@ const MainContent = ({ children, banner, pathname }: MainContentProps) => {
               {banner.updated_at && (
                 <>
                   <span className="text-xs font-normal text-sky-100">
-                    {getUSDate(new Date(banner.updated_at))}
+                    {getStandardDateFromString(banner.updated_at)}
                   </span>
                   <p className="font-normal text-sky-100">|</p>
                 </>

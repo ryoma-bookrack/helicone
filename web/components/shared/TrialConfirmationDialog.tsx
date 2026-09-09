@@ -7,6 +7,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
+import { useTranslation } from "react-i18next";
 
 export const TrialConfirmationDialog = ({
   featureName,
@@ -21,13 +22,14 @@ export const TrialConfirmationDialog = ({
   onConfirm: () => Promise<void>;
   isUpgrade?: boolean;
 }) => {
-  const actionText = isUpgrade ? "Upgrade" : "Start Trial";
+  const { t } = useTranslation("common");
+  const actionText = isUpgrade ? t("trial.upgrade") : t("trial.startTrial");
   const titleText = isUpgrade
-    ? `Enable ${featureName}`
-    : `Start ${featureName} Trial`;
+    ? t("trial.enableTitle", { featureName })
+    : t("trial.startTitle", { featureName });
   const descriptionText = isUpgrade
-    ? `Would you like to enable ${featureName}? This will add it to your current subscription.`
-    : `Would you like to start your ${featureName} trial? You can cancel anytime during the trial period.`;
+    ? t("trial.confirmEnableDescription", { featureName })
+    : t("trial.confirmStartDescription", { featureName });
 
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
@@ -38,7 +40,7 @@ export const TrialConfirmationDialog = ({
         </DialogHeader>
         <DialogFooter>
           <Button variant="outline" onClick={() => onOpenChange(false)}>
-            Cancel
+            {t("actions.cancel")}
           </Button>
           <Button onClick={onConfirm}>{actionText}</Button>
         </DialogFooter>

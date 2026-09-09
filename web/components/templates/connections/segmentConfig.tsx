@@ -6,6 +6,7 @@ import { Label } from "@/components/ui/label";
 import { EyeIcon, EyeOffIcon, Loader2 } from "lucide-react";
 import { useSegmentKey } from "@/services/hooks/useSegmentKey";
 import { useIntegration } from "@/services/hooks/useIntegrations";
+import { useTranslation } from "react-i18next";
 
 interface SegmentConfigProps {
   onClose: () => void;
@@ -36,6 +37,7 @@ const getExampleEvent = () => {
 };
 
 const SegmentConfig: React.FC<SegmentConfigProps> = ({ onClose }) => {
+  const { t } = useTranslation(["connections", "common"]);
   const [apiKey, setApiKey] = useState("");
   const [autoDatasetSync, setAutoDatasetSync] = useState(false);
   const [showApiKey, setShowApiKey] = useState(false);
@@ -68,11 +70,6 @@ const SegmentConfig: React.FC<SegmentConfigProps> = ({ onClose }) => {
       body: JSON.stringify({
         writeKey: apiKey,
         ...getExampleEvent(),
-        // event: "test-event",
-        // properties: {
-        //   test: "test",
-        // },
-        // userId: "1234567890",
       }),
     })
       .then((res) => res.json())
@@ -94,17 +91,17 @@ const SegmentConfig: React.FC<SegmentConfigProps> = ({ onClose }) => {
           disabled={isLoading}
           className="data-[state=checked]:bg-green-500"
         />
-        <Label htmlFor="autoDatasetSync">Enable Segment Integration</Label>
+        <Label htmlFor="autoDatasetSync">{t("connections:segment.enable")}</Label>
       </div>
       <div className="space-y-2">
-        <Label htmlFor="segmentKey">Segment API Key</Label>
+        <Label htmlFor="segmentKey">{t("connections:segment.apiKey")}</Label>
         <div className="relative">
           <Input
             id="segmentKey"
             type={showApiKey ? "text" : "password"}
             value={apiKey}
             onChange={(e) => setApiKey(e.target.value)}
-            placeholder="Enter your Segment API key"
+            placeholder={t("connections:segment.apiKeyPlaceholder")}
             disabled={isLoading}
           />
           <Button
@@ -127,7 +124,7 @@ const SegmentConfig: React.FC<SegmentConfigProps> = ({ onClose }) => {
       </div>
       <div className="flex space-x-2">
         <Button variant="outline" onClick={handleTestEvent}>
-          Test event
+          {t("connections:segment.testEvent")}
         </Button>
         <Button
           onClick={() => {
@@ -137,7 +134,7 @@ const SegmentConfig: React.FC<SegmentConfigProps> = ({ onClose }) => {
           disabled={isSaving || isLoading}
         >
           {isSaving ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
-          Save Configuration
+          {t("connections:segment.saveConfiguration")}
         </Button>
       </div>
       {testEventResponse && <div>{testEventResponse}</div>}

@@ -1,8 +1,9 @@
 import { TextInput } from "@tremor/react";
 import { SimpleTable } from "../../../shared/table/simpleTable";
 import { ThemedSwitch } from "../../../shared/themed/themedSwitch";
-import { getUSDate } from "../../../shared/utils/utils";
+import { getStandardDateFromString } from "../../../shared/utils/utils";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 
 import useNotification from "../../../shared/notification/useNotification";
 import { Button } from "@/components/ui/button";
@@ -16,7 +17,7 @@ interface AlertBannersProps {}
 
 const AlertBanners = (props: AlertBannersProps) => {
   const {} = props;
-
+  const { t } = useTranslation("admin");
   const { setNotification } = useNotification();
 
   const { data: alertBanners, refetch } = $JAWN_API.useQuery(
@@ -29,32 +30,33 @@ const AlertBanners = (props: AlertBannersProps) => {
     refetch();
     setTitle("");
     setMessage("");
-    setNotification("Alert banner created successfully", "success");
+    setNotification(t("panels.alertBanners.createdSuccess"), "success");
   });
 
   const { updateBanner } = useUpdateAlertBanner(() => {
     refetch();
-    setNotification("Alert banner updated successfully", "success");
+    setNotification(t("panels.alertBanners.updatedSuccess"), "success");
   });
 
-  // states
   const [title, setTitle] = useState("");
   const [message, setMessage] = useState("");
 
   return (
     <>
-      <h2 className="text-lg font-semibold text-white">Alert Banners</h2>
+      <h2 className="text-lg font-semibold text-white">
+        {t("panels.alertBanners.title")}
+      </h2>
       <div className="grid grid-cols-4 gap-4">
         <div className="col-span-1">
           <TextInput
-            placeholder="Title"
+            placeholder={t("panels.alertBanners.titlePlaceholder")}
             value={title}
             onValueChange={setTitle}
           />
         </div>
         <div className="col-span-2">
           <TextInput
-            placeholder="Message"
+            placeholder={t("panels.alertBanners.messagePlaceholder")}
             value={message}
             onValueChange={setMessage}
           />
@@ -64,14 +66,17 @@ const AlertBanners = (props: AlertBannersProps) => {
             size={"xs"}
             onClick={async () => {
               if (!title || !message) {
-                setNotification("Title and message are required", "error");
+                setNotification(
+                  t("panels.alertBanners.titleMessageRequired"),
+                  "error",
+                );
                 return;
               }
               createBanner({ title, message });
             }}
             disabled={isCreatingBanner}
           >
-            Create new alert
+            {t("panels.alertBanners.createNewAlert")}
           </Button>
         </div>
       </div>
@@ -81,33 +86,33 @@ const AlertBanners = (props: AlertBannersProps) => {
           columns={[
             {
               key: "title",
-              header: "Title",
+              header: t("common.title"),
               render: (row) => (
                 <div className="font-semibold text-black">{row.title}</div>
               ),
             },
             {
               key: "message",
-              header: "Message",
+              header: t("common.message"),
               render: (row) => <div className="text-wrap">{row.message}</div>,
             },
             {
               key: "created_at",
-              header: "Created At",
+              header: t("common.createdAt"),
               render: (row) => (
-                <div className="">{getUSDate(new Date(row.created_at))}</div>
+                <div className="">{getStandardDateFromString(row.created_at)}</div>
               ),
             },
             {
               key: "updated_at",
-              header: "Last Updated",
+              header: t("common.lastUpdated"),
               render: (row) => (
-                <div className="">{getUSDate(new Date(row.updated_at))}</div>
+                <div className="">{getStandardDateFromString(row.updated_at)}</div>
               ),
             },
             {
               key: "active",
-              header: "Active",
+              header: t("common.active"),
               render: (row) => (
                 <ThemedSwitch
                   checked={row.active}

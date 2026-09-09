@@ -8,6 +8,7 @@ import {
 } from "@/components/ui/carousel";
 import IntegrationCard from "./integrationCard";
 import { Integration } from "./types";
+import { useTranslation } from "react-i18next";
 
 interface IntegrationSectionProps {
   title: string;
@@ -20,6 +21,8 @@ const IntegrationSection: React.FC<IntegrationSectionProps> = ({
   items,
   onIntegrationClick,
 }) => {
+  const { t } = useTranslation("connections");
+
   if (items.length === 0) return null;
 
   return (
@@ -31,7 +34,7 @@ const IntegrationSection: React.FC<IntegrationSectionProps> = ({
             <CarouselItem key={index} className="basis-[55%] lg:basis-[30%]">
               <IntegrationCard
                 title={item.title}
-                description={`Integrate with ${item.title}'s services.`}
+                description={t("integration.description", { name: item.title })}
                 enabled={item.enabled}
                 onClick={() => onIntegrationClick(item.title)}
               />

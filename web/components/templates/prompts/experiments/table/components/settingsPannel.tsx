@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import ThemedDrawer from "../../../../../shared/themed/themedDrawer";
 import ProviderKeyList from "../../../../enterprise/portal/id/providerKeyList";
 
@@ -14,6 +15,9 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({
   open,
   setOpen,
 }) => {
+  const { t } = useTranslation("prompts");
+  const { t: tCommon } = useTranslation("common");
+
   return (
     <ThemedDrawer
       open={open}
@@ -21,7 +25,7 @@ const SettingsPanel: React.FC<SettingsPanelProps> = ({
       defaultWidth="md:min-w-[300px] w-full md:w-[400px]"
     >
       <div className="space-y-4 py-4">
-        <h2 className="mb-4 text-lg font-semibold">Settings</h2>
+        <h2 className="mb-4 text-lg font-semibold">{tCommon("actions.settings")}</h2>
         <ProviderKeyList
           variant="basic"
           setProviderKeyCallback={setSelectedProviderKey}

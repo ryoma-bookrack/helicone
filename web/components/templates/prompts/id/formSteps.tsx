@@ -1,8 +1,10 @@
+import { useTranslation } from "react-i18next";
 export default function FormSteps(props: {
   currentStep: number;
   setCurrentStep: (id: number) => void;
 }) {
   const { currentStep, setCurrentStep } = props;
+  const { t } = useTranslation("prompts");
   const getStepStatus = (stepIdx: number) => {
     if (stepIdx === currentStep) {
       return "current";
@@ -35,7 +37,7 @@ export default function FormSteps(props: {
   ];
 
   return (
-    <nav aria-label="Progress">
+    <nav aria-label={t("ui.progress")}>
       <ol role="list" className="space-y-4 md:flex md:space-x-8 md:space-y-0">
         {steps.map((step) => (
           <li key={step.name} className="md:flex-1">

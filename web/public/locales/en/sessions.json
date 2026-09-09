@@ -1,0 +1,88 @@
+{
+  "title": "Sessions",
+  "tabs": {
+    "sessions": "Sessions",
+    "metrics": "Metrics"
+  },
+  "columns": {
+    "sessionName": "Session Name",
+    "sessionId": "Session ID",
+    "createdAt": "Created At",
+    "latestRequest": "Latest Request",
+    "totalCost": "Total Cost",
+    "promptTokens": "Prompt Tokens",
+    "completionTokens": "Completion Tokens",
+    "totalTokens": "Total Tokens",
+    "totalRequests": "Total Requests",
+    "avgLatency": "Avg Latency",
+    "userIds": "User IDs",
+    "response": "Response",
+    "status": "Status",
+    "model": "Model",
+    "cost": "Cost",
+    "latency": "Latency",
+    "feedback": "Feedback"
+  },
+  "stats": {
+    "avgCost": "Avg Cost",
+    "avgLatency": "Avg Latency",
+    "totalCost": "Total Cost",
+    "totalSessions": "Total Sessions",
+    "startTime": "Start Time",
+    "endTime": "End Time",
+    "cost": "Cost",
+    "requests": "Requests",
+    "tokens": "Tokens"
+  },
+  "search": {
+    "all": "All",
+    "placeholder": "Search sessions...",
+    "sessionPlaceholder": "Search session...",
+    "noResults": "No results found."
+  },
+  "views": "Views",
+  "loading": "Loading sessions...",
+  "loadingDetails": "Loading session details...",
+  "loadingData": "Loading Data...",
+  "selectSessionId": "Select Session ID",
+  "breadcrumb": {
+    "sessions": "Sessions",
+    "copiedToClipboard": "Copied to clipboard"
+  },
+  "live": {
+    "live": "Live",
+    "startLive": "Start Live"
+  },
+  "nodeTypes": {
+    "llm": "LLM",
+    "tool": "Tool",
+    "vectorDb": "Vector DB",
+    "data": "Data"
+  },
+  "timeline": {
+    "toggleExpandAll": "Toggle expand all rows",
+    "descendantError": "Contains descendant error"
+  },
+  "span": {
+    "durationSeconds": "Duration (s)",
+    "tracePath": "Trace Path",
+    "notAvailable": "N/A",
+    "disableHighlighter": "Disable Highlighter",
+    "enableHighlighter": "Enable Highlighter",
+    "trace": "Trace"
+  },
+  "metrics": {
+    "percentile": "Percentile",
+    "requestsDistribution": "Requests count distribution",
+    "requestsPerUser": "Requests per user",
+    "costDistribution": "Cost distribution",
+    "costPerUser": "Cost per user",
+    "requestsLast30Days": "Requests last 30 days",
+    "costsLast30Days": "Costs in the last 30 days"
+  },
+  "userDetail": {
+    "usage": "Usage",
+    "logs": "Logs",
+    "users": "Users"
+  }
+}

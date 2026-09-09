@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 "use client";
 
 import React, { useState, useRef, useEffect } from "react";
@@ -15,6 +16,9 @@ export default function InputEditor({
   onContentChange,
   isEditing,
 }: InputEditorProps) {
+  const { t } = useTranslation("prompts");
+  const { t: tCommon } = useTranslation("common");
+
   const [content, setContent] = useState(initialContent);
 
   const editorRef = useRef<HTMLDivElement>(null);
@@ -130,9 +134,7 @@ export default function InputEditor({
         isEditing ? "border-none bg-[#F9FAFB] shadow-none" : "border"
       }`}
     >
-      <Label htmlFor="yaml-editor" className="sr-only">
-        YAML Editor
-      </Label>
+      <Label htmlFor="yaml-editor" className="sr-only">{t("ui.yamlEditor")}</Label>
       <div
         ref={editorRef}
         id="yaml-editor"

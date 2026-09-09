@@ -30,6 +30,7 @@ import {
 import { TimeFilter } from "@/types/timeFilter";
 import { useRouter } from "next/router";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { LuPlus } from "react-icons/lu";
 import { TimeInterval } from "../../../lib/timeCalculations/time";
 import { useGetUnauthorized } from "../../../services/hooks/dashboard";
@@ -62,7 +63,7 @@ import {
 } from "./mockRequestsData";
 import RequestDrawer from "./RequestDrawer";
 import RequestsEmptyState, {
-  EMPTY_STATE_PAGES,
+  useEmptyStatePages,
   RequestsPageEmptyStateOptions,
 } from "./RequestsEmptyState";
 import StreamWarning from "./StreamWarning";
@@ -107,12 +108,16 @@ export default function RequestsPage(props: RequestsPageV2Props) {
     initialRequestId,
     userId,
     rateLimited = false,
-    emptyStateOptions = {
-      options: EMPTY_STATE_PAGES.requests,
-      isVisible: true,
-    },
+    emptyStateOptions,
     showSelection = true,
   } = props;
+
+  const { t } = useTranslation("requests");
+  const emptyStatePages = useEmptyStatePages();
+  const resolvedEmptyStateOptions = emptyStateOptions ?? {
+    options: emptyStatePages.requests,
+    isVisible: true,
+  };
 
   /* -------------------------------------------------------------------------- */
   /*                                    REFS                                    */
@@ -359,7 +364,7 @@ export default function RequestsPage(props: RequestsPageV2Props) {
   /*                                    MEMOS                                   */
   /* -------------------------------------------------------------------------- */
   const shouldShowMockData = useMemo(() => {
-    const showMockData = emptyStateOptions.isVisible === true;
+    const showMockData = resolvedEmptyStateOptions.isVisible === true;
 
     if (orgContext?.currentOrg === undefined) {
       return undefined;
@@ -369,13 +374,13 @@ export default function RequestsPage(props: RequestsPageV2Props) {
 
   const mockRequests = useMemo(() => {
     const shouldForceRateLimitMock =
-      emptyStateOptions?.options === EMPTY_STATE_PAGES["rate-limits"];
+      resolvedEmptyStateOptions?.options === emptyStatePages["rate-limits"];
 
     return getMockRequests(
       pageSize,
       shouldForceRateLimitMock ? 429 : undefined,
     );
-  }, [pageSize, emptyStateOptions]);
+  }, [pageSize, resolvedEmptyStateOptions, emptyStatePages]);
 
   const mockFilterMap = useMemo(() => getMockFilterMap(), []);
   const mockProperties = useMemo(() => getMockProperties(), []);
@@ -395,15 +400,15 @@ export default function RequestsPage(props: RequestsPageV2Props) {
   // Moved activeColumns state management here
   const [activeColumns, setActiveColumns] = useLocalStorage<DragColumnItem[]>(
     `requests-table-activeColumns`, // Use a unique key
-    getInitialColumns().map(columnDefToDragColumnItem), // Initialize with default columns
+    getInitialColumns(t).map(columnDefToDragColumnItem), // Initialize with default columns
   );
 
   const columnsWithProperties = useMemo(() => {
-    const initialColumns = getInitialColumns();
+    const initialColumns = getInitialColumns(t);
     return [...initialColumns].concat(
       properties.map((property) => {
         return {
-          id: initialColumns.find((column) => column.id === property) // on id conflict, append property- to the property
+          id: initialColumns.find((column) => column.id === property)
             ? `property-${property}`
             : `${property}`,
           accessorFn: (row) => {
@@ -418,12 +423,12 @@ export default function RequestsPage(props: RequestsPageV2Props) {
           },
           meta: {
             sortKey: property,
-            category: "Custom Property",
+            category: t("columns.customProperty"),
           },
         };
       }),
     );
-  }, [properties, isCached]);
+  }, [properties, isCached, t]);
 
   const {
     selectMode,
@@ -738,7 +743,7 @@ export default function RequestsPage(props: RequestsPageV2Props) {
       {/* Header */}
       {!userId && (
         <Header
-          title={isCached ? "Cached Requests" : "Requests"}
+          title={isCached ? t("cachedTitle") : t("title")}
           leftActions={
             <div className="flex flex-row items-center gap-2">
               {/* Time Filter */}
@@ -778,7 +783,7 @@ export default function RequestsPage(props: RequestsPageV2Props) {
                   }}
                 >
                   <LuPlus className="h-4 w-4" />
-                  Add to Dataset
+                  {t("table.addToDataset")}
                 </Button>
               )}
 
@@ -975,9 +980,9 @@ export default function RequestsPage(props: RequestsPageV2Props) {
   ) : (
     <div className="animate-fade-in">
       <RequestsEmptyState
-        isVisible={emptyStateOptions.isVisible ?? true}
-        options={emptyStateOptions.options}
-        onClickHandler={emptyStateOptions.onPrimaryActionClick}
+        isVisible={resolvedEmptyStateOptions.isVisible ?? true}
+        options={resolvedEmptyStateOptions.options}
+        onClickHandler={resolvedEmptyStateOptions.onPrimaryActionClick}
       />
 
       <ThemedTable

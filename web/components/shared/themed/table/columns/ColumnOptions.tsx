@@ -1,5 +1,6 @@
 import { CheckIcon } from "@heroicons/react/24/outline";
 import { Column } from "@tanstack/react-table";
+import { useTranslation } from "react-i18next";
 import { Col } from "../../../../layout/common/col";
 import { clsx } from "../../../clsx";
 import ColumnSelectButton, { ColumnViewOptions } from "./ColumnSelect";
@@ -22,6 +23,8 @@ export default function ColumnOptions<T>({
   activeColumns,
   setActiveColumns,
 }: ColumnOptionsProps<T>) {
+  const { t } = useTranslation("common");
+
   return (
     <Col className="flex h-full flex-col">
       <ColumnSelectButton
@@ -41,7 +44,7 @@ export default function ColumnOptions<T>({
           .map((category, idx) => (
             <Col key={`${category}-${idx}`} className="mb-4 gap-2">
               <p className="text-xs font-medium text-slate-500">
-                {category === "Default" ? "All columns" : category}
+                {category === "Default" ? t("columns.allColumns") : category}
               </p>
               <ul className="flex flex-wrap gap-2">
                 {columns

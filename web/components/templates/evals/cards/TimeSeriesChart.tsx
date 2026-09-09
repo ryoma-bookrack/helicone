@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import React from "react";
 import { EvaluatorStats } from "../hooks/useEvaluatorStats";
 import {
@@ -25,6 +26,7 @@ export const TimeSeriesChart: React.FC<TimeSeriesChartProps> = ({
   timeSeriesData,
   className = "",
 }) => {
+  const { t } = useTranslation("evals");
   // Format date helper function (e.g., "2025-02-19" to "2/19")
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
@@ -38,7 +40,7 @@ export const TimeSeriesChart: React.FC<TimeSeriesChartProps> = ({
   if (!hasData) {
     return (
       <div className={`flex h-32 items-center justify-center ${className}`}>
-        <Small className="text-muted-foreground">No data available</Small>
+        <Small className="text-muted-foreground">{t("ui.noDataAvailable")}</Small>
       </div>
     );
   }

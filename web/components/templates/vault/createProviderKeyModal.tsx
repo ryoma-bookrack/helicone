@@ -20,6 +20,7 @@ import { useOrg } from "../../layout/org/organizationContext";
 import { clsx } from "../../shared/clsx";
 import useNotification from "../../shared/notification/useNotification";
 import ThemedModal from "../../shared/themed/themedModal";
+import { Trans, useTranslation } from "react-i18next";
 
 interface CreateProviderKeyModalProps {
   open: boolean;
@@ -30,6 +31,7 @@ interface CreateProviderKeyModalProps {
 
 const CreateProviderKeyModal = (props: CreateProviderKeyModalProps) => {
   const { open, setOpen, onSuccess, variant = "basic" } = props;
+  const { t } = useTranslation(["vault", "common"]);
 
   const { setNotification } = useNotification();
   const [isLoading, setIsLoading] = useState(false);
@@ -56,21 +58,18 @@ const CreateProviderKeyModal = (props: CreateProviderKeyModalProps) => {
     ) as HTMLInputElement;
 
     if ((!keyName || keyName.value === "") && variant !== "portal") {
-      setNotification("Please enter in a key name", "error");
+      setNotification(t("vault:notifications.enterKeyName"), "error");
       setIsLoading(false);
       return;
     }
     if (!providerKey || providerKey.value === "") {
-      setNotification("Please enter in a provider key", "error");
+      setNotification(t("vault:notifications.enterProviderKey"), "error");
       setIsLoading(false);
       return;
     }
 
     if (currentUserRole === "member") {
-      setNotification(
-        "Members are not allowed to create provider keys",
-        "error",
-      );
+      setNotification(t("vault:notifications.membersNotAllowed"), "error");
       setIsLoading(false);
       return;
     }
@@ -91,18 +90,18 @@ const CreateProviderKeyModal = (props: CreateProviderKeyModalProps) => {
       )
       .then(({ data }) => {
         if (data !== null) {
-          setNotification("Successfully created provider key", "success");
+          setNotification(t("vault:notifications.providerKeyCreated"), "success");
           setOpen(false);
           onSuccess();
         } else {
           setNotification(
-            "Failed to create provider key, you are only allowed 1 provider key",
+            t("vault:notifications.providerKeyCreateFailed"),
             "error",
           );
         }
       })
       .catch((err) => {
-        setNotification(`Error: ${err}`, "error");
+        setNotification(t("vault:notifications.error", { error: err }), "error");
       })
       .finally(() => setIsLoading(false));
   };
@@ -116,17 +115,19 @@ const CreateProviderKeyModal = (props: CreateProviderKeyModalProps) => {
         className="flex w-[400px] flex-col space-y-8 text-gray-900 dark:text-gray-100"
       >
         <h1 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
-          Create Provider Key
+          {t("vault:createProviderKey.title")}
         </h1>
         <div className="w-full space-y-1.5 text-sm">
-          <label htmlFor="api-key">Provider</label>
+          <label htmlFor="api-key">{t("vault:createProviderKey.provider")}</label>
           <Select defaultValue="openai" disabled>
             <SelectTrigger>
-              <SelectValue placeholder="Select provider" />
+              <SelectValue placeholder={t("vault:createProviderKey.selectProvider")} />
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="openai">
-                {variant === "portal" ? "Custom" : "OpenAI"}
+                {variant === "portal"
+                  ? t("vault:createProviderKey.custom")
+                  : t("vault:createProviderKey.openai")}
               </SelectItem>
             </SelectContent>
           </Select>
@@ -134,37 +135,37 @@ const CreateProviderKeyModal = (props: CreateProviderKeyModalProps) => {
 
         <div className="w-full space-y-1.5 text-sm">
           <label htmlFor="provider-key" className="flex items-center gap-1">
-            Provider Key
-            <Tooltip
-              title={
-                "This is the secret key that you get from the provider. It is used to authenticate and make requests to the provider's API."
-              }
-            >
+            {t("vault:createProviderKey.providerKey")}
+            <Tooltip title={t("vault:createProviderKey.providerKeyTooltip")}>
               <InformationCircleIcon
                 className={clsx("h-4 w-4 text-gray-500")}
               />
             </Tooltip>
           </label>
           <div className="text-xs italic text-gray-500">
-            This will be placed in the{" "}
-            <code className="not-italic">authorization</code> header with the{" "}
-            <code className="not-italic">Bearer</code> prefix.
+            <Trans
+              i18nKey="createProviderKey.authHeaderHint"
+              ns="vault"
+              components={{
+                code: <code className="not-italic" />,
+              }}
+            />
           </div>
           <Input
             type="password"
             name="provider-key"
             id="provider-key"
             required
-            placeholder="sk-"
+            placeholder={t("vault:createProviderKey.providerKeyPlaceholder")}
           />
         </div>
         <div className="w-full space-y-1.5 text-sm">
-          <label htmlFor="key-name">Key Name</label>
+          <label htmlFor="key-name">{t("vault:createProviderKey.keyName")}</label>
           <Input
             name="key-name"
             id="key-name"
             required
-            placeholder="Provider Key Name"
+            placeholder={t("vault:createProviderKey.keyNamePlaceholder")}
           />
         </div>
         <div className="flex justify-end gap-2">
@@ -173,7 +174,7 @@ const CreateProviderKeyModal = (props: CreateProviderKeyModalProps) => {
             type="button"
             className="flex flex-row items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-semibold text-gray-900 shadow-sm hover:bg-gray-50 hover:text-gray-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-500 dark:border-gray-700 dark:bg-black dark:text-gray-100 dark:hover:bg-gray-900 dark:hover:text-gray-300"
           >
-            Cancel
+            {t("common:actions.cancel")}
           </button>
           <button
             type="submit"
@@ -182,7 +183,7 @@ const CreateProviderKeyModal = (props: CreateProviderKeyModalProps) => {
             {isLoading && (
               <ArrowPathIcon className="mr-1.5 h-4 w-4 animate-spin" />
             )}
-            Create Provider Key
+            {t("vault:createProviderKey.createButton")}
           </button>
         </div>
       </form>

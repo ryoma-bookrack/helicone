@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { useState } from "react";
 import { Tags, CheckIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -24,6 +25,9 @@ interface TagsFilterProps {
 }
 
 const TagsFilter = ({ tags, selectedTags, onTagsChange }: TagsFilterProps) => {
+  const { t } = useTranslation("prompts");
+  const { t: tCommon } = useTranslation("common");
+
   const [open, setOpen] = useState(false);
 
   return (
@@ -46,9 +50,9 @@ const TagsFilter = ({ tags, selectedTags, onTagsChange }: TagsFilterProps) => {
         </PopoverTrigger>
         <PopoverContent className="w-[200px] p-0" align="end">
           <Command>
-            <CommandInput placeholder="Search tags..." />
+            <CommandInput placeholder={t("ui.searchTags")} />
             <CommandList>
-              <CommandEmpty>No tags found.</CommandEmpty>
+              <CommandEmpty>{t("ui.noTagsFound")}</CommandEmpty>
               <CommandGroup>
                 <CommandItem
                   onSelect={() => {
@@ -62,9 +66,7 @@ const TagsFilter = ({ tags, selectedTags, onTagsChange }: TagsFilterProps) => {
                       "mr-2 h-4 w-4",
                       selectedTags.length === 0 ? "opacity-100" : "opacity-0",
                     )}
-                  />
-                  All Tags
-                </CommandItem>
+                  />{t("ui.allTags")}</CommandItem>
                 <CommandSeparator />
                 {tags.map((tag) => (
                   <CommandItem

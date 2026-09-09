@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 import useNotification from "../components/shared/notification/useNotification";
@@ -8,6 +9,7 @@ import { useHeliconeAuthClient } from "@/packages/common/auth/client/AuthClientF
 import { logger } from "@/lib/telemetry/logger";
 
 const SecretSignUp = () => {
+  const { t } = useTranslation("auth");
   const heliconeAuthClient = useHeliconeAuthClient();
   const { setNotification } = useNotification();
   const router = useRouter();
@@ -25,9 +27,7 @@ const SecretSignUp = () => {
 
   return (
     <PublicMetaData
-      description={
-        "How developers build AI applications. Get observability, tooling, fine-tuning, and evaluations out of the box. "
-      }
+      description={t("meta.signUpDescription")}
       ogImageUrl={"https://www.helicone.ai/static/helicone-og.webp"}
     >
       <AuthForm
@@ -44,15 +44,12 @@ const SecretSignUp = () => {
           });
 
           if (error) {
-            setNotification(
-              "Error creating your account. Please try again.",
-              "error",
-            );
+            setNotification(t("signUp.errorCreateAccount"), "error");
             logger.error({ error, email }, "Email sign up failed");
             return;
           }
 
-          setNotification("Account created. Redirecting...", "success");
+          setNotification(t("signUp.accountCreatedRedirect"), "success");
           router.push("/welcome");
         }}
         authFormType={"signup"}

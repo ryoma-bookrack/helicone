@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import {
@@ -84,6 +85,9 @@ const PlaygroundHeader = ({
   unsupportedModelWarning,
   onDismissUnsupportedModelWarning,
 }: PlaygroundHeaderProps) => {
+  const { t } = useTranslation("playground");
+  const { t: tCommon } = useTranslation("common");
+
   const [modelListOpen, setModelListOpen] = useState<boolean>(false);
   const { data: playgroundModels, isLoading: modelsLoading } =
     useModelRegistry();
@@ -155,20 +159,18 @@ const PlaygroundHeader = ({
             </PopoverTrigger>
             <PopoverContent className="w-[250px] p-0">
               <Command>
-                <CommandInput placeholder="Search model..." />
+                <CommandInput placeholder={t("ui.searchModel")} />
                 <CommandList>
                   {modelsLoading ? (
                     <div className="flex items-center justify-center p-4">
                       <Loader2 className="h-4 w-4 animate-spin" />
-                      <span className="ml-2 text-sm text-muted-foreground">
-                        Loading models...
-                      </span>
+                      <span className="ml-2 text-sm text-muted-foreground">{t("ui.loadingModels")}</span>
                     </div>
                   ) : !playgroundModels || playgroundModels.length === 0 ? (
-                    <CommandEmpty>No models found.</CommandEmpty>
+                    <CommandEmpty>{t("ui.noModelsFound")}</CommandEmpty>
                   ) : (
                     <>
-                      <CommandEmpty>No model found.</CommandEmpty>
+                      <CommandEmpty>{t("ui.noModelFound")}</CommandEmpty>
                       <CommandGroup>
                         {playgroundModels.map((model) => (
                           <CommandItem

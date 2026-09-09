@@ -1,4 +1,5 @@
 import { GetServerSidePropsContext } from "next";
+import { useTranslation } from "react-i18next";
 import AuthLayout from "../../../../components/layout/auth/authLayout";
 import MetaData from "../../../../components/layout/public/authMetaData";
 
@@ -11,9 +12,10 @@ interface PortalProps {
 
 const Portal = (props: PortalProps) => {
   const { orgId } = props;
+  const { t } = useTranslation("enterprise");
 
   return (
-    <MetaData title="Customer Portal">
+    <MetaData title={t("portal.title")}>
       <PortalIdPage orgId={orgId} />
     </MetaData>
   );

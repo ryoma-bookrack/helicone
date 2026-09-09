@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import ModelPill from "@/components/templates/requests/modelPill";
 import type { components } from "../../../lib/clients/jawnTypes/public";
 import { formatTime } from "./timeUtils";
@@ -65,6 +66,9 @@ const PromptVersionCard = ({
   onOpenPromptVersion,
   onDeletePromptVersion,
 }: PromptVersionCardProps) => {
+  const { t } = useTranslation("prompts");
+  const { t: tCommon } = useTranslation("common");
+
   const [isAddEnvironmentOpen, setIsAddEnvironmentOpen] = useState(false);
   const [environmentSearch, setEnvironmentSearch] = useState("");
   const [environmentToRemove, setEnvironmentToRemove] = useState<string | null>(
@@ -110,10 +114,10 @@ const PromptVersionCard = ({
   const handleCopyVersionId = async () => {
     try {
       await navigator.clipboard.writeText(version.id);
-      setNotification("Version ID copied to clipboard", "success");
+      setNotification(t("ui.versionIdCopiedToClipboard"), "success");
     } catch (err) {
       logger.error({ error: err }, "Failed to copy version ID");
-      setNotification("Failed to copy version ID", "error");
+      setNotification(t("ui.failedToCopyVersionId"), "error");
     }
   };
 
@@ -158,7 +162,7 @@ const PromptVersionCard = ({
               >
                 <Command shouldFilter={false}>
                   <CommandInput
-                    placeholder="Search or type environment..."
+                    placeholder={t("ui.searchOrTypeEnvironment")}
                     value={environmentSearch}
                     onValueChange={setEnvironmentSearch}
                   />
@@ -173,9 +177,7 @@ const PromptVersionCard = ({
                           Create "{environmentSearch.trim()}"
                         </CommandItem>
                       ) : (
-                        <p className="p-2 text-sm text-muted-foreground">
-                          No environments available.
-                        </p>
+                        <p className="p-2 text-sm text-muted-foreground">{t("ui.noEnvironmentsAvailable")}</p>
                       )}
                     </CommandEmpty>
                     <CommandGroup>
@@ -232,7 +234,7 @@ const PromptVersionCard = ({
               </Button>
             </TooltipTrigger>
             <TooltipContent>
-              <p>Copy Version ID</p>
+              <p>{t("ui.copyVersionId")}</p>
             </TooltipContent>
           </Tooltip>
 
@@ -251,7 +253,7 @@ const PromptVersionCard = ({
               </Button>
             </TooltipTrigger>
             <TooltipContent>
-              <p>Open in Playground</p>
+              <p>{t("ui.openInPlayground")}</p>
             </TooltipContent>
           </Tooltip>
 
@@ -272,25 +274,23 @@ const PromptVersionCard = ({
                 </AlertDialogTrigger>
               </TooltipTrigger>
               <TooltipContent>
-                <p>Delete Version</p>
+                <p>{t("ui.deleteVersion")}</p>
               </TooltipContent>
             </Tooltip>
             <AlertDialogContent>
               <AlertDialogHeader>
-                <AlertDialogTitle>Delete Version</AlertDialogTitle>
+                <AlertDialogTitle>{t("ui.deleteVersion")}</AlertDialogTitle>
                 <AlertDialogDescription>
                   Are you sure you want to delete version {versionDisplay}? This
                   action cannot be undone.
                 </AlertDialogDescription>
               </AlertDialogHeader>
               <AlertDialogFooter>
-                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                <AlertDialogCancel>{tCommon("actions.cancel")}</AlertDialogCancel>
                 <AlertDialogAction
                   onClick={() => onDeletePromptVersion(version.id)}
                   className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
-                >
-                  Delete
-                </AlertDialogAction>
+                >{tCommon("actions.delete")}</AlertDialogAction>
               </AlertDialogFooter>
             </AlertDialogContent>
           </AlertDialog>
@@ -316,14 +316,10 @@ const PromptVersionCard = ({
         <AlertDialogContent onClick={(e) => e.stopPropagation()}>
           <AlertDialogHeader>
             <AlertDialogTitle>Remove "{environmentToRemove}" Environment</AlertDialogTitle>
-            <AlertDialogDescription>
-              This will remove the environment from this version entirely.
-            </AlertDialogDescription>
+            <AlertDialogDescription>{t("ui.thisWillRemoveTheEnvironmentFromThisVers")}</AlertDialogDescription>
           </AlertDialogHeader>
           <div className="rounded-md border border-amber-200 bg-amber-50 p-3 dark:border-amber-800 dark:bg-amber-950">
-            <p className="text-sm font-medium text-amber-800 dark:text-amber-200">
-              Trying to move it to another version?
-            </p>
+            <p className="text-sm font-medium text-amber-800 dark:text-amber-200">{t("ui.tryingToMoveItToAnotherVersion")}</p>
             <p className="mt-1 text-sm text-amber-700 dark:text-amber-300">
               Don't remove it here. Instead, go to the version you want and click
               the + button to assign "{environmentToRemove}" there. It will
@@ -331,7 +327,7 @@ const PromptVersionCard = ({
             </p>
           </div>
           <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogCancel>{tCommon("actions.cancel")}</AlertDialogCancel>
             <AlertDialogAction
               onClick={() => {
                 if (environmentToRemove) {
@@ -344,9 +340,7 @@ const PromptVersionCard = ({
                 }
               }}
               className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
-            >
-              Remove
-            </AlertDialogAction>
+            >{t("ui.remove")}</AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>

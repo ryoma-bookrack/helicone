@@ -1,4 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
+import { useTranslation } from "react-i18next";
 import { useEffect, useState } from "react";
 
 import { Button } from "@/components/ui/button";
@@ -17,6 +18,7 @@ export interface AzureExperiment {
 }
 
 export const AzureSettings = () => {
+  const { t } = useTranslation("admin");
   const jawn = useJawnClient();
 
   const currentAzureSettings = useQuery({
@@ -84,15 +86,15 @@ export const AzureSettings = () => {
 
   return (
     <div className="flex flex-col space-y-4 p-6">
-      <h1 className="text-2xl font-semibold">On Prem Settings</h1>
+      <h1 className="text-2xl font-semibold">{t("onPrem.title")}</h1>
       <div className="flex max-w-4xl flex-col space-y-8">
         <Card className="bg-slate-200">
           <CardHeader>
-            <CardTitle>Azure Settings (For experiments)</CardTitle>
+            <CardTitle>{t("onPrem.azureSettings")}</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="baseUri">Base URI</Label>
+              <Label htmlFor="baseUri">{t("onPrem.baseUri")}</Label>
               <Input
                 id="baseUri"
                 value={settings.azureBaseUri}
@@ -106,7 +108,7 @@ export const AzureSettings = () => {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="apiVersion">API Version</Label>
+              <Label htmlFor="apiVersion">{t("onPrem.apiVersion")}</Label>
               <Input
                 id="apiVersion"
                 value={settings.azureApiVersion}
@@ -120,7 +122,7 @@ export const AzureSettings = () => {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="deploymentName">Deployment Name</Label>
+              <Label htmlFor="deploymentName">{t("onPrem.deploymentName")}</Label>
               <Input
                 id="deploymentName"
                 value={settings.azureDeploymentName}
@@ -135,7 +137,7 @@ export const AzureSettings = () => {
 
             <div className="space-y-2">
               <div className="flex items-center justify-between">
-                <Label htmlFor="apiKey">API Key</Label>
+                <Label htmlFor="apiKey">{t("onPrem.apiKey")}</Label>
                 <Button
                   variant="outline"
                   size="sm"
@@ -168,9 +170,9 @@ export const AzureSettings = () => {
                   })
                   .then((s) => {
                     if (s.response.ok) {
-                      setNotification("Settings saved", "success");
+                      setNotification(t("onPrem.settingsSaved"), "success");
                     } else {
-                      setNotification("Failed to save settings", "error");
+                      setNotification(t("onPrem.settingsSaveFailed"), "error");
                     }
                   });
               }}
@@ -182,7 +184,7 @@ export const AzureSettings = () => {
 
         <Card className="bg-slate-200">
           <CardHeader>
-            <CardTitle>Test Azure</CardTitle>
+            <CardTitle>{t("onPrem.testAzure")}</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
             <Textarea
@@ -205,9 +207,9 @@ export const AzureSettings = () => {
                   .then((s) => {
                     setTestResult(s.data);
                     if (s.response.ok) {
-                      setNotification("Test completed", "success");
+                      setNotification(t("onPrem.testCompleted"), "success");
                     } else {
-                      setNotification("Test failed", "error");
+                      setNotification(t("onPrem.testFailed"), "error");
                     }
                   });
               }}
@@ -216,8 +218,8 @@ export const AzureSettings = () => {
             </Button>
 
             <div className="space-y-4">
-              <Label>Result</Label>
-              {testResult === "loading" && <p>Loading...</p>}
+              <Label>{t("common.result")}</Label>
+              {testResult === "loading" && <p>{t("common.loading")}</p>}
 
               {testResult && testResult !== "loading" && (
                 <>
@@ -250,7 +252,7 @@ export const AzureSettings = () => {
                   </div>
 
                   <div className="space-y-2">
-                    <h3 className="text-xl font-semibold">Result</h3>
+                    <h3 className="text-xl font-semibold">{t("common.result")}</h3>
                     <pre className="rounded-lg bg-muted p-4">
                       {(() => {
                         try {

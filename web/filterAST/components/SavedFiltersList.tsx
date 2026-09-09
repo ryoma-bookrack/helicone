@@ -1,27 +1,32 @@
+import { formatStandardDateTime } from "@/lib/i18n/format";
 import React from "react";
 import { useFilterStore } from "../store/filterStore";
 import { Button } from "@/components/ui/button";
 import { P, Small } from "@/components/ui/typography";
 import { Trash2 } from "lucide-react";
 import { useFilterAST } from "@/filterAST/context/filterContext";
+import { useTranslation } from "react-i18next";
 
 interface SavedFiltersListProps {
   onClose?: () => void;
 }
 
-export const SavedFiltersList: React.FC<SavedFiltersListProps> = ({
-  onClose,
-}) => {
+export const SavedFiltersList: React.FC<SavedFiltersListProps> = () => {
+  const { t } = useTranslation("filters");
+  const { t: tc } = useTranslation("common");
   const filterStore = useFilterStore();
   const { crud, helpers } = useFilterAST();
+
   if (crud.isLoading) {
-    return <P className="py-4 text-center">Loading saved filters...</P>;
+    return (
+      <P className="py-4 text-center">{t("loadingSavedFilters")}</P>
+    );
   }
 
   if (crud.savedFilters.length === 0) {
     return (
       <P className="py-4 text-center text-muted-foreground">
-        No saved filters yet. Create and save a filter to see it here.
+        {t("noSavedFiltersYet")}
       </P>
     );
   }
@@ -38,8 +43,8 @@ export const SavedFiltersList: React.FC<SavedFiltersListProps> = ({
             <P className="font-medium">{filter.name}</P>
             <Small className="text-muted-foreground">
               {filter.createdAt
-                ? new Date(filter.createdAt).toLocaleDateString()
-                : "Unknown date"}
+                ? formatStandardDateTime(filter.createdAt)
+                : tc("date.unknownDate")}
             </Small>
           </div>
           <Button

@@ -1,0 +1,40 @@
+{
+  "title": "Users",
+  "tabs": {
+    "users": "Users",
+    "metrics": "Metrics"
+  },
+  "columns": {
+    "userId": "User ID",
+    "noUserId": "No User ID",
+    "totalCost": "Total Cost",
+    "activeFor": "Active For",
+    "activeForDays": "{{count}} days",
+    "firstActive": "First Active",
+    "lastActive": "Last Active",
+    "requests": "Requests",
+    "avgReqsPerDay": "Avg Reqs / Day",
+    "avgTokensPerReq": "Avg Tokens / Req",
+    "completionTokens": "Completion Tokens",
+    "promptTokens": "Prompt Tokens",
+    "rateLimitedCount": "Rate Limited Count"
+  },
+  "views": "Views",
+  "metrics": {
+    "percentile": "Percentile",
+    "selectPercentile": "Select Percentile",
+    "interquartile": "Interquartile",
+    "usersUnit": "{{value}} users",
+    "requestsDistribution": "Requests count distribution",
+    "requestsPerUser": "Requests per user",
+    "costDistribution": "Cost distribution",
+    "costPerUser": "Cost per user"
+  },
+  "detail": {
+    "usage": "Usage",
+    "logs": "Logs",
+    "users": "Users",
+    "requestsLast30Days": "Requests last 30 days",
+    "costsLast30Days": "Costs in the last 30 days"
+  }
+}

@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 /* eslint-disable @next/next/no-img-element */
 import {
   ArrowsPointingOutIcon,
@@ -81,6 +82,9 @@ export const PrettyInput = ({
   selectedProperties: Record<string, string> | undefined;
   playgroundMode?: "prompt" | "experiment" | "experiment-compact";
 }) => {
+  const { t } = useTranslation("prompts");
+  const { t: tCommon } = useTranslation("common");
+
   const getRenderText = () => {
     if (selectedProperties) {
       return selectedProperties[keyName] || "{{undefined}}";
@@ -221,6 +225,8 @@ const RenderWithPrettyInputKeys = (props: {
 };
 
 const PromptChatRow = (props: PromptChatRowProps) => {
+  const { t } = useTranslation("prompts");
+  const { t: tCommon } = useTranslation("common");
   const {
     index,
     message,
@@ -426,9 +432,7 @@ const PromptChatRow = (props: PromptChatRowProps) => {
                         height={256}
                       />
                     ) : (
-                      <div className="flex h-[150px] w-[200px] items-center justify-center border border-slate-300 bg-white text-center text-xs italic text-slate-500">
-                        Unsupported Image Type
-                      </div>
+                      <div className="flex h-[150px] w-[200px] items-center justify-center border border-slate-300 bg-white text-center text-xs italic text-slate-500">{t("ui.unsupportedImageType")}</div>
                     )}
                     <button
                       onClick={() => {
@@ -655,9 +659,7 @@ const PromptChatRow = (props: PromptChatRowProps) => {
             {(role ?? "")?.slice(0, 1).toUpperCase() + (role ?? "").slice(1)}
           </Badge>
           {isStatic && (
-            <Badge className="border border-[#3C82F6] !bg-blue-50 px-2 py-[3px] text-[10px] leading-tight text-[#3C82F6] hover:border-[#3C82F6] dark:border-[#3C82F6] dark:!bg-blue-950 dark:text-[#3C82F6]">
-              Static
-            </Badge>
+            <Badge className="border border-[#3C82F6] !bg-blue-50 px-2 py-[3px] text-[10px] leading-tight text-[#3C82F6] hover:border-[#3C82F6] dark:border-[#3C82F6] dark:!bg-blue-950 dark:text-[#3C82F6]">{t("ui.static")}</Badge>
           )}
         </div>
         <div className="text-xs text-slate-700 dark:text-slate-300">
@@ -717,9 +719,7 @@ const PromptChatRow = (props: PromptChatRowProps) => {
             )}
             <div className="flex w-full items-center justify-end space-x-2">
               {!editMode && isStatic && (
-                <Badge className="bg-[#3C82F6] px-2 py-[3px] text-[10px] leading-tight text-white hover:bg-[#3C82F6] dark:bg-[#3C82F6] dark:text-white">
-                  Static
-                </Badge>
+                <Badge className="bg-[#3C82F6] px-2 py-[3px] text-[10px] leading-tight text-white hover:bg-[#3C82F6] dark:bg-[#3C82F6] dark:text-white">{t("ui.static")}</Badge>
               )}
               {!editMode && showMinimizeButton && (
                 <Tooltip title={minimize ? "Expand" : "Shrink"} placement="top">
@@ -738,11 +738,11 @@ const PromptChatRow = (props: PromptChatRowProps) => {
                 </Tooltip>
               )}
               {!editMode && (
-                <Tooltip title="Copy" placement="top">
+                <Tooltip title={tCommon("actions.copy")} placement="top">
                   <button
                     onClick={() => {
                       navigator.clipboard.writeText(contentAsString || "");
-                      setNotification("Copied to clipboard", "success");
+                      setNotification(t("ui.copiedToClipboard"), "success");
                     }}
                     className="text-slate-500"
                   >
@@ -759,7 +759,7 @@ const PromptChatRow = (props: PromptChatRowProps) => {
                     }}
                   />
 
-                  <Tooltip title="Delete" placement="top">
+                  <Tooltip title={tCommon("actions.delete")} placement="top">
                     <button
                       onClick={() => {
                         deleteRow(currentMessage.id || "");
@@ -867,9 +867,7 @@ const PromptChatRow = (props: PromptChatRowProps) => {
                   />
                   {promptVariables.length > 0 && (
                     <div className="flex flex-col space-y-2">
-                      <label className="text-sm font-medium text-slate-700 dark:text-slate-300">
-                        Variables
-                      </label>
+                      <label className="text-sm font-medium text-slate-700 dark:text-slate-300">{t("ui.variables")}</label>
                       <div className="flex flex-wrap gap-2">
                         {promptVariables.map(({ heliconeTag }, index) => {
                           const key =

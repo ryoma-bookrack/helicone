@@ -1,3 +1,4 @@
+import { formatStandardDateTime } from "@/lib/i18n/format";
 import { UseQueryResult } from "@tanstack/react-query";
 import { Result, resultMap } from "@/packages/common/result";
 
@@ -88,7 +89,7 @@ export const usePropertyCard = (props: PropertyPageData) => {
         return resultMap(data, (d) =>
           d.map((d) => ({
             ...d,
-            active_since: new Date(d.active_since).toLocaleDateString(),
+            active_since: formatStandardDateTime(d.active_since),
             total_cost: +d.total_cost.toPrecision(5),
           })),
         );

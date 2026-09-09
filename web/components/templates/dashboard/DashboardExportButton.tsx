@@ -1,3 +1,4 @@
+import { formatStandardDate } from "@/lib/i18n/format";
 import { Button } from "@/components/ui/button";
 import {
   Tooltip,
@@ -17,6 +18,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Loader2, Download } from "lucide-react";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import useNotification from "../../shared/notification/useNotification";
 import { logger } from "@/lib/telemetry/logger";
 import {
@@ -38,6 +40,7 @@ export default function DashboardExportButton({
   timeFilter,
   disabled = false,
 }: DashboardExportButtonProps) {
+  const { t } = useTranslation("dashboard");
   const [open, setOpen] = useState(false);
   const [exporting, setExporting] = useState(false);
 
@@ -66,14 +69,11 @@ export default function DashboardExportButton({
       // Clean up blob URL to prevent memory leak
       URL.revokeObjectURL(objectUrl);
 
-      setNotification("Dashboard data exported successfully!", "success");
+      setNotification(t("export.success"), "success");
       setOpen(false);
     } catch (error) {
       logger.error({ error }, "Error exporting dashboard data");
-      setNotification(
-        "Error exporting dashboard data. Please try again.",
-        "error",
-      );
+      setNotification(t("export.error"), "error");
     } finally {
       setExporting(false);
     }
@@ -92,32 +92,31 @@ export default function DashboardExportButton({
             <Download size={16} />
           </Button>
         </TooltipTrigger>
-        <TooltipContent>Export dashboard</TooltipContent>
+        <TooltipContent>{t("export.tooltip")}</TooltipContent>
       </Tooltip>
 
       <AlertDialog open={open} onOpenChange={setOpen}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Export Dashboard</AlertDialogTitle>
+            <AlertDialogTitle>{t("export.title")}</AlertDialogTitle>
             <AlertDialogDescription>
-              {timeFilter.start.toLocaleDateString()} -{" "}
-              {timeFilter.end.toLocaleDateString()}
+              {formatStandardDate(timeFilter.start)} -{" "}
+              {formatStandardDate(timeFilter.end)}
             </AlertDialogDescription>
             <AlertDialogDescription>
-              All dashboard data as an Excel file with separate tabs for
-              metrics, costs, requests, and more.
+              {t("export.description")}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel disabled={exporting}>Cancel</AlertDialogCancel>
+            <AlertDialogCancel disabled={exporting}>{t("export.cancel")}</AlertDialogCancel>
             <AlertDialogAction onClick={handleExport} disabled={exporting}>
               {exporting ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Exporting...
+                  {t("export.exporting")}
                 </>
               ) : (
-                "Export"
+                t("export.export")
               )}
             </AlertDialogAction>
           </AlertDialogFooter>

@@ -1,5 +1,6 @@
 import { useHeliconeAuthClient } from "@/packages/common/auth/client/AuthClientFactory";
 import { ArrowPathIcon } from "@heroicons/react/24/outline";
+import { useTranslation } from "react-i18next";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import { BsGoogle } from "react-icons/bs";
@@ -9,6 +10,7 @@ interface LoginProps {
 }
 
 const Login = (props: LoginProps) => {
+  const { t } = useTranslation("auth");
   const { formState: defaultFormState } = props;
   const [formState, setFormState] = useState<"login" | "reset" | "signup">(
     defaultFormState,
@@ -22,11 +24,11 @@ const Login = (props: LoginProps) => {
 
   const signUpHandler = async (email: string, password: string) => {
     if (email === "") {
-      setAuthError("Email is required");
+      setAuthError(t("login.emailRequired"));
       return;
     }
     if (password === "") {
-      setAuthError("Password is required");
+      setAuthError(t("login.passwordRequired"));
       return;
     }
 
@@ -50,15 +52,20 @@ const Login = (props: LoginProps) => {
     router.push("/welcome");
   };
 
+  const googleButtonLabel =
+    formState === "signup"
+      ? t("login.signUpWithGoogle")
+      : t("login.signInWithGoogle");
+
   return (
     <div className="flex w-full min-w-[300px] flex-col space-y-0 sm:min-w-[450px] sm:max-w-2xl">
       <div className="flex w-full flex-row items-center justify-between border-b border-gray-300 pb-2">
         <p className="w-full text-lg font-medium">
           {formState === "login"
-            ? "Login"
+            ? t("login.titleLogin")
             : formState === "reset"
-              ? "Reset Password"
-              : "Welcome to Helicone"}
+              ? t("login.titleReset")
+              : t("login.titleSignup")}
         </p>
       </div>
       <div className="flex flex-col space-y-2">
@@ -72,7 +79,7 @@ const Login = (props: LoginProps) => {
                     <div className="-space-y-px rounded-md shadow-sm">
                       <div>
                         <label htmlFor="email-address" className="sr-only">
-                          Email address
+                          {t("login.emailAddress")}
                         </label>
                         <input
                           id="email-address"
@@ -82,7 +89,7 @@ const Login = (props: LoginProps) => {
                           onChange={(e) => setEmail(e.target.value)}
                           required
                           className="text-md relative block w-full appearance-none rounded-md border border-gray-300 p-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:p-4 sm:text-lg"
-                          placeholder="Email address"
+                          placeholder={t("login.emailAddress")}
                         />
                       </div>
                     </div>
@@ -95,7 +102,7 @@ const Login = (props: LoginProps) => {
                   <button
                     onClick={() => {
                       if (email === "") {
-                        setAuthError("Email is required");
+                        setAuthError(t("login.emailRequired"));
                         return;
                       }
                       setLoading(true);
@@ -111,7 +118,7 @@ const Login = (props: LoginProps) => {
                             setAuthError(res.error);
                           } else {
                             setAuthError(
-                              `If an account exists with email (${email}), you will receive an email with a link to reset your password.`,
+                              t("login.resetEmailSent", { email }),
                             );
                           }
                           setLoading(false);
@@ -123,11 +130,11 @@ const Login = (props: LoginProps) => {
                     {loading ? (
                       <div className="flex flex-row items-center">
                         <ArrowPathIcon className="mr-1.5 h-4 w-4 animate-spin" />
-                        Resetting...
+                        {t("login.resetting")}
                       </div>
                     ) : (
                       <div className="flex flex-row items-center">
-                        Reset Email
+                        {t("login.resetEmail")}
                       </div>
                     )}
                   </button>
@@ -139,7 +146,7 @@ const Login = (props: LoginProps) => {
                     <div className="-space-y-px rounded-md shadow-sm">
                       <div>
                         <label htmlFor="email-address" className="sr-only">
-                          Email address
+                          {t("login.emailAddress")}
                         </label>
                         <input
                           id="email-address"
@@ -149,12 +156,12 @@ const Login = (props: LoginProps) => {
                           onChange={(e) => setEmail(e.target.value)}
                           required
                           className="text-md relative block w-full appearance-none rounded-none rounded-t-md border border-gray-300 p-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:p-4 sm:text-lg"
-                          placeholder="Email address"
+                          placeholder={t("login.emailAddress")}
                         />
                       </div>
                       <div>
                         <label htmlFor="password" className="sr-only">
-                          Password
+                          {t("login.password")}
                         </label>
                         <input
                           id="password"
@@ -164,7 +171,7 @@ const Login = (props: LoginProps) => {
                           onChange={(e) => setPassword(e.target.value)}
                           required
                           className="text-md relative block w-full appearance-none rounded-none rounded-b-md border border-gray-300 p-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:p-4 sm:text-lg"
-                          placeholder="Password"
+                          placeholder={t("login.password")}
                         />
                       </div>
                     </div>
@@ -176,7 +183,7 @@ const Login = (props: LoginProps) => {
                             onClick={() => setFormState("reset")}
                             className="font-medium text-sky-600 hover:text-sky-500"
                           >
-                            Forgot your password?
+                            {t("login.forgotPassword")}
                           </button>
                         </div>
                       </div>
@@ -220,15 +227,16 @@ const Login = (props: LoginProps) => {
                       {loading ? (
                         <div className="flex flex-row items-center">
                           <ArrowPathIcon className="mr-1.5 h-4 w-4 animate-spin" />
-                          Logging in...
+                          {t("login.loggingIn")}
                         </div>
                       ) : (
                         <div className="flex flex-row items-center">
-                          Sign {formState === "signup" ? "Up" : "In"}
+                          {formState === "signup"
+                            ? t("login.signUp")
+                            : t("login.signIn")}
                         </div>
                       )}
                     </button>
-                    {/* Sign in with Google */}
                     <button
                       onClick={async () => {
                         setLoading(true);
@@ -247,27 +255,27 @@ const Login = (props: LoginProps) => {
                     >
                       <div className="flex flex-row items-center">
                         <BsGoogle className="mr-2 h-5 w-5" />
-                        Sign {formState === "signup" ? "Up" : "In"} with Google
+                        {googleButtonLabel}
                       </div>
                     </button>
                     {formState === "signup" ? (
                       <div>
-                        Already have an account?{" "}
+                        {t("login.alreadyHaveAccount")}{" "}
                         <a
                           className="text-indigo-600 hover:cursor-pointer hover:text-indigo-500"
                           onClick={() => setFormState("login")}
                         >
-                          Login
+                          {t("login.loginLink")}
                         </a>
                       </div>
                     ) : (
                       <div>
-                        don{"'"}t have an account?{" "}
+                        {t("login.dontHaveAccount")}{" "}
                         <a
                           onClick={() => setFormState("signup")}
                           className="text-indigo-600 hover:cursor-pointer hover:text-indigo-500"
                         >
-                          Sign Up
+                          {t("login.signUp")}
                         </a>
                       </div>
                     )}

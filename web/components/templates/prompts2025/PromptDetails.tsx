@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { Small } from "@/components/ui/typography";
 import ModelPill from "@/components/templates/requests/modelPill";
 import {
@@ -82,6 +83,9 @@ const PromptDetails = ({
   onFilterVersion,
   onCollapse,
 }: PromptDetailsProps) => {
+  const { t } = useTranslation("prompts");
+  const { t: tCommon } = useTranslation("common");
+
   const { setNotification } = useNotification();
   const [selectedVersion, setSelectedVersion] = useState<string>(
     "All (last 50 versions)",
@@ -170,9 +174,7 @@ const PromptDetails = ({
   if (!promptWithVersions) {
     return (
       <div className="flex h-full w-full items-center justify-center">
-        <Small className="text-muted-foreground">
-          Select a prompt to view details
-        </Small>
+        <Small className="text-muted-foreground">{t("ui.selectAPromptToViewDetails")}</Small>
       </div>
     );
   }
@@ -288,9 +290,7 @@ const PromptDetails = ({
                       <LuPanelRightClose className="h-4 w-4" />
                     </Button>
                   </TooltipTrigger>
-                  <TooltipContent side="bottom" className="text-xs">
-                    Collapse Drawer
-                  </TooltipContent>
+                  <TooltipContent side="bottom" className="text-xs">{t("ui.collapseDrawer")}</TooltipContent>
                 </Tooltip>
               </TooltipProvider>
 
@@ -348,9 +348,7 @@ const PromptDetails = ({
                       <Trash2 size={16} />
                     </Button>
                   </TooltipTrigger>
-                  <TooltipContent side="bottom" className="text-xs">
-                    Delete Prompt
-                  </TooltipContent>
+                  <TooltipContent side="bottom" className="text-xs">{t("ui.deletePrompt")}</TooltipContent>
                 </Tooltip>
               </TooltipProvider>
             </div>
@@ -360,7 +358,7 @@ const PromptDetails = ({
             className="group flex cursor-pointer items-center text-sm text-muted-foreground transition-colors duration-200 hover:text-foreground"
             onClick={() => {
               navigator.clipboard.writeText(prompt.id);
-              setNotification("ID copied to clipboard", "success");
+              setNotification(t("ui.idCopiedToClipboard"), "success");
             }}
           >
             <span>ID: {prompt.id}</span>
@@ -369,7 +367,7 @@ const PromptDetails = ({
 
           <div className="flex flex-col gap-2">
             <div className="flex items-center justify-between gap-2">
-              <Small className="font-medium text-foreground">Tags</Small>
+              <Small className="font-medium text-foreground">{t("ui.tags")}</Small>
               <Popover
                 open={isTagEditorOpen}
                 onOpenChange={handleTagEditorOpenChange}
@@ -381,16 +379,12 @@ const PromptDetails = ({
                     className="gap-1 text-xs font-medium text-muted-foreground hover:text-foreground"
                     type="button"
                   >
-                    <Edit3 className="h-3.5 w-3.5" />
-                    Manage
-                  </Button>
+                    <Edit3 className="h-3.5 w-3.5" />{t("ui.manage")}</Button>
                 </PopoverTrigger>
                 <PopoverContent className="w-80 p-4" align="end">
                   <div className="flex flex-col gap-4">
                     <div className="flex flex-col gap-2">
-                      <Small className="text-xs font-semibold uppercase text-muted-foreground">
-                        Selected Tags
-                      </Small>
+                      <Small className="text-xs font-semibold uppercase text-muted-foreground">{t("ui.selectedTags")}</Small>
                       {draftTags.length > 0 ? (
                         <div className="flex flex-wrap gap-2">
                           {draftTags.map((tag) => (
@@ -412,9 +406,7 @@ const PromptDetails = ({
                           ))}
                         </div>
                       ) : (
-                        <div className="rounded-md border border-dashed border-border px-3 py-2 text-xs text-muted-foreground">
-                          No tags yet. Add or select tags below.
-                        </div>
+                        <div className="rounded-md border border-dashed border-border px-3 py-2 text-xs text-muted-foreground">{t("ui.noTagsYetAddOrSelectTagsBelow")}</div>
                       )}
                     </div>
 
@@ -429,7 +421,7 @@ const PromptDetails = ({
                             }
                           }}
                           onKeyDown={handleTagInputKeyDown}
-                          placeholder="Add a tag"
+                          placeholder={t("ui.addATag")}
                         />
                         <Button
                           variant="secondary"
@@ -439,37 +431,27 @@ const PromptDetails = ({
                           className="gap-1"
                           type="button"
                         >
-                          <Plus className="h-3 w-3" />
-                          Add
-                        </Button>
+                          <Plus className="h-3 w-3" />{t("ui.add")}</Button>
                       </div>
                       {tagInputFeedback ? (
                         <span className="text-xs text-destructive">
                           {tagInputFeedback}
                         </span>
                       ) : (
-                        <span className="text-[11px] text-muted-foreground">
-                          Press Enter or comma to add quickly.
-                        </span>
+                        <span className="text-[11px] text-muted-foreground">{t("ui.pressEnterOrCommaToAddQuickly")}</span>
                       )}
                     </div>
 
                     <div className="flex flex-col gap-2">
-                      <Small className="text-xs font-semibold uppercase text-muted-foreground">
-                        Suggestions
-                      </Small>
+                      <Small className="text-xs font-semibold uppercase text-muted-foreground">{t("ui.suggestions")}</Small>
                       {isLoadingAvailableTags ? (
                         <div className="flex items-center gap-2 rounded-md border border-dashed border-border px-3 py-2 text-xs text-muted-foreground">
-                          <Loader2 className="h-3.5 w-3.5 animate-spin" />
-                          Loading tags...
-                        </div>
+                          <Loader2 className="h-3.5 w-3.5 animate-spin" />{t("ui.loadingTags")}</div>
                       ) : suggestionTags.length > 0 ? (
                         <Command className="max-h-40 overflow-hidden rounded-md border border-border">
-                          <CommandInput placeholder="Search tags..." />
+                          <CommandInput placeholder={t("ui.searchTags")} />
                           <CommandList>
-                            <CommandEmpty>
-                              No matches. Add a custom tag instead.
-                            </CommandEmpty>
+                            <CommandEmpty>{t("ui.noMatchesAddACustomTagInstead")}</CommandEmpty>
                             <CommandGroup>
                               {suggestionTags.map((tag) => (
                                 <CommandItem
@@ -500,9 +482,7 @@ const PromptDetails = ({
                         onClick={() => handleTagEditorOpenChange(false)}
                         disabled={isSavingTags}
                         type="button"
-                      >
-                        Cancel
-                      </Button>
+                      >{tCommon("actions.cancel")}</Button>
                       <Button
                         size="sm_sleek"
                         className="gap-2"
@@ -527,10 +507,10 @@ const PromptDetails = ({
 
       <div className="border-b border-border bg-background p-4">
         <div className="flex flex-col gap-2">
-          <Small className="font-medium text-foreground">Version</Small>
+          <Small className="font-medium text-foreground">{t("ui.version")}</Small>
           <Select value={selectedVersion} onValueChange={handleVersionChange}>
             <SelectTrigger className="w-full">
-              <SelectValue placeholder="Select version" />
+              <SelectValue placeholder={t("ui.selectVersion")} />
             </SelectTrigger>
             <SelectContent>
               {versionOptions.map((version) => (
@@ -556,28 +536,21 @@ const PromptDetails = ({
       <Dialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Are you absolutely sure?</DialogTitle>
-            <DialogDescription>
-              This action cannot be undone. This will permanently delete your
-              prompt.
-            </DialogDescription>
+            <DialogTitle>{t("ui.areYouAbsolutelySure")}</DialogTitle>
+            <DialogDescription>{t("ui.thisActionCannotBeUndoneThisWillPermanen")}</DialogDescription>
           </DialogHeader>
           <DialogFooter>
             <Button
               variant="outline"
               onClick={() => setDeleteDialogOpen(false)}
-            >
-              Cancel
-            </Button>
+            >{tCommon("actions.cancel")}</Button>
             <Button
               variant="destructive"
               onClick={() => {
                 onDeletePrompt(prompt.id);
                 setDeleteDialogOpen(false);
               }}
-            >
-              Delete
-            </Button>
+            >{tCommon("actions.delete")}</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>

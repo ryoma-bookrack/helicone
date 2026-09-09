@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import {
   Accordion,
   AccordionContent,
@@ -14,10 +15,13 @@ interface ArrayDiffViewerProps {
 }
 
 const ArrayDiffViewer = (props: ArrayDiffViewerProps) => {
+  const { t } = useTranslation("prompts");
+  const { t: tCommon } = useTranslation("common");
+
   const { origin, target } = props;
 
   if (!origin || !Array.isArray(origin) || !target || !Array.isArray(target)) {
-    return <p className="text-xs text-muted-foreground">Failed to find diff</p>;
+    return <p className="text-xs text-muted-foreground">{t("ui.failedToFindDiff")}</p>;
   }
 
   // map the array that is longer with tie-breaker being origin
@@ -94,15 +98,13 @@ const ArrayDiffViewer = (props: ArrayDiffViewerProps) => {
                       "flex w-fit items-center border border-yellow-500 bg-yellow-100 px-2 py-1 text-xs font-semibold text-yellow-900 dark:bg-yellow-900 dark:text-yellow-300"
                     }
                   >
-                    <EyeIcon className="mr-1 h-4 w-4" />
-                    Changes
-                  </div>
+                    <EyeIcon className="mr-1 h-4 w-4" />{t("ui.changes")}</div>
                 )}
               </div>
             </AccordionTrigger>
             <AccordionContent className="p-4">
               {originContent === targetContent ? (
-                <p className="text-xs text-slate-500">No changes</p>
+                <p className="text-xs text-slate-500">{t("ui.noChanges")}</p>
               ) : (
                 <div className="mt-4 flex w-full flex-col space-y-2">
                   <ReactDiffViewer

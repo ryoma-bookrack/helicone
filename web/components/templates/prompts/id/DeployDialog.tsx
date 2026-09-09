@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
@@ -28,6 +29,9 @@ export default function DeployDialog({
   state,
   isImportedFromCode,
 }: DeployDialogProps) {
+  const { t } = useTranslation("prompts");
+  const { t: tCommon } = useTranslation("common");
+
   const [showChatExample, setShowChatExample] = useState(false);
 
   if (!promptId) return null;
@@ -51,16 +55,14 @@ export default function DeployDialog({
           disabled={isImportedFromCode === true}
         >
           <PiRocketLaunchBold className="mr-2 h-4 w-4" />
-          <span>Deploy</span>
+          <span>{t("ui.deploy")}</span>
         </Button>
       </DialogTrigger>
       <DialogContent className="flex max-h-[90vh] w-full max-w-4xl flex-col items-center gap-4 overflow-hidden bg-slate-100 dark:bg-slate-900">
         {/* Installation */}
         <div className="flex w-full flex-col">
           <div className="flex w-full flex-row items-center justify-between">
-            <P className="dark:slate-300 font-semibold text-slate-700">
-              Install
-            </P>
+            <P className="dark:slate-300 font-semibold text-slate-700">{t("ui.install")}</P>
           </div>
           <div className="w-full">
             <DiffHighlight
@@ -81,9 +83,7 @@ export default function DeployDialog({
             <Alert>
               <InfoIcon className="h-4 w-4" />
               <AlertTitle>Provider: {provider}</AlertTitle>
-              <AlertDescription>
-                Required environment variables:
-              </AlertDescription>
+              <AlertDescription>{t("ui.requiredEnvironmentVariables")}</AlertDescription>
               <div className="w-full">
                 <DiffHighlight
                   maxHeight={false}
@@ -106,21 +106,15 @@ export default function DeployDialog({
         {/* Toggle between chat and non-chat examples */}
         <div className="flex w-full flex-col">
           <div className="flex w-full flex-row items-center justify-between">
-            <P className="dark:slate-300 font-semibold text-slate-700">
-              Deploy
-            </P>
+            <P className="dark:slate-300 font-semibold text-slate-700">{t("ui.deploy")}</P>
             <div className="flex w-full flex-row items-center justify-end gap-2">
               <Tabs
                 defaultValue={showChatExample ? "chat" : "single"}
                 onValueChange={(value) => setShowChatExample(value === "chat")}
               >
                 <TabsList asPill size="xs">
-                  <TabsTrigger asPill value="single">
-                    Single
-                  </TabsTrigger>
-                  <TabsTrigger asPill value="chat">
-                    Chat
-                  </TabsTrigger>
+                  <TabsTrigger asPill value="single">{t("ui.single")}</TabsTrigger>
+                  <TabsTrigger asPill value="chat">{t("ui.chat")}</TabsTrigger>
                 </TabsList>
               </Tabs>
             </div>
@@ -167,9 +161,7 @@ export default function DeployDialog({
           rel="noopener noreferrer"
           className="mt-2 flex flex-row items-center gap-0.5 text-heliblue hover:underline"
         >
-          <Small className="font-semibold text-heliblue">
-            Read Full Documentation
-          </Small>
+          <Small className="font-semibold text-heliblue">{t("ui.readFullDocumentation")}</Small>
           <PiArrowUpRightBold className="h-4 w-4" />
         </Link>
       </DialogContent>

@@ -1,0 +1,114 @@
+{
+  "page": {
+    "title": "连接",
+    "description": "连接并配置集成以增强您的 Helicone 体验",
+    "searchPlaceholder": "搜索集成...",
+    "noResults": "未找到匹配的集成。"
+  },
+  "sort": {
+    "label": "排序：{{option}}",
+    "relevance": "相关度",
+    "alphabetical": "字母顺序",
+    "type": "类型",
+    "status": "状态"
+  },
+  "status": {
+    "noConfiguration": "未配置",
+    "active": "配置已启用",
+    "notActive": "已配置 - 未启用"
+  },
+  "integration": {
+    "configure": "配置",
+    "description": "集成 {{name}} 的服务。"
+  },
+  "types": {
+    "destination": "目标",
+    "fineTuning": "微调"
+  },
+  "segment": {
+    "enable": "启用 Segment 集成",
+    "apiKey": "Segment API 密钥",
+    "apiKeyPlaceholder": "输入 Segment API 密钥",
+    "testEvent": "测试事件",
+    "saveConfiguration": "保存配置"
+  },
+  "openPipe": {
+    "enable": "启用 OpenPipe 集成",
+    "apiKey": "OpenPipe API 密钥",
+    "apiKeyPlaceholder": "输入 OpenPipe API 密钥",
+    "autoSync": "启用自动数据集同步",
+    "comingSoon": "即将推出",
+    "saveConfiguration": "保存配置"
+  },
+  "stripe": {
+    "title": "Stripe 集成",
+    "description": "使用受限访问密钥将 Stripe 账户连接到 Helicone",
+    "enable": "启用 Stripe 集成",
+    "howToTitle": "如何获取 Stripe 受限访问密钥",
+    "step1": "前往 Stripe 控制台，导航至 <strong>开发者 → API 密钥</strong>",
+    "step2": "点击 <strong>创建受限密钥</strong>",
+    "step3": "为密钥取一个描述性名称，如 \"Helicone Integration\"",
+    "step4Intro": "设置以下权限：",
+    "billingPermission": "<strong>Billing</strong>：写入权限（计量事件所需）",
+    "meterEventsPermission": "<strong>Meter events</strong>：写入权限",
+    "customersPermission": "<strong>Customers</strong>：读取权限（可选，用于验证）",
+    "step5": "点击 <strong>创建密钥</strong>",
+    "step6": "复制密钥（以 \"rk_live_\" 或 \"rk_test_\" 开头）并粘贴到下方",
+    "note": "<strong>注意：</strong>开发环境使用测试密钥 (rk_test_)，生产环境使用正式密钥 (rk_live_)。",
+    "meterSettings": "计量设置",
+    "eventName": "事件名称",
+    "eventNameHint": "向 Stripe 发送数据时使用的事件名称",
+    "testMeterEvents": "测试计量事件",
+    "testMeterEventsHint": "在不保存的情况下测试计量事件配置",
+    "stripeCustomerId": "Stripe 客户 ID",
+    "testEvent": "测试事件",
+    "testEventHint": "将使用当前设置向 Stripe 发送测试计量事件",
+    "testSuccessful": "测试成功",
+    "testFailed": "测试失败",
+    "testSuccessMessage": "测试计量事件发送成功！",
+    "testFailedNotification": "测试失败：{{error}}",
+    "unknownError": "未知错误",
+    "saveFirstToTest": "请先保存配置再进行测试",
+    "nextSteps": "后续步骤",
+    "nextStepsIntro": "保存配置后，在 Helicone 请求中添加以下请求头以在 Stripe 中跟踪使用量：",
+    "nextStepsReplace": "将 <code>cus_12345678</code> 替换为实际的 Stripe 客户 ID，以将 Helicone 使用量关联到正确的 Stripe 客户进行计费。",
+    "learnMore": "<strong>了解更多：</strong><link>Helicone 请求头文档</link>",
+    "rakLabel": "Stripe 受限访问密钥 (RAK)",
+    "rakHint": "您的密钥经过加密并安全存储",
+    "saveConfiguration": "保存配置"
+  },
+  "fineTune": {
+    "title": "使用 OpenPipe 微调",
+    "description": "为数据集 {{datasetName}} 配置微调任务",
+    "fineTuneName": "微调名称 (Slug)",
+    "fineTuneNamePlaceholder": "输入微调模型名称",
+    "baseModel": "基础模型",
+    "selectBaseModel": "选择基础模型",
+    "batchSize": "批次大小",
+    "batchSizeTooltip": "每个训练步骤处理的样本数。使用 \"auto\" 自动选择。",
+    "learningRateMultiplier": "学习率倍数",
+    "learningRateTooltip": "调整学习率。较高的值可能加快学习但有过拟合风险。",
+    "numEpochs": "训练轮数",
+    "numEpochsTooltip": "完整遍历训练数据集的次数。更多轮数可能提高效果但增加训练时间。",
+    "processing": "处理中",
+    "startFineTuning": "开始微调",
+    "processLogs": "处理日志：",
+    "copyLogs": "复制日志到剪贴板",
+    "logs": {
+      "starting": "开始微调流程...",
+      "fetchingRows": "获取额外行...",
+      "fetchedRows": "已获取 {{count}} 行。",
+      "creatingDataset": "在 OpenPipe 中创建数据集...",
+      "datasetCreated": "数据集已创建，ID：{{id}}",
+      "uploadingData": "上传数据到 OpenPipe...",
+      "uploadSuccess": "数据上传成功。",
+      "creatingJob": "创建微调任务...",
+      "jobCreated": "微调任务已创建，ID：{{id}}",
+      "error": "错误：{{error}}"
+    },
+    "notifications": {
+      "success": "微调任务创建成功！",
+      "error": "微调流程出错，请重试。"
+    }
+  }
+}

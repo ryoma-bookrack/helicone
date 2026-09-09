@@ -4,6 +4,7 @@ import { RadioGroup } from "@headlessui/react";
 import { CheckCircleIcon } from "@heroicons/react/20/solid";
 import { KeyIcon, TrashIcon } from "@heroicons/react/24/outline";
 import { useCallback, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { DecryptedProviderKey } from "../../../../../services/lib/keys";
 import { clsx } from "../../../../shared/clsx";
 import useNotification from "../../../../shared/notification/useNotification";
@@ -30,6 +31,8 @@ const ProviderKeyList = (props: ProviderKeyListProps) => {
     variant = "portal",
     defaultProviderKey,
   } = props;
+  const { t } = useTranslation("enterprise");
+  const { t: tCommon } = useTranslation("common");
 
   const { providerKeys, refetchProviderKeys } = useVaultPage();
   const { setNotification } = useNotification();
@@ -61,11 +64,11 @@ const ProviderKeyList = (props: ProviderKeyListProps) => {
       .then(() => {
         refetchProviderKeys();
 
-        setNotification("Provider Key Deleted", "success");
+        setNotification(t("portal.providerKeys.deleteSuccess"), "success");
         setDeleteProviderOpen(false);
       })
       .catch(() => {
-        setNotification("Error Deleting Provider Key", "error");
+        setNotification(t("portal.providerKeys.deleteError"), "error");
         setDeleteProviderOpen(false);
       });
   };
@@ -78,12 +81,12 @@ const ProviderKeyList = (props: ProviderKeyListProps) => {
           {providerKey}
           <div className="flex flex-row items-center justify-between">
             <div className="flex items-center space-x-1">
-              <Tooltip title="Provider Keys are used to authenticate your requests to the API. This key is securely stored using our vault technologies, with the state of the art encryption.">
+              <Tooltip title={t("portal.providerKeys.tooltip")}>
                 <label
                   htmlFor="alert-metric"
                   className="text-xs font-semibold text-gray-900 dark:text-gray-100"
                 >
-                  Provider Keys
+                  {t("portal.providerKeys.title")}
                 </label>
               </Tooltip>
             </div>
@@ -99,9 +102,9 @@ const ProviderKeyList = (props: ProviderKeyListProps) => {
             >
               <KeyIcon className="h-4 w-4 text-black dark:text-white" />
               <p className="pt-2 text-xs font-semibold text-gray-500">
-                Please create a provider key.{" "}
-                <Tooltip title="Provider Keys are used to authenticate your requests to the API. This key is securely stored using our vault technologies, with the state of the art encryption.">
-                  <span className="cursor-pointer underline">Learn more.</span>
+                {t("portal.providerKeys.empty")}{" "}
+                <Tooltip title={t("portal.providerKeys.tooltip")}>
+                  <span className="cursor-pointer underline">{t("portal.providerKeys.learnMore")}</span>
                 </Tooltip>
               </p>
             </button>
@@ -113,7 +116,7 @@ const ProviderKeyList = (props: ProviderKeyListProps) => {
               }}
             >
               <RadioGroup.Label className="sr-only">
-                Server size
+                {t("portal.providerKeys.serverSize")}
               </RadioGroup.Label>
               <div className="space-y-2">
                 {providerKeys.map((key) => (
@@ -190,7 +193,7 @@ const ProviderKeyList = (props: ProviderKeyListProps) => {
               setIsProviderOpen(true);
             }}
           >
-            Add new key
+            {t("portal.providerKeys.addNewKey")}
           </Button>
         </div>
       </div>
@@ -203,12 +206,10 @@ const ProviderKeyList = (props: ProviderKeyListProps) => {
       <ThemedModal open={deleteProviderOpen} setOpen={setDeleteProviderOpen}>
         <div className="flex w-full flex-col gap-4">
           <p className="text-lg font-semibold text-gray-900 dark:text-gray-100">
-            Delete Provider Key
+            {t("portal.providerKeys.deleteTitle")}
           </p>
           <p className="w-[400px] whitespace-pre-wrap text-sm text-gray-700 dark:text-gray-300">
-            This Provider Key will be deleted from your account. All proxy keys
-            that are mapped to this provider key will be deleted as well. Are
-            you sure you want to delete this provider key?
+            {t("portal.providerKeys.deleteDescription")}
           </p>
           <div className="flex justify-end gap-2">
             <button
@@ -216,7 +217,7 @@ const ProviderKeyList = (props: ProviderKeyListProps) => {
               type="button"
               className="flex flex-row items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-semibold text-gray-900 shadow-sm hover:bg-gray-50 hover:text-gray-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-500 dark:border-gray-700 dark:bg-black dark:text-gray-100 dark:hover:bg-gray-900 dark:hover:text-gray-300"
             >
-              Cancel
+              {tCommon("actions.cancel")}
             </button>
             <button
               onClick={async () => {
@@ -226,7 +227,7 @@ const ProviderKeyList = (props: ProviderKeyListProps) => {
               }}
               className="flex items-center rounded-md bg-red-500 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white dark:text-black"
             >
-              Delete
+              {tCommon("actions.delete")}
             </button>
           </div>
         </div>

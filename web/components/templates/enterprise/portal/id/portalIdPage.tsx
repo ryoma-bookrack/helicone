@@ -1,3 +1,4 @@
+import { formatStandardDate } from "@/lib/i18n/format";
 import {
   useGetOrg,
   useGetOrgMembers,
@@ -8,6 +9,7 @@ import { clsx } from "../../../../shared/clsx";
 import OrgMembersPage from "../../../organization/members/orgMembersPage";
 import { AreaChart } from "@tremor/react";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import LoadingAnimation from "../../../../shared/loadingAnimation";
 import ProviderKeyList from "./providerKeyList";
 import { useOrg } from "../../../../layout/org/organizationContext";
@@ -30,6 +32,8 @@ interface PortalIdPageProps {
 
 const PortalIdPage = (props: PortalIdPageProps) => {
   const { orgId } = props;
+  const { t } = useTranslation("enterprise");
+  const { t: tCommon } = useTranslation("common");
 
   const { data: orgData, isLoading, refetch } = useGetOrg(orgId || "");
   const org = orgData?.data;
@@ -76,12 +80,12 @@ const PortalIdPage = (props: PortalIdPageProps) => {
       if (new Date(d.time) > new Date()) {
         return {
           requests: null,
-          date: new Date(d.time).toLocaleDateString(),
+          date: formatStandardDate(d.time),
         };
       } else {
         return {
           requests: +d.count,
-          date: new Date(d.time).toLocaleDateString(),
+          date: formatStandardDate(d.time),
         };
       }
     }) ?? [];
@@ -106,11 +110,11 @@ const PortalIdPage = (props: PortalIdPageProps) => {
         pages={[
           {
             href: "/enterprise/portal",
-            name: "Customer Portal",
+            name: t("portal.title"),
           },
           {
             href: `/enterprise/portal/${orgId}`,
-            name: org?.name || "n/a",
+            name: org?.name || t("portal.notAvailable"),
           },
         ]}
       />
@@ -146,7 +150,7 @@ const PortalIdPage = (props: PortalIdPageProps) => {
                   }}
                   className="flex w-full items-center justify-center rounded-lg border border-gray-500 bg-white px-4 py-2 text-xs font-semibold text-black dark:bg-black dark:text-white"
                 >
-                  View
+                  {t("portal.actions.view")}
                 </button>{" "}
                 <button
                   onClick={() => {
@@ -154,7 +158,7 @@ const PortalIdPage = (props: PortalIdPageProps) => {
                   }}
                   className="flex w-full items-center justify-center rounded-lg border border-gray-500 bg-white px-4 py-2 text-xs font-semibold text-black dark:bg-black dark:text-white"
                 >
-                  Edit
+                  {t("portal.actions.edit")}
                 </button>
                 <button
                   onClick={() => {
@@ -162,17 +166,17 @@ const PortalIdPage = (props: PortalIdPageProps) => {
                   }}
                   className="flex w-full items-center justify-center rounded-lg border border-gray-500 bg-white px-4 py-2 text-xs font-semibold text-black dark:bg-black dark:text-white"
                 >
-                  Delete
+                  {tCommon("actions.delete")}
                 </button>
               </div>
               <div className="flex w-full flex-col space-y-4 divide-y divide-gray-200 pt-4 text-black dark:divide-gray-800 dark:text-white">
-                <p className="text-md font-semibold">Limits</p>
+                <p className="text-md font-semibold">{t("portal.limits.title")}</p>
                 <div className="flex w-full flex-row items-center justify-between space-x-2 pr-4 pt-4">
                   <div className="flex flex-col items-start space-y-1">
-                    <p className="text-sm font-semibold">Costs</p>
+                    <p className="text-sm font-semibold">{t("portal.limits.costs")}</p>
                     <p className="text-sm text-gray-500">{`${
                       orgLimits?.cost === -1
-                        ? "unlimited"
+                        ? t("portal.limits.unlimited")
                         : new Intl.NumberFormat("en-US", {
                             style: "currency",
                             currency: "USD",
@@ -180,44 +184,44 @@ const PortalIdPage = (props: PortalIdPageProps) => {
                     }`}</p>
                   </div>
                   <div className="flex flex-col items-start space-y-1">
-                    <p className="text-sm font-semibold">Requests</p>
+                    <p className="text-sm font-semibold">{t("portal.limits.requests")}</p>
                     <p className="text-sm text-gray-500">
                       {orgLimits?.requests === -1
-                        ? "unlimited"
+                        ? t("portal.limits.unlimited")
                         : new Intl.NumberFormat("en-US").format(
                             orgLimits?.requests || 0,
                           )}
                     </p>
                   </div>
                   <div className="flex flex-col items-start space-y-1">
-                    <p className="text-sm font-semibold">Time Range</p>
-                    <p className="text-sm text-gray-500">Monthly</p>
+                    <p className="text-sm font-semibold">{t("portal.limits.timeRange")}</p>
+                    <p className="text-sm text-gray-500">{t("portal.limits.monthly")}</p>
                   </div>
                 </div>
               </div>
               <div className="flex w-full flex-col space-y-4 divide-y divide-gray-200 pt-8 text-black dark:divide-gray-800 dark:text-white">
-                <p className="text-md font-semibold">Details</p>
+                <p className="text-md font-semibold">{t("portal.details.title")}</p>
                 <div className="flex flex-col space-y-4 pr-4 pt-4">
                   <div className="flex flex-col items-start space-y-1">
-                    <p className="text-sm font-semibold">Created At</p>
+                    <p className="text-sm font-semibold">{t("portal.details.createdAt")}</p>
                     <p className="text-sm text-gray-500">
                       {getUSDateFromString(org?.created_at || "")}
                     </p>
                   </div>
                   <div className="flex flex-col items-start space-y-1">
-                    <p className="text-sm font-semibold">Organization ID</p>
+                    <p className="text-sm font-semibold">{t("portal.details.organizationId")}</p>
                     <p className="text-sm text-gray-500">{org?.id}</p>
                   </div>
                   <div className="flex flex-col items-start space-y-1">
-                    <p className="text-sm font-semibold">Owner</p>
+                    <p className="text-sm font-semibold">{t("portal.details.owner")}</p>
                     <p className="text-sm text-gray-500">
-                      {owner?.email || "n/a"}
+                      {owner?.email || t("portal.notAvailable")}
                     </p>
                   </div>
                   <div className="flex flex-col items-start space-y-1">
-                    <p className="text-sm font-semibold">Members</p>
+                    <p className="text-sm font-semibold">{t("portal.details.members")}</p>
                     <p className="text-sm text-gray-500">
-                      {members?.length || "n/a"}
+                      {members?.length || t("portal.notAvailable")}
                     </p>
                   </div>
                 </div>
@@ -226,14 +230,14 @@ const PortalIdPage = (props: PortalIdPageProps) => {
             <div className="flex h-full w-full flex-col">
               <Tabs defaultValue="usage" className="w-full">
                 <TabsList>
-                  <TabsTrigger value="usage">Usage</TabsTrigger>
-                  <TabsTrigger value="members">Members</TabsTrigger>
-                  <TabsTrigger value="keys">Keys</TabsTrigger>
+                  <TabsTrigger value="usage">{t("portal.tabsDetail.usage")}</TabsTrigger>
+                  <TabsTrigger value="members">{t("portal.tabsDetail.members")}</TabsTrigger>
+                  <TabsTrigger value="keys">{t("portal.tabsDetail.keys")}</TabsTrigger>
                 </TabsList>
                 <TabsContent value="usage">
                   <div className="pt-4">
                     <StyledAreaChart
-                      title={"Requests Over Time"}
+                      title={t("portal.requestsOverTime")}
                       value={undefined}
                       isDataOverTimeLoading={false}
                       height="400px"

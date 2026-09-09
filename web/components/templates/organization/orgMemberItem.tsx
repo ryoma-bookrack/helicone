@@ -1,3 +1,4 @@
+import { formatStandardDateTime } from "@/lib/i18n/format";
 import { AcademicCapIcon } from "@heroicons/react/20/solid";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/router";
@@ -75,7 +76,7 @@ const OrgMemberItem = (props: OrgMemberItemProps) => {
           </p>
           <p className="truncate overflow-ellipsis text-[11px] text-muted-foreground">
             (Added on{" "}
-            {new Date(orgMember.created_at || "").toLocaleDateString()})
+            {formatStandardDateTime(orgMember.created_at || "")})
           </p>
           {isUser && (
             <div className="flex justify-end gap-2">

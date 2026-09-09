@@ -1,0 +1,88 @@
+{
+  "title": "会话",
+  "tabs": {
+    "sessions": "会话",
+    "metrics": "指标"
+  },
+  "columns": {
+    "sessionName": "会话名称",
+    "sessionId": "会话 ID",
+    "createdAt": "创建时间",
+    "latestRequest": "最近请求",
+    "totalCost": "总成本",
+    "promptTokens": "Prompt Token",
+    "completionTokens": "Completion Token",
+    "totalTokens": "总 Token",
+    "totalRequests": "总请求数",
+    "avgLatency": "平均延迟",
+    "userIds": "用户 ID",
+    "response": "响应",
+    "status": "状态",
+    "model": "模型",
+    "cost": "成本",
+    "latency": "延迟",
+    "feedback": "反馈"
+  },
+  "stats": {
+    "avgCost": "平均成本",
+    "avgLatency": "平均延迟",
+    "totalCost": "总成本",
+    "totalSessions": "总会话数",
+    "startTime": "开始时间",
+    "endTime": "结束时间",
+    "cost": "成本",
+    "requests": "请求",
+    "tokens": "Token"
+  },
+  "search": {
+    "all": "全部",
+    "placeholder": "搜索会话...",
+    "sessionPlaceholder": "搜索会话...",
+    "noResults": "未找到结果。"
+  },
+  "views": "视图",
+  "loading": "加载会话中...",
+  "loadingDetails": "加载会话详情中...",
+  "loadingData": "加载数据中...",
+  "selectSessionId": "选择会话 ID",
+  "breadcrumb": {
+    "sessions": "会话",
+    "copiedToClipboard": "已复制到剪贴板"
+  },
+  "live": {
+    "live": "实时",
+    "startLive": "开始实时"
+  },
+  "nodeTypes": {
+    "llm": "LLM",
+    "tool": "工具",
+    "vectorDb": "向量数据库",
+    "data": "数据"
+  },
+  "timeline": {
+    "toggleExpandAll": "展开/收起所有行",
+    "descendantError": "包含子级错误"
+  },
+  "span": {
+    "durationSeconds": "耗时（秒）",
+    "tracePath": "追踪路径",
+    "notAvailable": "暂无",
+    "disableHighlighter": "关闭高亮",
+    "enableHighlighter": "开启高亮",
+    "trace": "追踪"
+  },
+  "metrics": {
+    "percentile": "分位数",
+    "requestsDistribution": "请求数分布",
+    "requestsPerUser": "每用户请求数",
+    "costDistribution": "成本分布",
+    "costPerUser": "每用户成本",
+    "requestsLast30Days": "近 30 天请求",
+    "costsLast30Days": "近 30 天成本"
+  },
+  "userDetail": {
+    "usage": "用量",
+    "logs": "日志",
+    "users": "用户"
+  }
+}

@@ -1,5 +1,6 @@
 import { cn } from "@/lib/utils";
 import { Lock, MoveUpRight } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import Link from "next/link";
 import {
   Tooltip,
@@ -67,8 +68,11 @@ export const QuickstartStepCard = ({
   headerAction,
   children,
   disabled = false,
-  lockedMessage = "Complete previous steps to unlock",
+  lockedMessage,
 }: QuickstartStepCardProps) => {
+  const { t } = useTranslation("onboarding");
+  const resolvedLockedMessage =
+    lockedMessage ?? t("quickstartStep.lockedMessage");
   const cardContent = (
     <div
       className={cn(
@@ -123,7 +127,7 @@ export const QuickstartStepCard = ({
       {!disabled && children}
       {disabled && (
         <div className="mt-3 rounded-sm bg-muted/50 px-3 py-2">
-          <p className="text-sm text-muted-foreground">{lockedMessage}</p>
+          <p className="text-sm text-muted-foreground">{resolvedLockedMessage}</p>
         </div>
       )}
     </div>
@@ -135,7 +139,7 @@ export const QuickstartStepCard = ({
         <Tooltip>
           <TooltipTrigger asChild>{cardContent}</TooltipTrigger>
           <TooltipContent>
-            <p>{lockedMessage}</p>
+            <p>{resolvedLockedMessage}</p>
           </TooltipContent>
         </Tooltip>
       </TooltipProvider>

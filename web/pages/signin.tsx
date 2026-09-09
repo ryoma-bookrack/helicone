@@ -1,5 +1,6 @@
 import LoadingAnimation from "@/components/shared/loadingAnimation";
 import { useHeliconeAuthClient } from "@/packages/common/auth/client/AuthClientFactory";
+import { useTranslation } from "react-i18next";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import PublicMetaData from "../components/layout/public/publicMetaData";
@@ -19,6 +20,7 @@ const SignIn = ({
     string
   >;
 }) => {
+  const { t } = useTranslation("auth");
   const heliconeAuthClient = useHeliconeAuthClient();
   const router = useRouter();
   const { setNotification } = useNotification();
@@ -84,14 +86,16 @@ const SignIn = ({
 
   return (
     <PublicMetaData
-      description="Helicone self-hosted observability dashboard."
+      description={t("meta.signInDescription")}
       ogImageUrl="/static/logo.svg"
     >
       <div>
         {heliconeAuthClient.user?.id ? (
           <div className="flex h-screen flex-col items-center justify-center">
             <LoadingAnimation />
-            <h1 className="text-4xl font-semibold">Getting your dashboard</h1>
+            <h1 className="text-4xl font-semibold">
+              {t("signIn.gettingDashboard")}
+            </h1>
           </div>
         ) : (
           <AuthForm
@@ -106,7 +110,7 @@ const SignIn = ({
                 logger.error({ error, email }, "Email sign in failed");
                 return;
               }
-              setNotification("Success. Redirecting...", "success");
+              setNotification(t("signIn.successRedirect"), "success");
               router.push("/dashboard");
             }}
             authFormType="signin"

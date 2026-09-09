@@ -11,6 +11,7 @@ import { Switch } from "@/components/ui/switch";
 import { useGetPropertiesV2 } from "@/services/hooks/propertiesV2";
 import { ChevronsUpDown, Loader2, Plus, X, ExternalLink } from "lucide-react";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { getPropertyFiltersV2 } from "@helicone-package/filters/frontendFilterDefs";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Separator } from "@/components/ui/separator";
@@ -39,6 +40,8 @@ interface AddWebhookFormProps {
 
 const AddWebhookForm = (props: AddWebhookFormProps) => {
   const { onSubmit, isLoading, error, onCancel } = props;
+  const { t } = useTranslation("webhooks");
+  const { t: tCommon } = useTranslation("common");
   const [destination, setDestination] = useState("");
   const [sampleRate, setSampleRate] = useState(100);
   const [includeData, setIncludeData] = useState(true);
@@ -64,7 +67,7 @@ const AddWebhookForm = (props: AddWebhookFormProps) => {
 
   const validateForm = () => {
     if (!destination) {
-      setValidationError("Destination URL is required");
+      setValidationError(t("form.validation.destinationRequired"));
       return false;
     }
 
@@ -72,7 +75,7 @@ const AddWebhookForm = (props: AddWebhookFormProps) => {
       !destination.startsWith("http://") &&
       !destination.startsWith("https://")
     ) {
-      setValidationError("Destination URL must start with http:// or https://");
+      setValidationError(t("form.validation.destinationProtocol"));
       return false;
     }
 
@@ -94,11 +97,10 @@ const AddWebhookForm = (props: AddWebhookFormProps) => {
     <div className="space-y-6">
       <div>
         <h2 className="text-2xl font-semibold tracking-tight">
-          Listen to events
+          {t("form.title")}
         </h2>
         <p className="mt-1 text-sm text-muted-foreground">
-          Configure a webhook to receive real-time updates about your API
-          requests.
+          {t("form.description")}
         </p>
       </div>
 
@@ -111,7 +113,7 @@ const AddWebhookForm = (props: AddWebhookFormProps) => {
       <div className="space-y-6">
         <div className="space-y-3">
           <Label htmlFor="webhook-url" className="text-sm font-medium">
-            Endpoint URL
+            {t("form.endpointUrl")}
           </Label>
           <Input
             type="text"
@@ -121,7 +123,7 @@ const AddWebhookForm = (props: AddWebhookFormProps) => {
               setDestination(e.target.value);
               if (validationError) validateForm();
             }}
-            placeholder="https://"
+            placeholder={t("form.endpointPlaceholder")}
             className="w-full"
           />
         </div>
@@ -131,7 +133,7 @@ const AddWebhookForm = (props: AddWebhookFormProps) => {
         <div className="space-y-3">
           <div className="flex items-center justify-between">
             <Label htmlFor="sample-rate" className="text-sm font-medium">
-              Sample Rate
+              {t("form.sampleRate")}
             </Label>
             <div className="flex items-center gap-2">
               <Input
@@ -166,11 +168,10 @@ const AddWebhookForm = (props: AddWebhookFormProps) => {
           <div className="flex items-center justify-between">
             <div>
               <Label htmlFor="include-data" className="text-sm font-medium">
-                Include Enhanced Data
+                {t("form.includeEnhancedData")}
               </Label>
               <p className="mt-1 text-xs text-muted-foreground">
-                When enabled, webhooks will include additional data such as
-                costs, token counts, latency metrics, and S3 URLs.
+                {t("form.includeEnhancedDataHint")}
               </p>
             </div>
             <Switch
@@ -186,16 +187,16 @@ const AddWebhookForm = (props: AddWebhookFormProps) => {
         <div className="space-y-3">
           <div className="flex items-center justify-between">
             <div>
-              <Label className="text-sm font-medium">Properties Filters</Label>
+              <Label className="text-sm font-medium">{t("form.propertyFilters")}</Label>
               <p className="mt-1 text-xs text-muted-foreground">
-                Filter which events are sent to the webhook using{" "}
+                {t("form.propertyFiltersHint")}{" "}
                 <a
                   href="https://docs.helicone.ai/features/advanced-usage/custom-properties#custom-properties"
                   target="_blank"
                   className="inline-flex items-center underline"
                   rel="noreferrer"
                 >
-                  custom properties
+                  {t("form.customProperties")}
                   <ExternalLink className="ml-0.5 h-3 w-3" />
                 </a>
               </p>
@@ -206,7 +207,7 @@ const AddWebhookForm = (props: AddWebhookFormProps) => {
               onClick={addPropertyFilter}
               className="h-8"
             >
-              <Plus className="mr-1 h-3.5 w-3.5" /> Add Property
+              <Plus className="mr-1 h-3.5 w-3.5" /> {t("form.addProperty")}
             </Button>
           </div>
 
@@ -227,7 +228,7 @@ const AddWebhookForm = (props: AddWebhookFormProps) => {
                           size="sm"
                         >
                           <span className="truncate">
-                            {filter.key || "Select property"}
+                            {filter.key || t("form.selectProperty")}
                           </span>
                           <ChevronsUpDown className="ml-2 h-3.5 w-3.5 shrink-0 opacity-50" />
                         </Button>
@@ -235,14 +236,14 @@ const AddWebhookForm = (props: AddWebhookFormProps) => {
                       <PopoverContent className="w-[200px] p-0" sideOffset={4}>
                         <Command>
                           <CommandInput
-                            placeholder="Type in anything..."
+                            placeholder={t("form.searchPlaceholder")}
                             onValueChange={(value) => {
                               updatePropertyFilter(index, value, filter.value);
                             }}
                           />
                           <CommandList>
-                            <CommandEmpty>No results found.</CommandEmpty>
-                            <CommandGroup heading="Suggestions">
+                            <CommandEmpty>{t("form.noResults")}</CommandEmpty>
+                            <CommandGroup heading={t("form.suggestions")}>
                               {properties.properties?.map((property) => (
                                 <CommandItem
                                   key={property}
@@ -266,7 +267,7 @@ const AddWebhookForm = (props: AddWebhookFormProps) => {
                   </div>
                   <div className="col-span-2 flex items-center space-x-2">
                     <Input
-                      placeholder="Value"
+                      placeholder={t("form.valuePlaceholder")}
                       value={filter.value}
                       onChange={(e) =>
                         updatePropertyFilter(index, filter.key, e.target.value)
@@ -291,11 +292,11 @@ const AddWebhookForm = (props: AddWebhookFormProps) => {
 
       <div className="flex justify-end space-x-2 pt-4">
         <Button variant="outline" onClick={onCancel} type="button">
-          Cancel
+          {tCommon("actions.cancel")}
         </Button>
         <Button onClick={handleSubmit} disabled={isLoading}>
           {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-          Add Webhook
+          {t("addWebhook")}
         </Button>
       </div>
     </div>

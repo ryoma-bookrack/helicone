@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import {
   Dialog,
   DialogContent,
@@ -12,6 +12,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { ChevronLeft, ChevronRight, Bot, FileText } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import {
   SiPython,
   SiTypescript,
@@ -53,43 +54,12 @@ interface IntegrationData {
   additionalInstructions: string;
 }
 
-const integrationMethods = [
-  {
-    value: "ai-gateway",
-    label: "Helicone AI Gateway (Recommended)",
-    icon: SiOpenai,
-  },
-  { value: "anthropic-sdk", label: "Anthropic SDK", icon: SiAnthropic },
-  { value: "azure", label: "Azure", icon: VscAzure },
-  { value: "vertex", label: "Vertex", icon: SiGoogle },
-  { value: "gemini", label: "Gemini", icon: SiGooglegemini },
-  { value: "bedrock", label: "Bedrock", icon: FaAws },
-  { value: "vercel-ai", label: "AI SDK", icon: SiVercel },
-  { value: "other", label: "Other", icon: FileText },
-];
-
-const languages = [
-  { value: "python", label: "Python", icon: SiPython, color: "text-blue-500" },
-  {
-    value: "typescript",
-    label: "TypeScript",
-    icon: SiTypescript,
-    color: "text-blue-500",
-  },
-  {
-    value: "javascript",
-    label: "JavaScript",
-    icon: SiJavascript,
-    color: "text-yellow-500",
-  },
-  { value: "other", label: "Other", icon: FileText, color: "text-gray-500" },
-];
-
 const HelixIntegrationDialog = ({
   isOpen,
   onClose,
   onSubmit,
 }: HelixIntegrationDialogProps) => {
+  const { t } = useTranslation("onboarding");
   const [step, setStep] = useState(1);
   const [data, setData] = useState<IntegrationData>({
     method: "ai-gateway",
@@ -101,6 +71,82 @@ const HelixIntegrationDialog = ({
   });
 
   const totalSteps = 3;
+
+  const integrationMethods = useMemo(
+    () => [
+      {
+        value: "ai-gateway" as const,
+        label: t("helixDialog.methods.aiGateway"),
+        icon: SiOpenai,
+      },
+      {
+        value: "anthropic-sdk" as const,
+        label: t("helixDialog.methods.anthropicSdk"),
+        icon: SiAnthropic,
+      },
+      {
+        value: "azure" as const,
+        label: t("helixDialog.methods.azure"),
+        icon: VscAzure,
+      },
+      {
+        value: "vertex" as const,
+        label: t("helixDialog.methods.vertex"),
+        icon: SiGoogle,
+      },
+      {
+        value: "gemini" as const,
+        label: t("helixDialog.methods.gemini"),
+        icon: SiGooglegemini,
+      },
+      {
+        value: "bedrock" as const,
+        label: t("helixDialog.methods.bedrock"),
+        icon: FaAws,
+      },
+      {
+        value: "vercel-ai" as const,
+        label: t("helixDialog.methods.vercelAi"),
+        icon: SiVercel,
+      },
+      {
+        value: "other" as const,
+        label: t("helixDialog.methods.other"),
+        icon: FileText,
+      },
+    ],
+    [t],
+  );
+
+  const languages = useMemo(
+    () => [
+      {
+        value: "python" as const,
+        label: t("helixDialog.languages.python"),
+        icon: SiPython,
+        color: "text-blue-500",
+      },
+      {
+        value: "typescript" as const,
+        label: t("helixDialog.languages.typescript"),
+        icon: SiTypescript,
+        color: "text-blue-500",
+      },
+      {
+        value: "javascript" as const,
+        label: t("helixDialog.languages.javascript"),
+        icon: SiJavascript,
+        color: "text-yellow-500",
+      },
+      {
+        value: "other" as const,
+        label: t("helixDialog.languages.other"),
+        icon: FileText,
+        color: "text-gray-500",
+      },
+    ],
+    [t],
+  );
 
   const handleNext = () => {
     if (step < totalSteps) {
@@ -116,27 +162,37 @@ const HelixIntegrationDialog = ({
 
   const formatMessage = () => {
     const methodNames = {
-      "ai-gateway": "Helicone AI Gateway",
-      "openai-sdk": "OpenAI SDK",
-      "anthropic-sdk": "Anthropic SDK",
-      azure: "Azure",
-      bedrock: "Bedrock",
-      gemini: "Gemini",
-      vertex: "Vertex",
-      "vercel-ai": "Vercel AI",
-      other: data.customMethod || "Other integration method",
+      "ai-gateway": t("helixDialog.methodNames.aiGateway"),
+      "openai-sdk": t("helixDialog.methodNames.openaiSdk"),
+      "anthropic-sdk": t("helixDialog.methodNames.anthropicSdk"),
+      azure: t("helixDialog.methodNames.azure"),
+      bedrock: t("helixDialog.methodNames.bedrock"),
+      gemini: t("helixDialog.methodNames.gemini"),
+      vertex: t("helixDialog.methodNames.vertex"),
+      "vercel-ai": t("helixDialog.methodNames.vercelAi"),
+      other: data.customMethod || t("helixDialog.messageTemplate.otherMethod"),
     };
 
     const frameworkNames = {
-      python: "Python",
-      typescript: "TypeScript",
-      javascript: "JavaScript",
-      other: data.customFramework || "Other",
+      python: t("helixDialog.languages.python"),
+      typescript: t("helixDialog.languages.typescript"),
+      javascript: t("helixDialog.languages.javascript"),
+      other: data.customFramework || t("helixDialog.languages.other"),
     };
 
-    let message = `I'm setting up Helicone integration and need help. Here are my details:\n\n`;
-    message += `**Integration Method:** ${data.method === "other" ? data.customMethod : methodNames[data.method]}\n\n`;
-    message += `**Framework/Language:** ${data.framework === "other" ? data.customFramework : frameworkNames[data.framework]}\n\n`;
+    let message = t("helixDialog.messageTemplate.intro");
+    message += t("helixDialog.messageTemplate.integrationMethod", {
+      method:
+        data.method === "other"
+          ? data.customMethod
+          : methodNames[data.method],
+    });
+    message += t("helixDialog.messageTemplate.framework", {
+      framework:
+        data.framework === "other"
+          ? data.customFramework
+          : frameworkNames[data.framework],
+    });
 
     if (data.currentCode.trim()) {
       const languageMap: Record<string, string> = {
@@ -146,14 +202,19 @@ const HelixIntegrationDialog = ({
         other: "text",
       };
       const lang = languageMap[data.framework] || "text";
-      message += `**Current Code:**\n\`\`\`${lang}\n${data.currentCode}\n\`\`\`\n\n`;
+      message += t("helixDialog.messageTemplate.currentCode", {
+        lang,
+        code: data.currentCode,
+      });
     }
 
     if (data.additionalInstructions.trim()) {
-      message += `**Additional Instructions:**\n${data.additionalInstructions}\n\n`;
+      message += t("helixDialog.messageTemplate.additionalInstructions", {
+        instructions: data.additionalInstructions,
+      });
     }
 
-    message += `I am new to Helicone. Can you help me integrate it into my application?`;
+    message += t("helixDialog.messageTemplate.closing");
 
     return message;
   };
@@ -179,7 +240,7 @@ const HelixIntegrationDialog = ({
         return (
           <div className="space-y-4">
             <Label className="text-base font-medium">
-              How would you like to integrate with Helicone?
+              {t("helixDialog.step1Question")}
             </Label>
             <div className="max-h-[300px] space-y-2 overflow-y-auto rounded-md border border-border p-2">
               <RadioGroup
@@ -208,11 +269,11 @@ const HelixIntegrationDialog = ({
             {data.method === "other" && (
               <div className="space-y-2">
                 <Label htmlFor="custom-method" className="text-sm">
-                  Please specify your integration method
+                  {t("helixDialog.customMethodLabel")}
                 </Label>
                 <Input
                   id="custom-method"
-                  placeholder="e.g., xAI, Groq Cloud, etc."
+                  placeholder={t("helixDialog.customMethodPlaceholder")}
                   value={data.customMethod}
                   onChange={(e) =>
                     setData({ ...data, customMethod: e.target.value })
@@ -227,7 +288,7 @@ const HelixIntegrationDialog = ({
         return (
           <div className="space-y-4">
             <Label className="text-base font-medium">
-              What framework or language are you using?
+              {t("helixDialog.step2Question")}
             </Label>
             <RadioGroup
               value={data.framework}
@@ -256,11 +317,11 @@ const HelixIntegrationDialog = ({
             {data.framework === "other" && (
               <div className="space-y-2">
                 <Label htmlFor="custom-framework" className="text-sm">
-                  Please specify your framework or language
+                  {t("helixDialog.customFrameworkLabel")}
                 </Label>
                 <Input
                   id="custom-framework"
-                  placeholder="e.g., Go, Rust, etc."
+                  placeholder={t("helixDialog.customFrameworkPlaceholder")}
                   value={data.customFramework}
                   onChange={(e) =>
                     setData({ ...data, customFramework: e.target.value })
@@ -276,17 +337,17 @@ const HelixIntegrationDialog = ({
           <div className="space-y-4">
             <div>
               <Label className="text-base font-medium">
-                What else should I know?
+                {t("helixDialog.step3Question")}
               </Label>
             </div>
 
             <div className="space-y-2">
               <Label htmlFor="current-code" className="text-sm font-medium">
-                Current Code (optional)
+                {t("helixDialog.currentCodeLabel")}
               </Label>
               <Textarea
                 id="current-code"
-                placeholder="Paste your current LLM code here..."
+                placeholder={t("helixDialog.currentCodePlaceholder")}
                 className="font-mono min-h-[150px] text-sm"
                 value={data.currentCode}
                 onChange={(e) =>
@@ -300,11 +361,11 @@ const HelixIntegrationDialog = ({
                 htmlFor="additional-instructions"
                 className="text-sm font-medium"
               >
-                Additional Instructions (optional)
+                {t("helixDialog.additionalInstructionsLabel")}
               </Label>
               <Textarea
                 id="additional-instructions"
-                placeholder="Any specific requirements? (e.g., tracking custom properties, streaming, async logging, etc.)"
+                placeholder={t("helixDialog.additionalInstructionsPlaceholder")}
                 className="min-h-[100px]"
                 value={data.additionalInstructions}
                 onChange={(e) =>
@@ -326,18 +387,16 @@ const HelixIntegrationDialog = ({
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
             <Bot className="h-5 w-5" />
-            Integrate with Helix
+            {t("helixDialog.title")}
           </DialogTitle>
-          <DialogDescription>
-            Answer 3 questions and get personalized integration help!
-          </DialogDescription>
+          <DialogDescription>{t("helixDialog.description")}</DialogDescription>
         </DialogHeader>
 
         <div>
           <div className="my-2 flex justify-end text-sm text-muted-foreground">
             <div className="flex items-center gap-3">
               <span>
-                Step {step} of {totalSteps}
+                {t("helixDialog.stepOf", { current: step, total: totalSteps })}
               </span>
               <div className="flex gap-1">
                 {Array.from({ length: totalSteps }).map((_, i) => (
@@ -363,12 +422,12 @@ const HelixIntegrationDialog = ({
             className="flex items-center gap-1"
           >
             <ChevronLeft className="h-4 w-4" />
-            Back
+            {t("helixDialog.back")}
           </Button>
 
           {step < totalSteps ? (
             <Button onClick={handleNext} className="flex items-center gap-1">
-              Next
+              {t("helixDialog.next")}
               <ChevronRight className="h-4 w-4" />
             </Button>
           ) : (
@@ -377,7 +436,7 @@ const HelixIntegrationDialog = ({
               className="flex items-center gap-1 bg-primary"
             >
               <Bot className="h-4 w-4" />
-              Ask Helix
+              {t("helixDialog.askHelix")}
             </Button>
           )}
         </div>

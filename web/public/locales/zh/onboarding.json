@@ -1,0 +1,264 @@
+{
+  "header": {
+    "logoAlt": "Helicone 标志",
+    "steps": {
+      "createOrg": "创建组织",
+      "sendRequest": "发送请求"
+    },
+    "signOut": "退出登录",
+    "signOutAria": "退出登录",
+    "toggleThemeAria": "切换主题"
+  },
+  "loading": "加载中...",
+  "index": {
+    "title": "欢迎使用 Helicone！👋",
+    "subtitle": "很高兴你来到这里。创建你的第一个组织。",
+    "inviteTitle": "邀请团队成员（可选）",
+    "inviteDescription": "添加团队成员，一起在 Helicone 组织中协作。你也可以稍后在组织设置中完成。",
+    "organizationUpdated": "组织已更新！",
+    "organizationCreated": "组织已创建！",
+    "inviteSuccess": "已成功邀请 {{count}} 名成员加入你的组织！",
+    "inviteSuccess_plural": "已成功邀请 {{count}} 名成员加入你的组织！",
+    "invitePartial": "部分成功：已发送 {{success}}/{{total}} 个邀请，部分失败。",
+    "inviteFailed": "发送成员邀请失败。请重试，或稍后在设置中添加成员。",
+    "inviteMemberFailed": "邀请成员失败",
+    "inviteMemberFailedWithEmail": "邀请 {{email}} 失败：{{error}}",
+    "unexpectedInviteError": "发送邀请时发生意外错误",
+    "updateOrganization": "更新组织",
+    "createOrganization": "创建组织",
+    "sendingInvitations": "正在发送邀请...",
+    "continueWithMembers": "继续并邀请 {{count}} 名成员",
+    "continueWithMembers_plural": "继续并邀请 {{count}} 名成员",
+    "continue": "继续"
+  },
+  "organization": {
+    "title": "组织",
+    "placeholder": "我的组织",
+    "nameRequired": "请输入组织名称 :)",
+    "renameHint": "别担心，你可以稍后重命名组织。"
+  },
+  "members": {
+    "title": "成员",
+    "invite": "邀请",
+    "user": "用户",
+    "role": "角色",
+    "you": "你",
+    "invited": "已邀请",
+    "noMembers": "暂无成员。",
+    "inviteTitle": "邀请成员",
+    "inviteDescription": "新成员将收到加入组织的邮件邀请。",
+    "email": "邮箱",
+    "emailPlaceholder": "邮箱",
+    "selectRole": "选择角色",
+    "member": "成员",
+    "admin": "管理员",
+    "sendInvitation": "发送邀请",
+    "emailRequired": "请输入邮箱",
+    "emailInvalid": "请输入有效的邮箱地址",
+    "emailIsOwner": "该邮箱属于组织所有者",
+    "emailAlreadyInvited": "该邮箱已被邀请"
+  },
+  "request": {
+    "title": "发送请求",
+    "subtitle": "通过一个简单的 AI 请求体验 Helicone 的功能。",
+    "promptPlaceholder": "在此输入你的 prompt...",
+    "characters": "{{count}}/100 字符",
+    "enterPrompt": "请输入 prompt",
+    "errorGenerating": "生成响应时出错",
+    "requestCompleted": "请求已成功完成！",
+    "requestCancelled": "请求已取消",
+    "errorOccurred": "生成响应时发生错误",
+    "failedToGenerate": "生成响应失败",
+    "skipping": "跳过中...",
+    "generating": "生成中...",
+    "sendRequest": "发送请求",
+    "skipToDashboard": "跳过，进入仪表盘",
+    "streaming": "流式传输中...",
+    "completingOnboarding": "正在完成引导...",
+    "viewInDashboard": "在仪表盘中查看",
+    "defaultPrompt": "写一首关于 AI 的俳句"
+  },
+  "quickstartStep": {
+    "lockedMessage": "完成前面的步骤后解锁"
+  },
+  "quickstart": {
+    "title": "快速开始",
+    "subtitle": "两步即可开始使用 Helicone",
+    "steps": {
+      "createKey": {
+        "title": "创建 Helicone API 密钥",
+        "description": "创建密钥"
+      },
+      "integrate": {
+        "title": "集成",
+        "description": ""
+      }
+    },
+    "creating": "创建中...",
+    "createApiKey": "创建 API 密钥",
+    "copiedToClipboard": "已复制到剪贴板",
+    "requestsDetected": "已检测到请求！",
+    "waitingForRequests": "正在等待通过 Jawn 代理的请求...",
+    "saving": "保存中...",
+    "finishQuickstart": "完成快速开始",
+    "proxyHint": "通过本地 Jawn 代理发送流量，或在此完成并继续。",
+    "needHelp": "需要帮助？",
+    "askHelix": "询问 Helix",
+    "documentation": "文档",
+    "askOnDiscord": "在 Discord 上提问",
+    "nextSteps": "下一步",
+    "nextStepsDescription": "探索常用功能，充分发挥 Helicone 的价值",
+    "viewDashboard": {
+      "title": "查看仪表盘",
+      "description": "查看请求分析与使用指标"
+    },
+    "setupSessions": {
+      "title": "配置 Sessions",
+      "description": "跟踪用户对话与交互"
+    },
+    "inviteMembers": {
+      "title": "邀请成员",
+      "description": "与团队成员协作"
+    },
+    "completed": "快速开始已完成",
+    "failedToFinish": "完成快速开始失败",
+    "integrationGuideOpened": "已成功打开集成指南对话框"
+  },
+  "integrationGuide": {
+    "modelRegistryPrefix": "查看我们的",
+    "modelRegistryLink": "模型注册表",
+    "modelRegistrySuffix": "，了解 AI Gateway 支持的所有 model slug"
+  },
+  "helixDialog": {
+    "title": "通过 Helix 集成",
+    "description": "回答 3 个问题，获取个性化集成帮助！",
+    "stepOf": "第 {{current}} 步，共 {{total}} 步",
+    "back": "上一步",
+    "next": "下一步",
+    "askHelix": "询问 Helix",
+    "step1Question": "你希望如何与 Helicone 集成？",
+    "step2Question": "你使用的框架或语言是什么？",
+    "step3Question": "还有什么需要我知道的？",
+    "customMethodLabel": "请说明你的集成方式",
+    "customMethodPlaceholder": "例如：xAI、Groq Cloud 等",
+    "customFrameworkLabel": "请说明你的框架或语言",
+    "customFrameworkPlaceholder": "例如：Go、Rust 等",
+    "currentCodeLabel": "当前代码（可选）",
+    "currentCodePlaceholder": "在此粘贴你当前的 LLM 代码...",
+    "additionalInstructionsLabel": "补充说明（可选）",
+    "additionalInstructionsPlaceholder": "有什么特殊要求？（例如：跟踪自定义属性、流式传输、异步日志等）",
+    "methods": {
+      "aiGateway": "Helicone AI Gateway（推荐）",
+      "anthropicSdk": "Anthropic SDK",
+      "azure": "Azure",
+      "vertex": "Vertex",
+      "gemini": "Gemini",
+      "bedrock": "Bedrock",
+      "vercelAi": "AI SDK",
+      "other": "其他"
+    },
+    "languages": {
+      "python": "Python",
+      "typescript": "TypeScript",
+      "javascript": "JavaScript",
+      "other": "其他"
+    },
+    "messageTemplate": {
+      "intro": "我正在设置 Helicone 集成，需要帮助。以下是我的信息：\n\n",
+      "integrationMethod": "**集成方式：** {{method}}\n\n",
+      "framework": "**框架/语言：** {{framework}}\n\n",
+      "currentCode": "**当前代码：**\n```{{lang}}\n{{code}}\n```\n\n",
+      "additionalInstructions": "**补充说明：**\n{{instructions}}\n\n",
+      "closing": "我是 Helicone 新手，能帮我集成到应用中吗？",
+      "otherMethod": "其他集成方式"
+    },
+    "methodNames": {
+      "aiGateway": "Helicone AI Gateway",
+      "openaiSdk": "OpenAI SDK",
+      "anthropicSdk": "Anthropic SDK",
+      "azure": "Azure",
+      "bedrock": "Bedrock",
+      "gemini": "Gemini",
+      "vertex": "Vertex",
+      "vercelAi": "Vercel AI"
+    }
+  },
+  "tour": {
+    "doc": "文档",
+    "requestsTable": {
+      "title": "欢迎使用 Requests！",
+      "description": "只需在 LLM 应用中添加一行代码，即可在此查看所有请求与响应数据。",
+      "accordionTitle": "如何向 Helicone 发送请求？",
+      "accordionBody": "如果你使用代理方式（推荐），只需添加一行代码即可开始向 Helicone 发送请求。",
+      "accordionHighlight": "适用于任意提供商。"
+    },
+    "requestsDrawer": {
+      "title": "深入了解",
+      "description": "查看与 LLM 交换的完整消息、元数据和关键指标。响应中有异常吗？我们来排查可能出了什么问题。"
+    },
+    "sessionsPage": {
+      "title": "我们正处于旅行规划 session 中",
+      "description": "每个 session 展示完整的 LLM 调用链及其关联。你可以逐步追踪旅行规划流程，找出问题从哪里开始。"
+    },
+    "sessionsCulprit": {
+      "title": "问题所在",
+      "description": "<strong>\"extract-travel-plan\"</strong> 这一步出了问题。我们去改进这个 prompt。",
+      "accordionTitle": "如何在 Helicone 中跟踪 session？",
+      "accordionBody": "根据你使用的库，需要在请求中添加 3 个 header 来开始跟踪 session 与 trace。"
+    },
+    "promptsPage": {
+      "title": "欢迎使用 Prompts！",
+      "description": "在此查看生产环境中最新的 <strong>\"extract-travel-plan\"</strong> prompt、版本历史与历史请求。",
+      "accordionTitle": "如何在 Helicone 中跟踪 prompt？",
+      "accordionBody": "示例："
+    },
+    "promptsExperiment": {
+      "title": "迭代这个 prompt",
+      "description": "改进这个 prompt，以获得更好的旅行计划提取效果。点击此处开始实验。"
+    },
+    "experimentsTable": {
+      "title": "Prompt 实验场",
+      "description": "在此创建 prompt 变体，用真实数据测试并衡量哪个表现最好。"
+    },
+    "experimentsOriginal": {
+      "title": "这是你的原始 prompt",
+      "description": "这是你的 <strong>\"extract-travel-plan\"</strong> 生产 prompt。我们来创建一个新版本与之对比测试。"
+    },
+    "experimentsAdd": {
+      "title": "添加实验",
+      "description": "点击此处创建 prompt 的新变体。"
+    },
+    "experimentsAddChangePrompt": {
+      "title": "修改 prompt",
+      "description": "尝试添加分步推理，帮助模型更好地理解并提取旅行计划。"
+    },
+    "experimentsAddSave": {
+      "title": "保存更改",
+      "description": "我们已经为你选好了模型。保存你的 prompt 吧。"
+    },
+    "experimentsFindExperiment": {
+      "title": "你可以在这里找到实验",
+      "description": "现在用一些生产输入来测试，确保新 prompt 没有退化，这很关键。"
+    },
+    "experimentsAddTestCases": {
+      "title": "添加无限测试用例",
+      "description": "用真实用户数据测试，结果更贴近实际。"
+    },
+    "experimentsRunExperiments": {
+      "title": "运行实验",
+      "description": "有时需要多次实验才能达到最高 prompt 准确率。按需添加即可。"
+    },
+    "experimentsSpecificEval": {
+      "title": "评估输出",
+      "description": "添加 LLM-as-a-judge 评估器，确保用户的旅行计划被成功提取。"
+    },
+    "experimentsRunEval": {
+      "title": "运行评估器",
+      "description": "运行评估器可以量化输出质量，确保没有退化。"
+    },
+    "dashboardSuccess": {
+      "title": "恭喜！问题已解决",
+      "description": "现在你可以持续监控错误率、延迟和成本，及时发现可能预示新问题的异常。"
+    }
+  }
+}

@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import {
   Select,
   SelectContent,
@@ -41,6 +42,9 @@ interface ExperimentConfigProps {
 }
 
 const ExperimentConfig = (props: ExperimentConfigProps) => {
+  const { t } = useTranslation("prompts");
+  const { t: tCommon } = useTranslation("common");
+
   const { currentPrompt, promptProperties, onFormSubmit, initialValues } =
     props;
 
@@ -69,9 +73,7 @@ const ExperimentConfig = (props: ExperimentConfigProps) => {
         <label
           htmlFor="experiment-name"
           className="text-xs font-semibold text-gray-900 dark:text-gray-100"
-        >
-          Name
-        </label>
+        >{t("ui.name")}</label>
         <Input
           value={experimentName}
           onChange={(e) => setExperimentName(e.target.value)}
@@ -82,9 +84,7 @@ const ExperimentConfig = (props: ExperimentConfigProps) => {
           <label
             htmlFor="alert-metric"
             className="text-xs font-semibold text-gray-900 dark:text-gray-100"
-          >
-            Version
-          </label>
+          >{t("ui.version")}</label>
           <Select
             value={selectedVersion}
             onValueChange={(e) => {
@@ -112,9 +112,7 @@ const ExperimentConfig = (props: ExperimentConfigProps) => {
           <label
             htmlFor="experiment-model"
             className="text-xs font-semibold text-gray-900 dark:text-gray-100"
-          >
-            Experiment Model
-          </label>
+          >{t("ui.experimentModel")}</label>
           <Select
             value={experimentModel}
             onValueChange={(e) => {
@@ -122,7 +120,7 @@ const ExperimentConfig = (props: ExperimentConfigProps) => {
             }}
           >
             <SelectTrigger>
-              <SelectValue placeholder="Select model" />
+              <SelectValue placeholder={t("ui.selectModel")} />
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="gpt-3.5-turbo-1106">
@@ -147,9 +145,7 @@ const ExperimentConfig = (props: ExperimentConfigProps) => {
         <label
           htmlFor="experiment-sample"
           className="text-xs font-semibold text-gray-900 dark:text-gray-100"
-        >
-          Random Data Set Sample (up to 10)
-        </label>
+        >{t("ui.randomDataSetSampleUpTo10")}</label>
         <div className="flex w-full gap-4 overflow-auto">
           {/* get a random `n=10` sample of the properties and then render cards */}
           {[...promptProperties].slice(0, 10).map((property, i) => (
@@ -176,21 +172,19 @@ const ExperimentConfig = (props: ExperimentConfigProps) => {
         <button
           onClick={close}
           className="flex flex-row items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-semibold text-gray-900 shadow-sm hover:bg-gray-50 hover:text-gray-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-500 dark:border-gray-700 dark:bg-black dark:text-gray-100 dark:hover:bg-gray-900 dark:hover:text-gray-300"
-        >
-          Cancel
-        </button>
+        >{tCommon("actions.cancel")}</button>
         <button
           onClick={() => {
             if (experimentName === "") {
-              setNotification("Experiment name is required", "error");
+              setNotification(t("ui.experimentNameIsRequired"), "error");
               return;
             }
             if (selectedVersion === "") {
-              setNotification("Version is required", "error");
+              setNotification(t("ui.versionIsRequired"), "error");
               return;
             }
             if (providerKeyId === "") {
-              setNotification("Provider key is required", "error");
+              setNotification(t("ui.providerKeyIsRequired"), "error");
               return;
             }
             // set the request id list
@@ -207,9 +201,7 @@ const ExperimentConfig = (props: ExperimentConfigProps) => {
             });
           }}
           className="flex items-center rounded-md bg-black px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-gray-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white dark:bg-white dark:text-black dark:hover:bg-gray-200"
-        >
-          Next
-        </button>
+        >{tCommon("actions.next")}</button>
       </div>
     </div>
   );

@@ -1,0 +1,86 @@
+{
+  "title": "速率限制",
+  "loading": "加载中...",
+  "tabs": {
+    "requests": "被限流的请求",
+    "rules": "速率限制规则"
+  },
+  "tooltip": {
+    "intro": "每个请求只应用一条速率限制规则，优先级如下：",
+    "priorityTitle": "规则优先级与排序",
+    "priorityDescription": "规则按应用优先级自动排序：",
+    "segment": "分段：",
+    "segmentDescription": "属性规则优先，其次是用户，最后是全局。",
+    "restrictiveness": "严格程度：",
+    "restrictivenessDescription": "在同一分段和单位内，有效配额（配额 / 时间窗口）最低的规则优先应用。"
+  },
+  "chart": {
+    "rateLimitCount": "限流次数",
+    "time": "时间"
+  },
+  "rules": {
+    "errorFetching": "获取规则失败",
+    "unknownError": "发生未知错误。",
+    "empty": "尚未定义速率限制。创建你的第一条规则即可开始。",
+    "createRule": "创建规则",
+    "columns": {
+      "name": "名称",
+      "quota": "配额",
+      "unit": "单位",
+      "windowSec": "窗口 (秒)",
+      "appliesTo": "适用范围",
+      "created": "创建时间",
+      "actions": "操作"
+    },
+    "appliesTo": {
+      "global": "全局",
+      "user": "用户",
+      "property": "属性：{{segment}}"
+    },
+    "units": {
+      "request": "请求",
+      "cents": "美分"
+    },
+    "deleteTitle": "确定要删除此速率限制规则吗？",
+    "deleteDescription": "此操作无法撤销。将永久删除速率限制规则<strong> \"{{name}}\"</strong>。",
+    "deleting": "删除中...",
+    "updateSuccess": "速率限制规则 \"{{name}}\" 更新成功",
+    "createSuccess": "速率限制规则 \"{{name}}\" 创建成功",
+    "deleteSuccess": "速率限制规则 \"{{name}}\" 删除成功",
+    "deleteFailed": "删除规则失败：{{error}}"
+  },
+  "modal": {
+    "createTitle": "创建速率限制规则",
+    "editTitle": "编辑速率限制规则",
+    "createDescription": "定义一条速率限制约束。请求必须满足所有适用的活跃规则。",
+    "editDescription": "修改此速率限制规则的详情。",
+    "ruleName": "规则名称",
+    "ruleNamePlaceholder": "例如：\"免费版每日限额\"",
+    "quota": "配额",
+    "quotaPlaceholder": "例如：1000",
+    "selectUnit": "选择单位",
+    "timeWindowSec": "时间窗口 (秒)",
+    "timeWindowPlaceholder": "例如：3600（1 小时）",
+    "applyTo": "应用于",
+    "selectScope": "选择范围...",
+    "scopeGlobal": "所有请求 (全局)",
+    "scopeUser": "每个用户 ID",
+    "scopeProperty": "自定义属性",
+    "propertyKey": "属性键",
+    "propertyKeyPlaceholder": "例如：\"customerId\" 或 \"X-Feature-Flag\"",
+    "error": "错误",
+    "creating": "创建中...",
+    "saving": "保存中...",
+    "saveChanges": "保存更改",
+    "propertyKeyEmpty": "分段类型为「自定义属性」时，属性键不能为空。",
+    "saveError": "保存规则时发生错误。",
+    "savedNoData": "规则已保存，但未能获取更新后的数据。",
+    "unknownError": "发生未知错误。",
+    "validation": {
+      "nameRequired": "规则名称为必填项。",
+      "quotaNonNegative": "配额必须为非负数。",
+      "windowNonNegative": "时间窗口必须为非负数。",
+      "segmentInvalid": "分段必须为 'user'、空（全局）或有效的属性键（字母数字/连字符/下划线）。"
+    }
+  }
+}

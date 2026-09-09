@@ -19,6 +19,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Input } from "@/components/ui/input";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { AlertTriangle } from "lucide-react";
@@ -47,6 +48,7 @@ export function ThemedTimeFilterShadCN({
   hasCustomTimeFilter = false,
   onClearTimeFilter,
 }: ThemedTimeFilterShadCNProps) {
+  const { t } = useTranslation("common");
   const [date, setDate] = useState<DateRange | undefined>(undefined);
   const [isInvertedRange, setIsInvertedRange] = useState(false);
 
@@ -134,9 +136,9 @@ export function ThemedTimeFilterShadCN({
     // When live mode is on, always show "Now" as the end time
     if (isLive) {
       if (from.toDateString() === new Date().toDateString()) {
-        return `${format(from, "LLL d, yyyy")} ${format(from, "HH:mm")} - Now`;
+        return `${format(from, "LLL d, yyyy")} ${format(from, "HH:mm")} ${t("timeFilter.now")}`;
       } else {
-        return `${format(from, "LLL d, yyyy HH:mm")} - Now`;
+        return `${format(from, "LLL d, yyyy HH:mm")} ${t("timeFilter.now")}`;
       }
     }
 
@@ -223,7 +225,7 @@ export function ThemedTimeFilterShadCN({
                 )}
               </>
             ) : (
-              <span>Pick a date and time</span>
+              <span>{t("timeFilter.pickDateTime")}</span>
             )}
           </Button>
         </PopoverTrigger>
@@ -232,7 +234,9 @@ export function ThemedTimeFilterShadCN({
           align="start"
         >
           {/* Predefined ranges */}
-          <span className="pt-4 text-sm font-semibold">Quick Select:</span>
+          <span className="pt-4 text-sm font-semibold">
+            {t("timeFilter.quickSelect")}
+          </span>
           <div className="grid grid-cols-6 gap-2">
             {predefinedRanges.map((range) => (
               <Button
@@ -247,7 +251,9 @@ export function ThemedTimeFilterShadCN({
           </div>
 
           {/* Custom time range selector */}
-          <span className="pt-4 text-sm font-semibold">Custom Range:</span>
+          <span className="pt-4 text-sm font-semibold">
+            {t("timeFilter.customRange")}
+          </span>
           <div className="grid gap-2">
             <div className="flex items-center gap-2">
               <Input
@@ -268,13 +274,13 @@ export function ThemedTimeFilterShadCN({
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="hour" className="text-xs">
-                    Hour(s)
+                    {t("timeFilter.hours")}
                   </SelectItem>
                   <SelectItem value="day" className="text-xs">
-                    Day(s)
+                    {t("timeFilter.days")}
                   </SelectItem>
                   <SelectItem value="week" className="text-xs">
-                    Week(s)
+                    {t("timeFilter.weeks")}
                   </SelectItem>
                 </SelectContent>
               </Select>
@@ -283,12 +289,14 @@ export function ThemedTimeFilterShadCN({
                 size="sm_sleek"
                 variant={"ghost"}
               >
-                Apply
+                {t("actions.apply")}
               </Button>
             </div>
           </div>
 
-          <span className="pt-4 text-sm font-semibold">Date Picker:</span>
+          <span className="pt-4 text-sm font-semibold">
+            {t("timeFilter.datePicker")}
+          </span>
           <div className="grid gap-4">
             <Calendar
               initialFocus
@@ -427,7 +435,7 @@ export function ThemedTimeFilterShadCN({
               onClick={onClearTimeFilter}
               className="ml-auto"
             >
-              Clear
+              {t("actions.clear")}
             </Button>
           )}
 
@@ -436,7 +444,7 @@ export function ThemedTimeFilterShadCN({
             <Alert variant="warning" className="mt-2">
               <AlertTriangle className="h-4 w-4" />
               <AlertDescription>
-                Warning: Start date is after end date
+                {t("timeFilter.startAfterEndWarning")}
               </AlertDescription>
             </Alert>
           )}

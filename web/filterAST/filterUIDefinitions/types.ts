@@ -1,14 +1,21 @@
 import { FieldSpec, FilterOperator } from "@helicone-package/filters/types";
 
 // Define the type for the UI rendering constants
+export interface FilterValueOption {
+  label?: string;
+  labelKey?: string;
+  value: string | number | boolean;
+}
+
 export interface FilterUIDefinition {
   id: string;
-  label: string;
+  label?: string;
+  labelKey?: string;
   table: FieldSpec["table"];
   type: "string" | "number" | "boolean" | "datetime" | "select" | "searchable";
   subType?: "property" | "score" | "sessions" | "user";
   operators: FilterOperator[];
-  valueOptions?: { label: string; value: string | number | boolean }[];
+  valueOptions?: FilterValueOption[];
   // Callback for dynamic searching of options
   onSearch?: (
     searchTerm: string,

@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -72,6 +73,9 @@ export const EvaluatorForm = ({
   isSubmitting,
   onCancel,
 }: EvaluatorFormProps) => {
+  const { t } = useTranslation("evals");
+  const { t: tCommon } = useTranslation("common");
+
   // State for form values with defaults
   const [name, setName] = useState(initialValues.name || "");
   const [scoringType, setScoringType] = useState<ScoringType>(
@@ -188,9 +192,7 @@ export const EvaluatorForm = ({
       {isCreating && (
         <Card className="shadow-sm">
           <CardHeader>
-            <CardTitle className="text-lg font-medium">
-              Evaluator Details
-            </CardTitle>
+            <CardTitle className="text-lg font-medium">{t("ui.evaluatorDetails")}</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
@@ -198,14 +200,12 @@ export const EvaluatorForm = ({
                 <label
                   htmlFor="name"
                   className="mb-1 block text-sm font-medium"
-                >
-                  Name
-                </label>
+                >{t("ui.name")}</label>
                 <Input
                   id="name"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  placeholder="Enter evaluator name"
+                  placeholder={t("ui.enterEvaluatorName")}
                   className="max-w-md"
                 />
               </div>
@@ -217,9 +217,7 @@ export const EvaluatorForm = ({
       {/* Prompt card */}
       <Card className="shadow-sm">
         <CardHeader>
-          <CardTitle className="text-lg font-medium">
-            Evaluation Prompt
-          </CardTitle>
+          <CardTitle className="text-lg font-medium">{t("ui.evaluationPrompt")}</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="space-y-2">
@@ -228,7 +226,7 @@ export const EvaluatorForm = ({
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               className="font-mono h-64"
-              placeholder="Enter your evaluator prompt here"
+              placeholder={t("ui.enterYourEvaluatorPromptHere")}
               required
             />
             <P className="text-sm text-muted-foreground">
@@ -242,7 +240,7 @@ export const EvaluatorForm = ({
       {/* Scoring Type card */}
       <Card className="shadow-sm">
         <CardHeader>
-          <CardTitle className="text-lg font-medium">Scoring Type</CardTitle>
+          <CardTitle className="text-lg font-medium">{t("ui.scoringType")}</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
@@ -252,9 +250,9 @@ export const EvaluatorForm = ({
               className="w-full"
             >
               <TabsList className="grid w-full max-w-md grid-cols-3">
-                <TabsTrigger value="boolean">Boolean</TabsTrigger>
-                <TabsTrigger value="choice">Categorical</TabsTrigger>
-                <TabsTrigger value="range">Numeric</TabsTrigger>
+                <TabsTrigger value="boolean">{t("ui.boolean")}</TabsTrigger>
+                <TabsTrigger value="choice">{t("ui.categorical")}</TabsTrigger>
+                <TabsTrigger value="range">{t("ui.numeric")}</TabsTrigger>
               </TabsList>
               <TabsContent value="boolean" className="pt-4">
                 <P className="text-muted-foreground">
@@ -271,7 +269,7 @@ export const EvaluatorForm = ({
                   </P>
                   <div className="rounded-md border bg-muted/10 p-4">
                     <div className="mb-3 flex items-center justify-between">
-                      <h4 className="text-sm font-medium">Choice Values</h4>
+                      <h4 className="text-sm font-medium">{t("ui.choiceValues")}</h4>
                       <Button
                         type="button"
                         variant="outline"
@@ -279,8 +277,7 @@ export const EvaluatorForm = ({
                         onClick={addChoiceScore}
                         className="h-8 px-2"
                       >
-                        <Plus size={14} className="mr-1" /> Add Value
-                      </Button>
+                        <Plus size={14} className="mr-1" />{t("ui.addValue")}</Button>
                     </div>
                     <div className="space-y-2">
                       {choiceScores.map((choice, index) => (
@@ -292,7 +289,7 @@ export const EvaluatorForm = ({
                               updateChoiceScore(index, "score", e.target.value)
                             }
                             className="w-20"
-                            placeholder="Score"
+                            placeholder={t("ui.score")}
                           />
                           <Input
                             value={choice.description}
@@ -304,7 +301,7 @@ export const EvaluatorForm = ({
                               )
                             }
                             className="flex-1"
-                            placeholder="Description"
+                            placeholder={t("ui.description")}
                           />
                           {choiceScores.length > 1 && (
                             <Button
@@ -330,15 +327,13 @@ export const EvaluatorForm = ({
                     granular quality evaluations.
                   </P>
                   <div className="rounded-md border bg-muted/10 p-4">
-                    <h4 className="mb-3 text-sm font-medium">Range Values</h4>
+                    <h4 className="mb-3 text-sm font-medium">{t("ui.rangeValues")}</h4>
                     <div className="grid grid-cols-2 gap-4">
                       <div>
                         <label
                           htmlFor="range-min"
                           className="text-sm text-muted-foreground"
-                        >
-                          Minimum
-                        </label>
+                        >{t("ui.minimum")}</label>
                         <Input
                           id="range-min"
                           type="number"
@@ -350,9 +345,7 @@ export const EvaluatorForm = ({
                         <label
                           htmlFor="range-max"
                           className="text-sm text-muted-foreground"
-                        >
-                          Maximum
-                        </label>
+                        >{t("ui.maximum")}</label>
                         <Input
                           id="range-max"
                           type="number"
@@ -376,9 +369,7 @@ export const EvaluatorForm = ({
           onClick={() => setAdvancedOpen(!advancedOpen)}
         >
           <CardHeader className="flex flex-row items-center justify-between py-4">
-            <CardTitle className="text-lg font-medium">
-              Advanced Configuration
-            </CardTitle>
+            <CardTitle className="text-lg font-medium">{t("ui.advancedConfiguration")}</CardTitle>
             <Button variant="ghost" size="icon" className="h-7 w-7">
               {advancedOpen ? (
                 <ChevronUp className="h-4 w-4" />
@@ -393,13 +384,11 @@ export const EvaluatorForm = ({
             {/* Model Selection */}
             <div className="space-y-2">
               <div className="flex items-center gap-2">
-                <label htmlFor="model" className="text-sm font-medium">
-                  Model
-                </label>
+                <label htmlFor="model" className="text-sm font-medium">{t("ui.model")}</label>
               </div>
               <Select value={model} onValueChange={(value) => setModel(value)}>
                 <SelectTrigger id="model" className="max-w-md">
-                  <SelectValue placeholder="Select a model" />
+                  <SelectValue placeholder={t("ui.selectAModel")} />
                 </SelectTrigger>
                 <SelectContent>
                   {modelOptions.map((option) => (
@@ -409,17 +398,13 @@ export const EvaluatorForm = ({
                   ))}
                 </SelectContent>
               </Select>
-              <P className="text-sm text-muted-foreground">
-                You will be charged for the LLM usage of this evaluator.
-              </P>
+              <P className="text-sm text-muted-foreground">{t("ui.youWillBeChargedForTheLlmUsageOfThisEval")}</P>
             </div>
 
             {/* Included Variables Section */}
             <div className="space-y-2">
-              <h3 className="text-sm font-medium">Included Variables</h3>
-              <P className="text-sm text-muted-foreground">
-                Select which variables to include in the evaluation
-              </P>
+              <h3 className="text-sm font-medium">{t("ui.includedVariables")}</h3>
+              <P className="text-sm text-muted-foreground">{t("ui.selectWhichVariablesToIncludeInTheEvalua")}</P>
 
               <div className="mt-3 grid grid-cols-2 gap-2">
                 {/* Inputs checkbox */}
@@ -436,12 +421,8 @@ export const EvaluatorForm = ({
                     }
                   />
                   <div>
-                    <label htmlFor="inputs" className="text-sm font-medium">
-                      Inputs
-                    </label>
-                    <P className="text-xs text-muted-foreground">
-                      Include prompt input variables
-                    </P>
+                    <label htmlFor="inputs" className="text-sm font-medium">{t("ui.inputs")}</label>
+                    <P className="text-xs text-muted-foreground">{t("ui.includePromptInputVariables")}</P>
                   </div>
                 </div>
 
@@ -462,12 +443,8 @@ export const EvaluatorForm = ({
                     <label
                       htmlFor="promptTemplate"
                       className="text-sm font-medium"
-                    >
-                      Prompt Template
-                    </label>
-                    <P className="text-xs text-muted-foreground">
-                      Include the prompt template
-                    </P>
+                    >{t("ui.promptTemplate")}</label>
+                    <P className="text-xs text-muted-foreground">{t("ui.includeThePromptTemplate")}</P>
                   </div>
                 </div>
 
@@ -485,12 +462,8 @@ export const EvaluatorForm = ({
                     }
                   />
                   <div>
-                    <label htmlFor="inputBody" className="text-sm font-medium">
-                      Input Body
-                    </label>
-                    <P className="text-xs text-muted-foreground">
-                      Include the full request body
-                    </P>
+                    <label htmlFor="inputBody" className="text-sm font-medium">{t("ui.inputBody")}</label>
+                    <P className="text-xs text-muted-foreground">{t("ui.includeTheFullRequestBody")}</P>
                   </div>
                 </div>
 
@@ -508,12 +481,8 @@ export const EvaluatorForm = ({
                     }
                   />
                   <div>
-                    <label htmlFor="outputBody" className="text-sm font-medium">
-                      Output Body
-                    </label>
-                    <P className="text-xs text-muted-foreground">
-                      Include the full response body
-                    </P>
+                    <label htmlFor="outputBody" className="text-sm font-medium">{t("ui.outputBody")}</label>
+                    <P className="text-xs text-muted-foreground">{t("ui.includeTheFullResponseBody")}</P>
                   </div>
                 </div>
               </div>
@@ -530,9 +499,7 @@ export const EvaluatorForm = ({
       {/* Sticky footer */}
       <div className="fixed bottom-0 left-0 right-0 z-10 border-t border-border bg-background p-4 shadow-md">
         <div className="mx-auto flex max-w-4xl justify-end gap-3">
-          <Button type="button" variant="outline" onClick={onCancel}>
-            Cancel
-          </Button>
+          <Button type="button" variant="outline" onClick={onCancel}>{tCommon("actions.cancel")}</Button>
           <Button type="submit" disabled={isSubmitting}>
             {isSubmitting
               ? isCreating

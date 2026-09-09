@@ -18,6 +18,7 @@ import {
   sortProviders,
 } from "@/utils/providerUtils";
 import { useOrg } from "@/components/layout/org/organizationContext";
+import { useTranslation } from "react-i18next";
 
 interface ProviderKeySettingsProps {
   className?: string;
@@ -26,9 +27,16 @@ interface ProviderKeySettingsProps {
 export const ProviderKeySettings: React.FC<ProviderKeySettingsProps> = ({
   className,
 }) => {
+  const { t } = useTranslation("settings");
   const [searchQuery, setSearchQuery] = useState("");
   const [sortOption, setSortOption] = useState<SortOption>("relevance");
   const org = useOrg();
+
+  const sortLabels: Record<SortOption, string> = {
+    relevance: t("providers.sortRelevance"),
+    alphabetical: t("providers.sortAlphabetical"),
+    "recently-used": t("providers.sortRecentlyUsed"),
+  };
 
   const filteredProviders = sortProviders(
     filterProviders(
@@ -45,7 +53,7 @@ export const ProviderKeySettings: React.FC<ProviderKeySettingsProps> = ({
         <div className="relative flex-1">
           <Search className="absolute left-3 top-1/2 h-3 w-3 -translate-y-1/2 text-muted-foreground" />
           <Input
-            placeholder="Search providers..."
+            placeholder={t("providers.searchPlaceholder")}
             value={searchQuery}
             onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
               setSearchQuery(e.target.value)
@@ -61,25 +69,20 @@ export const ProviderKeySettings: React.FC<ProviderKeySettingsProps> = ({
               className="flex min-w-[120px] items-center justify-between gap-1"
             >
               <XSmall>
-                Sort:{" "}
-                {sortOption === "relevance"
-                  ? "Relevance"
-                  : sortOption === "alphabetical"
-                    ? "A-Z"
-                    : "Recently Used"}
+                {t("providers.sortLabel", { option: sortLabels[sortOption] })}
               </XSmall>
               <ChevronDown className="h-3 w-3" />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuItem onClick={() => setSortOption("relevance")}>
-              Relevance
+              {t("providers.sortRelevance")}
             </DropdownMenuItem>
             <DropdownMenuItem onClick={() => setSortOption("alphabetical")}>
-              Alphabetical (A-Z)
+              {t("providers.sortAlphabeticalFull")}
             </DropdownMenuItem>
             <DropdownMenuItem onClick={() => setSortOption("recently-used")}>
-              Recently Used
+              {t("providers.sortRecentlyUsed")}
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
@@ -88,9 +91,7 @@ export const ProviderKeySettings: React.FC<ProviderKeySettingsProps> = ({
       <div className="space-y-0">
         {filteredProviders.length === 0 ? (
           <div className="border-2 border-dashed border-border bg-muted p-8 text-center">
-            <Muted className="font-medium">
-              No providers found matching your search.
-            </Muted>
+            <Muted className="font-medium">{t("providers.noResults")}</Muted>
           </div>
         ) : (
           filteredProviders.map((provider) => (

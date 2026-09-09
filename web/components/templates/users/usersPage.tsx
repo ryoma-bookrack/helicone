@@ -9,13 +9,14 @@ import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useRouter } from "next/router";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { useUsers } from "../../../services/hooks/users";
 import {
   SortDirection,
   SortLeafRequest,
 } from "../../../services/lib/sorts/requests/sorts";
 import ThemedTable from "../../shared/themed/table/themedTable";
-import { INITIAL_COLUMNS } from "./initialColumns";
+import { getInitialColumns } from "./initialColumns";
 import { UserMetrics } from "./UserMetrics";
 import { Small } from "@/components/ui/typography";
 import { FilterASTButton } from "@/filterAST/FilterASTButton";
@@ -42,19 +43,6 @@ interface UsersPageV2Props {
     isCustomProperty: boolean;
   };
 }
-
-const TABS = [
-  {
-    id: "users",
-    label: "Users",
-    icon: <Table size={16} />,
-  },
-  {
-    id: "metrics",
-    label: "Metrics",
-    icon: <PieChart size={16} />,
-  },
-];
 
 function useQueryParam(
   paramName: string,
@@ -91,6 +79,14 @@ function useQueryParam(
 }
 
 const UsersPageV2 = (props: UsersPageV2Props) => {
+  const { t } = useTranslation("users");
+  const tabs = useMemo(
+    () => [
+      { id: "users", label: t("tabs.users"), icon: <Table size={16} /> },
+      { id: "metrics", label: t("tabs.metrics"), icon: <PieChart size={16} /> },
+    ],
+    [t],
+  );
   const {
     currentPage: currentPageProp,
     pageSize: pageSizeProp,
@@ -114,7 +110,7 @@ const UsersPageV2 = (props: UsersPageV2Props) => {
   );
   const [sortKey, setSortKey] = useQueryParam("sortKey", "last_active");
   const [currentTab, setCurrentTab] = useLocalStorage<
-    (typeof TABS)[number]["id"]
+    (typeof tabs)[number]["id"]
   >("user-details-tab", "users");
 
   const [timeFilter, setTimeFilter] = useState<TimeFilter>({
@@ -153,12 +149,14 @@ const UsersPageV2 = (props: UsersPageV2Props) => {
     }
   };
 
+  const baseColumns = useMemo(() => getInitialColumns(t), [t]);
+
   const columns = useMemo(() => {
     if (hasAccess) {
-      return INITIAL_COLUMNS;
+      return baseColumns;
     }
 
-    return INITIAL_COLUMNS.map((column) => {
+    return baseColumns.map((column) => {
       if ("accessorKey" in column && column.accessorKey === "user_id") {
         return {
           ...column,
@@ -179,7 +177,7 @@ const UsersPageV2 = (props: UsersPageV2Props) => {
                 {isPremium && (
                   <LockIcon className="mr-1 inline h-3 w-3 text-muted-foreground" />
                 )}
-                {user.user_id ? `${user.user_id}` : "No User ID"}
+                {user.user_id ? `${user.user_id}` : t("columns.noUserId")}
               </span>
             );
           },
@@ -213,7 +211,7 @@ const UsersPageV2 = (props: UsersPageV2Props) => {
       }
       return column;
     });
-  }, [hasAccess, freeLimit, userMetrics]);
+  }, [hasAccess, freeLimit, userMetrics, baseColumns, t]);
 
   const [activeColumns, setActiveColumns] = useState<DragColumnItem[]>(
     columnDefsToDragColumnItems(columns),
@@ -253,7 +251,7 @@ const UsersPageV2 = (props: UsersPageV2Props) => {
           leftSection={
             <section className="flex flex-row items-center gap-2">
               <Link href="/users" className="no-underline">
-                <Small className="font-semibold">Users</Small>
+                <Small className="font-semibold">{t("title")}</Small>
               </Link>
               <Small className="font-semibold">/</Small>
 
@@ -272,7 +270,7 @@ const UsersPageV2 = (props: UsersPageV2Props) => {
           rightSection={
             <section className="flex flex-row items-center gap-2">
               <div className="flex h-8 flex-row items-center divide-x divide-border overflow-hidden rounded-lg border border-border shadow-sm">
-                <label className="px-2 py-1 text-xs">Views</label>
+                <label className="px-2 py-1 text-xs">{t("views")}</label>
 
                 <TabsList
                   size={"sm"}
@@ -280,7 +278,7 @@ const UsersPageV2 = (props: UsersPageV2Props) => {
                   asPill={"none"}
                   className="divide-x divide-border"
                 >
-                  {TABS.map((tab) => (
+                  {tabs.map((tab) => (
                     <TabsTrigger
                       variant={"secondary"}
                       asPill={"none"}

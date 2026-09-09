@@ -1,0 +1,52 @@
+{
+  "page": {
+    "title": "API 密钥",
+    "description": "这些密钥可用于读写 Helicone 数据。请勿分享这些密钥，并确保将其安全存储。",
+    "generateNewKey": "生成新密钥"
+  },
+  "table": {
+    "loading": "正在加载密钥...",
+    "emptyAction": "点击此处生成 Helicone 密钥",
+    "columns": {
+      "name": "名称",
+      "created": "创建时间",
+      "permissions": "权限"
+    },
+    "permissions": {
+      "read": "读取",
+      "write": "写入",
+      "readWrite": "读/写"
+    }
+  },
+  "modal": {
+    "createTitle": "创建密钥",
+    "keyName": "密钥名称",
+    "keyNamePlaceholder": "密钥名称",
+    "permissions": "权限",
+    "read": "读取",
+    "write": "写入",
+    "rateLimiting": "速率限制",
+    "enableUiRateLimits": "启用 UI 速率限制",
+    "rateLimitTooltip": "这将在密钥前添加 \"rl-\" 前缀，并应用仪表盘中配置的速率限制。",
+    "viewDocumentation": "查看文档",
+    "rateLimitLatency": "可能会影响请求延迟。",
+    "learnMore": "了解更多",
+    "createKey": "创建密钥",
+    "yourKeyTitle": "您的 Helicone 密钥",
+    "yourKeyDescription": "请复制此密钥并安全保存。您将无法再次查看。",
+    "yourKeyDescriptionFull": "这是您<strong>唯一一次</strong>可以查看 API 密钥的机会。请将其保存在安全且可访问的地方。如果丢失，您需要重新生成。",
+    "editTitle": "编辑 Helicone 密钥",
+    "deleteTitle": "删除 Helicone 密钥",
+    "deleteDescription": "此 Helicone 密钥将从您的账户中删除。您将无法再将其用于 API 请求。确定要永久删除此密钥吗？",
+    "update": "更新"
+  },
+  "keyNameField": {
+    "emailPlaceholder": "you@example.com"
+  },
+  "notifications": {
+    "enterKeyName": "请输入密钥名称",
+    "createSuccess": "API 密钥创建成功",
+    "createFailed": "API 密钥创建失败",
+    "copiedToClipboard": "已复制到剪贴板！"
+  }
+}

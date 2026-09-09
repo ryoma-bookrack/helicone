@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { useEffect, useState, useMemo } from "react";
 import ThemedDrawer from "../../../shared/themed/themedDrawer";
 import { useJawnClient } from "../../../../lib/clients/jawnHook";
@@ -18,6 +19,9 @@ interface ExperimentDatasetSelectorProps {
 }
 
 const ExperimentDatasetSelector = (props: ExperimentDatasetSelectorProps) => {
+  const { t } = useTranslation("prompts");
+  const { t: tCommon } = useTranslation("common");
+
   const {
     open,
     setOpen,
@@ -77,13 +81,11 @@ const ExperimentDatasetSelector = (props: ExperimentDatasetSelectorProps) => {
               Select Datasets ({datasets.length})
             </h2>
           </div>
-          <p className="pb-4 text-sm text-gray-500">
-            Select the inputs you want to include in the dataset.
-          </p>
+          <p className="pb-4 text-sm text-gray-500">{t("ui.selectTheInputsYouWantToIncludeInTheData")}</p>
 
           <ul className="flex w-full flex-col items-center space-y-4 overflow-y-auto px-1 pt-4">
-            {isLoading && <div>Loading inputs...</div>}
-            {isError && <div>Error loading inputs.</div>}
+            {isLoading && <div>{t("ui.loadingInputs")}</div>}
+            {isError && <div>{t("ui.errorLoadingInputs")}</div>}
             {!isLoading &&
               !isError &&
               datasets.map((dataset) => (
@@ -123,15 +125,13 @@ const ExperimentDatasetSelector = (props: ExperimentDatasetSelectorProps) => {
             variant={"secondary"}
             size={"sm"}
             onClick={() => setOpen(false)}
-          >
-            Cancel
-          </Button>
+          >{tCommon("actions.cancel")}</Button>
 
           <Button
             size={"sm"}
             onClick={async () => {
               if (!selectedDatasetId) {
-                setNotification("Please select one input.", "error");
+                setNotification(t("ui.pleaseSelectOneInput"), "error");
                 return;
               }
 
@@ -139,13 +139,11 @@ const ExperimentDatasetSelector = (props: ExperimentDatasetSelectorProps) => {
               if (onSuccess) {
                 onSuccess(true);
 
-                setNotification("Added inputs to dataset", "success");
+                setNotification(t("ui.addedInputsToDataset"), "success");
                 setOpen(false);
               }
             }}
-          >
-            Confirm
-          </Button>
+          >{tCommon("actions.confirm")}</Button>
         </div>
       </div>
     </ThemedDrawer>

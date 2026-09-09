@@ -1,10 +1,12 @@
 /* eslint-disable @next/next/no-img-element */
 import { useHeliconeAuthClient } from "@/packages/common/auth/client/AuthClientFactory";
+import LocaleSwitcher from "@/components/shared/LocaleSwitcher";
 import { Dialog } from "@headlessui/react";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import { useTranslation } from "react-i18next";
 import { useState } from "react";
 import SolutionsButton from "./solutionsButton";
 
@@ -12,7 +14,7 @@ interface NavBarV2Props {}
 
 const NavBarV2 = (props: NavBarV2Props) => {
   const {} = props;
-
+  const { t } = useTranslation(["marketing", "common"]);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const router = useRouter();
@@ -27,11 +29,11 @@ const NavBarV2 = (props: NavBarV2Props) => {
         >
           <div className="flex items-center">
             <Link href="/" className="-m-1.5">
-              <span className="sr-only">Helicone</span>
+              <span className="sr-only">{t("marketing:nav.srOnly")}</span>
               <Image
                 className="dark:hidden"
                 src={"/static/logo.svg"}
-                alt="Helicone - Open-source LLM observability and monitoring platform for developers"
+                alt={t("marketing:nav.logoAlt")}
                 height={150}
                 width={150}
                 priority={true}
@@ -39,7 +41,7 @@ const NavBarV2 = (props: NavBarV2Props) => {
               <Image
                 className="hidden dark:block"
                 src={"/static/logo-white.svg"}
-                alt="Helicone - Open-source LLM observability and monitoring platform for developers"
+                alt={t("marketing:nav.logoAlt")}
                 height={100}
                 width={100}
                 priority={true}
@@ -53,36 +55,39 @@ const NavBarV2 = (props: NavBarV2Props) => {
               href="https://docs.helicone.ai/"
               className="flex flex-row items-center rounded-md px-3 py-1.5 font-medium text-gray-700 hover:text-black focus:outline-none dark:text-gray-300 dark:hover:text-white"
             >
-              Docs
+              {t("marketing:nav.docs")}
             </Link>
             <Link
               href="https://helicone.ai/pricing"
               className="flex flex-row items-center rounded-md px-3 py-1.5 font-medium text-gray-700 hover:text-black focus:outline-none dark:text-gray-300 dark:hover:text-white"
             >
-              Pricing
+              {t("marketing:nav.pricing")}
             </Link>
             <Link
               href="/blog"
               rel="noopener noreferrer"
               className="flex flex-row items-center rounded-md px-3 py-1.5 font-medium text-gray-700 hover:text-black focus:outline-none dark:text-gray-300 dark:hover:text-white"
             >
-              Blog
+              {t("marketing:nav.blog")}
             </Link>
             <Link
               href="/contact"
               className="flex flex-row items-center rounded-md px-3 py-1.5 font-medium text-gray-700 hover:text-black focus:outline-none dark:text-gray-300 dark:hover:text-white"
             >
-              Contact
+              {t("marketing:nav.contact")}
             </Link>
           </div>
           <div className="hidden flex-1 items-center justify-end gap-x-2 md:flex">
+            <div className="px-2">
+              <LocaleSwitcher />
+            </div>
             {heliconeAuthClient.user ? (
               <>
                 <Link
                   href="/dashboard"
                   className="whitespace-nowrap rounded-md border-2 border-sky-700 bg-sky-500 px-4 py-1.5 text-sm font-semibold text-white shadow-sm hover:bg-sky-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-500"
                 >
-                  Dashboard
+                  {t("marketing:nav.dashboard")}
                 </Link>
                 <button
                   onClick={async () => {
@@ -92,7 +97,7 @@ const NavBarV2 = (props: NavBarV2Props) => {
                   }}
                   className="flex w-fit items-center gap-1 rounded-lg border-[3px] border-gray-300 bg-white px-4 py-1.5 text-sm font-bold text-black shadow-lg duration-500 ease-in-out hover:bg-gray-100 dark:border-gray-600 dark:bg-gray-800 dark:text-white dark:hover:bg-gray-700"
                 >
-                  Sign Out
+                  {t("common:actions.signOut")}
                 </button>
               </>
             ) : (
@@ -101,13 +106,13 @@ const NavBarV2 = (props: NavBarV2Props) => {
                   href="/signin"
                   className="whitespace-nowrap rounded-md bg-[#f8feff] px-4 py-1.5 text-sm font-semibold text-black hover:bg-gray-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-500 dark:bg-gray-800 dark:text-white dark:hover:bg-gray-700"
                 >
-                  Sign In
+                  {t("marketing:nav.signIn")}
                 </Link>
                 <Link
                   href="/signup"
                   className="whitespace-nowrap rounded-md border-2 border-sky-700 bg-sky-500 px-4 py-1.5 text-sm font-semibold text-white shadow-sm hover:bg-sky-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-500"
                 >
-                  Sign up for free
+                  {t("marketing:nav.signUpFree")}
                 </Link>
               </>
             )}
@@ -119,7 +124,9 @@ const NavBarV2 = (props: NavBarV2Props) => {
                 className="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-gray-700 dark:text-gray-300"
                 onClick={() => setMobileMenuOpen(false)}
               >
-                <span className="sr-only">close main menu</span>
+                <span className="sr-only">
+                  {t("marketing:nav.closeMainMenu")}
+                </span>
                 <XMarkIcon className="h-6 w-6" aria-hidden="true" />
               </button>
             ) : (
@@ -128,14 +135,15 @@ const NavBarV2 = (props: NavBarV2Props) => {
                 className="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-gray-700 dark:text-gray-300"
                 onClick={() => setMobileMenuOpen(true)}
               >
-                <span className="sr-only">Open main menu</span>
+                <span className="sr-only">
+                  {t("marketing:nav.openMainMenu")}
+                </span>
                 <Bars3Icon className="h-6 w-6" aria-hidden="true" />
               </button>
             )}
           </div>
         </nav>
       )}
-      {/* MOBILE */}
       <Dialog
         as="div"
         className="md:hidden"
@@ -148,7 +156,7 @@ const NavBarV2 = (props: NavBarV2Props) => {
             <div>
               <div className="flex items-center justify-between gap-x-6">
                 <a href="#" className="-m-1.5 p-1.5">
-                  <span className="sr-only">Helicone</span>
+                  <span className="sr-only">{t("marketing:nav.srOnly")}</span>
                   <Image
                     className="block rounded-md"
                     src="/assets/landing/helicone.webp"
@@ -163,7 +171,9 @@ const NavBarV2 = (props: NavBarV2Props) => {
                   className="-m-2.5 rounded-md p-2.5 text-gray-700 dark:text-gray-300"
                   onClick={() => setMobileMenuOpen(false)}
                 >
-                  <span className="sr-only">Close menu</span>
+                  <span className="sr-only">
+                    {t("marketing:nav.closeMainMenu")}
+                  </span>
                   <XMarkIcon className="h-6 w-6" aria-hidden="true" />
                 </button>
               </div>
@@ -174,7 +184,7 @@ const NavBarV2 = (props: NavBarV2Props) => {
                       href="https://helicone.ai/pricing"
                       className="text-md font-semibold text-gray-900 dark:text-gray-300"
                     >
-                      Pricing
+                      {t("marketing:nav.pricing")}
                     </Link>
                     <Link
                       href="https://docs.helicone.ai/"
@@ -182,7 +192,7 @@ const NavBarV2 = (props: NavBarV2Props) => {
                       rel="noopener noreferrer"
                       className="text-md font-semibold text-gray-900 dark:text-gray-300"
                     >
-                      Documentation
+                      {t("marketing:nav.documentation")}
                     </Link>
                     <Link
                       href="https://github.com/Helicone/helicone"
@@ -190,17 +200,20 @@ const NavBarV2 = (props: NavBarV2Props) => {
                       rel="noopener noreferrer"
                       className="text-md font-semibold text-gray-900 dark:text-gray-300"
                     >
-                      Github
+                      {t("marketing:nav.github")}
                     </Link>
                     <Link
                       href="/blog"
                       rel="noopener noreferrer"
                       className="text-md font-semibold text-gray-900 dark:text-gray-300"
                     >
-                      Blog
+                      {t("marketing:nav.blog")}
                     </Link>
                   </div>
-                  <div className="w-full pt-16">
+                  <div className="w-full space-y-4 pt-8">
+                    <LocaleSwitcher />
+                  </div>
+                  <div className="w-full pt-8">
                     {heliconeAuthClient.user ? (
                       <button
                         onClick={async () => {
@@ -210,14 +223,14 @@ const NavBarV2 = (props: NavBarV2Props) => {
                         }}
                         className="text-md flex w-full justify-center whitespace-nowrap rounded-md bg-gray-900 px-4 py-2 font-semibold text-white shadow-sm hover:bg-gray-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-500"
                       >
-                        Sign Out
+                        {t("common:actions.signOut")}
                       </button>
                     ) : (
                       <Link
                         href="/signin"
                         className="text-md flex w-full justify-center whitespace-nowrap rounded-md bg-gray-900 px-4 py-2 font-semibold text-white shadow-sm hover:bg-gray-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-500"
                       >
-                        Sign In
+                        {t("marketing:nav.signIn")}
                       </Link>
                     )}
                   </div>

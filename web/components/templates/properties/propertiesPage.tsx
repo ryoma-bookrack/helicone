@@ -24,6 +24,7 @@ import { useQuery } from "@tanstack/react-query";
 import { Loader2 } from "lucide-react";
 import { useRouter } from "next/router";
 import { useEffect, useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { getPropertyFiltersV2 } from "@helicone-package/filters/frontendFilterDefs";
 import { useGetPropertiesV2 } from "../../../services/hooks/propertiesV2";
 import PropertyPanel from "./propertyPanel";
@@ -31,6 +32,7 @@ import PropertyPanel from "./propertyPanel";
 type HiddenProperty = { property: string };
 
 const PropertiesPage = (props: { initialPropertyKey?: string }) => {
+  const { t } = useTranslation("properties");
   const { initialPropertyKey } = props;
   const {
     properties,
@@ -69,7 +71,7 @@ const PropertiesPage = (props: { initialPropertyKey?: string }) => {
       );
       if (!res.data || res.data.error !== null) {
         throw new Error(
-          res.data?.error ?? "Failed to load deleted properties.",
+          res.data?.error ?? t("loadError"),
         );
       }
       return res.data.data ?? [];
@@ -172,7 +174,7 @@ const PropertiesPage = (props: { initialPropertyKey?: string }) => {
       setRestoreModalOpen(false);
       setSelectedHiddenProperty("");
     } catch (e) {
-      setRestoreError("Unable to restore property. Please try again.");
+      setRestoreError(t("restore.error"));
     } finally {
       setRestoringKey(null);
     }
@@ -326,15 +328,16 @@ const HidePropertyConfirmDialog = ({
   onConfirm: () => void;
   isLoading: boolean;
 }) => {
+  const { t } = useTranslation("properties");
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-md">
         <DialogHeader className="space-y-4">
-          <DialogTitle>Delete property?</DialogTitle>
+          <DialogTitle>{t("delete.title")}</DialogTitle>
           <DialogDescription>
             {property
-              ? `This will delete the property "${property}" from your Properties list.`
-              : "This will delete the selected property from your Properties list."}
+              ? t("delete.descriptionWithName", { property })
+              : t("delete.description")}
           </DialogDescription>
         </DialogHeader>
         <DialogFooter>
@@ -343,14 +346,14 @@ const HidePropertyConfirmDialog = ({
             onClick={() => onOpenChange(false)}
             disabled={isLoading}
           >
-            Cancel
+            {t("delete.cancel")}
           </Button>
           <Button
             variant="destructive"
             onClick={onConfirm}
             disabled={isLoading || !property}
           >
-            {isLoading ? "Deleting..." : "Delete"}
+            {isLoading ? t("delete.deleting") : t("delete.confirm")}
           </Button>
         </DialogFooter>
       </DialogContent>
@@ -385,15 +388,13 @@ const RestoreHiddenPropertiesDialog = ({
   restoreError,
   restoringKey,
 }: RestoreHiddenPropertiesDialogProps) => {
+  const { t } = useTranslation("properties");
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Restore Deleted Properties</DialogTitle>
-          <DialogDescription>
-            Select a property to restore. Restored properties will reappear in
-            your list.
-          </DialogDescription>
+          <DialogTitle>{t("restore.title")}</DialogTitle>
+          <DialogDescription>{t("restore.description")}</DialogDescription>
         </DialogHeader>
 
         {errorMessage ? (
@@ -404,18 +405,20 @@ const RestoreHiddenPropertiesDialog = ({
           </div>
         ) : hiddenPropertyKeys.length === 0 ? (
           <p className="text-sm text-muted-foreground">
-            You do not have any deleted properties to restore.
+            {t("restore.empty")}
           </p>
         ) : (
           <div className="space-y-3">
             <div className="space-y-2">
-              <Label htmlFor="restore-hidden-property">Deleted property</Label>
+              <Label htmlFor="restore-hidden-property">
+                {t("restore.deletedPropertyLabel")}
+              </Label>
               <Select
                 value={selectedProperty || undefined}
                 onValueChange={(value) => onSelect(value)}
               >
                 <SelectTrigger id="restore-hidden-property">
-                  <SelectValue placeholder="Select a property" />
+                  <SelectValue placeholder={t("selectPropertyPlaceholder")} />
                 </SelectTrigger>
                 <SelectContent>
                   {hiddenPropertyKeys.map((property) => (
@@ -442,7 +445,7 @@ const RestoreHiddenPropertiesDialog = ({
             }}
             disabled={!!restoringKey}
           >
-            Cancel
+            {t("restore.cancel")}
           </Button>
           <Button
             onClick={onRestore}
@@ -452,10 +455,10 @@ const RestoreHiddenPropertiesDialog = ({
             {restoringKey ? (
               <>
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                Restoring
+                {t("restore.restoring")}
               </>
             ) : (
-              "Restore"
+              t("restore.button")
             )}
           </Button>
         </DialogFooter>

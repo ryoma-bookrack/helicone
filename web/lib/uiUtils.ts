@@ -18,27 +18,27 @@ export function getStripeLink(
   }
   return `https://dashboard.stripe.com/invoices/${invoiceId}`;
 }
+import {
+  formatCurrency as formatCurrencyI18n,
+  formatMonthKey as formatMonthKeyI18n,
+} from "@/lib/i18n/format";
+
 // Format currency values
 export const formatCurrency = (
   amount: number | null | undefined,
   currency = "usd",
   maximumFractionDigits: number | undefined = undefined,
+  locale = "zh",
 ): string => {
-  if (amount === null || amount === undefined) return "$0.00";
-  return new Intl.NumberFormat("en-US", {
-    style: "currency",
-    currency: currency.toUpperCase(),
-    minimumFractionDigits: 2,
-    maximumFractionDigits: maximumFractionDigits, // Support small amounts like $0.0003049
-  }).format(amount);
+  return formatCurrencyI18n(
+    amount,
+    locale,
+    currency,
+    maximumFractionDigits,
+  );
 };
 
 // Format month key for display
-export const formatMonthKey = (monthKey: string): string => {
-  const [year, month] = monthKey.split("-");
-  const date = new Date(parseInt(year), parseInt(month) - 1);
-  return date.toLocaleDateString(undefined, {
-    month: "long",
-    year: "numeric",
-  });
+export const formatMonthKey = (monthKey: string, locale = "zh"): string => {
+  return formatMonthKeyI18n(monthKey, locale);
 };

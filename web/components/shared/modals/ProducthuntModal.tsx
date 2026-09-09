@@ -3,6 +3,7 @@ import { XMarkIcon } from "@heroicons/react/24/solid";
 import { useState, useEffect } from "react";
 import { ArrowUpRightIcon } from "@heroicons/react/24/outline";
 import Cookies from "js-cookie";
+import { useTranslation } from "react-i18next";
 
 interface ProducthuntModalProps {
   open: boolean;
@@ -14,6 +15,8 @@ const ProducthuntSupportModal: React.FC<ProducthuntModalProps> = ({
   open,
   setOpen,
 }) => {
+  const { t } = useTranslation("common");
+
   const handleProductHuntClick = () => {
     Cookies.set("visitedProductHunt", "true", { expires: 1 });
     window.open(
@@ -28,7 +31,7 @@ const ProducthuntSupportModal: React.FC<ProducthuntModalProps> = ({
       <div className="flex w-[374px] flex-col items-start space-y-6 text-left">
         <div className="flex w-full items-center justify-between">
           <div className="text-2xl font-bold text-gray-900 dark:text-white">
-            We need your help! 🫶
+            {t("modals.productHunt.helpTitle")}
           </div>
           <XMarkIcon
             className="h-6 w-6 cursor-pointer text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
@@ -37,14 +40,14 @@ const ProducthuntSupportModal: React.FC<ProducthuntModalProps> = ({
         </div>
 
         <p className="text-gray-600 dark:text-gray-300">
-          We just launched on Product Hunt today and would love your support!
+          {t("modals.productHunt.launchedMessage")}
         </p>
 
         <p className="text-gray-600 dark:text-gray-300">
-          We are giving away $500 in credit to all new Growth users.
+          {t("modals.productHunt.creditMessage")}
           <span className="font-semibold text-[#FF6154] dark:text-white">
             {" "}
-            To see the code, please give us an upvote!
+            {t("modals.productHunt.upvoteMessage")}
           </span>
         </p>
         <a
@@ -73,8 +76,9 @@ const UpgradeOfferModal: React.FC<ProducthuntModalProps> = ({
   setOpen,
   upgradeOpen,
 }) => {
+  const { t } = useTranslation("common");
+
   const handleUpgradeClick = () => {
-    // Implement your upgrade logic here
     Cookies.set("closedProductHuntPromo", "true", { expires: 365 });
     setOpen(false);
     upgradeOpen(true);
@@ -85,7 +89,7 @@ const UpgradeOfferModal: React.FC<ProducthuntModalProps> = ({
       <div className="flex w-[374px] flex-col items-start space-y-6 text-left">
         <div className="flex w-full items-center justify-between">
           <div className="text-2xl font-bold text-gray-900 dark:text-white">
-            Launch Promo 🎉
+            {t("modals.productHunt.promoTitle")}
           </div>
           <XMarkIcon
             className="h-6 w-6 cursor-pointer text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
@@ -94,7 +98,7 @@ const UpgradeOfferModal: React.FC<ProducthuntModalProps> = ({
         </div>
 
         <p className="text-gray-600 dark:text-gray-300">
-          Get $500 in credit when you upgrade to Growth today. Use code{" "}
+          {t("modals.productHunt.promoDescription")}{" "}
           <span className="font-semibold text-[#FF6154] dark:text-white">
             PHUNT500
           </span>{" "}
@@ -102,7 +106,7 @@ const UpgradeOfferModal: React.FC<ProducthuntModalProps> = ({
         </p>
 
         <p className="text-sm italic text-gray-500 dark:text-gray-400">
-          *The credit expires in 6 months.
+          {t("modals.productHunt.creditExpires")}
         </p>
 
         <button
@@ -110,7 +114,7 @@ const UpgradeOfferModal: React.FC<ProducthuntModalProps> = ({
           tabIndex={-1}
           className="rounded-md bg-[#FF6154] px-6 py-3 text-white transition-colors hover:bg-[#E55A4D]"
         >
-          Upgrade
+          {t("actions.upgrade")}
         </button>
       </div>
     </ThemedModal>
@@ -118,11 +122,15 @@ const UpgradeOfferModal: React.FC<ProducthuntModalProps> = ({
 };
 
 export const ProducthuntLaunchCard: React.FC = () => {
+  const { t } = useTranslation("common");
+
   return (
     <div>
-      <h2 className="mb-4 text-sm font-medium">Product Hunt Launch! 🎉</h2>
+      <h2 className="mb-4 text-sm font-medium">
+        {t("modals.productHunt.launchTitle")}
+      </h2>
       <p className="mb-4 text-xs text-gray-600">
-        We just launched today and would love your support! 🙏
+        {t("modals.productHunt.launchCardMessage")}
       </p>
       <a
         href="https://www.producthunt.com/leaderboard/daily/2024/8/22"
@@ -144,10 +152,14 @@ export const ProducthuntLaunchCard: React.FC = () => {
 export const ProducthuntLaunchPromoCard: React.FC<{
   setOpen: (_open: boolean) => void;
 }> = ({ setOpen }) => {
+  const { t } = useTranslation("common");
+
   return (
     <div>
       <div className="flex w-full items-center justify-between">
-        <h2 className="mb-4 text-sm font-medium">Launch Promo 🎉</h2>
+        <h2 className="mb-4 text-sm font-medium">
+          {t("modals.productHunt.promoTitle")}
+        </h2>
         <ArrowUpRightIcon
           className="mb-4 h-4 w-4 cursor-pointer text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
           onClick={() => setOpen(true)}
@@ -155,7 +167,7 @@ export const ProducthuntLaunchPromoCard: React.FC<{
       </div>
 
       <p className="mb-4 text-xs text-gray-600">
-        Get $500 in credit when you upgrade to Growth today. Use code{" "}
+        {t("modals.productHunt.promoDescription")}{" "}
         <span className="font-semibold text-[#FF6154] dark:text-white">
           PHUNT500
         </span>{" "}
@@ -190,7 +202,6 @@ const ProducthuntModal: React.FC<{
   }, []);
 
   useEffect(() => {
-    // Show the modal only if the user hasn't visited Product Hunt and hasn't closed the promo
     if (!visitedProductHunt && !closedPromo) {
       setOpen(true);
     }
@@ -199,7 +210,7 @@ const ProducthuntModal: React.FC<{
   const handleSupportModalClose = () => {
     Cookies.set("visitedProductHunt", "true", { expires: 1 });
     setVisitedProductHunt(true);
-    setOpen(true); // Immediately open the second modal
+    setOpen(true);
   };
 
   const handlePromoModalClose = () => {
@@ -209,7 +220,7 @@ const ProducthuntModal: React.FC<{
   };
 
   if (closedPromo) {
-    return null; // Don't render anything if the user has closed the promo
+    return null;
   }
 
   return (

@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -18,6 +19,7 @@ export const EvaluatorTypeDropdown: React.FC<{
   selectedOption: string;
   onOptionSelect: (option: EvaluatorType) => void;
 }> = ({ selectedOption, onOptionSelect }) => {
+  const { t } = useTranslation("evals");
   return (
     <>
       <div className="pb-8">
@@ -31,7 +33,7 @@ export const EvaluatorTypeDropdown: React.FC<{
           </DropdownMenuTrigger>
           <DropdownMenuContent>
             <DropdownMenuGroup>
-              <DropdownMenuLabel>LLM As a Judge</DropdownMenuLabel>
+              <DropdownMenuLabel>{t("ui.llmAsAJudge")}</DropdownMenuLabel>
               {LLM_AS_A_JUDGE_OPTIONS.map((option) => (
                 <DropdownMenuItem
                   key={option.name}
@@ -43,7 +45,7 @@ export const EvaluatorTypeDropdown: React.FC<{
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
-              <DropdownMenuLabel>Composite</DropdownMenuLabel>
+              <DropdownMenuLabel>{t("ui.composite")}</DropdownMenuLabel>
               {COMPOSITE_OPTIONS.map((option) => (
                 <DropdownMenuItem
                   key={option.name}
@@ -55,39 +57,30 @@ export const EvaluatorTypeDropdown: React.FC<{
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
-              <DropdownMenuLabel>
-                RAG <span className="text-xs text-gray-500">(soon)</span>
+              <DropdownMenuLabel>{t("ui.rag")}<span className="text-xs text-gray-500">{t("ui.soon")}</span>
               </DropdownMenuLabel>
               <DropdownMenuItem
                 // onClick={() => onOptionSelect("ContextRecall")}
                 disabled
-              >
-                ContextRecall
-              </DropdownMenuItem>
+              >{t("ui.contextrecall")}</DropdownMenuItem>
               <DropdownMenuItem
                 // onClick={() => onOptionSelect("AnswerSimilarity")}
                 disabled
-              >
-                AnswerSimilarity
-              </DropdownMenuItem>
+              >{t("ui.answersimilarity")}</DropdownMenuItem>
               <DropdownMenuItem
                 // onClick={() => onOptionSelect("SourceProperly")}
                 disabled
-              >
-                SourceProperly
-              </DropdownMenuItem>
+              >{t("ui.sourceproperly")}</DropdownMenuItem>
             </DropdownMenuGroup>
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
       <TabsList>
-        <TabsTrigger value="llm-as-a-judge">LLM-as-a-judge</TabsTrigger>
-        <TabsTrigger value="python">
-          Python <span className="px-3 text-xs text-gray-500"></span>
+        <TabsTrigger value="llm-as-a-judge">{t("ui.llmAsAJudge2")}</TabsTrigger>
+        <TabsTrigger value="python">{t("ui.python")}<span className="px-3 text-xs text-gray-500"></span>
         </TabsTrigger>
-        <TabsTrigger value="typescript">LastMile AutoEval </TabsTrigger>
-        <TabsTrigger value="typescript" disabled>
-          Typescript <span className="px-3 text-xs text-gray-500">(soon)</span>
+        <TabsTrigger value="typescript">{t("ui.lastmileAutoeval")}</TabsTrigger>
+        <TabsTrigger value="typescript" disabled>{t("ui.typescript")}<span className="px-3 text-xs text-gray-500">{t("ui.soon")}</span>
         </TabsTrigger>
       </TabsList>
     </>

@@ -1,3 +1,4 @@
+import { formatStandardDateTime } from "@/lib/i18n/format";
 import { InvoiceData } from "@/lib/admin/RevenueCalculator";
 import { formatCurrency, getStripeLink, truncateID } from "@/lib/uiUtils";
 import { ArrowDown, ArrowUp } from "lucide-react";
@@ -160,7 +161,7 @@ export const InvoiceTable: React.FC<InvoiceTableProps> = ({
                 {invoice.customerEmail}
               </td>
               <td className="whitespace-nowrap px-3 py-2 text-sm">
-                {invoice.created.toLocaleDateString()}
+                {formatStandardDateTime(invoice.created)}
               </td>
               <td className="whitespace-nowrap px-3 py-2 text-sm">
                 {invoice.status}

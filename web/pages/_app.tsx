@@ -1,8 +1,12 @@
 import { createBrowserSupabaseClient } from "@supabase/auth-helpers-nextjs";
 import { Session, SessionContextProvider } from "@supabase/auth-helpers-react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { AppProps } from "next/app";
-import { ReactElement, ReactNode, useState } from "react";
+import App, { AppContext, AppProps } from "next/app";
+import { ReactElement, ReactNode, useEffect, useState } from "react";
+import { I18nextProvider } from "react-i18next";
+import { useRouter } from "next/router";
+import i18n, { initI18n } from "@/lib/i18n/client";
+import { DEFAULT_LOCALE } from "@/lib/i18n/namespaces";
 import Notification from "../components/shared/notification/Notification";
 import { NotificationProvider } from "../components/shared/notification/NotificationContext";
 import "react-grid-layout/css/styles.css";
@@ -24,7 +28,6 @@ if (typeof window !== "undefined") {
   ensureRandomUUIDPolyfill();
 }
 
-// Use system font stack for faster builds - Inter is loaded via CSS
 const inter = {
   className: "font-sans",
 };
@@ -35,6 +38,8 @@ export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
 
 type AppPropsWithLayout = AppProps & {
   Component: NextPageWithLayout;
+  i18nLocale?: string;
+  i18nResources?: Record<string, Record<string, unknown>>;
 };
 
 export function SupabaseProvider({
@@ -71,37 +76,78 @@ export function SupabaseProvider({
   );
 }
 
-export default function MyApp({ Component, pageProps }: AppPropsWithLayout) {
+function MyApp({
+  Component,
+  pageProps,
+  i18nLocale,
+  i18nResources,
+}: AppPropsWithLayout) {
+  const router = useRouter();
   const [queryClient] = useState(() => new QueryClient());
+  const locale = router.locale ?? i18nLocale ?? DEFAULT_LOCALE;
+
+  useEffect(() => {
+    initI18n(locale);
+    if (i18n.language !== locale) {
+      void i18n.changeLanguage(locale);
+    }
+  }, [locale]);
+
+  if (!i18n.isInitialized) {
+    initI18n(locale, i18nResources);
+  }
 
   const getLayout = Component.getLayout ?? ((page) => page);
 
   return (
-    <SupabaseProvider>
-      <QueryClientProvider client={queryClient}>
-        <NotificationProvider>
-          <DndProvider backend={HTML5Backend}>
-            <OrgContextProvider>
-              <FilterProvider>
-                <ThemeProvider attribute="class" defaultTheme="light">
-                  <TooltipProvider>
-                    <div className={inter.className}>
-                      {getLayout(<Component {...pageProps} />)}
-                    </div>
-                  </TooltipProvider>
-                </ThemeProvider>
-              </FilterProvider>
-              <Notification />
-            </OrgContextProvider>
-          </DndProvider>
-        </NotificationProvider>
-        {process.env.NODE_ENV === "development" && (
-          <ReactQueryDevtools
-            initialIsOpen={false}
-            buttonPosition="bottom-left"
-          />
-        )}
-      </QueryClientProvider>
-    </SupabaseProvider>
+    <I18nextProvider i18n={i18n}>
+      <SupabaseProvider>
+        <QueryClientProvider client={queryClient}>
+          <NotificationProvider>
+            <DndProvider backend={HTML5Backend}>
+              <OrgContextProvider>
+                <FilterProvider>
+                  <ThemeProvider attribute="class" defaultTheme="light">
+                    <TooltipProvider>
+                      <div className={inter.className}>
+                        {getLayout(<Component {...pageProps} />)}
+                      </div>
+                    </TooltipProvider>
+                  </ThemeProvider>
+                </FilterProvider>
+                <Notification />
+              </OrgContextProvider>
+            </DndProvider>
+          </NotificationProvider>
+          {process.env.NODE_ENV === "development" && (
+            <ReactQueryDevtools
+              initialIsOpen={false}
+              buttonPosition="bottom-left"
+            />
+          )}
+        </QueryClientProvider>
+      </SupabaseProvider>
+    </I18nextProvider>
   );
 }
+
+MyApp.getInitialProps = async (appContext: AppContext) => {
+  const appProps = await App.getInitialProps(appContext);
+  const locale = appContext.ctx.locale ?? DEFAULT_LOCALE;
+
+  if (typeof window === "undefined") {
+    const { loadLocaleResources } = await import(
+      "@/lib/i18n/loadLocaleResources.server"
+    );
+    return {
+      ...appProps,
+      i18nLocale: locale,
+      i18nResources: loadLocaleResources(locale),
+      pageProps: appProps.pageProps,
+    };
+  }
+
+  return appProps;
+};
+
+export default MyApp;

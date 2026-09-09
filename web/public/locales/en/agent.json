@@ -1,0 +1,64 @@
+{
+  "title": "Agent Chat",
+  "beta": "Beta",
+  "escalation": {
+    "connected": "Human support connected",
+    "live": "Live",
+    "connectedDescription": "Connected to our support team. They'll respond here shortly.",
+    "resolved": "Support ticket resolved",
+    "resolvedDescription": "This conversation has been marked as resolved by our team.",
+    "reopening": "Reopening...",
+    "reopen": "Reopen",
+    "escalateSuccess": "Successfully escalated to a human",
+    "escalateFailed": "❌ Sorry, I couldn't connect you to support right now. Please try again or email support@helicone.ai"
+  },
+  "emptyState": "Start a conversation with Helix, our AI agent.",
+  "executingTools_one": "Executing {{count}} tool...",
+  "executingTools_other": "Executing {{count}} tools...",
+  "errors": {
+    "generic": "Something went wrong: {{message}}. Please try again or create a new chat.",
+    "parseFailed": "Failed to parse response from the AI",
+    "parseError": "Failed to parse response",
+    "processingFailed": "An error occurred while processing your message",
+    "chatError": "Chat error occurred",
+    "toolExecutionFailed": "Failed to execute tool: {{toolName}}",
+    "noHandler": "No handler found for tool: {{toolName}}",
+    "toolError": "Error executing tool: {{toolName}}",
+    "timeoutToolCall": "Timeout tool call: This conversation turn has become too long with too many tool calls."
+  },
+  "initialMessages": {
+    "default": "Hello! I'm Helix, your Helicone assistant. How can I help you today?",
+    "quickstart": "Hello, I'm Helix! I can provide personalized help for integrating with Helicone, so ask me anything."
+  },
+  "navigation": {
+    "success": "Successfully navigated to {{page}}"
+  },
+  "session": {
+    "noConversations": "No conversations yet",
+    "support": "Support"
+  },
+  "message": {
+    "response": "Response",
+    "fromSupport": "{{name}} from Helicone Support",
+    "tool": "Tool",
+    "helpIntegrate": "Help me integrate",
+    "imageAlt": "Image {{index}}",
+    "uploadAlt": "Upload {{index}}"
+  },
+  "chat": {
+    "queued": "{{count}} Queued",
+    "placeholderStreaming": "Type your message (will be queued)...",
+    "placeholderDragOver": "Drop images here...",
+    "placeholderDefault": "Type your message... (Press ⌘ + I to open this window)",
+    "support": "Support",
+    "talkToHuman": "Talk to a human",
+    "stop": "Stop",
+    "send": "Send"
+  },
+  "models": {
+    "auto": "Auto",
+    "gpt5": "GPT-5",
+    "gpt5Mini": "GPT-5 Mini",
+    "claudeSonnet": "Claude Sonnet 4.5"
+  }
+}

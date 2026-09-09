@@ -1,4 +1,6 @@
+import { formatStandardDateTime } from "@/lib/i18n/format";
 import { Button } from "@/components/ui/button";
+import { useTranslation } from "react-i18next";
 import { useQuery } from "@tanstack/react-query";
 import { BarChart, TextInput } from "@tremor/react";
 import dateFormat from "dateformat";
@@ -13,6 +15,7 @@ function formatBigNumberWithCommas(n: number) {
 }
 
 const TopOrgs = (props: TopOrgsProps) => {
+  const { t } = useTranslation("admin");
   const {} = props;
 
   const [timeRange, setTimeRange] = useState<{
@@ -87,11 +90,11 @@ const TopOrgs = (props: TopOrgsProps) => {
         Top Organizations
       </h1>
       <div className="flex flex-col space-y-2">
-        <p className="text-sm">Organization Lookup by Name</p>
+        <p className="text-sm">{t("common.organizationLookupByName")}</p>
         <div className="grid grid-cols-5 gap-4">
           <div className="col-span-2">
             <TextInput
-              placeholder="Organization Name"
+              placeholder={t("common.organizationName")}
               value={orgName}
               onValueChange={setOrgName}
             />
@@ -212,8 +215,8 @@ const TopOrgs = (props: TopOrgsProps) => {
       </div>
       <div>
         Local time:
-        {timeRange?.startDate.toLocaleString()} -
-        {timeRange?.endDate.toLocaleString()}
+        {formatStandardDateTime(timeRange?.startDate ?? "")} -
+        {formatStandardDateTime(timeRange?.endDate ?? "")}
       </div>
       <div>
         Estimated total MRR:
@@ -221,14 +224,14 @@ const TopOrgs = (props: TopOrgsProps) => {
           ?.map((org, i) => handleLogCostCalculation(org.ct))
           .reduce((acc, curr) => acc + curr, 0)}
       </div>
-      <h2>Top Organizations</h2>
+      <h2>{t("panels.topOrgs.title")}</h2>
       <div className="grid grid-cols-9">
-        <div className="col-span-2">Org Id (click to copy)</div>
-        <div className="col-span-2">Name</div>
+        <div className="col-span-2">{t("common.orgIdClickToCopy")}</div>
+        <div className="col-span-2">{t("common.name")}</div>
         <div className="col-span-2">email</div>
-        <div className="col-span-1">Tier</div>
-        <div className="col-span-1">Count</div>
-        <div className="col-span-1">Estimated spend</div>
+        <div className="col-span-1">{t("common.tier")}</div>
+        <div className="col-span-1">{t("common.count")}</div>
+        <div className="col-span-1">{t("common.estimatedSpend")}</div>
       </div>
       <div className="grid grid-cols-8">
         {data?.data?.map((org, i) => (

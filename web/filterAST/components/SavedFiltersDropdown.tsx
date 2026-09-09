@@ -1,3 +1,4 @@
+import { formatStandardDateTime } from "@/lib/i18n/format";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -11,13 +12,14 @@ import { Small } from "@/components/ui/typography";
 import { useFilterAST } from "@/filterAST/context/filterContext";
 import { Check, ChevronDown, Search, Trash2 } from "lucide-react";
 import React, { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Input } from "@/components/ui/input";
 
-interface SavedFiltersDropdownProps { }
+interface SavedFiltersDropdownProps {}
 
-export const SavedFiltersDropdown: React.FC<
-  SavedFiltersDropdownProps
-> = ({ }) => {
+export const SavedFiltersDropdown: React.FC<SavedFiltersDropdownProps> = () => {
+  const { t } = useTranslation("filters");
+  const { t: tc } = useTranslation("common");
   const [open, setOpen] = useState(false);
   const [search, setSearch] = useState("");
   const { crud, helpers, store } = useFilterAST();
@@ -33,14 +35,20 @@ export const SavedFiltersDropdown: React.FC<
   };
 
   return (
-    <DropdownMenu open={open} onOpenChange={(v) => { setOpen(v); if (!v) setSearch(""); }}>
+    <DropdownMenu
+      open={open}
+      onOpenChange={(v) => {
+        setOpen(v);
+        if (!v) setSearch("");
+      }}
+    >
       <DropdownMenuTrigger asChild>
         <Button
           variant="glass"
           size="sm"
-          className="flex shadow-sm items-center gap-2 text-xs"
+          className="flex items-center gap-2 text-xs shadow-sm"
         >
-          <span>Saved Filters</span>
+          <span>{t("savedFilters")}</span>
           {crud.savedFilters.length > 0 && (
             <Badge
               variant="helicone"
@@ -54,18 +62,21 @@ export const SavedFiltersDropdown: React.FC<
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-64">
         <div className="px-2 py-1.5">
-          <Small className="text-xs font-medium">Saved Filters</Small>
+          <Small className="text-xs font-medium">{t("savedFilters")}</Small>
         </div>
         <DropdownMenuSeparator />
 
         {crud.savedFilters.length > 5 && (
           <div className="px-2 py-1.5">
             <div className="relative">
-              <Search size={12} className="absolute left-2 top-1/2 -translate-y-1/2 text-muted-foreground" />
+              <Search
+                size={12}
+                className="absolute left-2 top-1/2 -translate-y-1/2 text-muted-foreground"
+              />
               <Input
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                placeholder="Search filters..."
+                placeholder={t("search.searchFilters")}
                 className="h-7 pl-7 text-xs"
                 onKeyDown={(e) => e.stopPropagation()}
               />
@@ -77,24 +88,30 @@ export const SavedFiltersDropdown: React.FC<
           if (crud.isLoading) {
             return (
               <div className="p-2 text-center">
-                <Small className="text-muted-foreground">Loading...</Small>
+                <Small className="text-muted-foreground">
+                  {tc("actions.loading")}
+                </Small>
               </div>
             );
           }
           if (crud.savedFilters.length === 0) {
             return (
               <div className="p-2 text-center">
-                <Small className="text-muted-foreground">No saved filters</Small>
+                <Small className="text-muted-foreground">
+                  {t("noSavedFilters")}
+                </Small>
               </div>
             );
           }
           const filtered = crud.savedFilters.filter((f) =>
-            f.name.toLowerCase().includes(search.toLowerCase())
+            f.name.toLowerCase().includes(search.toLowerCase()),
           );
           if (filtered.length === 0) {
             return (
               <div className="p-2 text-center">
-                <Small className="text-muted-foreground">No matching filters</Small>
+                <Small className="text-muted-foreground">
+                  {t("noMatchingFilters")}
+                </Small>
               </div>
             );
           }
@@ -110,8 +127,8 @@ export const SavedFiltersDropdown: React.FC<
                     <span className="text-sm font-medium">{filter.name}</span>
                     <Small className="text-[10px] text-muted-foreground">
                       {filter.createdAt
-                        ? new Date(filter.createdAt).toLocaleDateString()
-                        : "Unknown date"}
+                        ? formatStandardDateTime(filter.createdAt)
+                        : tc("date.unknownDate")}
                     </Small>
                   </div>
                   <div className="flex items-center gap-1">

@@ -1,5 +1,6 @@
 import { useOrg } from "@/components/layout/org/organizationContext";
 import { useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { RequestsOverTime } from "../../../lib/timeCalculations/fetchTimeData";
 import {
   getTimeInterval,
@@ -28,11 +29,6 @@ import { InfoIcon } from "lucide-react";
 import { TimeInterval } from "@/lib/timeCalculations/time";
 import { useQuery } from "@tanstack/react-query";
 import { $JAWN_API } from "@/lib/clients/jawn";
-
-const TABS = [
-  { id: "requests", label: "Rate Limited Requests" },
-  { id: "rules", label: "Rate Limit Rules" },
-];
 
 // Helper function to parse URL param into TimeFilter object
 // TODO: Extract this to a shared utility
@@ -68,6 +64,13 @@ const getTimeFilterFromParam = (paramValue: string | null): TimeFilter => {
 };
 
 const RateLimitPage = (props: {}) => {
+  const { t } = useTranslation("rateLimits");
+
+  const TABS = [
+    { id: "requests", label: t("tabs.requests") },
+    { id: "rules", label: t("tabs.rules") },
+  ];
+
   const searchParams = useSearchParams();
   const [currentTab, setCurrentTab] = useLocalStorage<string>(
     "rateLimitPageActiveTab",
@@ -179,7 +182,7 @@ const RateLimitPage = (props: {}) => {
   };
 
   if (isLoading) {
-    return <LoadingAnimation title="Loading..." height={175} width={175} />;
+    return <LoadingAnimation title={t("loading")} height={175} width={175} />;
   }
   if (shouldShowUnauthorized) {
     return (
@@ -195,7 +198,7 @@ const RateLimitPage = (props: {}) => {
     >
       <div>
         <Header
-          title="Rate Limits"
+          title={t("title")}
           leftActions={
             currentTab === "rules" ? (
               <div className="ml-4 flex items-center gap-1.5">
@@ -205,28 +208,23 @@ const RateLimitPage = (props: {}) => {
                       <InfoIcon className="h-4 w-4 cursor-help text-muted-foreground" />
                     </TooltipTrigger>
                     <TooltipContent className="max-w-xs text-sm" side="bottom">
-                      <p className="mb-2">
-                        Only one rate limit rule applies per request, based on
-                        the following priority:
-                      </p>
+                      <p className="mb-2">{t("tooltip.intro")}</p>
                       <p className="mb-1 font-medium">
-                        Rule Priority & Sorting
+                        {t("tooltip.priorityTitle")}
                       </p>
-                      <p>
-                        Rules are automatically sorted by application priority:
-                      </p>
+                      <p>{t("tooltip.priorityDescription")}</p>
                       <ul className="mt-1 list-disc space-y-0.5 pl-4 text-xs">
                         <li>
-                          <span className="font-semibold">Segment:</span>{" "}
-                          Property rules apply first, then User, then Global.
+                          <span className="font-semibold">
+                            {t("tooltip.segment")}
+                          </span>{" "}
+                          {t("tooltip.segmentDescription")}
                         </li>
                         <li>
                           <span className="font-semibold">
-                            Restrictiveness:
+                            {t("tooltip.restrictiveness")}
                           </span>{" "}
-                          Within the same Segment & Unit, the rule with the
-                          lowest effective quota (quota / time window) applies
-                          first.
+                          {t("tooltip.restrictivenessDescription")}
                         </li>
                       </ul>
                     </TooltipContent>

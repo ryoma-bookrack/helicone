@@ -32,6 +32,7 @@ import { TimeFilter } from "@/types/timeFilter";
 import { Check, ChevronDown, PieChart, Table } from "lucide-react";
 import Link from "next/link";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
 import {
   getTimeIntervalAgo,
   TimeInterval,
@@ -88,25 +89,21 @@ export type TSessions = {
   };
 };
 
-const TABS = [
-  {
-    id: "sessions",
-    label: "Sessions",
-    icon: <Table size={16} />,
-  },
-  {
-    id: "metrics",
-    label: "Metrics",
-    icon: <PieChart size={16} />,
-  },
-];
-
 const SessionsPage = (props: SessionsPageProps) => {
+  const { t } = useTranslation("sessions");
+  const tabs = useMemo(
+    () => [
+      { id: "sessions", label: t("tabs.sessions"), icon: <Table size={16} /> },
+      { id: "metrics", label: t("tabs.metrics"), icon: <PieChart size={16} /> },
+    ],
+    [t],
+  );
   const tableRef = useRef<any>(null);
 
-  // State for active columns
+  const sessionColumns = useMemo(() => getColumns(t), [t]);
+
   const [activeColumns, setActiveColumns] = useState<DragColumnItem[]>(
-    columnDefsToDragColumnItems(getColumns()),
+    columnDefsToDragColumnItems(sessionColumns),
   );
 
   const [currentPageSize, setCurrentPageSize] = useState<number>(
@@ -138,7 +135,7 @@ const SessionsPage = (props: SessionsPageProps) => {
 
   const names = useSessionNames(debouncedSessionNameSearch ?? "", timeFilter);
   const sessionNames = [
-    "All",
+    t("search.all"),
     ...names.sessions
       .sort(
         (a, b) =>
@@ -186,7 +183,7 @@ const SessionsPage = (props: SessionsPageProps) => {
   );
 
   const [currentTab, setCurrentTab] = useLocalStorage<
-    (typeof TABS)[number]["id"]
+    (typeof tabs)[number]["id"]
   >("session-details-tab", "sessions");
 
   const { selectedIds, toggleSelection, selectAll, isShiftPressed } =
@@ -196,7 +193,7 @@ const SessionsPage = (props: SessionsPageProps) => {
     });
 
   const handleSelectSessionName = (value: string) => {
-    if (value === "" || value === "All") {
+    if (value === "" || value === t("search.all")) {
       setSelectedName(""); // Map placeholder back to empty string
     } else {
       setSelectedName(value);
@@ -288,11 +285,11 @@ const SessionsPage = (props: SessionsPageProps) => {
     };
   }, [aggregateMetrics]);
   const statsToDisplay = [
-    { label: "Avg Cost", value: aggregatedStats.avgCost },
-    { label: "Avg Latency", value: aggregatedStats.avgLatency },
-    { label: "Total Cost", value: aggregatedStats.totalCost },
+    { label: t("stats.avgCost"), value: aggregatedStats.avgCost },
+    { label: t("stats.avgLatency"), value: aggregatedStats.avgLatency },
+    { label: t("stats.totalCost"), value: aggregatedStats.totalCost },
     {
-      label: "Total Sessions",
+      label: t("stats.totalSessions"),
       value: aggregatedStats.totalSessions.toString(),
     },
   ];
@@ -337,21 +334,21 @@ const SessionsPage = (props: SessionsPageProps) => {
                   >
                     {selectedName === ""
                       ? EMPTY_SESSION_NAME
-                      : (selectedName ?? "All")}
+                      : (selectedName ?? t("search.all"))}
                     <ChevronDown className="ml-2 h-3 w-3 shrink-0 opacity-50" />
                   </Button>
                 </PopoverTrigger>
                 <PopoverContent className="w-[180px] p-0">
                   <Command>
                     <CommandInput
-                      placeholder="Search sessions..."
+                      placeholder={t("search.placeholder")}
                       onChangeCapture={(
                         e: React.ChangeEvent<HTMLInputElement>,
                       ) => {
                         setSessionNameSearch(e.target.value);
                       }}
                     />
-                    <CommandEmpty>No results found.</CommandEmpty>
+                    <CommandEmpty>{t("search.noResults")}</CommandEmpty>
 
                     <CommandList>
                       {sessionNames.map((name) => (
@@ -417,7 +414,7 @@ const SessionsPage = (props: SessionsPageProps) => {
               </div>
 
               <div className="flex h-8 flex-row items-center divide-x divide-border overflow-hidden rounded-lg border border-border shadow-sm">
-                <label className="px-2 py-1 text-xs">Views</label>
+                <label className="px-2 py-1 text-xs">{t("views")}</label>
 
                 <TabsList
                   size={"sm"}
@@ -425,7 +422,7 @@ const SessionsPage = (props: SessionsPageProps) => {
                   asPill={"none"}
                   className="divide-x divide-border"
                 >
-                  {TABS.map((tab) => (
+                  {tabs.map((tab) => (
                     <TabsTrigger
                       variant={"secondary"}
                       asPill={"none"}
@@ -479,7 +476,7 @@ const SessionsPage = (props: SessionsPageProps) => {
               id="sessions-table"
               tableRef={tableRef}
               defaultData={sessionsWithId}
-              defaultColumns={getColumns()}
+              defaultColumns={sessionColumns}
               skeletonLoading={isSessionsLoading}
               dataLoading={isSessionsLoading}
               activeColumns={activeColumns}
@@ -495,7 +492,7 @@ const SessionsPage = (props: SessionsPageProps) => {
               onRowSelect={onRowSelectHandler}
               onSelectAll={selectAll}
               selectedIds={selectedIds}
-              loadingText="Loading sessions..."
+              loadingText={t("loading")}
             />
           </div>
 

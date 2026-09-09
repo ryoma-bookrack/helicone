@@ -1,0 +1,78 @@
+{
+  "portal": {
+    "title": "客户门户",
+    "tabs": {
+      "customers": "客户",
+      "analytics": "分析",
+      "branding": "品牌"
+    },
+    "searchPlaceholder": "搜索客户名称...",
+    "addCustomer": "添加客户",
+    "addNewCustomer": "添加新客户",
+    "empty": {
+      "title": "暂无客户！",
+      "description": "创建新客户即可开始，或联系我们的支持团队获取帮助。",
+      "contactSupport": "联系支持"
+    },
+    "analytics": {
+      "title": "分析功能即将推出！",
+      "description": "你将很快了解客户如何使用你的产品，以及如何改善他们的体验。"
+    },
+    "branding": {
+      "title": "品牌定制即将推出！",
+      "description": "自定义品牌，打造专属门户。客户将看到你的 Logo、配色以及自定义域名。"
+    },
+    "columns": {
+      "name": "名称",
+      "createdAt": "创建时间",
+      "status": "状态",
+      "members": "成员",
+      "requests30Days": "请求数 (30 天)"
+    },
+    "status": {
+      "active": "活跃"
+    },
+    "actions": {
+      "view": "查看",
+      "edit": "编辑"
+    },
+    "editCustomer": "编辑客户",
+    "notAvailable": "无",
+    "limits": {
+      "title": "限额",
+      "costs": "成本",
+      "requests": "请求",
+      "timeRange": "时间范围",
+      "monthly": "每月",
+      "unlimited": "无限制"
+    },
+    "details": {
+      "title": "详情",
+      "createdAt": "创建时间",
+      "organizationId": "组织 ID",
+      "owner": "所有者",
+      "members": "成员"
+    },
+    "tabsDetail": {
+      "usage": "用量",
+      "members": "成员",
+      "keys": "密钥"
+    },
+    "requestsOverTime": "请求趋势",
+    "providerKeys": {
+      "title": "Provider 密钥",
+      "tooltip": "Provider 密钥用于向 API 发起请求时的身份验证。该密钥通过 Vault 技术安全存储，并采用最先进的加密方式。",
+      "empty": "请创建 Provider 密钥。",
+      "learnMore": "了解更多。",
+      "addNewKey": "添加新密钥",
+      "deleteTitle": "删除 Provider 密钥",
+      "deleteDescription": "此 Provider 密钥将从你的账户中删除。所有映射到该密钥的代理密钥也将一并删除。确定要删除吗？",
+      "deleteSuccess": "Provider 密钥已删除",
+      "deleteError": "删除 Provider 密钥失败",
+      "serverSize": "服务器规格"
+    }
+  },
+  "vault": {
+    "title": "开发者 Vault"
+  }
+}

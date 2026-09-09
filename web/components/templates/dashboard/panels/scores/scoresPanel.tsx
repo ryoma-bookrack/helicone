@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import LoadingAnimation from "@/components/shared/loadingAnimation";
 import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from "recharts";
 import {
@@ -16,6 +17,7 @@ import {
 import { CHART_COLORS } from "../../../../../lib/chartColors";
 
 export const ScoresPanel = (props: ScoresPanelProps) => {
+  const { t } = useTranslation("dashboard");
   const { timeFilter, userFilters, dbIncrement, filterBool } = props;
   const org = useOrg();
   const shouldShowMockData = org?.currentOrg?.has_onboarded === false;
@@ -78,7 +80,7 @@ export const ScoresPanel = (props: ScoresPanelProps) => {
       <div className="flex w-full flex-row items-center justify-between">
         <div className="flex w-full flex-col space-y-0.5">
           <p className="text-sm text-muted-foreground">
-            {filterBool ? "Feedback / Bool Scores" : "Scores"}
+            {filterBool ? t("panels.feedbackBoolScores") : t("panels.scores")}
           </p>
         </div>
       </div>
@@ -91,7 +93,7 @@ export const ScoresPanel = (props: ScoresPanelProps) => {
         ) : !hasData ? (
           <div className="flex h-[180px] w-full items-center justify-center">
             <p className="text-sm text-muted-foreground">
-              No score data available
+              {t("panels.noScoreData")}
             </p>
           </div>
         ) : (

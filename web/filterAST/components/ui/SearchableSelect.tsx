@@ -17,6 +17,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { FilterSubType } from "@helicone-package/filters/types";
+import { useTranslation } from "react-i18next";
 
 export type SearchableSelectOption = {
   label: string;
@@ -40,18 +41,23 @@ export const SearchableSelect: React.FC<SearchableSelectProps> = ({
   options,
   value,
   onValueChange,
-  placeholder = "Select option",
-  emptyMessage = "No options found.",
-  searchPlaceholder = "Search...",
+  placeholder,
+  emptyMessage,
+  searchPlaceholder,
   disabled = false,
   width = "200px",
   className,
 }) => {
+  const { t } = useTranslation("filters");
+  const { t: tc } = useTranslation("common");
+  const resolvedPlaceholder = placeholder ?? tc("select.option");
+  const resolvedEmptyMessage = emptyMessage ?? tc("empty.noOptions");
+  const resolvedSearchPlaceholder = searchPlaceholder ?? tc("actions.search");
   const [open, setOpen] = useState(false);
 
   // Get the current label for the selected value
   const getCurrentLabel = () => {
-    if (!value) return placeholder;
+    if (!value) return resolvedPlaceholder;
     const option = options.find((opt) => opt.value === value);
     return option ? option.label : value;
   };
@@ -98,14 +104,14 @@ export const SearchableSelect: React.FC<SearchableSelectProps> = ({
       <PopoverContent className={`w-[${width}] p-0`}>
         <Command>
           <CommandInput
-            placeholder={searchPlaceholder}
+            placeholder={resolvedSearchPlaceholder}
             className="h-7 text-[10px]"
           />
-          <CommandEmpty className="text-[10px]">{emptyMessage}</CommandEmpty>
+          <CommandEmpty className="text-[10px]">{resolvedEmptyMessage}</CommandEmpty>
           <CommandList>
             {/* Property subtype options */}
             {groupedOptions.users.length > 0 && (
-              <CommandGroup heading="Users">
+              <CommandGroup heading={t("groups.users")}>
                 {groupedOptions.users.map((option) => (
                   <CommandItem
                     key={option.value}
@@ -130,7 +136,7 @@ export const SearchableSelect: React.FC<SearchableSelectProps> = ({
 
             {/* Property subtype options */}
             {groupedOptions.sessions.length > 0 && (
-              <CommandGroup heading="Sessions">
+              <CommandGroup heading={t("groups.sessions")}>
                 {groupedOptions.sessions.map((option) => (
                   <CommandItem
                     key={option.value}
@@ -159,7 +165,7 @@ export const SearchableSelect: React.FC<SearchableSelectProps> = ({
                 heading={
                   groupedOptions.users.length > 0 ||
                   groupedOptions.sessions.length > 0
-                    ? "Default"
+                    ? t("groups.default")
                     : undefined
                 }
               >
@@ -191,7 +197,7 @@ export const SearchableSelect: React.FC<SearchableSelectProps> = ({
 
             {/* Property subtype options */}
             {groupedOptions.properties.length > 0 && (
-              <CommandGroup heading="Properties">
+              <CommandGroup heading={t("groups.properties")}>
                 {groupedOptions.properties.map((option) => (
                   <CommandItem
                     key={option.value}
@@ -216,7 +222,7 @@ export const SearchableSelect: React.FC<SearchableSelectProps> = ({
 
             {/* Score subtype options */}
             {groupedOptions.scores.length > 0 && (
-              <CommandGroup heading="Scores">
+              <CommandGroup heading={t("groups.scores")}>
                 {groupedOptions.scores.map((option) => (
                   <CommandItem
                     key={option.value}

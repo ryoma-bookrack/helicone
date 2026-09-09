@@ -1,0 +1,264 @@
+{
+  "header": {
+    "logoAlt": "Helicone Logo",
+    "steps": {
+      "createOrg": "Create organization",
+      "sendRequest": "Send a request"
+    },
+    "signOut": "Sign Out",
+    "signOutAria": "Sign Out",
+    "toggleThemeAria": "Toggle theme"
+  },
+  "loading": "Loading...",
+  "index": {
+    "title": "Welcome to Helicone! 👋",
+    "subtitle": "Glad to have you here. Create your first organization.",
+    "inviteTitle": "Invite team members (optional)",
+    "inviteDescription": "Add team members to collaborate on your Helicone organization. You can always do this later from your organization settings.",
+    "organizationUpdated": "Organization updated!",
+    "organizationCreated": "Organization created!",
+    "inviteSuccess": "Successfully invited {{count}} member to your organization!",
+    "inviteSuccess_plural": "Successfully invited {{count}} members to your organization!",
+    "invitePartial": "Partially successful: {{success}}/{{total}} invitations sent. Some failed.",
+    "inviteFailed": "Failed to send member invitations. Please try again or add members later from settings.",
+    "inviteMemberFailed": "Failed to invite member",
+    "inviteMemberFailedWithEmail": "Failed to invite {{email}}: {{error}}",
+    "unexpectedInviteError": "Unexpected error occurred while sending invitations",
+    "updateOrganization": "Update organization",
+    "createOrganization": "Create organization",
+    "sendingInvitations": "Sending invitations...",
+    "continueWithMembers": "Continue with {{count}} member",
+    "continueWithMembers_plural": "Continue with {{count}} members",
+    "continue": "Continue"
+  },
+  "organization": {
+    "title": "Organization",
+    "placeholder": "My Organization",
+    "nameRequired": "Please enter an organization name :)",
+    "renameHint": "Don't worry, you can rename your organization later."
+  },
+  "members": {
+    "title": "Members",
+    "invite": "Invite",
+    "user": "User",
+    "role": "Role",
+    "you": "YOU",
+    "invited": "INVITED",
+    "noMembers": "No members.",
+    "inviteTitle": "Invite a member",
+    "inviteDescription": "New members will receive an email to join your organization.",
+    "email": "Email",
+    "emailPlaceholder": "Email",
+    "selectRole": "Select a role",
+    "member": "Member",
+    "admin": "Admin",
+    "sendInvitation": "Send invitation",
+    "emailRequired": "Email is required",
+    "emailInvalid": "Please enter a valid email address",
+    "emailIsOwner": "This email belongs to the organization owner",
+    "emailAlreadyInvited": "This email has already been invited"
+  },
+  "request": {
+    "title": "Send a Request",
+    "subtitle": "Try out Helicone with a simple AI request to see it in action.",
+    "promptPlaceholder": "Enter your prompt here...",
+    "characters": "{{count}}/100 characters",
+    "enterPrompt": "Please enter a prompt",
+    "errorGenerating": "Error generating response",
+    "requestCompleted": "Request completed successfully!",
+    "requestCancelled": "Request was cancelled",
+    "errorOccurred": "An error occurred while generating the response",
+    "failedToGenerate": "Failed to generate response",
+    "skipping": "Skipping...",
+    "generating": "Generating...",
+    "sendRequest": "Send Request",
+    "skipToDashboard": "Skip to dashboard",
+    "streaming": "Streaming...",
+    "completingOnboarding": "Completing onboarding...",
+    "viewInDashboard": "View in Dashboard",
+    "defaultPrompt": "Write a haiku about AI"
+  },
+  "quickstartStep": {
+    "lockedMessage": "Complete previous steps to unlock"
+  },
+  "quickstart": {
+    "title": "Quickstart",
+    "subtitle": "Get started with Helicone in 2 simple steps",
+    "steps": {
+      "createKey": {
+        "title": "Create Helicone API key",
+        "description": "Create key"
+      },
+      "integrate": {
+        "title": "Integrate",
+        "description": ""
+      }
+    },
+    "creating": "Creating...",
+    "createApiKey": "Create API Key",
+    "copiedToClipboard": "Copied to clipboard",
+    "requestsDetected": "Requests detected!",
+    "waitingForRequests": "Waiting for requests via Jawn proxy...",
+    "saving": "Saving...",
+    "finishQuickstart": "Finish Quickstart",
+    "proxyHint": "Send traffic through your local Jawn proxy, or finish here and continue.",
+    "needHelp": "Need some help?",
+    "askHelix": "Ask Helix",
+    "documentation": "Documentation",
+    "askOnDiscord": "Ask us on Discord",
+    "nextSteps": "Next Steps",
+    "nextStepsDescription": "Explore popular features to get the most out of Helicone",
+    "viewDashboard": {
+      "title": "View Dashboard",
+      "description": "See your request analytics and usage metrics"
+    },
+    "setupSessions": {
+      "title": "Setup Sessions",
+      "description": "Track user conversations and interactions"
+    },
+    "inviteMembers": {
+      "title": "Invite Members",
+      "description": "Collaborate with your team members"
+    },
+    "completed": "Quickstart completed",
+    "failedToFinish": "Failed to finish quickstart",
+    "integrationGuideOpened": "Successfully opened the integration guide dialog"
+  },
+  "integrationGuide": {
+    "modelRegistryPrefix": "Check our",
+    "modelRegistryLink": "Model Registry",
+    "modelRegistrySuffix": "to see all supported model slugs for the AI Gateway"
+  },
+  "helixDialog": {
+    "title": "Integrate with Helix",
+    "description": "Answer 3 questions and get personalized integration help!",
+    "stepOf": "Step {{current}} of {{total}}",
+    "back": "Back",
+    "next": "Next",
+    "askHelix": "Ask Helix",
+    "step1Question": "How would you like to integrate with Helicone?",
+    "step2Question": "What framework or language are you using?",
+    "step3Question": "What else should I know?",
+    "customMethodLabel": "Please specify your integration method",
+    "customMethodPlaceholder": "e.g., xAI, Groq Cloud, etc.",
+    "customFrameworkLabel": "Please specify your framework or language",
+    "customFrameworkPlaceholder": "e.g., Go, Rust, etc.",
+    "currentCodeLabel": "Current Code (optional)",
+    "currentCodePlaceholder": "Paste your current LLM code here...",
+    "additionalInstructionsLabel": "Additional Instructions (optional)",
+    "additionalInstructionsPlaceholder": "Any specific requirements? (e.g., tracking custom properties, streaming, async logging, etc.)",
+    "methods": {
+      "aiGateway": "Helicone AI Gateway (Recommended)",
+      "anthropicSdk": "Anthropic SDK",
+      "azure": "Azure",
+      "vertex": "Vertex",
+      "gemini": "Gemini",
+      "bedrock": "Bedrock",
+      "vercelAi": "AI SDK",
+      "other": "Other"
+    },
+    "languages": {
+      "python": "Python",
+      "typescript": "TypeScript",
+      "javascript": "JavaScript",
+      "other": "Other"
+    },
+    "messageTemplate": {
+      "intro": "I'm setting up Helicone integration and need help. Here are my details:\n\n",
+      "integrationMethod": "**Integration Method:** {{method}}\n\n",
+      "framework": "**Framework/Language:** {{framework}}\n\n",
+      "currentCode": "**Current Code:**\n```{{lang}}\n{{code}}\n```\n\n",
+      "additionalInstructions": "**Additional Instructions:**\n{{instructions}}\n\n",
+      "closing": "I am new to Helicone. Can you help me integrate it into my application?",
+      "otherMethod": "Other integration method"
+    },
+    "methodNames": {
+      "aiGateway": "Helicone AI Gateway",
+      "openaiSdk": "OpenAI SDK",
+      "anthropicSdk": "Anthropic SDK",
+      "azure": "Azure",
+      "bedrock": "Bedrock",
+      "gemini": "Gemini",
+      "vertex": "Vertex",
+      "vercelAi": "Vercel AI"
+    }
+  },
+  "tour": {
+    "doc": "Doc",
+    "requestsTable": {
+      "title": "Welcome to Requests!",
+      "description": "View all your request and response data here after adding one line of code to your LLM app.",
+      "accordionTitle": "How to send requests to Helicone?",
+      "accordionBody": "If you are using the proxy method (recommended), simply add one line of code to start sending requests to Helicone.",
+      "accordionHighlight": "Available for any providers."
+    },
+    "requestsDrawer": {
+      "title": "Let's dive deeper",
+      "description": "See the complete request with all messages exchanged with the LLM, metadata, and key metrics. Notice anything unusual in the response? Let's investigate what might have gone wrong."
+    },
+    "sessionsPage": {
+      "title": "We are in the travel planning session",
+      "description": "Each session shows you the complete chain of LLM calls and how they connect. Here you can trace through every step of the travel planning process to find where things started going wrong."
+    },
+    "sessionsCulprit": {
+      "title": "The Culprit",
+      "description": "The <strong>\"extract-travel-plan\"</strong> step is where things went wrong. Let's go improve this prompt.",
+      "accordionTitle": "How do I track sessions in Helicone?",
+      "accordionBody": "Depending on your library, you will need to add 3 headers to your request to start tracking your sessions and traces."
+    },
+    "promptsPage": {
+      "title": "Welcome to Prompts!",
+      "description": "Here, you can view the latest <strong>\"extract-travel-plan\"</strong> prompt in production, its version history and previous requests.",
+      "accordionTitle": "How do I track my prompts in Helicone?",
+      "accordionBody": "Here's an example:"
+    },
+    "promptsExperiment": {
+      "title": "Let's iterate on this prompt",
+      "description": "Let's improve this prompt to give us better travel plan extractions. Click here to start experimenting."
+    },
+    "experimentsTable": {
+      "title": "A playground for prompts",
+      "description": "This is where you can create variations of your prompt, test them against real data, and measure which performs best."
+    },
+    "experimentsOriginal": {
+      "title": "Here's your original prompt",
+      "description": "This is your <strong>\"extract-travel-plan\"</strong> production prompt. Let's create a new version to test against it."
+    },
+    "experimentsAdd": {
+      "title": "Add an experiment",
+      "description": "Click here to create a new variation of your prompt."
+    },
+    "experimentsAddChangePrompt": {
+      "title": "Change the prompt",
+      "description": "Try adding step-by-step reasoning to help the model better understand and extract travel plans."
+    },
+    "experimentsAddSave": {
+      "title": "Save changes",
+      "description": "We already picked a model for you. Go ahead and save your prompt."
+    },
+    "experimentsFindExperiment": {
+      "title": "You can find your experiment here",
+      "description": "Now let's test it on some production inputs. This is a crucial step to make sure our new prompt didn't regress."
+    },
+    "experimentsAddTestCases": {
+      "title": "Add infinite test cases",
+      "description": "Test with real data from your users for more realistic results."
+    },
+    "experimentsRunExperiments": {
+      "title": "Run experiments",
+      "description": "Sometimes it takes multiple experiments to achieve the highest prompt accuracy. Add as many as you need."
+    },
+    "experimentsSpecificEval": {
+      "title": "Evaluate your output",
+      "description": "Let's attach an LLM-as-a-judge evaluator that assesses the output to make sure the user's travel plan is successfully extracted."
+    },
+    "experimentsRunEval": {
+      "title": "Run evaluator",
+      "description": "Running evaluators will quantify the output quality and make sure it didn't regress."
+    },
+    "dashboardSuccess": {
+      "title": "Congrats! You resolved the issue",
+      "description": "Now you can monitor error rates, latency, and costs over time to catch anomalies that could suggest new issues."
+    }
+  }
+}

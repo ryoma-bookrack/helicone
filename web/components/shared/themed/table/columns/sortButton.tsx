@@ -19,6 +19,7 @@ import {
 } from "@heroicons/react/24/outline";
 import { Column } from "@tanstack/react-table";
 import { useRouter } from "next/router";
+import { useTranslation } from "react-i18next";
 import { Row } from "@/components/layout/common/row";
 
 interface SortButtonProps<T> {
@@ -28,13 +29,14 @@ interface SortButtonProps<T> {
 export default function SortButton<T>(props: SortButtonProps<T>) {
   const { columns } = props;
   const router = useRouter();
+  const { t } = useTranslation("common");
 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
           <BarsArrowDownIcon className="h-4 w-4" />
-          <span className="sr-only">Sort</span>
+          <span className="sr-only">{t("table.sort")}</span>
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-[200px]">
@@ -69,7 +71,7 @@ export default function SortButton<T>(props: SortButtonProps<T>) {
             value={router.query.sortKey as string}
           >
             <SelectTrigger className="w-[180px]">
-              <SelectValue placeholder="Select a column" />
+              <SelectValue placeholder={t("table.selectColumn")} />
             </SelectTrigger>
             <SelectContent>
               {columns

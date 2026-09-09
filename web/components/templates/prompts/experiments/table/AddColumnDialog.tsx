@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { useOrg } from "@/components/layout/org/organizationContext";
 import { getJawnClient } from "@/lib/clients/jawn";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
@@ -24,6 +25,8 @@ const AddColumnDialog = ({
   originalColumnPromptVersionId: string;
   numberOfExistingPromptVersions: number;
 }) => {
+  const { t } = useTranslation("experiments");
+  const { t: tCommon } = useTranslation("common");
   const jawn = useJawnClient();
   const queryClient = useQueryClient();
 
@@ -64,13 +67,9 @@ const AddColumnDialog = ({
         <div className="mb-8 flex items-center justify-between">
           <div className="flex items-center">
             <FlaskConicalIcon className="mr-2.5 h-5 w-5 text-slate-500" />
-            <h3 className="mr-3 text-base font-medium text-slate-950 dark:text-white">
-              Add Prompt
-            </h3>
+            <h3 className="mr-3 text-base font-medium text-slate-950 dark:text-white">{t("ui.addPrompt")}</h3>
             <div className="flex items-center gap-1">
-              <p className="text-sm font-medium leading-4 text-slate-500">
-                Forked from
-              </p>
+              <p className="text-sm font-medium leading-4 text-slate-500">{t("ui.forkedFrom")}</p>
               <Badge variant="helicone" className="text-slate-500">
                 <FlaskConicalIcon className="mr-1 h-3.5 w-3.5" />
                 {(promptVersionTemplateData?.metadata?.label as string) ??

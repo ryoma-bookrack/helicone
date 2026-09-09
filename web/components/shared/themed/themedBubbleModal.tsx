@@ -1,5 +1,6 @@
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import { Row } from "../../layout/common";
+import { useTranslation } from "react-i18next";
 
 interface ThemedBubbleModalProps {
   open: boolean;
@@ -17,9 +18,12 @@ const ThemedBubbleModal: React.FC<ThemedBubbleModalProps> = ({
   setRemoved,
   removed,
   children,
-  buttonText = "Demo 🚀",
+  buttonText,
   showButton = true,
 }) => {
+  const { t } = useTranslation("common");
+  const resolvedButtonText = buttonText ?? t("demo.buttonText");
+
   if (removed) return null;
 
   return (
@@ -31,7 +35,7 @@ const ThemedBubbleModal: React.FC<ThemedBubbleModalProps> = ({
               <button
                 className="z-50 flex h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-red-500 text-white shadow-lg transition-colors hover:bg-red-600"
                 onClick={() => setRemoved(true)}
-                aria-label="Remove demo"
+                aria-label={t("demo.removeDemo")}
               >
                 <XMarkIcon className="h-4 w-4" />
               </button>
@@ -39,7 +43,7 @@ const ThemedBubbleModal: React.FC<ThemedBubbleModalProps> = ({
                 className="flex h-12 cursor-pointer items-center justify-center rounded-full bg-blue-500 px-5 font-light text-white shadow-lg transition-colors hover:bg-blue-600"
                 onClick={() => setOpen(true)}
               >
-                {buttonText}
+                {resolvedButtonText}
               </button>
             </>
           )}

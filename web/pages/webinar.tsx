@@ -1,8 +1,11 @@
-const Dashboard = () => {
-  return "hello";
+import { useTranslation } from "react-i18next";
+
+const Webinar = () => {
+  const { t } = useTranslation("marketing");
+  return t("redirects.webinar");
 };
 
-export default Dashboard;
+export default Webinar;
 
 export const getServerSideProps = async () => {
   return {

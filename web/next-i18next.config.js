@@ -1,0 +1,46 @@
+/** @type {import('next-i18next').UserConfig} */
+module.exports = {
+  i18n: {
+    defaultLocale: "zh",
+    locales: ["zh", "en"],
+  },
+  localePath:
+    typeof window === "undefined"
+      ? require("path").resolve("./public/locales")
+      : "/locales",
+  reloadOnPrerender: process.env.NODE_ENV === "development",
+  defaultNS: "common",
+  ns: [
+    "common",
+    "nav",
+    "notifications",
+    "filters",
+    "auth",
+    "onboarding",
+    "dashboard",
+    "requests",
+    "sessions",
+    "users",
+    "properties",
+    "cache",
+    "hql",
+    "prompts",
+    "datasets",
+    "playground",
+    "experiments",
+    "evals",
+    "alerts",
+    "rateLimits",
+    "settings",
+    "keys",
+    "vault",
+    "connections",
+    "providers",
+    "enterprise",
+    "webhooks",
+    "agent",
+    "admin",
+    "legal",
+    "marketing",
+  ],
+};

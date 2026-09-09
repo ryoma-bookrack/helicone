@@ -1,0 +1,107 @@
+{
+  "title": "仪表盘",
+  "metrics": {
+    "avgCostPerReq": "平均成本 / 请求",
+    "avgPromptTokensPerReq": "平均 Prompt Token / 请求",
+    "avgCompletionTokensPerReq": "平均 Completion Token / 请求",
+    "avgTotalTokensPerReq": "平均总 Token / 请求",
+    "notAvailable": "暂无"
+  },
+  "charts": {
+    "requests": "请求",
+    "costs": "成本",
+    "users": "用户",
+    "latency": "延迟",
+    "latencyPerReq": "{{value}} 秒 / 请求",
+    "timeToFirstToken": "首 Token 时间",
+    "averageMs": "平均：{{value}} 毫秒",
+    "threats": "威胁",
+    "tokensPerMinute": "Token / 分钟",
+    "maxTokens": "最大：{{value}} Token",
+    "maxSeconds": "最大：{{value}} 秒",
+    "success": "成功",
+    "error": "错误",
+    "promptPerMin": "Prompt / 分钟",
+    "completionPerMin": "Completion / 分钟",
+    "totalPerMin": "总计 / 分钟",
+    "secondsUnit": "{{value}} 秒",
+    "millisecondsUnit": "{{value}} 毫秒",
+    "tokensUnit": "{{value}} Token"
+  },
+  "panels": {
+    "allErrors": "全部错误",
+    "percentOfRequests": "占请求的 {{value}}%",
+    "errorType": "错误类型",
+    "percentage": "占比",
+    "topModelsByRequests": "请求量最高的模型",
+    "topModelsByCost": "成本最高的模型",
+    "topProviders": "主要提供商",
+    "topCountries": "主要国家/地区",
+    "name": "名称",
+    "provider": "提供商",
+    "country": "国家/地区",
+    "cost": "成本",
+    "requests": "请求",
+    "scores": "评分",
+    "feedbackBoolScores": "反馈 / 布尔评分",
+    "noScoreData": "暂无评分数据",
+    "quantiles": "分位数",
+    "selectProperty": "选择属性",
+    "latencyMetric": "延迟",
+    "promptTokensMetric": "Prompt Token",
+    "completionTokensMetric": "Completion Token",
+    "totalTokensMetric": "总 Token",
+    "p75": "P75",
+    "p90": "P90",
+    "p95": "P95",
+    "p99": "P99"
+  },
+  "statusCodes": {
+    "timeout": "超时",
+    "pending": "等待中",
+    "cancelled": "已取消",
+    "threat": "威胁"
+  },
+  "gatewayDiscount": {
+    "saveWithGateway": "使用 AI Gateway 可节省 <highlight>${{amount}}/月</highlight>",
+    "dismiss": "关闭"
+  },
+  "suggestGraph": {
+    "requestNewGraph": "申请新图表",
+    "posthogIntegration": "或使用我们的 <link>PostHog 集成</link> 创建自定义图表，或从预置模板开始。"
+  },
+  "emptyState": {
+    "title": "集成后即可查看分析数据",
+    "description": "当前为预览。将 LLM 应用与 Helicone 集成后，即可查看实时洞察。",
+    "tryDemo": "试用演示",
+    "quickStart": "快速开始"
+  },
+  "export": {
+    "tooltip": "导出仪表盘",
+    "title": "导出仪表盘",
+    "description": "将所有仪表盘数据导出为 Excel 文件，包含指标、成本、请求等多个工作表。",
+    "cancel": "取消",
+    "export": "导出",
+    "exporting": "导出中...",
+    "success": "仪表盘数据导出成功！",
+    "error": "导出仪表盘数据失败，请重试。"
+  },
+  "suggestModal": {
+    "metricTitle": "指标名称",
+    "metricTitlePlaceholder": "例如：平均 Token / 请求",
+    "type": "类型",
+    "typePlaceholder": "时间图 | 数值 | 其他",
+    "email": "邮箱地址",
+    "useCase": "使用场景",
+    "useCasePlaceholder": "例如：监控是否接近 OpenAI API 限额。",
+    "whatElse": "还有什么需要我们知道的？",
+    "whatElsePlaceholder": "你好",
+    "submit": "提交",
+    "submitError": "提交反馈失败，请重试。",
+    "submitSuccess": "感谢你的反馈！"
+  },
+  "onboarding": {
+    "demoModalTitle": "欢迎使用 Helicone",
+    "floatingPrompt": "需要帮助入门？"
+  }
+}

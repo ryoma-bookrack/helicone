@@ -6,51 +6,53 @@ import Link from "next/link";
 import ContactForm from "../../components/shared/contactForm";
 import Image from "next/image";
 import Footer from "../../components/layout/footer";
+import { useTranslation } from "react-i18next";
 
-const bullets = [
-  "Billing / Usage APIs",
-  "White labeling",
-  "Embeddable dashboards",
-  "Alerts",
-  "Customer rate-limiting",
-  "Customer facing API tokens",
-  "Custom domains",
-  "Custom proxy endpoint",
-];
+const CUSTOMER_PORTAL_BULLET_KEYS = [
+  "billingUsageApis",
+  "whiteLabeling",
+  "embeddableDashboards",
+  "alerts",
+  "customerRateLimiting",
+  "customerFacingApiTokens",
+  "customDomains",
+  "customProxyEndpoint",
+] as const;
 
 const CustomerPortal = () => {
+  const { t } = useTranslation("marketing");
+
   return (
-    <MetaData title={"Contact Us"}>
+    <MetaData title={t("customerPortal.metaTitle")}>
       <NavBarV2 />
       <div className="h-full min-h-screen bg-white">
         <GridBackground>
           <div className="mx-auto flex w-full max-w-6xl flex-col gap-8 p-4 pb-24 pt-10 antialiased sm:flex-row sm:pb-32 md:px-8 lg:flex lg:py-24">
             <div className="flex w-full flex-col">
               <h1 className="max-w-4xl text-2xl font-semibold leading-tight sm:text-4xl sm:leading-snug">
-                Launch:{" "}
+                {t("customerPortal.badge")}{" "}
                 <span className="border-dashed border-sky-500 text-sky-500 md:border-2 md:px-4 md:py-2">
-                  Customer Portal
+                  {t("customerPortal.title")}
                 </span>
                 <p className="pt-4 text-sm font-normal text-gray-700 sm:text-lg">
-                  Easily share your Helicone dashboards and analytics with your
-                  customers. All for only $799 per month.
+                  {t("customerPortal.subtitle")}
                 </p>
               </h1>
 
               <ul className="flex flex-col space-y-4 py-8">
-                {bullets.map((bullet, idx) => (
+                {CUSTOMER_PORTAL_BULLET_KEYS.map((key) => (
                   <li
                     className="sm:text-md flex items-center gap-2 text-sm text-gray-700"
-                    key={idx}
+                    key={key}
                   >
                     <CheckCircleIcon className="h-4 w-4 text-sky-500 sm:h-5 sm:w-5" />
-                    {bullet}
+                    {t(`customerPortal.bullets.${key}`)}
                   </li>
                 ))}
               </ul>
 
               <p className="mt-4 text-sm text-black">
-                Want to chat with the founders?
+                {t("customerPortal.chatWithFounders")}
               </p>
               <Link
                 href={"https://cal.com/team/helicone/helicone-discovery"}
@@ -58,15 +60,14 @@ const CustomerPortal = () => {
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                Contact Us <ChevronRightIcon className="h-4 w-4" />
+                {t("customerPortal.contactUs")}{" "}
+                <ChevronRightIcon className="h-4 w-4" />
               </Link>
             </div>
             <ContactForm
               contactTag={"customer-portal"}
-              buttonText={"Contact Us"}
-              defaultPlaceholder={
-                "I am interested in Helicone's Customer Portal feature!"
-              }
+              buttonText={t("customerPortal.formButton")}
+              defaultPlaceholder={t("customerPortal.formPlaceholder")}
             />
           </div>
         </GridBackground>
@@ -76,7 +77,7 @@ const CustomerPortal = () => {
             <div className="-m-2 rounded-xl bg-gray-900/5 p-2 ring-1 ring-inset ring-gray-900/10 lg:-m-2.5 lg:rounded-xl lg:p-2.5">
               <Image
                 src="/assets/customer-portal/created-customer.png"
-                alt="App screenshot"
+                alt={t("customerPortal.screenshotAlt")}
                 width={2720}
                 height={1844}
                 className="w-[70rem] rounded-lg shadow-2xl ring-1 ring-gray-900/10"

@@ -5,11 +5,13 @@ import { BarChart } from "@tremor/react";
 import { Result } from "@/packages/common/result";
 import { HeliconeStats } from "./api/stats";
 import { getTimeMap } from "../lib/timeCalculations/constants";
+import { useTranslation } from "react-i18next";
 
 interface HomeProps {}
 
 const Home = (props: HomeProps) => {
   const {} = props;
+  const { t } = useTranslation(["marketing", "common"]);
   const { isLoading, data } = useQuery({
     queryKey: ["issues"],
     queryFn: async () => {
@@ -79,7 +81,7 @@ const Home = (props: HomeProps) => {
         time: getTimeMap("day")(
           new Date(
             v.time_step.getTime() +
-              new Date(v.time_step).getDate() * 24 * 60 * 60 * 1000, // add the number of days in the month
+              new Date(v.time_step).getDate() * 24 * 60 * 60 * 1000,
           ),
         ),
         value: v.count_step,
@@ -144,7 +146,7 @@ const Home = (props: HomeProps) => {
         time: getTimeMap("day")(
           new Date(
             v.time_step.getTime() +
-              new Date(v.time_step).getDate() * 24 * 60 * 60 * 1000, // add the number of days in the month
+              new Date(v.time_step).getDate() * 24 * 60 * 60 * 1000,
           ),
         ),
         value: v.rate,
@@ -163,14 +165,14 @@ const Home = (props: HomeProps) => {
       })) ?? [];
 
   return (
-    <MetaData title="Home">
+    <MetaData title={t("marketing:stats.metaTitle")}>
       <BasePageV2>
         {isLoading ? (
-          <div>Loading...</div>
+          <div>{t("common:actions.loading")}</div>
         ) : (
           <div className="mx-auto w-full max-w-3xl">
             <h1 className="text-center text-3xl font-bold">
-              Active Orgs/Month
+              {t("marketing:stats.activeOrgsMonth")}
             </h1>
             <div className="h-96">
               <BarChart
@@ -179,7 +181,9 @@ const Home = (props: HomeProps) => {
                 index={"time"}
               />
             </div>
-            <h1 className="text-center text-3xl font-bold">Active Orgs/week</h1>
+            <h1 className="text-center text-3xl font-bold">
+              {t("marketing:stats.activeOrgsWeek")}
+            </h1>
             <div className="h-96">
               <BarChart
                 data={activeOrgWeek}
@@ -187,7 +191,9 @@ const Home = (props: HomeProps) => {
                 index={"time"}
               />
             </div>
-            <h1 className="text-center text-3xl font-bold">Active Orgs/day</h1>
+            <h1 className="text-center text-3xl font-bold">
+              {t("marketing:stats.activeOrgsDay")}
+            </h1>
             <div className="h-96">
               <BarChart
                 data={activeOrgDay}
@@ -195,7 +201,9 @@ const Home = (props: HomeProps) => {
                 index={"time"}
               />
             </div>
-            <h1 className="text-center text-3xl font-bold">Total Users</h1>
+            <h1 className="text-center text-3xl font-bold">
+              {t("marketing:stats.totalUsers")}
+            </h1>
             <div className="h-96">
               <BarChart
                 data={totalUsers}
@@ -204,7 +212,7 @@ const Home = (props: HomeProps) => {
               />
             </div>
             <h1 className="text-center text-3xl font-bold">
-              User Growth Per Month
+              {t("marketing:stats.userGrowthMonth")}
             </h1>
             <div className="h-96">
               <BarChart
@@ -213,7 +221,7 @@ const Home = (props: HomeProps) => {
                 index={"time"}
               />
               <h1 className="text-center text-3xl font-bold">
-                User Growth Per Week
+                {t("marketing:stats.userGrowthWeek")}
               </h1>
               <div className="h-96">
                 <BarChart
@@ -224,7 +232,7 @@ const Home = (props: HomeProps) => {
               </div>
 
               <h1 className="text-center text-3xl font-bold">
-                User Growth Per Day
+                {t("marketing:stats.userGrowthDay")}
               </h1>
               <div className="h-96">
                 <BarChart
@@ -235,7 +243,7 @@ const Home = (props: HomeProps) => {
               </div>
 
               <h1 className="text-center text-3xl font-bold">
-                Requests week over week
+                {t("marketing:stats.requestsWeekOverWeek")}
               </h1>
               <div className="h-96">
                 <BarChart
@@ -245,7 +253,7 @@ const Home = (props: HomeProps) => {
                 />
               </div>
               <h1 className="text-center text-3xl font-bold">
-                Requests day by day
+                {t("marketing:stats.requestsDayByDay")}
               </h1>
               <div className="h-96">
                 <BarChart
@@ -255,7 +263,7 @@ const Home = (props: HomeProps) => {
                 />
               </div>
               <h1 className="text-center text-3xl font-bold">
-                Monthly Retention Rate (1 day of activity)
+                {t("marketing:stats.monthlyRetentionRate")}
               </h1>
               <div className="h-96">
                 <BarChart
@@ -266,7 +274,7 @@ const Home = (props: HomeProps) => {
               </div>
 
               <h1 className="text-center text-3xl font-bold">
-                Weekly Retention Rate (Active for more than 1 day)
+                {t("marketing:stats.weeklyRetentionRate")}
               </h1>
               <div className="h-96">
                 <BarChart

@@ -13,6 +13,7 @@ import { StateInputs } from "@/types/prompt-state";
 import { isValidVariableName } from "@/utils/variables";
 import { useMutation } from "@tanstack/react-query";
 import { memo, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { PiChatBold, PiDatabaseBold, PiShuffleBold } from "react-icons/pi";
 import GlassHeader from "../universal/GlassHeader";
 import { populateVariables } from "./helpers";
@@ -33,6 +34,7 @@ export default function VariablesPanel({
   onVariableChange,
   promptVersionId,
 }: VariablesPanelProps) {
+  const { t } = useTranslation("common");
   const jawn = useJawnClient();
   // - Filter Valid Variables
   const validVariablesWithIndices = variables
@@ -82,7 +84,9 @@ export default function VariablesPanel({
     <div className="flex flex-col">
       {/* Header */}
       <GlassHeader className="h-14 px-4">
-        <h2 className="font-semibold text-secondary">Inputs</h2>
+        <h2 className="font-semibold text-secondary">
+          {t("prompts.inputs.title")}
+        </h2>
         <div className="flex flex-row gap-2">
           <TooltipProvider delayDuration={100}>
             <Tooltip>
@@ -102,8 +106,8 @@ export default function VariablesPanel({
               <TooltipContent>
                 <p>
                   {hasInputs
-                    ? "Import specific values from Production"
-                    : "No production data available"}
+                    ? t("prompts.inputs.importFromProduction")
+                    : t("prompts.inputs.noProductionData")}
                 </p>
               </TooltipContent>
             </Tooltip>
@@ -126,8 +130,8 @@ export default function VariablesPanel({
               <TooltipContent>
                 <p>
                   {hasInputs
-                    ? "Import random values from Production"
-                    : "No production data available"}
+                    ? t("prompts.inputs.importRandomFromProduction")
+                    : t("prompts.inputs.noProductionData")}
                 </p>
               </TooltipContent>
             </Tooltip>
@@ -138,11 +142,7 @@ export default function VariablesPanel({
       {/* No Variables */}
       {validVariablesWithIndices.length === 0 ? (
         <p className="text-balance px-4 text-center text-sm text-slate-400">
-          Make your prompt dynamic with{" "}
-          <span className="font-semibold">Inputs</span>. Type{" "}
-          <span className="text-heliblue">{`{{name}}`}</span> or highlight a
-          value in a message and press <span className="text-heliblue">⌘E</span>
-          .
+          {t("prompts.inputs.emptyStateDetailed", { name: "{{name}}" })}
         </p>
       ) : (
         <div className="flex flex-col divide-y divide-slate-100 px-4 dark:divide-slate-900">
@@ -182,7 +182,10 @@ export default function VariablesPanel({
 }
 
 const VariableItem = memo(
-  ({ variable, originalIndex, onVariableChange }: VariableItemProps) => (
+  ({ variable, originalIndex, onVariableChange }: VariableItemProps) => {
+    const { t } = useTranslation("common");
+
+    return (
     <div className="flex flex-col py-1 first:pt-0">
       <div className="flex-d flex items-center justify-between gap-2 text-sm">
         <div className="flex items-center gap-2">
@@ -202,14 +205,17 @@ const VariableItem = memo(
           onChange={(e) => onVariableChange(originalIndex, e.target.value)}
           placeholder={
             variable.idx
-              ? "Import variable value from production..."
-              : `Enter default value for {{${variable.name}}}...`
+              ? t("prompts.inputs.importVariablePlaceholder")
+              : t("prompts.inputs.enterDefaultPlaceholder", {
+                  name: `{{${variable.name}}}`,
+                })
           }
           className="w-[32rem]"
         />
       </div>
     </div>
-  ),
+    );
+  },
 );
 
 VariableItem.displayName = "VariableItem";

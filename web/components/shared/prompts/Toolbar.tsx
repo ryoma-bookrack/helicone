@@ -13,6 +13,7 @@ import {
   useRef,
   useState,
 } from "react";
+import { useTranslation } from "react-i18next";
 import { PiArrowRightBold, PiCheckBold, PiXBold } from "react-icons/pi";
 
 interface ToolbarProps {
@@ -74,6 +75,7 @@ const Toolbar = forwardRef<HTMLDivElement, ToolbarProps>(
     },
     ref,
   ) => {
+    const { t } = useTranslation("common");
     const [activeInput, setActiveInput] = useState<{
       index: number;
       value: string;
@@ -209,7 +211,8 @@ const Toolbar = forwardRef<HTMLDivElement, ToolbarProps>(
                     value={activeInput.value}
                     required
                     placeholder={
-                      tools[activeInput.index].placeholder ?? "Type here..."
+                      tools[activeInput.index].placeholder ??
+                      t("prompts.toolbar.typeHere")
                     }
                     onChange={(e) => {
                       if (activeInput.showConfirmation) {
@@ -325,7 +328,8 @@ const Toolbar = forwardRef<HTMLDivElement, ToolbarProps>(
                     }
                   }}
                   placeholder={
-                    tools[activeInput.index].placeholder ?? "Type here..."
+                    tools[activeInput.index].placeholder ??
+                    t("prompts.toolbar.typeHere")
                   }
                   autoFocus
                   readOnly={pendingEdit?.isPending}

@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import {
   Dialog,
   DialogContent,
@@ -45,6 +46,9 @@ interface ProviderKeySelectorProps {
 }
 
 const ProviderKeySelector = (props: ProviderKeySelectorProps) => {
+  const { t } = useTranslation("prompts");
+  const { t: tCommon } = useTranslation("common");
+
   const {
     setProviderKeyCallback,
     setDecryptedKey,
@@ -88,11 +92,11 @@ const ProviderKeySelector = (props: ProviderKeySelectorProps) => {
       .then(() => {
         refetchProviderKeys();
 
-        setNotification("Provider Key Deleted", "success");
+        setNotification(t("ui.providerKeyDeleted"), "success");
         setDeleteProviderOpen(false);
       })
       .catch(() => {
-        setNotification("Error Deleting Provider Key", "error");
+        setNotification(t("ui.errorDeletingProviderKey"), "error");
         setDeleteProviderOpen(false);
       });
   };
@@ -107,9 +111,7 @@ const ProviderKeySelector = (props: ProviderKeySelectorProps) => {
                 <label
                   htmlFor="alert-metric"
                   className="text-base font-semibold text-gray-900 dark:text-gray-100"
-                >
-                  Provider Keys
-                </label>
+                >{t("ui.providerKeys")}</label>
               </Tooltip>
             </div>
           </div>
@@ -126,7 +128,7 @@ const ProviderKeySelector = (props: ProviderKeySelectorProps) => {
               <p className="pt-2 text-xs font-semibold text-gray-500">
                 Please create a provider key.{" "}
                 <Tooltip title="Provider Keys are used to authenticate your requests to the API. This key is securely stored using our vault technologies, with the state of the art encryption.">
-                  <span className="cursor-pointer underline">Learn more.</span>
+                  <span className="cursor-pointer underline">{t("ui.learnMore")}</span>
                 </Tooltip>
               </p>
             </button>
@@ -137,9 +139,7 @@ const ProviderKeySelector = (props: ProviderKeySelectorProps) => {
                 changeProviderKeyHandler(keyId);
               }}
             >
-              <RadioGroup.Label className="sr-only">
-                Server size
-              </RadioGroup.Label>
+              <RadioGroup.Label className="sr-only">{t("ui.serverSize")}</RadioGroup.Label>
               <div className="space-y-2">
                 {providerKeys.map((key) => (
                   <RadioGroup.Option
@@ -217,9 +217,7 @@ const ProviderKeySelector = (props: ProviderKeySelectorProps) => {
               setIsProviderOpen(true);
             }}
             className="w-full"
-          >
-            Add new key
-          </Button>
+          >{t("ui.addNewKey")}</Button>
 
           <div className="mt-4 flex justify-between">
             <Button
@@ -229,9 +227,7 @@ const ProviderKeySelector = (props: ProviderKeySelectorProps) => {
                 e.preventDefault();
                 setIsProviderOpen(true);
               }}
-            >
-              Cancel
-            </Button>
+            >{tCommon("actions.cancel")}</Button>
             <Button
               variant="default"
               onClick={(e) => {
@@ -239,9 +235,7 @@ const ProviderKeySelector = (props: ProviderKeySelectorProps) => {
                 // e.preventDefault();
                 // setIsProviderOpen(true);
               }}
-            >
-              Save preference
-            </Button>
+            >{t("ui.savePreference")}</Button>
           </div>
         </div>
       </div>
@@ -249,14 +243,14 @@ const ProviderKeySelector = (props: ProviderKeySelectorProps) => {
       <Dialog open={isProviderOpen} onOpenChange={setIsProviderOpen}>
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
-            <DialogTitle>Create Provider Key</DialogTitle>
+            <DialogTitle>{t("ui.createProviderKey")}</DialogTitle>
           </DialogHeader>
           <div className="flex w-full flex-col space-y-8 text-gray-900 dark:text-gray-100">
             <div className="w-full space-y-1.5 text-sm">
-              <label htmlFor="api-key">Provider</label>
+              <label htmlFor="api-key">{t("ui.provider")}</label>
               <Select defaultValue="openai" disabled>
                 <SelectTrigger>
-                  <SelectValue placeholder="Select provider" />
+                  <SelectValue placeholder={t("ui.selectProvider")} />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="openai">
@@ -267,9 +261,7 @@ const ProviderKeySelector = (props: ProviderKeySelectorProps) => {
             </div>
 
             <div className="w-full space-y-1.5 text-sm">
-              <label htmlFor="provider-key" className="flex items-center gap-1">
-                Provider Key
-                <Tooltip
+              <label htmlFor="provider-key" className="flex items-center gap-1">{t("ui.providerKey")}<Tooltip
                   title={
                     "This is the secret key that you get from the provider. It is used to authenticate and make requests to the provider's API."
                   }
@@ -282,7 +274,7 @@ const ProviderKeySelector = (props: ProviderKeySelectorProps) => {
               <div className="text-xs italic text-gray-500">
                 This will be placed in the{" "}
                 <code className="not-italic">authorization</code> header with
-                the <code className="not-italic">Bearer</code> prefix.
+                the <code className="not-italic">{t("ui.bearer")}</code> prefix.
               </div>
               <Input
                 type="password"
@@ -293,21 +285,19 @@ const ProviderKeySelector = (props: ProviderKeySelectorProps) => {
               />
             </div>
             <div className="w-full space-y-1.5 text-sm">
-              <label htmlFor="key-name">Key Name</label>
+              <label htmlFor="key-name">{t("ui.keyName")}</label>
               <Input
                 name="key-name"
                 id="key-name"
                 required
-                placeholder="Provider Key Name"
+                placeholder={t("ui.providerKeyName")}
               />
             </div>
             <div className="flex justify-end gap-2">
               <Button
                 variant="outline"
                 onClick={() => setIsProviderOpen(false)}
-              >
-                Cancel
-              </Button>
+              >{tCommon("actions.cancel")}</Button>
               <Button
                 onClick={() => {
                   const providerKeyInput = document.getElementById(
@@ -321,11 +311,11 @@ const ProviderKeySelector = (props: ProviderKeySelectorProps) => {
                     (!keyNameInput || keyNameInput.value === "") &&
                     variant !== "portal"
                   ) {
-                    setNotification("Please enter in a key name", "error");
+                    setNotification(t("ui.pleaseEnterInAKeyName"), "error");
                     return;
                   }
                   if (!providerKeyInput || providerKeyInput.value === "") {
-                    setNotification("Please enter in a provider key", "error");
+                    setNotification(t("ui.pleaseEnterInAProviderKey"), "error");
                     return;
                   }
 
@@ -384,9 +374,7 @@ const ProviderKeySelector = (props: ProviderKeySelectorProps) => {
           className="flex w-full flex-col gap-4"
           onClick={(e) => e.stopPropagation()}
         >
-          <p className="text-lg font-semibold text-gray-900 dark:text-gray-100">
-            Delete Provider Key
-          </p>
+          <p className="text-lg font-semibold text-gray-900 dark:text-gray-100">{t("ui.deleteProviderKey")}</p>
           <p className="w-[400px] whitespace-pre-wrap text-sm text-gray-700 dark:text-gray-300">
             This Provider Key will be deleted from your account. All proxy keys
             that are mapped to this provider key will be deleted as well. Are
@@ -400,9 +388,7 @@ const ProviderKeySelector = (props: ProviderKeySelectorProps) => {
               }}
               type="button"
               className="flex flex-row items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-semibold text-gray-900 shadow-sm hover:bg-gray-50 hover:text-gray-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-500 dark:border-gray-700 dark:bg-black dark:text-gray-100 dark:hover:bg-gray-900 dark:hover:text-gray-300"
-            >
-              Cancel
-            </button>
+            >{tCommon("actions.cancel")}</button>
             <button
               onClick={async (e) => {
                 e.stopPropagation();
@@ -411,9 +397,7 @@ const ProviderKeySelector = (props: ProviderKeySelectorProps) => {
                 }
               }}
               className="flex items-center rounded-md bg-red-500 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white dark:text-black"
-            >
-              Delete
-            </button>
+            >{tCommon("actions.delete")}</button>
           </div>
         </div>
       </ThemedModal>

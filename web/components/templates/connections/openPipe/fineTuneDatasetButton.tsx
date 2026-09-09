@@ -34,6 +34,7 @@ import {
 import { Slider } from "@/components/ui/slider";
 import GenericButton from "@/components/layout/common/button";
 import { LOGOS } from "../connectionSVG";
+import { useTranslation } from "react-i18next";
 
 const SUPPORTED_MODELS = [
   "OpenPipe/Hermes-2-Theta-Llama-3-8B-32k",
@@ -67,6 +68,7 @@ export default function OpenPipeFineTuneButton(
   const [isSheetOpen, setIsSheetOpen] = useState(false);
 
   const { existingKey } = useOpenPipeKey();
+  const { t } = useTranslation("connections");
   const openPipeClient = useOpenPipeClient({
     apiKey: existingKey?.provider_key || "",
   });
@@ -80,19 +82,19 @@ export default function OpenPipeFineTuneButton(
     setIsLoading(true);
     setLogs([]);
     try {
-      addLog("Starting fine-tuning process...");
+      addLog(t("fineTune.logs.starting"));
       let dataToUpload = rows;
       if (fetchRows) {
-        addLog("Fetching additional rows...");
+        addLog(t("fineTune.logs.fetchingRows"));
         dataToUpload = await fetchRows();
-        addLog(`Fetched ${dataToUpload.length} rows.`);
+        addLog(t("fineTune.logs.fetchedRows", { count: dataToUpload.length }));
       }
 
-      addLog("Creating dataset in OpenPipe...");
+      addLog(t("fineTune.logs.creatingDataset"));
       const dataset = await openPipeClient.createDataset(datasetName);
-      addLog(`Dataset created with ID: ${dataset.datasetId}`);
+      addLog(t("fineTune.logs.datasetCreated", { id: dataset.datasetId }));
 
-      addLog("Uploading data to OpenPipe...");
+      addLog(t("fineTune.logs.uploadingData"));
       await openPipeClient.createDatasetEntry(
         dataset.datasetId,
         rows?.map((row) => ({
@@ -103,9 +105,9 @@ export default function OpenPipeFineTuneButton(
           ],
         })),
       );
-      addLog("Data uploaded successfully.");
+      addLog(t("fineTune.logs.uploadSuccess"));
 
-      addLog("Creating fine-tune job...");
+      addLog(t("fineTune.logs.creatingJob"));
       const fineTune = await openPipeClient.createFinetune({
         datasetId: dataset.datasetId,
         slug: fineTuneName,
@@ -116,17 +118,14 @@ export default function OpenPipeFineTuneButton(
           num_epochs: numEpochs,
         },
       });
-      addLog(`Fine-tune job created with ID: ${fineTune.id}`);
+      addLog(t("fineTune.logs.jobCreated", { id: fineTune.id }));
 
-      setNotification("Fine-tune job created successfully!", "success");
+      setNotification(t("fineTune.notifications.success"), "success");
       setIsSheetOpen(false); // Close the sheet after successful completion
     } catch (error) {
       logger.error({ error }, "Error in fine-tuning process");
-      addLog(`Error: ${error}`);
-      setNotification(
-        "Error in fine-tuning process. Please try again.",
-        "error",
-      );
+      addLog(t("fineTune.logs.error", { error: String(error) }));
+      setNotification(t("fineTune.notifications.error"), "error");
     } finally {
       setIsLoading(false);
     }
@@ -144,28 +143,28 @@ export default function OpenPipeFineTuneButton(
       <SheetContent className="w-full sm:max-w-md" size="full">
         <SheetHeader className="mb-6">
           <SheetTitle className="text-2xl font-bold">
-            Fine-tune with OpenPipe
+            {t("fineTune.title")}
           </SheetTitle>
           <SheetDescription className="text-sm text-gray-500">
-            Configure your fine-tuning job for the dataset: {datasetName}
+            {t("fineTune.description", { datasetName })}
           </SheetDescription>
         </SheetHeader>
         <div className="space-y-6">
           <div className="space-y-2">
             <Label htmlFor="fineTuneName" className="text-sm font-medium">
-              Fine-tune Name (Slug)
+              {t("fineTune.fineTuneName")}
             </Label>
             <Input
               id="fineTuneName"
               value={fineTuneName}
               onChange={(e) => setFineTuneName(e.target.value)}
-              placeholder="Enter a name for your fine-tuned model"
+              placeholder={t("fineTune.fineTuneNamePlaceholder")}
               className="w-full"
             />
           </div>
           <div className="space-y-2">
             <Label htmlFor="baseModel" className="text-sm font-medium">
-              Base Model
+              {t("fineTune.baseModel")}
             </Label>
             <Select
               value={baseModel}
@@ -174,7 +173,7 @@ export default function OpenPipeFineTuneButton(
               }
             >
               <SelectTrigger className="w-full">
-                <SelectValue placeholder="Select a base model" />
+                <SelectValue placeholder={t("fineTune.selectBaseModel")} />
               </SelectTrigger>
               <SelectContent>
                 {SUPPORTED_MODELS.map((model) => (
@@ -187,7 +186,7 @@ export default function OpenPipeFineTuneButton(
           </div>
           <div className="space-y-2">
             <Label htmlFor="batchSize" className="text-sm font-medium">
-              Batch Size
+              {t("fineTune.batchSize")}
             </Label>
             <TooltipProvider>
               <Tooltip>
@@ -201,10 +200,7 @@ export default function OpenPipeFineTuneButton(
                   />
                 </TooltipTrigger>
                 <TooltipContent>
-                  <p className="text-xs">
-                    Number of samples processed in each training step. Use
-                    &quot;auto&quot; for automatic selection.
-                  </p>
+                  <p className="text-xs">{t("fineTune.batchSizeTooltip")}</p>
                 </TooltipContent>
               </Tooltip>
             </TooltipProvider>
@@ -214,7 +210,7 @@ export default function OpenPipeFineTuneButton(
               htmlFor="learningRateMultiplier"
               className="text-sm font-medium"
             >
-              Learning Rate Multiplier
+              {t("fineTune.learningRateMultiplier")}
             </Label>
             <TooltipProvider>
               <Tooltip>
@@ -236,17 +232,14 @@ export default function OpenPipeFineTuneButton(
                   </div>
                 </TooltipTrigger>
                 <TooltipContent>
-                  <p className="text-xs">
-                    Adjusts the learning rate. Higher values may lead to faster
-                    learning but risk overshooting.
-                  </p>
+                  <p className="text-xs">{t("fineTune.learningRateTooltip")}</p>
                 </TooltipContent>
               </Tooltip>
             </TooltipProvider>
           </div>
           <div className="space-y-2">
             <Label htmlFor="numEpochs" className="text-sm font-medium">
-              Number of Epochs
+              {t("fineTune.numEpochs")}
             </Label>
             <TooltipProvider>
               <Tooltip>
@@ -266,10 +259,7 @@ export default function OpenPipeFineTuneButton(
                   </div>
                 </TooltipTrigger>
                 <TooltipContent>
-                  <p className="text-xs">
-                    Number of complete passes through the training dataset. More
-                    epochs may improve results but increase training time.
-                  </p>
+                  <p className="text-xs">{t("fineTune.numEpochsTooltip")}</p>
                 </TooltipContent>
               </Tooltip>
             </TooltipProvider>
@@ -282,17 +272,17 @@ export default function OpenPipeFineTuneButton(
             {isLoading ? (
               <>
                 <ArrowPathIcon className="mr-2 inline h-5 w-5 animate-spin" />
-                Processing
+                {t("fineTune.processing")}
               </>
             ) : (
-              "Start Fine-tuning"
+              t("fineTune.startFineTuning")
             )}
           </Button>
         </div>
         {/* Log display */}
         {logs.length > 0 && (
           <div className="mt-4 max-h-40 overflow-y-auto rounded-md bg-gray-100 p-2">
-            <h3 className="mb-2 text-sm font-semibold">Process Logs:</h3>
+            <h3 className="mb-2 text-sm font-semibold">{t("fineTune.processLogs")}</h3>
             {logs.map((log, index) => (
               <p key={index} className="text-xs text-gray-600">
                 {log}
@@ -315,7 +305,7 @@ export default function OpenPipeFineTuneButton(
                 </Button>
               </TooltipTrigger>
               <TooltipContent>
-                <p className="text-xs">Copy logs to clipboard</p>
+                <p className="text-xs">{t("fineTune.copyLogs")}</p>
               </TooltipContent>
             </Tooltip>
           </TooltipProvider>

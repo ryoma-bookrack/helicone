@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import StyledAreaChart from "../styledAreaChart";
 import { sortAndColorData } from "./utils";
 import { useExpandableBarList } from "./barListPanel";
@@ -15,6 +16,7 @@ interface TopProvidersPanelProps {
 }
 
 const TopProvidersPanel = (props: TopProvidersPanelProps) => {
+  const { t } = useTranslation("dashboard");
   const { providers } = props;
 
   const providerData = sortAndColorData(
@@ -30,14 +32,14 @@ const TopProvidersPanel = (props: TopProvidersPanelProps) => {
     data: providerData,
     maxValue,
     formatValue: (value) => value.toLocaleString(),
-    modalTitle: "Top Providers",
-    modalValueLabel: "Requests",
+    modalTitle: t("panels.topProviders"),
+    modalValueLabel: t("panels.requests"),
   });
 
   return (
     <>
       <StyledAreaChart
-        title={`Top Providers`}
+        title={t("panels.topProviders")}
         value={undefined}
         isDataOverTimeLoading={providers.isLoading}
         withAnimation={true}
@@ -45,8 +47,8 @@ const TopProvidersPanel = (props: TopProvidersPanelProps) => {
       >
         <div className="flex h-full flex-col overflow-hidden">
           <div className="flex flex-row items-center justify-between pb-2">
-            <p className="text-xs font-semibold text-foreground">Provider</p>
-            <p className="text-xs font-semibold text-foreground">Requests</p>
+            <p className="text-xs font-semibold text-foreground">{t("panels.provider")}</p>
+            <p className="text-xs font-semibold text-foreground">{t("panels.requests")}</p>
           </div>
           <div className="flex-grow overflow-y-auto">{barList}</div>
         </div>

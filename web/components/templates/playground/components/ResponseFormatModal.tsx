@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -49,6 +50,9 @@ export default function ResponseFormatModal({
   responseFormat,
   onResponseFormatChange,
 }: ResponseFormatModalProps) {
+  const { t } = useTranslation("playground");
+  const { t: tCommon } = useTranslation("common");
+
   const [responseFormatText, setResponseFormatText] = useState("");
   const { setNotification } = useNotification();
 
@@ -63,9 +67,7 @@ export default function ResponseFormatModal({
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       {/* <DialogTrigger asChild>
-        <Button variant="outline" size="sm">
-          Response Format
-        </Button>
+        <Button variant="outline" size="sm">{t("ui.responseFormat")}</Button>
       </DialogTrigger> */}
       <DialogContent
         className={clsx(
@@ -73,7 +75,7 @@ export default function ResponseFormatModal({
         )}
       >
         <DialogHeader>
-          <DialogTitle>Response Format</DialogTitle>
+          <DialogTitle>{t("ui.responseFormat")}</DialogTitle>
         </DialogHeader>
         <div className="max-h-[350px] min-h-[350px] overflow-y-auto border border-border">
           <MarkdownEditor
@@ -86,7 +88,7 @@ export default function ResponseFormatModal({
         </div>
         <DialogFooter className="flex w-full justify-between">
           <DialogClose asChild>
-            <Button variant="outline">Cancel</Button>
+            <Button variant="outline">{tCommon("actions.cancel")}</Button>
           </DialogClose>
           <Button
             onClick={() => {
@@ -99,12 +101,10 @@ export default function ResponseFormatModal({
                 }
                 setOpen(false);
               } catch (e) {
-                setNotification("Invalid JSON", "error");
+                setNotification(t("ui.invalidJson"), "error");
               }
             }}
-          >
-            Save
-          </Button>
+          >{tCommon("actions.save")}</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

@@ -1,3 +1,5 @@
+import { formatStandardDateTime } from "@/lib/i18n/format";
+import { useTranslation } from "react-i18next";
 import { FreeTierLimitBanner } from "@/components/shared/FreeTierLimitBanner";
 import { FreeTierLimitWrapper } from "@/components/shared/FreeTierLimitWrapper";
 import { EmptyStateCard } from "@/components/shared/helicone/EmptyStateCard";
@@ -40,6 +42,9 @@ interface PromptsPageProps {
 }
 
 const PromptsPage = (props: PromptsPageProps) => {
+  const { t } = useTranslation("prompts");
+  const { t: tCommon } = useTranslation("common");
+
   const { prompts, isLoading, refetch } = usePrompts();
   const [searchName, setSearchName] = useState<string>("");
   const router = useRouter();
@@ -67,7 +72,7 @@ const PromptsPage = (props: PromptsPageProps) => {
     <main className="flex min-h-screen flex-col gap-4">
       <AuthHeader
         className="min-w-full"
-        title="Prompts"
+        title={t("ui.prompts")}
         actions={
           <>
             <FreeTierLimitWrapper feature="prompts" itemCount={promptCount}>
@@ -75,20 +80,16 @@ const PromptsPage = (props: PromptsPageProps) => {
                 variant="action"
                 onClick={() => router.push("/playground")}
               >
-                <PiPlusBold className="mr-2 h-4 w-4" />
-                New Prompt
-              </Button>
+                <PiPlusBold className="mr-2 h-4 w-4" />{t("ui.newPrompt")}</Button>
             </FreeTierLimitWrapper>
 
             <Dialog>
               <DialogTrigger asChild>
-                <Button className="text-slate-700" variant="link" size="sm">
-                  Import from Code
-                </Button>
+                <Button className="text-slate-700" variant="link" size="sm">{t("ui.importFromCode")}</Button>
               </DialogTrigger>
               <DialogContent className="flex h-[40rem] w-full max-w-4xl flex-col">
                 <DialogHeader>
-                  <DialogTitle>Import from Code</DialogTitle>
+                  <DialogTitle>{t("ui.importFromCode")}</DialogTitle>
                 </DialogHeader>
 
                 {/* TODO: Allow for Python tab as well */}
@@ -138,7 +139,7 @@ const chatCompletion = await openai.chat.completions.create(
       {isLoading ? (
         // Loading State
         <div className="mt-16 flex w-full flex-col items-center justify-center">
-          <LoadingAnimation title="Loading Prompts..." />
+          <LoadingAnimation title={t("ui.loadingPrompts")} />
         </div>
       ) : (
         <>
@@ -153,7 +154,7 @@ const chatCompletion = await openai.chat.completions.create(
                   <Input
                     value={searchName}
                     onChange={(e) => setSearchName(e.target.value)}
-                    placeholder="Search prompts..."
+                    placeholder={t("ui.searchPrompts")}
                     className="h-full"
                   />
                 </div>
@@ -204,7 +205,7 @@ const chatCompletion = await openai.chat.completions.create(
                 columns={[
                   {
                     key: "user_defined_id",
-                    header: "Name",
+                    header: t("ui.name"),
                     render: (prompt) => (
                       <div className="flex items-center font-semibold text-black underline dark:text-white">
                         <DocumentTextIcon className="mr-1 h-4 w-4" />
@@ -214,16 +215,16 @@ const chatCompletion = await openai.chat.completions.create(
                   },
                   {
                     key: "created_at",
-                    header: "Created At",
+                    header: t("ui.createdAt"),
                     render: (prompt) => (
                       <div className="text-gray-500">
-                        {new Date(prompt.created_at).toLocaleString()}
+                        {formatStandardDateTime(prompt.created_at)}
                       </div>
                     ),
                   },
                   {
                     key: "major_version",
-                    header: "Major Versions",
+                    header: t("ui.majorVersions"),
                     render: (prompt) => (
                       <div className="text-gray-500">
                         {prompt.major_version}
@@ -232,14 +233,14 @@ const chatCompletion = await openai.chat.completions.create(
                   },
                   {
                     key: undefined,
-                    header: "Last 30 days",
+                    header: t("ui.last30Days"),
                     render: (prompt) => (
                       <PromptUsageChart promptId={prompt.user_defined_id} />
                     ),
                   },
                   {
                     key: undefined,
-                    header: "Permission",
+                    header: t("ui.permission"),
                     render: (prompt) => (
                       <div>
                         {prompt.metadata?.createdFromUi === true ? (
@@ -247,7 +248,7 @@ const chatCompletion = await openai.chat.completions.create(
                             <TooltipTrigger asChild>
                               <Badge className="rounded-lg border border-slate-200 bg-slate-100 px-2 text-xs font-medium text-slate-900 hover:bg-slate-100 hover:text-slate-900 dark:border-slate-700 dark:bg-slate-800 dark:text-white dark:hover:bg-slate-800 dark:hover:text-white">
                                 <PencilIcon className="mr-1 h-4 w-4" />
-                                <p>Editable</p>
+                                <p>{t("ui.editable")}</p>
                               </Badge>
                             </TooltipTrigger>
                             <TooltipContent align="center">
@@ -264,7 +265,7 @@ const chatCompletion = await openai.chat.completions.create(
                             <TooltipTrigger asChild>
                               <Badge className="rounded-lg border border-slate-200 bg-slate-100 px-2 text-xs font-medium text-slate-900 hover:bg-slate-100 hover:text-slate-900 dark:border-slate-700 dark:bg-slate-800 dark:text-white dark:hover:bg-slate-800 dark:hover:text-white">
                                 <EyeIcon className="mr-1 h-4 w-4" />
-                                <p>View only</p>
+                                <p>{t("ui.viewOnly")}</p>
                               </Badge>
                             </TooltipTrigger>
                             <TooltipContent align="center">
@@ -302,12 +303,8 @@ const chatCompletion = await openai.chat.completions.create(
             // Fallback for when filtering returns no results
             <div className="mt-[10rem] flex items-center justify-center">
               <div className="flex max-w-lg flex-col items-center justify-center gap-6 px-4 text-center">
-                <p className="text-lg text-gray-500">
-                  No prompts match your search criteria.
-                </p>
-                <Button variant="outline" onClick={() => setSearchName("")}>
-                  Clear Search
-                </Button>
+                <p className="text-lg text-gray-500">{t("ui.noPromptsMatchYourSearchCriteria")}</p>
+                <Button variant="outline" onClick={() => setSearchName("")}>{t("ui.clearSearch")}</Button>
               </div>
             </div>
           )}

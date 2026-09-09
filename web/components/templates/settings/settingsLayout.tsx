@@ -10,70 +10,80 @@ import { KeyIcon, LinkIcon, Plug, Webhook, Lock } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { ReactNode } from "react";
+import { useTranslation } from "react-i18next";
 import AuthHeader from "@/components/shared/authHeader";
 
-const ORGANIZATION_TABS = [
-  {
-    id: "general",
-    title: "General",
-    icon: BuildingOfficeIcon,
-    href: "/settings",
-  },
-  {
-    id: "members",
-    title: "Members",
-    icon: UsersIcon,
-    href: "/settings/members",
-  },
-  {
-    id: "reports",
-    title: "Reports",
-    icon: DocumentTextIcon,
-    href: "/settings/reports",
-  },
-  {
-    id: "rate-limits",
-    title: "Rate Limits",
-    icon: NoSymbolIcon,
-    href: "/settings/rate-limits",
-  },
-];
+const useOrganizationTabs = () => {
+  const { t } = useTranslation("nav");
+  return [
+    {
+      id: "general",
+      title: t("settings.general"),
+      icon: BuildingOfficeIcon,
+      href: "/settings",
+    },
+    {
+      id: "members",
+      title: t("settings.members"),
+      icon: UsersIcon,
+      href: "/settings/members",
+    },
+    {
+      id: "reports",
+      title: t("settings.reports"),
+      icon: DocumentTextIcon,
+      href: "/settings/reports",
+    },
+    {
+      id: "rate-limits",
+      title: t("settings.rateLimits"),
+      icon: NoSymbolIcon,
+      href: "/settings/rate-limits",
+    },
+  ];
+};
 
-const DEVELOPER_TABS = [
-  {
-    id: "api-keys",
-    title: "API Keys",
-    icon: KeyIcon,
-    href: "/settings/api-keys",
-  },
-  {
-    id: "providers",
-    title: "Providers",
-    icon: Plug,
-    href: "/settings/providers",
-  },
-  {
-    id: "webhooks",
-    title: "Webhooks",
-    icon: Webhook,
-    href: "/settings/webhooks",
-  },
-  {
-    id: "connections",
-    title: "Connections",
-    icon: LinkIcon,
-    href: "/settings/connections",
-  },
-];
+const useDeveloperTabs = () => {
+  const { t } = useTranslation("nav");
+  return [
+    {
+      id: "api-keys",
+      title: t("settings.apiKeys"),
+      icon: KeyIcon,
+      href: "/settings/api-keys",
+    },
+    {
+      id: "providers",
+      title: t("settings.providers"),
+      icon: Plug,
+      href: "/settings/providers",
+    },
+    {
+      id: "webhooks",
+      title: t("settings.webhooks"),
+      icon: Webhook,
+      href: "/settings/webhooks",
+    },
+    {
+      id: "connections",
+      title: t("settings.connections"),
+      icon: LinkIcon,
+      href: "/settings/connections",
+    },
+  ];
+};
 
-const ACCOUNTS_TABS = [
-  {
-    id: "password",
-    title: "Password",
-    icon: Lock,
-    href: "/settings/password",
-  },
-];
+const useAccountsTabs = () => {
+  const { t } = useTranslation("nav");
+  return [
+    {
+      id: "password",
+      title: t("settings.password"),
+      icon: Lock,
+      href: "/settings/password",
+    },
+  ];
+};
 
 interface SettingsLayoutProps {
   children: ReactNode;
@@ -84,10 +94,16 @@ const SettingsLayout = ({ children }: SettingsLayoutProps) => {
   const currentPath = router.pathname;
   const org = useOrg();
   const isBetterAuthEnabled = process.env.NEXT_PUBLIC_BETTER_AUTH === "true";
+  const { t } = useTranslation("nav");
 
-  const organizationTabs = ORGANIZATION_TABS;
+  const organizationTabs = useOrganizationTabs();
+  const developerTabs = useDeveloperTabs();
+  const accountsTabs = useAccountsTabs();
 
-  const renderNavSection = (title: string, tabs: typeof ORGANIZATION_TABS) => (
+  const renderNavSection = (
+    title: string,
+    tabs: ReturnType<typeof useOrganizationTabs>,
+  ) => (
     <div className="space-y-2">
       <h3 className="px-2 text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">
         {title}
@@ -134,10 +150,10 @@ const SettingsLayout = ({ children }: SettingsLayoutProps) => {
           {/* Settings Sidebar */}
           <div className="w-48 border-r border-slate-200 bg-slate-50/50 px-2 py-2 dark:border-slate-800 dark:bg-slate-900/50">
             <div className="space-y-8">
-              {renderNavSection("Organization", organizationTabs)}
-              {renderNavSection("Developer", DEVELOPER_TABS)}
+              {renderNavSection(t("settings.organization"), organizationTabs)}
+              {renderNavSection(t("settings.developer"), developerTabs)}
               {isBetterAuthEnabled &&
-                renderNavSection("Accounts", ACCOUNTS_TABS)}
+                renderNavSection(t("settings.accounts"), accountsTabs)}
             </div>
           </div>
 

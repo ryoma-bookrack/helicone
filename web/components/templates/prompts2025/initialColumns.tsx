@@ -6,14 +6,17 @@ import { PromptWithVersions } from "@/services/hooks/prompts";
 import TagsSummary from "./TagsSummary";
 import { Button } from "@/components/ui/button";
 import PromptVersionPill from "./PromptVersionPill";
+import type { TFunction } from "i18next";
 
 export const getInitialColumns = (
   onPlaygroundActionClick: (promptVersionId: string) => void,
+  t: TFunction,
+  tCommon: TFunction,
 ): ColumnConfig<PromptWithVersions>[] => {
   return [
     {
       key: "prompt_id" as keyof PromptWithVersions,
-      header: "Prompt ID",
+      header: t("ui.promptId"),
       sortable: false,
       minSize: 150,
       render: (item) => {
@@ -26,7 +29,7 @@ export const getInitialColumns = (
     },
     {
       key: "name" as keyof PromptWithVersions,
-      header: "Name",
+      header: t("ui.name"),
       sortable: true,
       minSize: 250,
       render: (item) => {
@@ -39,7 +42,7 @@ export const getInitialColumns = (
     },
     {
       key: "version" as keyof PromptWithVersions,
-      header: "Version",
+      header: t("ui.version"),
       sortable: true,
       minSize: 100,
       render: (item) => (
@@ -51,7 +54,7 @@ export const getInitialColumns = (
     },
     {
       key: "totalVersions" as keyof PromptWithVersions,
-      header: "Total Versions",
+      header: t("ui.totalVersions"),
       sortable: true,
       minSize: 120,
       render: (item) => (
@@ -63,14 +66,14 @@ export const getInitialColumns = (
     },
     {
       key: undefined,
-      header: "Model",
+      header: t("ui.model"),
       sortable: false,
       minSize: 250,
       render: (item) => <ModelPill model={item.productionVersion.model} />,
     },
     {
       key: undefined,
-      header: "Tags",
+      header: t("ui.tags"),
       sortable: false,
       minSize: 200,
       render: (item) => <TagsSummary tags={item.prompt.tags} />,
@@ -91,7 +94,7 @@ export const getInitialColumns = (
     // },
     {
       key: "playground" as keyof PromptWithVersions,
-      header: "Playground",
+      header: t("ui.playground"),
       sortable: false,
       minSize: 100,
       render: (item) => {
@@ -106,14 +109,14 @@ export const getInitialColumns = (
             className="flex items-center gap-1 rounded-lg"
           >
             <TestTube2 size={14} className="text-muted-foreground" />
-            <span className="ml-1">Edit</span>
+            <span className="ml-1">{tCommon("actions.edit")}</span>
           </Button>
         );
       },
     },
     {
       key: "created" as keyof PromptWithVersions,
-      header: "Created",
+      header: t("ui.created"),
       sortable: true,
       minSize: 300,
       render: (item) => (

@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { PencilIcon, PlusIcon } from "@heroicons/react/24/outline";
 import { useRef, useState } from "react";
 import ThemedModal from "../../../shared/themed/themedModal";
@@ -12,6 +13,9 @@ interface AddFileButtonProps {
 }
 
 const AddFileButton = (props: AddFileButtonProps) => {
+  const { t } = useTranslation("playground");
+  const { t: tCommon } = useTranslation("common");
+
   const { file, onFileChange, promptInput } = props;
 
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -48,24 +52,16 @@ const AddFileButton = (props: AddFileButtonProps) => {
       >
         {file ? (
           <>
-            <PencilIcon className="h-4 w-4" />
-            Edit Image
-          </>
+            <PencilIcon className="h-4 w-4" />{t("ui.editImage")}</>
         ) : (
           <>
-            <PlusIcon className="h-4 w-4" />
-            Add Image
-          </>
+            <PlusIcon className="h-4 w-4" />{t("ui.addImage")}</>
         )}
       </Button>
       <ThemedModal open={open} setOpen={setOpen}>
         <div className="flex h-full w-[400px] flex-col space-y-4">
-          <h2 className="text-xl font-semibold text-black dark:text-white">
-            Chat Image
-          </h2>
-          <p className="text-sm text-slate-500">
-            Upload an image or enter in an image URL.
-          </p>
+          <h2 className="text-xl font-semibold text-black dark:text-white">{t("ui.chatImage")}</h2>
+          <p className="text-sm text-slate-500">{t("ui.uploadAnImageOrEnterInAnImageUrl")}</p>
           <input
             ref={fileInputRef}
             type="file"
@@ -80,9 +76,7 @@ const AddFileButton = (props: AddFileButtonProps) => {
             onClick={handleClick}
             className="flex w-full items-center justify-center gap-2 rounded-lg border border-dashed border-slate-300 bg-slate-100 px-4 py-8 text-xs hover:cursor-not-allowed dark:border-slate-700 dark:bg-slate-900"
           >
-            <PlusIcon className="h-4 w-4" />
-            Upload from Computer
-          </button>
+            <PlusIcon className="h-4 w-4" />{t("ui.uploadFromComputer")}</button>
           <Separator>
             <span className="text-sm text-slate-500 dark:text-slate-400">
               or
@@ -109,9 +103,7 @@ const AddFileButton = (props: AddFileButtonProps) => {
             <button
               onClick={() => setOpen(false)}
               className="flex flex-row items-center rounded-md border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-900 shadow-sm hover:bg-slate-50 hover:text-slate-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-slate-500 dark:border-slate-700 dark:bg-black dark:text-slate-100 dark:hover:bg-slate-900 dark:hover:text-slate-300"
-            >
-              Cancel
-            </button>
+            >{tCommon("actions.cancel")}</button>
             <button
               onClick={() => {
                 onFileChangeSubmit();

@@ -1,3 +1,5 @@
+import { formatStandardDateTime } from "@/lib/i18n/format";
+import { useTranslation } from "react-i18next";
 import { useRouter } from "next/router";
 import { useGetHeliconeDatasets } from "../../../services/hooks/dataset/heliconeDataset";
 import AuthHeader from "../../shared/authHeader";
@@ -43,6 +45,8 @@ interface DatasetsPageProps {
 }
 
 const DatasetsPage = (props: DatasetsPageProps) => {
+  const { t } = useTranslation("datasets");
+  const { t: tCommon } = useTranslation("common");
   const { currentPage, pageSize, sort, defaultIndex } = props;
 
   const { datasets, isLoading, refetch, isRefetching, isFetched, status } =
@@ -86,15 +90,15 @@ const DatasetsPage = (props: DatasetsPageProps) => {
       })
       .then((res) => {
         if (res.error) {
-          setNotification("Error deleting dataset", "error");
+          setNotification(t("notifications.deleteError"), "error");
         } else {
-          setNotification("Dataset deleted successfully", "success");
+          setNotification(t("notifications.deleteSuccess"), "success");
           refetch();
           handleCloseDialog();
         }
       })
       .catch((err) => {
-        setNotification("Error deleting dataset", "error");
+        setNotification(t("notifications.deleteError"), "error");
       })
       .finally(() => {
         setIsDeleting(false);
@@ -104,35 +108,35 @@ const DatasetsPage = (props: DatasetsPageProps) => {
   const columns = [
     {
       key: "name" as keyof DatasetTableRow,
-      header: "Name",
-      render: (row: DatasetTableRow) => row.name || "Untitled Dataset",
+      header: t("table.name"),
+      render: (row: DatasetTableRow) => row.name || t("page.untitled"),
     },
     {
       key: "created_at" as keyof DatasetTableRow,
-      header: "Created At",
+      header: t("table.createdAt"),
       render: (row: DatasetTableRow) =>
-        new Date(row.created_at ?? 0).toLocaleString(),
+        formatStandardDateTime(row.created_at ?? 0),
     },
     {
       key: "dataset_type" as keyof DatasetTableRow,
-      header: "Dataset Type",
+      header: t("table.datasetType"),
       render: (row: DatasetTableRow) => {
         return row.dataset_type === "helicone" ? (
           <span className="-my-1 inline-flex items-center rounded-md bg-blue-50 px-2 py-1 text-xs font-medium text-blue-700 ring-1 ring-inset ring-blue-600/20 dark:bg-blue-900 dark:text-blue-300">
-            Helicone
+            {t("types.helicone")}
           </span>
         ) : row.dataset_type === "experiment" ? (
           <span className="-my-1 inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20 dark:bg-green-900 dark:text-green-300">
-            Experiment
+            {t("types.experiment")}
           </span>
         ) : (
-          "Unknown"
+          t("types.unknown")
         );
       },
     },
     {
       key: "requests_count" as keyof DatasetTableRow,
-      header: "Rows",
+      header: t("table.rows"),
       render: (row: DatasetTableRow) => row.requests_count,
     },
     {
@@ -173,7 +177,7 @@ const DatasetsPage = (props: DatasetsPageProps) => {
         </div>
       ) : (
         <>
-          <AuthHeader title={"Datasets"} />
+          <AuthHeader title={t("page.title")} />
 
           <SimpleTable
             data={datasets || []}
@@ -181,7 +185,7 @@ const DatasetsPage = (props: DatasetsPageProps) => {
             onSelect={(row) => {
               router.push({
                 pathname: `/datasets/${row.id}`,
-                query: { name: row.name || "Untitled Dataset" },
+                query: { name: row.name || t("page.untitled") },
               });
             }}
           />
@@ -190,23 +194,25 @@ const DatasetsPage = (props: DatasetsPageProps) => {
           <Dialog open={deleteModalOpen} onOpenChange={handleCloseDialog}>
             <DialogContent className="sm:max-w-md">
               <DialogHeader>
-                <DialogTitle>Delete Dataset</DialogTitle>
+                <DialogTitle>{t("delete.title")}</DialogTitle>
                 <DialogDescription>
-                  Are you sure you want to delete the dataset &ldquo;
-                  {datasetToDelete?.name || "Untitled Dataset"}
-                  &rdquo;? This action cannot be undone.
+                  {t("delete.description", {
+                    name: datasetToDelete?.name || t("page.untitled"),
+                  })}
                 </DialogDescription>
               </DialogHeader>
               <DialogFooter className="flex flex-row justify-end gap-2">
                 <Button variant="outline" onClick={handleCloseDialog}>
-                  Cancel
+                  {tCommon("actions.cancel")}
                 </Button>
                 <Button
                   variant="destructive"
                   onClick={handleDeleteConfirm}
                   disabled={isDeleting}
                 >
-                  {isDeleting ? "Deleting..." : "Delete"}
+                  {isDeleting
+                    ? t("delete.deleting")
+                    : tCommon("actions.delete")}
                 </Button>
               </DialogFooter>
             </DialogContent>

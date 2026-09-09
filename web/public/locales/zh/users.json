@@ -1,0 +1,40 @@
+{
+  "title": "用户",
+  "tabs": {
+    "users": "用户",
+    "metrics": "指标"
+  },
+  "columns": {
+    "userId": "用户 ID",
+    "noUserId": "无用户 ID",
+    "totalCost": "总成本",
+    "activeFor": "活跃时长",
+    "activeForDays": "{{count}} 天",
+    "firstActive": "首次活跃",
+    "lastActive": "最近活跃",
+    "requests": "请求",
+    "avgReqsPerDay": "平均请求 / 天",
+    "avgTokensPerReq": "平均 Token / 请求",
+    "completionTokens": "Completion Token",
+    "promptTokens": "Prompt Token",
+    "rateLimitedCount": "速率限制次数"
+  },
+  "views": "视图",
+  "metrics": {
+    "percentile": "分位数",
+    "selectPercentile": "选择分位数",
+    "interquartile": "四分位距",
+    "usersUnit": "{{value}} 用户",
+    "requestsDistribution": "请求数分布",
+    "requestsPerUser": "每用户请求数",
+    "costDistribution": "成本分布",
+    "costPerUser": "每用户成本"
+  },
+  "detail": {
+    "usage": "用量",
+    "logs": "日志",
+    "users": "用户",
+    "requestsLast30Days": "近 30 天请求",
+    "costsLast30Days": "近 30 天成本"
+  }
+}

@@ -1,0 +1,43 @@
+{
+  "title": "属性",
+  "columns": {
+    "value": "值",
+    "requests": "请求",
+    "avgPromptTokensPerReq": "平均 Prompt Token / 请求",
+    "avgCompletionTokensPerReq": "平均 Completion Token / 请求",
+    "avgLatencyPerReq": "平均延迟 / 请求",
+    "avgCostPerReq": "平均成本 / 请求",
+    "totalCost": "总成本",
+    "cost": "成本",
+    "avgPromptTokens": "平均 Prompt Token",
+    "avgCompTokens": "平均 Completion Token",
+    "avgLatency": "平均延迟",
+    "avgCost": "平均成本"
+  },
+  "tabs": {
+    "table": "表格",
+    "charts": "图表"
+  },
+  "selectProperty": "选择属性",
+  "selectPropertyPlaceholder": "选择一个属性",
+  "searchProperties": "搜索属性...",
+  "noPropertyData": "暂无属性数据",
+  "showMore": "显示更多",
+  "showLess": "收起",
+  "empty": "空",
+  "delete": {
+    "title": "删除属性",
+    "description": "这将从属性列表中删除所选属性。",
+    "deleting": "删除中...",
+    "confirm": "删除"
+  },
+  "restore": {
+    "button": "恢复",
+    "error": "无法恢复属性，请重试。"
+  },
+  "loadError": "加载已删除属性失败。",
+  "charts": {
+    "topRequests": "请求量最高",
+    "topCosts": "成本最高"
+  }
+}

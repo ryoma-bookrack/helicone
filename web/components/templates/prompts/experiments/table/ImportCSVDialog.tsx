@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import {
   DialogContent,
@@ -34,6 +35,8 @@ const ImportCSVDialog = ({
   experimentId: string;
   experimentPromptInputKeys: string[];
 }) => {
+  const { t } = useTranslation("experiments");
+  const { t: tCommon } = useTranslation("common");
   const [dragActive, setDragActive] = useState(false);
   const [file, setFile] = useState<File | null>(null);
   const [rows, setRows] = useState<Record<string, string>[]>([]);
@@ -122,7 +125,7 @@ const ImportCSVDialog = ({
       });
     },
     onError: () => {
-      setNotification("Failed to import rows", "error");
+      setNotification(t("ui.failedToImportRows"), "error");
     },
   });
 
@@ -130,7 +133,7 @@ const ImportCSVDialog = ({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="w-[90vw] max-w-[600px]">
         <DialogHeader>
-          <DialogTitle>Import from CSV</DialogTitle>
+          <DialogTitle>{t("ui.importFromCsv")}</DialogTitle>
           {experimentPromptInputKeys.length > 0 && (
             <DialogDescription>
               Import rows from a CSV file with the variable names as the columns{" "}
@@ -185,7 +188,7 @@ const ImportCSVDialog = ({
                 </div>
               ) : (
                 <p className="mb-2 text-sm text-slate-500">
-                  <span className="font-semibold">Click to upload</span> or drag
+                  <span className="font-semibold">{t("ui.clickToUpload")}</span> or drag
                   and drop
                 </p>
               )}
@@ -292,9 +295,7 @@ const ImportCSVDialog = ({
         <DialogFooter className="flex w-full items-end gap-y-1 sm:items-center sm:justify-between">
           <div className="flex items-center gap-1">
             <InfoIcon className="h-4 w-4 text-slate-500" />
-            <p className="text-sm text-slate-500">
-              Currently, we only support importing up to 100 rows.
-            </p>
+            <p className="text-sm text-slate-500">{t("ui.currentlyWeOnlySupportImportingUpTo100Ro")}</p>
           </div>
           {rows.length > 0 && file ? (
             <Button onClick={() => handleImport.mutate()}>

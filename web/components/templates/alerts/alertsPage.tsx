@@ -1,13 +1,14 @@
 import { useState, useMemo } from "react";
+import { useTranslation } from "react-i18next";
 import { useOrg } from "../../layout/org/organizationContext";
 import useAlertsPage from "./useAlertsPage";
 import { CreateAlertModal, EditAlertModal } from "./createAlertModal";
 import DeleteAlertModal from "./deleteAlertModal";
 import { SimpleTable } from "@/components/shared/table/simpleTable";
 import { Database } from "../../../db/database.types";
-import { getUSDate } from "../../shared/utils/utils";
+import { getStandardDateFromString } from "../../shared/utils/utils";
 import { useGetOrgSlackChannels } from "@/services/hooks/organizations";
-import { alertTimeWindows } from "./constant";
+import { getTimeWindowKey } from "./constant";
 import LoadingAnimation from "@/components/shared/loadingAnimation";
 import { useFeatureLimit } from "@/hooks/useFreeTierLimit";
 import { FreeTierLimitWrapper } from "@/components/shared/FreeTierLimitWrapper";
@@ -17,7 +18,6 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { EmptyStateCard } from "@/components/shared/helicone/EmptyStateCard";
 import {
-  AlertMetric,
   AlertAggregation,
 } from "@helicone-package/filters/alerts";
 import { PencilIcon, TrashIcon, PlusIcon } from "@heroicons/react/24/outline";
@@ -27,12 +27,13 @@ import { useLocalStorage } from "@/services/hooks/localStorage";
 import TableFooter from "../requests/tableFooter";
 import AlertStatusPill from "./alertStatusPill";
 
-const TABS = [
-  { id: "alerts", label: "Alerts" },
-  { id: "history", label: "History" },
-];
-
 const AlertsPage = () => {
+  const { t } = useTranslation("alerts");
+
+  const TABS = [
+    { id: "alerts", label: t("tabs.alerts") },
+    { id: "history", label: t("tabs.history") },
+  ];
   const [createNewAlertModal, setCreateNewAlertModal] = useState(false);
   const [deleteAlertOpen, setDeleteAlertOpen] = useState(false);
   const [editAlertOpen, setEditAlertOpen] = useState(false);
@@ -74,14 +75,7 @@ const AlertsPage = () => {
   const isPageLoading = isLoading || isLoadingSlackChannels || isOrgLoading;
 
   function formatTimeWindow(milliseconds: number): string {
-    let closest = Object.keys(alertTimeWindows).reduce((a, b) => {
-      return Math.abs(alertTimeWindows[a] - milliseconds) <
-        Math.abs(alertTimeWindows[b] - milliseconds)
-        ? a
-        : b;
-    });
-
-    return closest;
+    return t(`timeWindows.${getTimeWindowKey(milliseconds)}`);
   }
 
   function formatThreshold(metric: string, threshold: number): string {
@@ -100,27 +94,17 @@ const AlertsPage = () => {
     aggregation: AlertAggregation | null,
   ): string {
     if (metric === "response.status") {
-      return "rate";
+      return t("aggregation.rate");
     }
     if (metric === "count") {
-      return "count";
+      return t("aggregation.count");
     }
-    return aggregation || "sum";
+    return aggregation || t("aggregation.sum");
   }
 
   function formatMetric(metric: string): string {
-    const metricLabels: Record<AlertMetric, string> = {
-      "response.status": "Status",
-      cost: "Cost",
-      latency: "Latency (ms)",
-      total_tokens: "Total Tokens",
-      prompt_tokens: "Prompt Tokens",
-      completion_tokens: "Completion Tokens",
-      prompt_cache_read_tokens: "Prompt Cache Read Tokens",
-      prompt_cache_write_tokens: "Prompt Cache Write Tokens",
-      count: "Count",
-    };
-    return metricLabels[metric as AlertMetric] || metric;
+    const key = `metrics.${metric}` as const;
+    return t(key, { defaultValue: metric });
   }
 
   // Paginate alerts in memory (preserves SimpleTable sorting)
@@ -152,7 +136,7 @@ const AlertsPage = () => {
   if (isPageLoading) {
     return (
       <div className="flex min-h-[calc(100vh-200px)] items-center justify-center">
-        <LoadingAnimation height={175} width={175} title="Loading alerts..." />
+        <LoadingAnimation height={175} width={175} title={t("loading")} />
       </div>
     );
   }
@@ -165,7 +149,7 @@ const AlertsPage = () => {
     >
       <div className="flex h-screen w-full flex-col bg-background dark:bg-sidebar-background">
         <Header
-          title="Alerts"
+          title={t("title")}
           rightActions={[
             <FreeTierLimitWrapper
               key="create-alert"
@@ -179,7 +163,7 @@ const AlertsPage = () => {
                 onClick={handleCreateAlert}
               >
                 <PlusIcon className="mr-1 h-4 w-4" />
-                Create
+                {t("create")}
               </Button>
             </FreeTierLimitWrapper>,
             <TabsList key="tabs">
@@ -210,7 +194,7 @@ const AlertsPage = () => {
                 columns={[
                   {
                     key: undefined,
-                    header: "Actions",
+                    header: t("columns.actions"),
                     render: (alert) => (
                       <div className="flex items-center gap-2">
                         <button
@@ -240,7 +224,7 @@ const AlertsPage = () => {
                   },
                   {
                     key: "name",
-                    header: "Name",
+                    header: t("columns.name"),
                     render: (alert) => (
                       <p className="text-sm font-semibold">{alert.name}</p>
                     ),
@@ -248,12 +232,14 @@ const AlertsPage = () => {
                   },
                   {
                     key: "status",
-                    header: "Status",
+                    header: t("columns.status"),
                     render: (alert) => (
                       <AlertStatusPill
                         status={alert.status as "resolved" | "triggered"}
                         displayText={
-                          alert.status === "resolved" ? "Healthy" : "Triggered"
+                          alert.status === "resolved"
+                            ? t("status.healthy")
+                            : t("status.triggered")
                         }
                       />
                     ),
@@ -261,17 +247,17 @@ const AlertsPage = () => {
                   },
                   {
                     key: "created_at",
-                    header: "Created",
+                    header: t("columns.created"),
                     render: (alert) => (
                       <p className="text-sm text-muted-foreground">
-                        {getUSDate(new Date(alert.created_at || ""))}
+                        {getStandardDateFromString(alert.created_at || "")}
                       </p>
                     ),
                     sortable: true,
                   },
                   {
                     key: "metric",
-                    header: "Metric",
+                    header: t("columns.metric"),
                     render: (alert) => (
                       <Badge variant="helicone">
                         {formatMetric(alert.metric)}
@@ -281,7 +267,7 @@ const AlertsPage = () => {
                   },
                   {
                     key: undefined,
-                    header: "Aggregation",
+                    header: t("columns.aggregation"),
                     render: (alert) => (
                       <p className="text-sm">
                         {formatAggregation(
@@ -294,7 +280,7 @@ const AlertsPage = () => {
                   },
                   {
                     key: "threshold",
-                    header: "Threshold",
+                    header: t("columns.threshold"),
                     render: (alert) => (
                       <p className="text-sm">
                         {formatThreshold(alert.metric, alert.threshold)}
@@ -304,7 +290,7 @@ const AlertsPage = () => {
                   },
                   {
                     key: undefined,
-                    header: "Grouping",
+                    header: t("columns.grouping"),
                     render: (alert) => (
                       <p className="text-sm">
                         {(alert as any).grouping
@@ -316,7 +302,7 @@ const AlertsPage = () => {
                   },
                   {
                     key: "time_window",
-                    header: "Time Window",
+                    header: t("columns.timeWindow"),
                     render: (alert) => (
                       <p className="text-sm">
                         {formatTimeWindow(alert.time_window)}
@@ -326,7 +312,7 @@ const AlertsPage = () => {
                   },
                   {
                     key: "minimum_request_count",
-                    header: "Min Requests",
+                    header: t("columns.minRequests"),
                     render: (alert) => (
                       <p className="text-sm">
                         {alert.minimum_request_count || 0}
@@ -336,15 +322,15 @@ const AlertsPage = () => {
                   },
                   {
                     key: "filter",
-                    header: "Filter",
+                    header: t("columns.filter"),
                     render: (alert) => (
-                      <p className="text-sm">{alert.filter ? "Yes" : "No"}</p>
+                      <p className="text-sm">{alert.filter ? t("filter.yes") : t("filter.no")}</p>
                     ),
                     sortable: false,
                   },
                   {
                     key: "emails",
-                    header: "Emails",
+                    header: t("columns.emails"),
                     render: (alert) => (
                       <div className="flex text-sm">
                         {alert.emails.join(", ")}
@@ -355,7 +341,7 @@ const AlertsPage = () => {
                   },
                   {
                     key: "slack_channels",
-                    header: "Slack Channels",
+                    header: t("columns.slackChannels"),
                     render: (alert) => (
                       <div className="flex text-sm">
                         {alert.slack_channels
@@ -400,7 +386,7 @@ const AlertsPage = () => {
                 className="mx-auto mb-2 text-muted-foreground"
               />
               <p className="text-xs font-medium">
-                No alerts have been triggered yet
+                {t("emptyHistory")}
               </p>
             </div>
           ) : (
@@ -411,7 +397,7 @@ const AlertsPage = () => {
                   columns={[
                     {
                       key: "status",
-                      header: "Status",
+                      header: t("columns.status"),
                       render: (history) => (
                         <AlertStatusPill
                           status={history.status as "resolved" | "triggered"}
@@ -421,7 +407,7 @@ const AlertsPage = () => {
                     },
                     {
                       key: "alert_name",
-                      header: "Name",
+                      header: t("columns.name"),
                       render: (history) => (
                         <p className="text-sm font-semibold">
                           {history.alert_name}
@@ -431,21 +417,21 @@ const AlertsPage = () => {
                     },
                     {
                       key: "alert_start_time",
-                      header: "Start Time",
+                      header: t("columns.startTime"),
                       render: (history) => (
                         <p className="text-sm">
-                          {getUSDate(new Date(history.alert_start_time))}
+                          {getStandardDateFromString(history.alert_start_time)}
                         </p>
                       ),
                       sortable: true,
                     },
                     {
                       key: "alert_end_time",
-                      header: "End Time",
+                      header: t("columns.endTime"),
                       render: (history) => (
                         <p className="text-sm">
                           {history.alert_end_time
-                            ? getUSDate(new Date(history.alert_end_time))
+                            ? getStandardDateFromString(history.alert_end_time)
                             : "—"}
                         </p>
                       ),
@@ -453,7 +439,7 @@ const AlertsPage = () => {
                     },
                     {
                       key: "triggered_value",
-                      header: "Trigger",
+                      header: t("columns.trigger"),
                       render: (history) => (
                         <p className="text-sm">
                           {formatThreshold(

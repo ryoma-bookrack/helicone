@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import { H3, P } from "@/components/ui/typography";
 import { XIcon } from "lucide-react";
@@ -10,10 +11,13 @@ interface EvaluatorNotFoundProps {
 export const EvaluatorNotFound: React.FC<EvaluatorNotFoundProps> = ({
   closeEditPanel,
 }) => {
+  const { t } = useTranslation("evals");
+  const { t: tCommon } = useTranslation("common");
+
   return (
     <div className="flex h-full flex-col items-center justify-center p-8">
       <div className="mb-4 flex w-full justify-between">
-        <H3>Evaluator Not Found</H3>
+        <H3>{t("ui.evaluatorNotFound")}</H3>
         <Button variant="ghost" size="icon" onClick={closeEditPanel}>
           <XIcon size={18} />
         </Button>
@@ -22,9 +26,7 @@ export const EvaluatorNotFound: React.FC<EvaluatorNotFoundProps> = ({
         The selected evaluator could not be found. It may have been deleted or
         you may need to refresh the page.
       </P>
-      <Button variant="outline" onClick={closeEditPanel}>
-        Go Back
-      </Button>
+      <Button variant="outline" onClick={closeEditPanel}>{t("ui.goBack")}</Button>
     </div>
   );
 };

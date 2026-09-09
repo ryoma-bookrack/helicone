@@ -1,4 +1,5 @@
 import useNotification from "@/components/shared/notification/useNotification";
+import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -8,6 +9,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 
 export const OpenRouterSettings = () => {
+  const { t } = useTranslation("admin");
   const jawn = getJawnClient();
 
   const currentOpenRouterSettings = useQuery({
@@ -39,16 +41,16 @@ export const OpenRouterSettings = () => {
 
   return (
     <div className="flex flex-col space-y-4 p-6">
-      <h1 className="text-2xl font-semibold">On Prem Settings</h1>
+      <h1 className="text-2xl font-semibold">{t("onPrem.title")}</h1>
       <div className="flex max-w-4xl flex-col space-y-8">
         <Card className="bg-slate-200">
           <CardHeader>
-            <CardTitle>OpenRouter Settings</CardTitle>
+            <CardTitle>{t("onPrem.openrouterSettings")}</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="space-y-2">
               <div className="flex items-center justify-between">
-                <Label htmlFor="apiKey">API Key</Label>
+                <Label htmlFor="apiKey">{t("onPrem.apiKey")}</Label>
                 <Button
                   variant="outline"
                   size="sm"
@@ -80,9 +82,9 @@ export const OpenRouterSettings = () => {
                   })
                   .then((response) => {
                     if (response.response.ok) {
-                      setNotification("Settings saved", "success");
+                      setNotification(t("onPrem.settingsSaved"), "success");
                     } else {
-                      setNotification("Failed to save settings", "error");
+                      setNotification(t("onPrem.settingsSaveFailed"), "error");
                     }
                   });
               }}

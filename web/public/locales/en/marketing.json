@@ -1,0 +1,146 @@
+{
+  "nav": {
+    "srOnly": "Helicone",
+    "logoAlt": "Helicone - Open-source LLM observability and monitoring platform for developers",
+    "solutions": "Solutions",
+    "useCases": "Use Cases",
+    "new": "New",
+    "docs": "Docs",
+    "pricing": "Pricing",
+    "blog": "Blog",
+    "contact": "Contact",
+    "documentation": "Documentation",
+    "github": "Github",
+    "dashboard": "Dashboard",
+    "signIn": "Sign In",
+    "signUpFree": "Sign up for free",
+    "openMainMenu": "Open main menu",
+    "closeMainMenu": "Close menu",
+    "checkoutBlog": "Checkout our blog",
+    "checkoutBlogDescription": "Learn more about what is possible with our technology",
+    "solutionsItems": {
+      "customerPortal": {
+        "name": "Customer Portal",
+        "description": "Share Helicone usage with customers"
+      },
+      "fineTuning": {
+        "name": "Fine-Tuning",
+        "description": "Reduce costs and improve quality"
+      },
+      "dataSegmentation": {
+        "name": "Data Segmentation",
+        "description": "Get insights into costs & behaviors."
+      },
+      "debugging": {
+        "name": "Debugging",
+        "description": "Identify and rectify errors quickly."
+      },
+      "dataEtl": {
+        "name": "Data ETL and Extraction",
+        "description": "Turn Helicone into a data warehouse."
+      },
+      "internalAuditing": {
+        "name": "Internal Auditing",
+        "description": "Ensure compliance and security."
+      },
+      "githubActions": {
+        "name": "Github Actions",
+        "description": "Automate and cache your CI pipelines."
+      }
+    }
+  },
+  "meta": {
+    "defaultTitle": "Helicone - Open-Source Generative AI Platform for Developers",
+    "siteName": "Helicone",
+    "siteDescription": "Observability platform for LLM-developers",
+    "customerSupport": "customer support",
+    "notFoundDescription": "How developers build AI applications. Get observability, tooling, fine-tuning, and evaluations out of the box.",
+    "authDefaultDescription": "Monitoring usage and costs for language models shouldn't be a hassle. With Helicone, you can focus on building your product, not building and maintaining your own analytics solution."
+  },
+  "faqs": {
+    "latency": {
+      "question": "Is there a latency impact to my requests with Helicone's Proxy?",
+      "answer": "Helicone leverages Cloudflare's global network of servers as proxies for efficient web traffic routing. Cloudflare workers maintain extremely low latency through their worldwide distribution. This results in a fast and reliable proxy for your LLM requests with less than a fraction of a millisecond of latency impact."
+    },
+    "selfHosted": {
+      "question": "Do you offer a self-hosted or manage-hosted solution?",
+      "answer": "Our recommended solution is to use our cloud service, but we do offer a dedicated manage-hosted solution for enterprise customers. Please contact us at sales@helicone.ai for more information."
+    },
+    "withoutProxy": {
+      "question": "I do not want to use the proxy, can I still use Helicone?",
+      "answer": "Yes, you can use Helicone without the proxy. We have packages for Python and Node.js that you can use to send data to Helicone. Visit our documentation page to learn more."
+    }
+  },
+  "notFound": {
+    "title": "404 Error",
+    "description": "The page you are looking for does not exist. What does it mean to exist anyway? Is it the physical presence of a page? Or is it the idea of a page? Who knows? But what we do know is that this page does not exist - please click the button below to go home.",
+    "goHome": "Go Home",
+    "uselessWeb": "The Useless Web"
+  },
+  "stats": {
+    "metaTitle": "Home",
+    "activeOrgsMonth": "Active Orgs/Month",
+    "activeOrgsWeek": "Active Orgs/week",
+    "activeOrgsDay": "Active Orgs/day",
+    "totalUsers": "Total Users",
+    "userGrowthMonth": "User Growth Per Month",
+    "userGrowthWeek": "User Growth Per Week",
+    "userGrowthDay": "User Growth Per Day",
+    "requestsWeekOverWeek": "Requests week over week",
+    "requestsDayByDay": "Requests day by day",
+    "monthlyRetentionRate": "Monthly Retention Rate (1 day of activity)",
+    "weeklyRetentionRate": "Weekly Retention Rate (Active for more than 1 day)"
+  },
+  "fineTuning": {
+    "metaTitle": "Contact Us",
+    "badge": "Beta:",
+    "title": "Fine-Tuning",
+    "subtitle": "Reduce your costs and improve your applications performance with our fine-tuning service.",
+    "bullets": {
+      "evaluations": "Evaluations",
+      "abTesting": "A/B Testing",
+      "automatedFineTuning": "Automated Fine-Tuning",
+      "datasetCollection": "Dataset Collection",
+      "jsonlExports": "JSONL Exports",
+      "costComparisons": "Cost Comparisons",
+      "performanceMeasurements": "Performance Measurements",
+      "driftAnalysis": "Drift Analysis"
+    },
+    "chatWithFounders": "Want to chat with the founders?",
+    "contactUs": "Contact Us",
+    "formButton": "Contact Us",
+    "formPlaceholder": "I am interested in Helicone's fine-tuning feature!"
+  },
+  "customerPortal": {
+    "metaTitle": "Contact Us",
+    "badge": "Launch:",
+    "title": "Customer Portal",
+    "subtitle": "Easily share your Helicone dashboards and analytics with your customers. All for only $799 per month.",
+    "bullets": {
+      "billingUsageApis": "Billing / Usage APIs",
+      "whiteLabeling": "White labeling",
+      "embeddableDashboards": "Embeddable dashboards",
+      "alerts": "Alerts",
+      "customerRateLimiting": "Customer rate-limiting",
+      "customerFacingApiTokens": "Customer facing API tokens",
+      "customDomains": "Custom domains",
+      "customProxyEndpoint": "Custom proxy endpoint"
+    },
+    "chatWithFounders": "Want to chat with the founders?",
+    "contactUs": "Contact Us",
+    "formButton": "Contact Us",
+    "formPlaceholder": "I am interested in Helicone's Customer Portal feature!",
+    "screenshotAlt": "App screenshot"
+  },
+  "redirects": {
+    "blog": "Redirecting to blog...",
+    "career": "Redirecting to careers...",
+    "webinar": "Redirecting to webinar..."
+  },
+  "footer": {
+    "copyright": "© 2025 Helicone, Inc. All rights reserved.",
+    "privacyPolicy": "Privacy Policy",
+    "termsOfUse": "Terms of Use",
+    "workWithUs": "Work with us"
+  }
+}

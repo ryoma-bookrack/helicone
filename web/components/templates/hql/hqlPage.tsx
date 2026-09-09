@@ -2,6 +2,7 @@ import { components } from "@/lib/clients/jawnTypes/public";
 import { useClickhouseSchemas } from "@/services/hooks/heliconeSql";
 import { useMonaco, Editor } from "@monaco-editor/react";
 import { useCallback, useEffect, useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
 import TopBar from "./topBar";
 import { Directory } from "./directory";
 import QueryResult from "./QueryResult";
@@ -102,6 +103,7 @@ function getInitialActiveTabId(tabs: QueryTab[]): string {
 }
 
 function HQLPage() {
+  const { t } = useTranslation("hql");
   const organization = useOrg();
   const { data: hasAccessToHQL, isLoading: isLoadingFeatureFlag } =
     useFeatureFlag("hql", organization?.currentOrg?.id ?? "");
@@ -139,7 +141,7 @@ function HQLPage() {
   // Compatibility layer: currentQuery derived from currentTab
   const currentQuery = {
     id: currentTab?.savedQueryId,
-    name: currentTab?.name || "Untitled query",
+    name: currentTab?.name || t("untitledQuery"),
     sql: currentTab?.sql || DEFAULT_SQL,
   };
 
@@ -160,14 +162,14 @@ function HQLPage() {
   // Tab operations
   const openNewTab = useCallback((query?: { name: string; sql: string; savedQueryId?: string }) => {
     if (tabs.length >= MAX_TABS) {
-      setNotification("Maximum 10 tabs allowed. Close some tabs first.", "error");
+      setNotification(t("tabs.maxTabsError"), "error");
       return;
     }
 
     const newTab: QueryTab = {
       id: generateTabId(),
       savedQueryId: query?.savedQueryId,
-      name: query?.name || "Untitled query",
+      name: query?.name || t("untitledQuery"),
       sql: query?.sql || DEFAULT_SQL,
       isDirty: false,
     };
@@ -632,8 +634,8 @@ function HQLPage() {
         <div className="w-full max-w-md rounded-lg bg-white p-6 shadow-xl dark:bg-slate-900">
           <FeatureWaitlist
             feature="hql"
-            title="Get Early Access"
-            description="Be the first to know when HQL launches for your organization."
+            title={t("waitlist.title")}
+            description={t("waitlist.description")}
             organizationId={organization?.currentOrg?.id}
             variant="flat"
           />
@@ -771,7 +773,7 @@ function HQLPage() {
                           endLineNumber: 1,
                           endColumn: 1,
                           message:
-                            "Only read (SELECT) queries are allowed. Write operations are not permitted.",
+                            t("readOnlyWarning"),
                           severity: monaco.MarkerSeverity.Error,
                         },
                       ],
@@ -796,7 +798,7 @@ function HQLPage() {
                             endLineNumber: 1,
                             endColumn: 1,
                             message:
-                              "Only read (SELECT) queries are allowed. Write operations are not permitted.",
+                              t("readOnlyWarning"),
                             severity: monaco.MarkerSeverity.Error,
                           },
                         ],
@@ -850,7 +852,7 @@ function HQLPage() {
                             endLineNumber: 1,
                             endColumn: 1,
                             message:
-                              "Only read (SELECT) queries are allowed. Write operations are not permitted.",
+                              t("readOnlyWarning"),
                             severity: monaco.MarkerSeverity.Error,
                           },
                         ],

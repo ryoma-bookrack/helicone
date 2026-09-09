@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import {
   FolderIcon,
   PencilIcon,
@@ -23,6 +24,9 @@ export const AddRowPopover: React.FC<AddRowPopoverProps> = ({
   setShowExperimentDatasetSelector,
   setShowImportCsvModal,
 }) => {
+  const { t } = useTranslation("prompts");
+  const { t: tCommon } = useTranslation("common");
+
   return (
     <div>
       <Button
@@ -33,9 +37,7 @@ export const AddRowPopover: React.FC<AddRowPopoverProps> = ({
         className="flex h-8 w-full items-center justify-start"
         variant="ghost"
       >
-        <PencilIcon className="mr-2 inline h-4 w-4" />
-        Manual input
-      </Button>
+        <PencilIcon className="mr-2 inline h-4 w-4" />{t("ui.manualInput")}</Button>
       <Button
         onClick={() => {
           setPopoverOpen(false);
@@ -44,9 +46,7 @@ export const AddRowPopover: React.FC<AddRowPopoverProps> = ({
         className="flex h-8 w-full items-center justify-start"
         variant="ghost"
       >
-        <TableCellsIcon className="mr-2 inline h-4 w-4" />
-        Select an input set
-      </Button>
+        <TableCellsIcon className="mr-2 inline h-4 w-4" />{t("ui.selectAnInputSet")}</Button>
       <Button
         onClick={() => {
           setPopoverOpen(false);
@@ -55,9 +55,7 @@ export const AddRowPopover: React.FC<AddRowPopoverProps> = ({
         className="flex h-8 w-full items-center justify-start"
         variant="ghost"
       >
-        <Dices className="mr-2 inline h-4 w-4" />
-        Random prod
-      </Button>
+        <Dices className="mr-2 inline h-4 w-4" />{t("ui.randomProd")}</Button>
       <Button
         onClick={() => {
           setPopoverOpen(false);
@@ -66,9 +64,7 @@ export const AddRowPopover: React.FC<AddRowPopoverProps> = ({
         className="flex h-8 w-full items-center justify-start"
         variant="ghost"
       >
-        <FolderIcon className="mr-2 inline h-4 w-4" />
-        Select a dataset
-      </Button>
+        <FolderIcon className="mr-2 inline h-4 w-4" />{t("ui.selectADataset")}</Button>
       <Button
         onClick={() => {
           setPopoverOpen(false);
@@ -77,9 +73,7 @@ export const AddRowPopover: React.FC<AddRowPopoverProps> = ({
         className="flex h-8 w-full items-center justify-start"
         variant="ghost"
       >
-        <UploadIcon className="mr-2 h-4 w-4" />
-        Import from CSV
-      </Button>
+        <UploadIcon className="mr-2 h-4 w-4" />{t("ui.importFromCsv")}</Button>
     </div>
   );
 };

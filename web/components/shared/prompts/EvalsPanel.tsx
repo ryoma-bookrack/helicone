@@ -9,10 +9,12 @@ import {
 } from "@/components/ui/tooltip";
 import { XIcon } from "lucide-react";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { PiPlusBold } from "react-icons/pi";
 import ThemedDrawer from "../../shared/themed/themedDrawer";
 
 export default function EvalsPanel() {
+  const { t } = useTranslation("common");
   const { evaluators, deleteEvaluator } = useEvaluators();
   const [openSelector, setOpenSelector] = useState(false);
 
@@ -22,7 +24,7 @@ export default function EvalsPanel() {
     <div className="flex flex-col gap-2">
       {/* Header */}
       <div className="flex h-8 items-center justify-between">
-        <h2 className="font-semibold text-secondary">Evals</h2>
+        <h2 className="font-semibold text-secondary">{t("prompts.evals.title")}</h2>
         <div className="flex flex-row gap-2">
           <TooltipProvider delayDuration={100}>
             <Tooltip>
@@ -39,7 +41,7 @@ export default function EvalsPanel() {
                 </div>
               </TooltipTrigger>
               <TooltipContent>
-                <p>Add Eval</p>
+                <p>{t("prompts.evals.addEval")}</p>
               </TooltipContent>
             </Tooltip>
           </TooltipProvider>
@@ -49,13 +51,7 @@ export default function EvalsPanel() {
       {/* No Evaluators */}
       {!evaluatorsList?.length ? (
         <p className="text-balance text-center text-sm text-slate-400">
-          Measure the performance of your prompt with{" "}
-          <span className="font-semibold">Evals</span>. Press the{" "}
-          <span className="text-heliblue">
-            <PiPlusBold className="inline-block" />
-            &quot;Add Eval&quot;
-          </span>{" "}
-          button to choose or create one.
+          {t("prompts.evals.emptyStateDetailed")}
         </p>
       ) : (
         <div className="flex flex-col divide-y divide-slate-100 dark:divide-slate-900">
@@ -89,11 +85,13 @@ export default function EvalsPanel() {
           <div className="flex w-full flex-col">
             <div className="mb-4 flex items-center justify-between">
               <h2 className="text-xl font-semibold">
-                Select Evaluators ({evaluatorsList?.length ?? 0})
+                {t("prompts.evals.selectEvaluatorsCount", {
+                  count: evaluatorsList?.length ?? 0,
+                })}
               </h2>
             </div>
             <p className="pb-4 text-sm text-gray-500">
-              Select evaluators to add or create a new custom evaluator.
+              {t("prompts.evals.selectEvaluatorsDescription")}
             </p>
 
             <ul className="flex w-full flex-col items-center space-y-4 overflow-y-auto px-1 pt-4">
@@ -127,10 +125,10 @@ export default function EvalsPanel() {
                 <div className="flex w-full flex-col">
                   <div className="flex items-center justify-between">
                     <span className="font-medium text-heliblue">
-                      Create New Custom Evaluator
+                      {t("prompts.evals.createCustom")}
                     </span>
                     <span className="text-sm text-slate-500">
-                      (Opens in new tab)
+                      {t("prompts.evals.opensInNewTab")}
                     </span>
                   </div>
                 </div>
@@ -144,7 +142,7 @@ export default function EvalsPanel() {
               size={"sm"}
               onClick={() => setOpenSelector(false)}
             >
-              Cancel
+              {t("actions.cancel")}
             </Button>
           </div>
         </div>

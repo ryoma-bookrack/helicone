@@ -17,6 +17,7 @@ import {
 import { Column } from "@tanstack/react-table";
 import clsx from "clsx";
 import { useEffect, useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Result } from "@/packages/common/result";
 import { TimeInterval } from "../../../../lib/timeCalculations/time";
 import { SingleFilterDef } from "@helicone-package/filters/frontendFilterDefs";
@@ -95,6 +96,7 @@ export default function ThemedTableHeader<T>(props: ThemedTableHeaderProps<T>) {
     showFilters: showFiltersProp,
   } = props;
 
+  const { t } = useTranslation("common");
   const searchParams = useSearchParams();
 
   const [isSearchExpanded, setIsSearchExpanded] = useState(false);
@@ -145,8 +147,9 @@ export default function ThemedTableHeader<T>(props: ThemedTableHeaderProps<T>) {
               <div className="mr-2 flex items-center gap-2">
                 <div className="flex flex-row items-center gap-2">
                   <span className="whitespace-nowrap rounded-md bg-[#F1F5F9] p-2 text-sm font-medium text-[#1876D2] dark:bg-slate-900 dark:text-slate-100">
-                    {selectedRows!.count}{" "}
-                    {selectedRows!.count === 1 ? "row" : "rows"} selected
+                    {selectedRows!.count === 1
+                      ? t("table.rowSelected", { count: selectedRows!.count })
+                      : t("table.rowsSelected", { count: selectedRows!.count })}
                   </span>
                 </div>
                 {selectedRows!.children && selectedRows!.children}
@@ -195,7 +198,9 @@ export default function ThemedTableHeader<T>(props: ThemedTableHeaderProps<T>) {
                   </div>
                 </TooltipTrigger>
                 <TooltipContent>
-                  {isSearchExpanded ? "Close search" : "Open search"}
+                  {isSearchExpanded
+                    ? t("tableHeader.closeSearch")
+                    : t("tableHeader.openSearch")}
                 </TooltipContent>
               </Tooltip>
             )}
@@ -211,7 +216,7 @@ export default function ThemedTableHeader<T>(props: ThemedTableHeaderProps<T>) {
                     />
                   </span>
                 </TooltipTrigger>
-                <TooltipContent>Manage columns</TooltipContent>
+                <TooltipContent>{t("tableHeader.manageColumns")}</TooltipContent>
               </Tooltip>
             )}
 
@@ -222,7 +227,7 @@ export default function ThemedTableHeader<T>(props: ThemedTableHeaderProps<T>) {
                     <ExportButton rows={rows} />
                   </span>
                 </TooltipTrigger>
-                <TooltipContent>Export data</TooltipContent>
+                <TooltipContent>{t("tableHeader.exportData")}</TooltipContent>
               </Tooltip>
             )}
 
@@ -238,7 +243,7 @@ export default function ThemedTableHeader<T>(props: ThemedTableHeaderProps<T>) {
                     />
                   </span>
                 </TooltipTrigger>
-                <TooltipContent>Toggle view</TooltipContent>
+                <TooltipContent>{t("tableHeader.toggleView")}</TooltipContent>
               </Tooltip>
             )}
 

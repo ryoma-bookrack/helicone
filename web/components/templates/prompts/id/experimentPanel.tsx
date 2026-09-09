@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { Row } from "@/components/layout/common";
 import { useOrg } from "@/components/layout/org/organizationContext";
 import { Button } from "@/components/ui/button";
@@ -10,6 +11,9 @@ interface PromptIdPageProps {
 }
 
 const ExperimentPanel = (props: PromptIdPageProps) => {
+  const { t } = useTranslation("prompts");
+  const { t: tCommon } = useTranslation("common");
+
   const { promptId } = props;
   const org = useOrg();
   const experiments = useQuery({
@@ -40,7 +44,7 @@ const ExperimentPanel = (props: PromptIdPageProps) => {
             <Link
               href={`/prompts/${promptId}/subversion/${experiment.meta?.["prompt_version"]}/experiment/${experiment.id}`}
             >
-              <Button>View</Button>
+              <Button>{t("ui.view")}</Button>
             </Link>
           </Row>
         ))}

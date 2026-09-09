@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import React from "react";
 import { Row } from "../../layout/common";
 import MarkdownEditor from "../../shared/markdownEditor";
@@ -32,6 +33,8 @@ const EditDataset: React.FC<EditDatasetProps> = ({
   onRequestBodyChange,
   onResponseBodyChange,
 }) => {
+  const { t } = useTranslation("datasets");
+
   return (
     <div className="flex flex-col space-y-4">
       <Row className="items-center justify-start space-x-2">
@@ -49,7 +52,7 @@ const EditDataset: React.FC<EditDatasetProps> = ({
                 }}
               />
             </TooltipTrigger>
-            <TooltipContent>View original request</TooltipContent>
+            <TooltipContent>{t("detail.viewOriginalRequest")}</TooltipContent>
           </Tooltip>
         </TooltipProvider>
       </Row>
@@ -57,7 +60,7 @@ const EditDataset: React.FC<EditDatasetProps> = ({
         <Row className="gap-5">
           <Card className="w-1/2">
             <CardHeader className="bg-muted">
-              <h3 className="text-md font-medium">Request Body</h3>
+              <h3 className="text-md font-medium">{t("detail.requestBody")}</h3>
             </CardHeader>
             <CardContent className="p-0">
               <MarkdownEditor
@@ -72,7 +75,7 @@ const EditDataset: React.FC<EditDatasetProps> = ({
           </Card>
           <Card className="w-1/2">
             <CardHeader className="bg-muted">
-              <h3 className="text-md font-medium">Response Body</h3>
+              <h3 className="text-md font-medium">{t("detail.responseBody")}</h3>
             </CardHeader>
             <CardContent className="p-0">
               <MarkdownEditor

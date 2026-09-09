@@ -1,3 +1,5 @@
+import { formatStandardDateTime } from "@/lib/i18n/format";
+import { useTranslation } from "react-i18next";
 import { FreeTierLimitBanner } from "@/components/shared/FreeTierLimitBanner";
 import { FreeTierLimitWrapper } from "@/components/shared/FreeTierLimitWrapper";
 import GenericEmptyState from "@/components/shared/helicone/GenericEmptyState";
@@ -37,6 +39,9 @@ import ThemedTable from "../../../../shared/themed/table/themedTableOld";
 import { StartFromPromptDialog } from "./components/startFromPromptDialog";
 
 const ExperimentsPage = () => {
+  const { t } = useTranslation("prompts");
+  const { t: tCommon } = useTranslation("common");
+
   const jawn = useJawnClient();
   const notification = useNotification();
   const { prompts } = usePrompts();
@@ -56,7 +61,7 @@ const ExperimentsPage = () => {
     useFeatureLimit("experiments", experimentCount);
 
   if (isLoading) {
-    return <LoadingAnimation title="Loading Experiments" />;
+    return <LoadingAnimation title={t("ui.loadingExperiments")} />;
   }
 
   const handleDeleteExperiment = async () => {
@@ -64,9 +69,9 @@ const ExperimentsPage = () => {
 
     try {
       await deleteExperiment.mutateAsync(experimentToDelete);
-      setNotification("Experiment deleted successfully", "success");
+      setNotification(t("ui.experimentDeletedSuccessfully"), "success");
     } catch (error) {
-      setNotification("Failed to delete experiment", "error");
+      setNotification(t("ui.failedToDeleteExperiment"), "error");
     } finally {
       setDeleteDialogOpen(false);
       setExperimentToDelete(null);
@@ -74,10 +79,10 @@ const ExperimentsPage = () => {
   };
 
   const handleStartFromScratch = async () => {
-    setNotification("Creating experiment...", "info");
+    setNotification(t("ui.creatingExperiment"), "info");
     const res = await jawn.POST("/v2/experiment/create/empty");
     if (res.error) {
-      notification.setNotification("Failed to create experiment", "error");
+      notification.setNotification(t("ui.failedToCreateExperiment"), "error");
     } else {
       router.push(`/experiments/${res.data?.data?.experimentId}`);
     }
@@ -88,8 +93,8 @@ const ExperimentsPage = () => {
       <div className="flex h-screen w-full flex-col bg-background dark:bg-sidebar-background">
         <div className="flex h-full flex-1">
           <GenericEmptyState
-            title="Start Your First Experiment"
-            description="Create an experiment to compare prompt and model variations side by side."
+            title={t("ui.startYourFirstExperiment")}
+            description={t("ui.createAnExperimentToComparePromptAndMode")}
             icon={<FlaskConical size={28} className="text-accent-foreground" />}
             className="w-full"
             actions={
@@ -104,27 +109,19 @@ const ExperimentsPage = () => {
                       variant="default"
                       size="default"
                       disabled={!canCreateExperiment}
-                    >
-                      New Experiment
-                      <Plus className="ml-2 h-4 w-4" />
+                    >{t("ui.newExperiment")}<Plus className="ml-2 h-4 w-4" />
                     </Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="center" className="w-[200px]">
-                    <DropdownMenuItem onSelect={handleStartFromScratch}>
-                      Start from scratch
-                    </DropdownMenuItem>
-                    <DropdownMenuItem onSelect={() => setDialogOpen(true)}>
-                      Start from prompt
-                    </DropdownMenuItem>
+                    <DropdownMenuItem onSelect={handleStartFromScratch}>{t("ui.startFromScratch")}</DropdownMenuItem>
+                    <DropdownMenuItem onSelect={() => setDialogOpen(true)}>{t("ui.startFromPrompt")}</DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
                 <Link
                   href="https://docs.helicone.ai/features/experiments"
                   target="_blank"
                 >
-                  <Button variant="outline" className="gap-2">
-                    View Docs
-                    <SquareArrowOutUpRight className="h-4 w-4" />
+                  <Button variant="outline" className="gap-2">{t("ui.viewDocs")}<SquareArrowOutUpRight className="h-4 w-4" />
                   </Button>
                 </Link>
               </>
@@ -145,16 +142,14 @@ const ExperimentsPage = () => {
   return (
     <div className="flex min-h-[calc(100vh-4rem)] flex-col">
       <AuthHeader
-        title="Experiments"
+        title={t("ui.experiments")}
         actions={
           !canCreateExperiment ? (
             <FreeTierLimitWrapper
               feature="experiments"
               itemCount={experimentCount}
             >
-              <Button variant="action">
-                Start new experiment
-                <ChevronDownIcon className="ml-2 h-4 w-4" />
+              <Button variant="action">{t("ui.startNewExperiment")}<ChevronDownIcon className="ml-2 h-4 w-4" />
               </Button>
             </FreeTierLimitWrapper>
           ) : (
@@ -164,18 +159,12 @@ const ExperimentsPage = () => {
               modal={false}
             >
               <DropdownMenuTrigger asChild>
-                <Button variant="action">
-                  Start new experiment
-                  <ChevronDownIcon className="ml-2 h-4 w-4" />
+                <Button variant="action">{t("ui.startNewExperiment")}<ChevronDownIcon className="ml-2 h-4 w-4" />
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="center" className="w-[200px]">
-                <DropdownMenuItem onSelect={handleStartFromScratch}>
-                  Start from scratch
-                </DropdownMenuItem>
-                <DropdownMenuItem onSelect={() => setDialogOpen(true)}>
-                  Start from prompt
-                </DropdownMenuItem>
+                <DropdownMenuItem onSelect={handleStartFromScratch}>{t("ui.startFromScratch")}</DropdownMenuItem>
+                <DropdownMenuItem onSelect={() => setDialogOpen(true)}>{t("ui.startFromPrompt")}</DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
           )
@@ -202,24 +191,21 @@ const ExperimentsPage = () => {
       <Dialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Delete Experiment</DialogTitle>
+            <DialogTitle>{t("ui.deleteExperiment")}</DialogTitle>
           </DialogHeader>
-          <DialogDescription>
-            Once deleted, this experiment cannot be recovered. Do you want to
-            delete it?
-          </DialogDescription>
+          <DialogDescription>{t("ui.onceDeletedThisExperimentCannotBeRecover")}</DialogDescription>
           <DialogFooter>
             <Button
               variant="outline"
               onClick={() => setDeleteDialogOpen(false)}
-            >
-              Cancel
-            </Button>
+            >{tCommon("actions.cancel")}</Button>
             <Button
               onClick={handleDeleteExperiment}
               disabled={deleteExperiment.isPending}
             >
-              {deleteExperiment.isPending ? "Deleting..." : "Yes, delete"}
+              {deleteExperiment.isPending
+                ? t("ui.deleting")
+                : t("ui.yesDelete")}
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -228,17 +214,17 @@ const ExperimentsPage = () => {
       <ThemedTable
         defaultColumns={[
           {
-            header: "Name",
+            header: t("ui.name"),
             accessorFn: (row) => {
               return row.name;
             },
           },
           {
-            header: "Created At",
+            header: t("ui.createdAt"),
             accessorKey: "created_at",
             minSize: 100,
             accessorFn: (row) => {
-              return new Date(row.created_at ?? 0).toLocaleString();
+              return formatStandardDateTime(row.created_at ?? 0);
             },
           },
           {

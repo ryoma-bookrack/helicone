@@ -1,23 +1,20 @@
-export const formatDate = (dateStr: string) => {
-  const date = new Date(dateStr);
-  const now = new Date();
+import {
+  formatRelativeTime,
+  formatStandardDateTime,
+} from "@/lib/i18n/format";
 
-  // If the date is from today, show relative time
-  if (date.toDateString() === now.toDateString()) {
-    const diffMs = now.getTime() - date.getTime();
-    const diffMins = Math.round(diffMs / (1000 * 60));
-    const diffHours = Math.round(diffMs / (1000 * 60 * 60));
+export const formatDate = (
+  dateStr: string,
+  locale = "zh",
+  labels = {
+    justNow: "刚刚",
+    minutesAgo: "{{count}} 分钟前",
+    hoursAgo: "{{count}} 小时前",
+  },
+) => {
+  return formatRelativeTime(dateStr, locale, labels);
+};
 
-    if (diffMins < 1) return "Just now";
-    if (diffMins < 60) return `${diffMins}m ago`;
-    return `${diffHours}h ago`;
-  }
-
-  // Otherwise use the original date format
-  return date.toLocaleDateString("en-US", {
-    month: "short",
-    day: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
-  });
+export const formatDateAbsolute = (dateStr: string) => {
+  return formatStandardDateTime(dateStr);
 };

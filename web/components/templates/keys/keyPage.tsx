@@ -4,8 +4,10 @@ import DeleteKeyModal from "./components/DeleteKeyModal";
 import EditKeyModal from "./components/EditKeyModal";
 import HeliconeKeyTable from "./components/HeliconeKeyTable";
 import { Button } from "@/components/ui/button";
+import { useTranslation } from "react-i18next";
 
 const KeyPage = () => {
+  const { t } = useTranslation("keys");
   const [editOpen, setEditOpen] = useState(false);
   const [addKeyOpen, setAddKeyOpen] = useState(false);
   const [deleteHeliconeOpen, setDeleteHeliconeOpen] = useState(false);
@@ -27,11 +29,9 @@ const KeyPage = () => {
         <div className="border-b border-border p-4">
           <div className="flex flex-row items-center justify-between">
             <div>
-              <h1 className="text-sm font-semibold">API Keys</h1>
+              <h1 className="text-sm font-semibold">{t("page.title")}</h1>
               <p className="mt-1 text-xs text-muted-foreground">
-                These keys can be used to read and write data to Helicone.
-                Please do not share these keys and make sure you store them
-                somewhere secure.
+                {t("page.description")}
               </p>
             </div>
             <Button
@@ -39,7 +39,7 @@ const KeyPage = () => {
               size="sm"
               className="text-xs"
             >
-              Generate New Key
+              {t("page.generateNewKey")}
             </Button>
           </div>
         </div>

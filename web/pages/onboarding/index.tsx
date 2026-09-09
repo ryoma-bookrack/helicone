@@ -10,10 +10,12 @@ import { H1, Muted } from "@/components/ui/typography";
 import { useOrgOnboarding } from "@/services/hooks/useOrgOnboarding";
 import { useAddOrgMemberMutation } from "@/services/hooks/organizations";
 import { Loader2 } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 export default function OnboardingPage() {
+  const { t } = useTranslation("onboarding");
   const router = useRouter();
   const org = useOrg();
   const { setNotification } = useNotification();
@@ -59,8 +61,13 @@ export default function OnboardingPage() {
           });
           return { success: true, email: member.email };
         } catch (error: any) {
-          const errorMessage = error.error || "Failed to invite member";
-          errors.push(`Failed to invite ${member.email}: ${errorMessage}`);
+          const errorMessage = error.error || t("index.inviteMemberFailed");
+          errors.push(
+            t("index.inviteMemberFailedWithEmail", {
+              email: member.email,
+              error: errorMessage,
+            }),
+          );
           return { success: false, email: member.email, error: errorMessage };
         }
       });
@@ -76,7 +83,7 @@ export default function OnboardingPage() {
       };
     } catch (error) {
       console.error("Error sending invitations:", error);
-      errors.push("Unexpected error occurred while sending invitations");
+      errors.push(t("index.unexpectedInviteError"));
       return {
         success: false,
         errors,
@@ -95,8 +102,8 @@ export default function OnboardingPage() {
 
     setNotification(
       onboardingState?.name && onboardingState.name !== "My Organization"
-        ? "Organization updated!"
-        : "Organization created!",
+        ? t("index.organizationUpdated")
+        : t("index.organizationCreated"),
       "success",
     );
 
@@ -109,21 +116,21 @@ export default function OnboardingPage() {
 
       if (result.success) {
         setNotification(
-          `Successfully invited ${result.successCount ?? 0} member${(result.successCount ?? 0) !== 1 ? "s" : ""} to your organization!`,
+          t("index.inviteSuccess", { count: result.successCount ?? 0 }),
           "success",
         );
         setDraftMembers([]);
       } else if ((result.successCount ?? 0) > 0) {
         setNotification(
-          `Partially successful: ${result.successCount ?? 0}/${result.totalCount ?? 0} invitations sent. Some failed.`,
+          t("index.invitePartial", {
+            success: result.successCount ?? 0,
+            total: result.totalCount ?? 0,
+          }),
           "error",
         );
         result.errors.forEach((error) => console.error(error));
       } else {
-        setNotification(
-          "Failed to send member invitations. Please try again or add members later from settings.",
-          "error",
-        );
+        setNotification(t("index.inviteFailed"), "error");
         result.errors.forEach((error) => console.error(error));
         return;
       }
@@ -138,7 +145,7 @@ export default function OnboardingPage() {
         <OnboardingHeader />
         <div className="mx-auto mt-12 w-full max-w-2xl px-4">
           <div className="flex flex-col gap-4">
-            <div className="animate-pulse">Loading...</div>
+            <div className="animate-pulse">{t("loading")}</div>
           </div>
         </div>
       </div>
@@ -150,8 +157,8 @@ export default function OnboardingPage() {
       <div className="mx-auto mt-12 w-full max-w-2xl px-4">
         <div className="flex flex-col gap-4">
           <div className="flex flex-col gap-2">
-            <H1>Welcome to Helicone! 👋</H1>
-            <Muted>Glad to have you here. Create your first organization.</Muted>
+            <H1>{t("index.title")}</H1>
+            <Muted>{t("index.subtitle")}</Muted>
           </div>
 
           <OrganizationStep />
@@ -160,11 +167,10 @@ export default function OnboardingPage() {
             <>
               <div className="flex flex-col gap-2 pt-4">
                 <h3 className="text-sm font-medium">
-                  Invite team members (optional)
+                  {t("index.inviteTitle")}
                 </h3>
                 <Muted className="text-xs">
-                  Add team members to collaborate on your Helicone organization.
-                  You can always do this later from your organization settings.
+                  {t("index.inviteDescription")}
                 </Muted>
               </div>
 
@@ -182,8 +188,8 @@ export default function OnboardingPage() {
               >
                 {onboardingState?.name &&
                 onboardingState.name !== "My Organization"
-                  ? "Update organization"
-                  : "Create organization"}
+                  ? t("index.updateOrganization")
+                  : t("index.createOrganization")}
               </Button>
             ) : (
               <Button
@@ -196,12 +202,12 @@ export default function OnboardingPage() {
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                 )}
                 {isSendingInvites
-                  ? "Sending invitations..."
+                  ? t("index.sendingInvitations")
                   : draftMembers.length > 0
-                    ? `Continue with ${draftMembers.length} member${
-                        draftMembers.length > 1 ? "s" : ""
-                      }`
-                    : "Continue"}
+                    ? t("index.continueWithMembers", {
+                        count: draftMembers.length,
+                      })
+                    : t("index.continue")}
               </Button>
             )}
           </div>

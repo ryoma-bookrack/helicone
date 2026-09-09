@@ -1,4 +1,6 @@
+import { formatStandardDateTime } from "@/lib/i18n/format";
 import { P } from "@/components/ui/typography";
+import { useTranslation, Trans } from "react-i18next";
 import { Col } from "../../layout/common/col";
 import { useEffect, useState } from "react";
 import RateLimitRuleModal from "./RateLimitRuleModal";
@@ -43,6 +45,8 @@ interface RateLimitRulesViewProps {
 
 const RateLimitRulesView = (props: RateLimitRulesViewProps) => {
   const { triggerOpenCreateModal } = props;
+  const { t } = useTranslation("rateLimits");
+  const { t: tCommon } = useTranslation("common");
 
   const org = useOrg();
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
@@ -144,8 +148,8 @@ const RateLimitRulesView = (props: RateLimitRulesViewProps) => {
 
   const handleModalSuccess = (rule: RateLimitRuleView) => {
     const message = editingRule
-      ? `Successfully updated rate limit rule "${rule.name}"`
-      : `Successfully created rate limit rule "${rule.name}"`;
+      ? t("rules.updateSuccess", { name: rule.name })
+      : t("rules.createSuccess", { name: rule.name });
     setNotification(message, "success");
     if (editingRule) {
       setEditingRule(null);
@@ -157,16 +161,16 @@ const RateLimitRulesView = (props: RateLimitRulesViewProps) => {
     try {
       await deleteRuleMutation.mutateAsync(ruleId);
       setNotification(
-        `Successfully deleted rate limit rule "${ruleName}"`,
+        t("rules.deleteSuccess", { name: ruleName }),
         "success",
       );
     } catch (error) {
       // Log the actual error object for debugging
       logger.error({ error }, "Failed to delete rate limit rule");
       setNotification(
-        `Failed to delete rule: ${
-          error instanceof Error ? error.message : "Unknown error"
-        }`,
+        t("rules.deleteFailed", {
+          error: error instanceof Error ? error.message : t("rules.unknownError"),
+        }),
         "error",
       );
     }
@@ -179,11 +183,11 @@ const RateLimitRulesView = (props: RateLimitRulesViewProps) => {
 
         {(isError || apiError) && (
           <div className="flex flex-col items-center justify-center gap-4 bg-destructive/10 text-destructive">
-            <P className="text-center font-semibold">Error fetching rules</P>
+            <P className="text-center font-semibold">{t("rules.errorFetching")}</P>
             <P className="text-center text-xs">
               {networkError?.message ||
                 apiError ||
-                "An unknown error occurred."}
+                t("rules.unknownError")}
             </P>
           </div>
         )}
@@ -194,8 +198,7 @@ const RateLimitRulesView = (props: RateLimitRulesViewProps) => {
           (!rules || rules.length === 0) && (
             <div className="flex flex-col items-center justify-center gap-4 bg-muted p-6 dark:bg-muted/50">
               <P className="text-center text-muted-foreground">
-                No rate limits defined yet. Create your first rate limit rule to
-                get started.
+                {t("rules.empty")}
               </P>
             </div>
           )}
@@ -211,49 +214,53 @@ const RateLimitRulesView = (props: RateLimitRulesViewProps) => {
                   <TableHeader className="bg-muted/30">
                     <TableRow className="border-b border-border hover:bg-transparent dark:border-slate-800">
                       <TableHead className="border-r border-border px-4 py-2.5 text-sm font-semibold">
-                        Name
+                        {t("rules.columns.name")}
                       </TableHead>
                       <TableHead className="border-r border-border px-4 py-2.5 text-sm font-semibold">
-                        Quota
+                        {t("rules.columns.quota")}
                       </TableHead>
                       <TableHead className="border-r border-border px-4 py-2.5 text-sm font-semibold">
-                        Unit
+                        {t("rules.columns.unit")}
                       </TableHead>
                       <TableHead className="border-r border-border px-4 py-2.5 text-sm font-semibold">
-                        Window (sec)
+                        {t("rules.columns.windowSec")}
                       </TableHead>
                       <TableHead className="border-r border-border px-4 py-2.5 text-sm font-semibold">
-                        Applies To
+                        {t("rules.columns.appliesTo")}
                       </TableHead>
                       <TableHead className="border-r border-border px-4 py-2.5 text-sm font-semibold">
-                        Created
+                        {t("rules.columns.created")}
                       </TableHead>
                       <TableHead className="px-4 py-2.5 text-sm font-semibold last:border-r-0">
-                        Actions
+                        {t("rules.columns.actions")}
                       </TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
                     {sortedRules.map((rule) => {
                       let appliesToElement: React.ReactNode = (
-                        <Badge variant="secondary">Global</Badge>
+                        <Badge variant="secondary">{t("rules.appliesTo.global")}</Badge>
                       );
                       if (rule.segment === "user") {
                         appliesToElement = (
-                          <Badge variant="default">User</Badge>
+                          <Badge variant="default">{t("rules.appliesTo.user")}</Badge>
                         );
                       } else if (rule.segment) {
                         appliesToElement = (
-                          <Badge variant="outline">{`Property: ${rule.segment}`}</Badge>
+                          <Badge variant="outline">
+                            {t("rules.appliesTo.property", {
+                              segment: rule.segment,
+                            })}
+                          </Badge>
                         );
                       }
 
                       let unitElement: React.ReactNode = (
                         <Badge variant="outline">
                           {rule.unit === "request"
-                            ? "Requests"
+                            ? t("rules.units.request")
                             : rule.unit === "cents"
-                              ? "Cents"
+                              ? t("rules.units.cents")
                               : rule.unit}
                         </Badge>
                       );
@@ -279,14 +286,7 @@ const RateLimitRulesView = (props: RateLimitRulesViewProps) => {
                             {appliesToElement}
                           </TableCell>
                           <TableCell className="px-4 py-3 text-sm text-muted-foreground">
-                            {new Date(rule.created_at).toLocaleDateString(
-                              "en-US",
-                              {
-                                year: "numeric",
-                                month: "short",
-                                day: "numeric",
-                              },
-                            )}
+                            {formatStandardDateTime(rule.created_at)}
                           </TableCell>
                           <TableCell className="px-4 py-3">
                             <div className="flex items-center gap-1">
@@ -322,20 +322,22 @@ const RateLimitRulesView = (props: RateLimitRulesViewProps) => {
                                 >
                                   <AlertDialogHeader>
                                     <AlertDialogTitle>
-                                      Are you sure you want to delete this rate
-                                      limit rule?
+                                      {t("rules.deleteTitle")}
                                     </AlertDialogTitle>
                                     <AlertDialogDescription>
-                                      This action cannot be undone. This will
-                                      permanently delete the rate limit rule
-                                      <strong>{` "${rule.name}"`}</strong>.
+                                      <Trans
+                                        i18nKey="rules.deleteDescription"
+                                        ns="rateLimits"
+                                        values={{ name: rule.name }}
+                                        components={{ strong: <strong /> }}
+                                      />
                                     </AlertDialogDescription>
                                   </AlertDialogHeader>
                                   <AlertDialogFooter>
                                     <AlertDialogCancel
                                       onClick={(e) => e.stopPropagation()}
                                     >
-                                      Cancel
+                                      {tCommon("actions.cancel")}
                                     </AlertDialogCancel>
                                     <AlertDialogAction
                                       onClick={(e) => {
@@ -345,8 +347,8 @@ const RateLimitRulesView = (props: RateLimitRulesViewProps) => {
                                       disabled={deleteRuleMutation.isPending}
                                     >
                                       {deleteRuleMutation.isPending
-                                        ? "Deleting..."
-                                        : "Delete"}
+                                        ? t("rules.deleting")
+                                        : tCommon("actions.delete")}
                                     </AlertDialogAction>
                                   </AlertDialogFooter>
                                 </AlertDialogContent>
@@ -370,7 +372,7 @@ const RateLimitRulesView = (props: RateLimitRulesViewProps) => {
             className="items-center gap-1"
           >
             <PiPlusBold className="h-3.5 w-3.5" />
-            Create Rule
+            {t("rules.createRule")}
           </Button>
         </div>
       </div>

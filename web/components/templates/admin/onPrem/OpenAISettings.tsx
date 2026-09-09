@@ -1,4 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
+import { useTranslation } from "react-i18next";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -15,6 +16,7 @@ export interface AzureExperiment {
 }
 
 export const OpenAISettings = () => {
+  const { t } = useTranslation("admin");
   const jawn = useJawnClient();
 
   const currentOpenAISettings = useQuery({
@@ -46,11 +48,11 @@ export const OpenAISettings = () => {
 
   return (
     <div className="flex flex-col space-y-4 p-6">
-      <h1 className="text-2xl font-semibold">On Prem Settings</h1>
+      <h1 className="text-2xl font-semibold">{t("onPrem.title")}</h1>
       <div className="flex max-w-4xl flex-col space-y-8">
         <Card className="bg-slate-200">
           <CardHeader>
-            <CardTitle>OpenAI Settings</CardTitle>
+            <CardTitle>{t("onPrem.openaiSettings")}</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="space-y-2">
@@ -87,9 +89,9 @@ export const OpenAISettings = () => {
                   })
                   .then((s) => {
                     if (s.response.ok) {
-                      setNotification("Settings saved", "success");
+                      setNotification(t("onPrem.settingsSaved"), "success");
                     } else {
-                      setNotification("Failed to save settings", "error");
+                      setNotification(t("onPrem.settingsSaveFailed"), "error");
                     }
                   });
               }}

@@ -1,45 +1,20 @@
+import { formatStandardDate, formatStandardDateTime } from "@/lib/i18n/format";
 import { TimeIncrement } from "./fetchTimeData";
 
 const INC_TO_TIME: {
   [_key in TimeIncrement]: (_startDate: Date, _nextDate?: Date) => string;
 } = {
-  min: (date) =>
-    date.toLocaleTimeString(undefined, {
-      hour: "numeric",
-      minute: "2-digit",
-    }),
-  hour: (date) =>
-    date.toLocaleTimeString(undefined, {
-      hour: "2-digit",
-    }),
-  day: (date) =>
-    date.toLocaleDateString(undefined, {
-      dateStyle: "short",
-    }),
+  min: (date) => formatStandardDateTime(date),
+  hour: (date) => formatStandardDateTime(date),
+  day: (date) => formatStandardDate(date),
   week: (startDate, nextDate) => {
     if (!nextDate) {
       throw new Error("nextDate is required for week");
     }
-    return `${startDate.toLocaleDateString(undefined, {
-      month: "2-digit",
-      day: "2-digit",
-    })} - ${nextDate.toLocaleDateString(undefined, {
-      month: "2-digit",
-      day: "2-digit",
-    })}`;
+    return `${formatStandardDate(startDate)} - ${formatStandardDate(nextDate)}`;
   },
-  month: (date) =>
-    date.toLocaleDateString(undefined, {
-      year: "2-digit",
-      month: "2-digit",
-      day: "2-digit",
-    }),
-  year: (date) =>
-    date.toLocaleDateString(undefined, {
-      year: "2-digit",
-      month: "2-digit",
-      day: "2-digit",
-    }),
+  month: (date) => formatStandardDate(date),
+  year: (date) => formatStandardDate(date),
 };
 
 export function getTimeMap(inc: TimeIncrement) {

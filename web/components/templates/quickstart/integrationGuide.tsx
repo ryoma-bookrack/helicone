@@ -1,5 +1,6 @@
 import { IntegrationCodeTabs } from "@/components/shared/IntegrationCodeTabs";
 import { BookOpen } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import Link from "next/link";
 
 interface IntegrationGuideProps {
@@ -7,6 +8,8 @@ interface IntegrationGuideProps {
 }
 
 const IntegrationGuide = ({ apiKey }: IntegrationGuideProps) => {
+  const { t } = useTranslation("onboarding");
+
   return (
     <div
       className="w-full rounded-lg bg-background"
@@ -18,16 +21,16 @@ const IntegrationGuide = ({ apiKey }: IntegrationGuideProps) => {
         <div className="flex items-center gap-2 rounded-md border border-blue-200 bg-blue-50/50 px-3 py-2 dark:border-blue-800 dark:bg-blue-950/20">
           <BookOpen className="h-4 w-4 flex-shrink-0 text-blue-600 dark:text-blue-400" />
           <span className="text-sm text-blue-900 dark:text-blue-100">
-            Check our{" "}
+            {t("integrationGuide.modelRegistryPrefix")}{" "}
             <Link
               href="https://helicone.ai/models"
               target="_blank"
               rel="noopener noreferrer"
               className="font-medium underline underline-offset-2 hover:no-underline"
             >
-              Model Registry
+              {t("integrationGuide.modelRegistryLink")}
             </Link>{" "}
-            to see all supported model slugs for the AI Gateway
+            {t("integrationGuide.modelRegistrySuffix")}
           </span>
         </div>
       </div>

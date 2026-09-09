@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import React, {
   forwardRef,
   useEffect,
@@ -45,6 +46,8 @@ export const HypothesisCellRenderer = forwardRef<
     { requestId, prompt, experimentTableId, inputRecordId, promptVersionId },
     ref,
   ) => {
+    const { t } = useTranslation("experiments");
+    const { t: tCommon } = useTranslation("common");
     const [running, setRunning] = useState(false);
     const initialModel = prompt?.model || "";
     const [hypothesisRequestId, setHypothesisRequestId] = useState<
@@ -217,9 +220,7 @@ export const HypothesisCellRenderer = forwardRef<
       return (
         <div className="flex items-center gap-2 px-4 py-2">
           <div className="h-2 w-2 animate-pulse rounded-full bg-yellow-700"></div>
-          <div className="text-sm text-slate-700 dark:text-slate-400">
-            Generating...
-          </div>
+          <div className="text-sm text-slate-700 dark:text-slate-400">{t("ui.generating")}</div>
         </div>
       );
     }
@@ -228,9 +229,7 @@ export const HypothesisCellRenderer = forwardRef<
       return (
         <div className="flex items-center gap-2 px-4 py-2">
           <div className="h-2 w-2 animate-pulse rounded-full bg-green-700"></div>
-          <div className="text-sm text-slate-700 dark:text-slate-400">
-            Loading...
-          </div>
+          <div className="text-sm text-slate-700 dark:text-slate-400">{tCommon("actions.loading")}</div>
         </div>
       );
     }
@@ -290,9 +289,7 @@ export const HypothesisCellRenderer = forwardRef<
                     <TooltipContent
                       side="left"
                       className="rounded-none border-0 bg-yellow-50 px-1 py-px text-[11px] text-yellow-500 shadow-none dark:bg-yellow-950 dark:text-yellow-500"
-                    >
-                      Prompt has changed since this cell was last run
-                    </TooltipContent>
+                    >{t("ui.promptHasChangedSinceThisCellWasLastRun")}</TooltipContent>
                   </Tooltip>
                 )}
               </div>

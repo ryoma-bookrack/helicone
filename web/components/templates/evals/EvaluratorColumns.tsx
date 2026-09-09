@@ -1,9 +1,6 @@
 import { Badge } from "@/components/ui/badge";
-
-// Import shadcn components
-
-// Import Recharts components
 import { ColumnDef } from "@tanstack/react-table";
+import type { TFunction } from "i18next";
 import { AverageScoreChart } from "./charts/AverageScoreChart";
 import { ScoreDistributionChart } from "./charts/ScoreDistributionChart";
 import { ScoreDistributionChartPie } from "./charts/ScoreDistributionChartPie";
@@ -23,22 +20,22 @@ export type EvalMetric = {
   id?: string;
 };
 
-export const INITIAL_COLUMNS: ColumnDef<EvalMetric>[] = [
+export const getEvalColumns = (t: TFunction): ColumnDef<EvalMetric>[] => [
   {
     accessorKey: "name",
-    header: "Name",
+    header: t("ui.name"),
     cell: (info) => (
       <span className="font-medium text-gray-900 dark:text-gray-100">
         {info.getValue()
           ? `${info.getValue()}`.replaceAll("-hcone-bool", " ")
-          : "No Eval Name"}
+          : t("ui.noEvalName")}
       </span>
     ),
     minSize: 50,
   },
   {
     accessorKey: "type",
-    header: "Type",
+    header: t("ui.type"),
     cell: (info) => (
       <Badge variant={"outline"}>{info.getValue() as string}</Badge>
     ),
@@ -46,7 +43,7 @@ export const INITIAL_COLUMNS: ColumnDef<EvalMetric>[] = [
   },
   {
     accessorKey: "valueType",
-    header: "Value",
+    header: t("ui.value"),
     cell: (info) => (
       <Badge variant={"outline"}>{info.getValue() as string}</Badge>
     ),
@@ -55,7 +52,7 @@ export const INITIAL_COLUMNS: ColumnDef<EvalMetric>[] = [
   },
   {
     accessorKey: "overTime",
-    header: "Traces",
+    header: t("ui.traces"),
     cell: (info) => (
       <TracesChart
         overTime={info.getValue() as { date: string; count: number }[]}
@@ -65,7 +62,7 @@ export const INITIAL_COLUMNS: ColumnDef<EvalMetric>[] = [
   },
   {
     accessorKey: "averageOverTime",
-    header: "Average Score",
+    header: t("ui.averageScore"),
     cell: (info) => (
       <AverageScoreChart
         averageOverTime={info.getValue() as { date: string; value: number }[]}
@@ -75,7 +72,7 @@ export const INITIAL_COLUMNS: ColumnDef<EvalMetric>[] = [
   },
   {
     accessorKey: "scoreDistribution",
-    header: "Score Distribution",
+    header: t("ui.scoreDistribution"),
     cell: (info) =>
       info.row.original.valueType !== "Boolean" ? (
         <ScoreDistributionChart
@@ -94,7 +91,7 @@ export const INITIAL_COLUMNS: ColumnDef<EvalMetric>[] = [
   },
   {
     accessorKey: "count",
-    header: "Count",
+    header: t("ui.count"),
     cell: (info) => <span>{Number(info.getValue()).toLocaleString()}</span>,
     meta: {
       sortKey: "count",
@@ -102,16 +99,15 @@ export const INITIAL_COLUMNS: ColumnDef<EvalMetric>[] = [
   },
   {
     accessorKey: "averageScore",
-    header: "Average Score",
+    header: t("ui.averageScore"),
     cell: (info) => <span>{Number(info.getValue()).toFixed(2)}</span>,
     meta: {
       sortKey: "averageScore",
     },
   },
-
   {
     accessorKey: "minScore",
-    header: "Min Score",
+    header: t("ui.minScore"),
     cell: (info) => Number(info.getValue()).toLocaleString(),
     meta: {
       sortKey: "minScore",
@@ -119,7 +115,7 @@ export const INITIAL_COLUMNS: ColumnDef<EvalMetric>[] = [
   },
   {
     accessorKey: "maxScore",
-    header: "Max Score",
+    header: t("ui.maxScore"),
     cell: (info) => Number(info.getValue()).toLocaleString(),
     meta: {
       sortKey: "maxScore",
@@ -127,3 +123,6 @@ export const INITIAL_COLUMNS: ColumnDef<EvalMetric>[] = [
     minSize: 200,
   },
 ];
+
+/** @deprecated Use getEvalColumns(t) instead */
+export const INITIAL_COLUMNS: ColumnDef<EvalMetric>[] = [];

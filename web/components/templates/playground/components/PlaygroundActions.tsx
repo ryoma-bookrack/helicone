@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 
 import {
@@ -48,6 +49,9 @@ const PlaygroundActions = ({
   isLoading = false,
   createPrompt,
 }: PlaygroundActionsProps) => {
+  const { t } = useTranslation("playground");
+  const { t: tCommon } = useTranslation("common");
+
   const organization = useOrg();
   const resetToDefault = () => {
     logger.debug(
@@ -126,7 +130,7 @@ const PlaygroundActions = ({
             </div>
             +{" "}
             <div className="py rounded-md bg-muted px-1">
-              <kbd className="text-xs">Enter</kbd>
+              <kbd className="text-xs">{t("ui.enter")}</kbd>
             </div>
           </div>
         </TooltipContent>

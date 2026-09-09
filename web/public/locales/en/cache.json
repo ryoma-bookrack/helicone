@@ -1,0 +1,17 @@
+{
+  "title": "Cache",
+  "columns": {
+    "request": "Request",
+    "model": "Model",
+    "cacheHits": "Cache Hits",
+    "firstUsed": "First Used",
+    "lastUsed": "Last Used"
+  },
+  "metrics": {
+    "totalCacheHits": "Total Cache Hits",
+    "costSavings": "Cost Savings",
+    "timeSaved": "Time Saved"
+  },
+  "selectTimePeriod": "Select time period",
+  "cacheEnabledFilter": "Cache Enabled Requests"
+}

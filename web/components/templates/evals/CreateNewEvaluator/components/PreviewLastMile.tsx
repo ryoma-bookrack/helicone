@@ -1,7 +1,11 @@
+import { useTranslation } from "react-i18next";
 import { Col } from "@/components/layout/common";
 import { DataEntry, LastMileConfigForm, TestInput } from "../types";
 
 export function RenderDataEntry(dataEntry: DataEntry) {
+  const { t } = useTranslation("evals");
+  const { t: tCommon } = useTranslation("common");
+
   return <div>{dataEntry._type}</div>;
 }
 
@@ -20,16 +24,16 @@ export function PreviewLastMile({
   return (
     <div>
       <Col>
-        {/* <Label>Input</Label>
+        {/* <Label>{t("ui.input")}</Label>
 
         {JSON.stringify(testDataConfig.input)}
-        <Label>Output</Label>
+        <Label>{t("ui.output")}</Label>
         {JSON.stringify(testDataConfig.output)}
-        <Label>Prompt Template</Label>
-        <Label>Ground Truth</Label>
+        <Label>{t("ui.promptTemplate")}</Label>
+        <Label>{t("ui.groundTruth")}</Label>
         {"groundTruth" in testDataConfig && (
           <div>
-            <Label>Ground Truth</Label>
+            <Label>{t("ui.groundTruth")}</Label>
             {JSON.stringify(testDataConfig.groundTruth)}
           </div>
         )} */}

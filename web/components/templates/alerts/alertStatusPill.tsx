@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { clsx } from "../../shared/clsx";
 import { colourPillStyles, ColorKey } from "../requests/colors";
 
@@ -8,10 +9,11 @@ interface AlertStatusPillProps {
 
 const AlertStatusPill = (props: AlertStatusPillProps) => {
   const { status, displayText: customDisplayText } = props;
+  const { t } = useTranslation("alerts");
 
   const defaultDisplayMap = {
-    resolved: "Resolved",
-    triggered: "Triggered",
+    resolved: t("status.resolved"),
+    triggered: t("status.triggered"),
   };
 
   const displayText = customDisplayText || defaultDisplayMap[status];
@@ -20,7 +22,7 @@ const AlertStatusPill = (props: AlertStatusPillProps) => {
     if (status === "triggered") {
       return "red";
     }
-    return displayText === "Healthy" ? "emerald" : "gray";
+    return displayText === t("status.healthy") ? "emerald" : "gray";
   };
 
   const colorKey = getColorKey();

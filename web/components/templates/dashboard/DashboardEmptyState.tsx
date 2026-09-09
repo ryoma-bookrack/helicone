@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import { H2, Large } from "@/components/ui/typography";
 import { ArrowRight } from "lucide-react";
 import { useRouter } from "next/router";
+import { useTranslation } from "react-i18next";
 import { useOrg } from "@/components/layout/org/organizationContext";
 import { useOrgOnboarding } from "@/services/hooks/useOrgOnboarding";
 import { STEP_ROUTES } from "@/components/onboarding/OnboardingHeader";
@@ -13,6 +14,7 @@ interface DashboardEmptyStateProps {
 export default function DashboardEmptyState({
   isVisible,
 }: DashboardEmptyStateProps) {
+  const { t } = useTranslation("dashboard");
   const router = useRouter();
   const orgContext = useOrg();
   const { onboardingState } = useOrgOnboarding(
@@ -77,19 +79,18 @@ export default function DashboardEmptyState({
             {/* Sidebar offset container - no transform on small screens, offset on medium+ */}
             <div className="flex w-full max-w-3xl flex-col items-center gap-6 md:translate-x-[calc(var(--sidebar-width,0px)/2)]">
               <div className="flex w-full flex-col gap-2 text-center">
-                <H2>Integrate to unlock your analytics</H2>
+                <H2>{t("emptyState.title")}</H2>
                 <Large className="mx-auto max-w-lg lg:max-w-3xl">
-                  This is a preview. Integrate your LLM app with Helicone to see
-                  your real-time insights.
+                  {t("emptyState.description")}
                 </Large>
               </div>
 
               <div className="flex justify-center gap-4">
                 <Button variant="outline" onClick={handleDemoClick}>
-                  Try Demo
+                  {t("emptyState.tryDemo")}
                 </Button>
                 <Button variant="action" onClick={handleQuickStart}>
-                  Quick Start <ArrowRight className="ml-2 h-4 w-4" />
+                  {t("emptyState.quickStart")} <ArrowRight className="ml-2 h-4 w-4" />
                 </Button>
               </div>
             </div>
@@ -113,19 +114,18 @@ export default function DashboardEmptyState({
             {/* Sidebar offset container - no transform on small screens, offset on medium+ */}
             <div className="flex w-full max-w-3xl flex-col items-center gap-6 md:translate-x-[calc(var(--sidebar-width,0px)/2)]">
               <div className="flex w-full flex-col gap-2 text-center">
-                <H2>Integrate to unlock your analytics</H2>
+                <H2>{t("emptyState.title")}</H2>
                 <Large className="mx-auto max-w-lg lg:max-w-3xl">
-                  This is a preview. Integrate your LLM app with Helicone to see
-                  your real-time insights.
+                  {t("emptyState.description")}
                 </Large>
               </div>
 
               <div className="flex justify-center gap-4">
                 <Button variant="outline" onClick={handleDemoClick}>
-                  Try Demo
+                  {t("emptyState.tryDemo")}
                 </Button>
                 <Button variant="action" onClick={handleQuickStart}>
-                  Quick Start <ArrowRight className="ml-2 h-4 w-4" />
+                  {t("emptyState.quickStart")} <ArrowRight className="ml-2 h-4 w-4" />
                 </Button>
               </div>
             </div>

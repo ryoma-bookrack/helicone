@@ -5,6 +5,7 @@ import { H2, Large } from "@/components/ui/typography";
 import { useOrgOnboarding } from "@/services/hooks/useOrgOnboarding";
 import { ArrowRight } from "lucide-react";
 import { useRouter } from "next/router";
+import { useTranslation } from "react-i18next";
 
 export interface EmptyStatePage {
   title: string;
@@ -207,6 +208,41 @@ export interface RequestsPageEmptyStateOptions {
   onPrimaryActionClick?: () => void;
   isVisible?: boolean;
 }
+
+export const useEmptyStatePages = (): Record<string, EmptyStatePage> => {
+  const { t } = useTranslation("requests");
+  return {
+    requests: {
+      title: t("emptyState.requestsTitle"),
+      description: t("emptyState.requestsDescription"),
+      cta: {
+        primary: {
+          text: t("emptyState.quickStart"),
+          link: "/onboarding/integrate",
+        },
+        secondary: {
+          text: t("emptyState.tryDemo"),
+          link: "#tryDemo",
+        },
+      },
+    },
+    "rate-limits": {
+      title: t("emptyState.rateLimitsTitle"),
+      description: t("emptyState.rateLimitsDescription"),
+      cta: {
+        primary: {
+          text: t("emptyState.configureRateLimits"),
+          onClick: true,
+        },
+        secondary: {
+          text: t("emptyState.viewDocs"),
+          link: "https://docs.helicone.ai/features/advanced-usage/custom-rate-limits",
+          openInNewTab: true,
+        },
+      },
+    },
+  };
+};
 
 export const EMPTY_STATE_PAGES: Record<string, EmptyStatePage> = {
   requests: {

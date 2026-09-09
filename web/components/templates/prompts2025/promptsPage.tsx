@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { Small } from "@/components/ui/typography";
 import { Button } from "@/components/ui/button";
 import { BookOpen, Plus } from "lucide-react";
@@ -41,6 +42,9 @@ interface PromptsPageProps {
 }
 
 const PromptsPage = (props: PromptsPageProps) => {
+  const { t } = useTranslation("prompts");
+  const { t: tCommon } = useTranslation("common");
+
   const router = useRouter();
   const [search, setSearch] = useState("");
   const [selectedPrompt, setSelectedPrompt] =
@@ -134,13 +138,13 @@ const PromptsPage = (props: PromptsPageProps) => {
     });
 
     if (result.error) {
-      setNotification("Error renaming prompt", "error");
+      setNotification(t("ui.errorRenamingPrompt"), "error");
       logger.error(
         { error: result.error, promptId, newName },
         "Error renaming prompt",
       );
     } else {
-      setNotification("Prompt renamed successfully", "success");
+      setNotification(t("ui.promptRenamedSuccessfully"), "success");
     }
   };
 
@@ -162,7 +166,7 @@ const PromptsPage = (props: PromptsPageProps) => {
       });
 
       if (result.error) {
-        setNotification("Error updating tags", "error");
+        setNotification(t("ui.errorUpdatingTags"), "error");
         logger.error(
           { error: result.error, promptId, tags },
           "Error updating tags",
@@ -186,10 +190,10 @@ const PromptsPage = (props: PromptsPageProps) => {
         );
       }
 
-      setNotification("Tags updated", "success");
+      setNotification(t("ui.tagsUpdated"), "success");
       return true;
     } catch (error) {
-      setNotification("Error updating tags", "error");
+      setNotification(t("ui.errorUpdatingTags"), "error");
       logger.error({ error, promptId, tags }, "Error updating tags");
       return false;
     }
@@ -209,7 +213,7 @@ const PromptsPage = (props: PromptsPageProps) => {
     });
 
     if (result.error) {
-      setNotification("Error setting environment", "error");
+      setNotification(t("ui.errorSettingEnvironment"), "error");
       logger.error(
         { error: result.error, promptId, promptVersionId, environment },
         "Error setting environment",
@@ -233,7 +237,7 @@ const PromptsPage = (props: PromptsPageProps) => {
     });
 
     if (result.error) {
-      setNotification("Error removing environment", "error");
+      setNotification(t("ui.errorRemovingEnvironment"), "error");
       logger.error(
         { error: result.error, promptId, promptVersionId, environment },
         "Error removing environment",
@@ -254,20 +258,20 @@ const PromptsPage = (props: PromptsPageProps) => {
       });
 
       if (result.error) {
-        setNotification("Error deleting prompt", "error");
+        setNotification(t("ui.errorDeletingPrompt"), "error");
         logger.error(
           { error: result.error, promptId },
           "Error deleting prompt",
         );
       } else {
-        setNotification("Prompt deleted successfully", "success");
+        setNotification(t("ui.promptDeletedSuccessfully"), "success");
         if (selectedPrompt?.prompt.id === promptId) {
           setSelectedPrompt(null);
           drawerRef.current?.collapse();
         }
       }
     } catch (error) {
-      setNotification("Error deleting prompt", "error");
+      setNotification(t("ui.errorDeletingPrompt"), "error");
       logger.error({ error, promptId }, "Error deleting prompt");
     }
   };
@@ -286,7 +290,7 @@ const PromptsPage = (props: PromptsPageProps) => {
       });
 
       if (result.error) {
-        setNotification("Error deleting prompt version", "error");
+        setNotification(t("ui.errorDeletingPromptVersion"), "error");
         logger.error(
           {
             error: result.error,
@@ -296,10 +300,10 @@ const PromptsPage = (props: PromptsPageProps) => {
           "Error deleting prompt version",
         );
       } else {
-        setNotification("Prompt version deleted successfully", "success");
+        setNotification(t("ui.promptVersionDeletedSuccessfully"), "success");
       }
     } catch (error) {
-      setNotification("Error deleting prompt version", "error");
+      setNotification(t("ui.errorDeletingPromptVersion"), "error");
       logger.error(
         { error, promptVersionId, promptId: selectedPrompt?.prompt.id },
         "Error deleting prompt version",
@@ -363,7 +367,7 @@ const PromptsPage = (props: PromptsPageProps) => {
     router.push(`/playground?promptVersionId=${promptVersionId}`);
   };
 
-  const columns = getInitialColumns(handlePlaygroundActionClick);
+  const columns = getInitialColumns(handlePlaygroundActionClick, t, tCommon);
 
   useEffect(() => {
     setToolHandler("prompts-search", async (args: { query: string }) => {
@@ -436,9 +440,7 @@ const PromptsPage = (props: PromptsPageProps) => {
       <FoldedHeader
         showFold={false}
         leftSection={
-          <Small className="font-bold text-gray-500 dark:text-slate-300">
-            Prompts
-          </Small>
+          <Small className="font-bold text-gray-500 dark:text-slate-300">{t("ui.prompts")}</Small>
         }
         rightSection={
           <section className="flex flex-row items-center gap-2">
@@ -470,7 +472,7 @@ const PromptsPage = (props: PromptsPageProps) => {
                       className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground"
                     />
                     <Input
-                      placeholder="Search prompts..."
+                      placeholder={t("ui.searchPrompts")}
                       value={search}
                       onChange={(e) => setSearch(e.target.value)}
                       className="pl-9"
@@ -484,7 +486,7 @@ const PromptsPage = (props: PromptsPageProps) => {
                     }}
                   >
                     <Plus className="h-4 w-4" />
-                    <span className="ml-2 text-sm">Create Prompt</span>
+                    <span className="ml-2 text-sm">{t("ui.createPrompt")}</span>
                   </Button>
                   <TagsFilter
                     tags={tags}
@@ -501,7 +503,7 @@ const PromptsPage = (props: PromptsPageProps) => {
                   <SimpleTable
                     data={sortedPrompts}
                     columns={columns}
-                    emptyMessage="No prompts yet. Create one in the Playground!"
+                    emptyMessage={t("ui.noPromptsYetCreateOneInThePlayground")}
                     onSelect={handleRowSelect}
                     onSort={handleSort}
                     currentSortKey={sortKey}

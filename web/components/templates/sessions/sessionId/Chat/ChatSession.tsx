@@ -1,3 +1,4 @@
+import { formatStandardDateTime } from "@/lib/i18n/format";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import {
   HeliconeRequest,
@@ -106,7 +107,7 @@ const ChatSession: React.FC<ChatSessionProps> = ({
                         Created at
                       </div>
                       <i className="w-full text-sm font-light text-slate-500 dark:text-slate-200 sm:w-auto">
-                        {new Date(request.request_created_at).toLocaleString()}
+                        {formatStandardDateTime(request.request_created_at)}
                       </i>
                     </Row>
                     <Row className="flex-wrap justify-between">

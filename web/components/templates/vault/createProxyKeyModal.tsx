@@ -14,6 +14,7 @@ import {
 import { clsx } from "../../shared/clsx";
 import useNotification from "../../shared/notification/useNotification";
 import ThemedModal from "../../shared/themed/themedModal";
+import { useTranslation } from "react-i18next";
 
 interface CreateProxyKeyModalProps {
   providerKeys: DecryptedProviderKey[];
@@ -32,6 +33,7 @@ const LimitRowDiv = (props: {
   setLimit: (limit: LimitRow) => void;
   onDelete: () => void;
 }) => {
+  const { t } = useTranslation("vault");
   const { limit, setLimit, onDelete } = props;
   const { _limitType, cost, count, timewindow_seconds } = limit;
   const [timeGrain, setTimeGrain] = useState<
@@ -52,17 +54,21 @@ const LimitRowDiv = (props: {
         }}
       >
         <option key={"cost-options"} value={"cost"}>
-          cost
+          {t("limits.cost")}
         </option>
-        <option key={"cost-options"} value={"count"}>
-          count
+        <option key={"count-options"} value={"count"}>
+          {t("limits.count")}
         </option>
       </select>
 
       <input
         type="number"
         className="block w-full rounded-md border border-gray-300 p-2 text-sm shadow-sm"
-        placeholder={_limitType === "cost" ? "Cost USD" : "Count"}
+        placeholder={
+          _limitType === "cost"
+            ? t("limits.costPlaceholder")
+            : t("limits.countPlaceholder")
+        }
         value={_limitType === "cost" ? cost : count}
         onChange={(e) => {
           const newLimit = { ...limit };
@@ -79,11 +85,11 @@ const LimitRowDiv = (props: {
           setLimit(newLimit);
         }}
       />
-      {" For "}
+      {t("limits.for")}{" "}
       <input
         type="number"
         className="block w-full rounded-md border border-gray-300 p-2 text-sm shadow-sm"
-        placeholder="Time Window"
+        placeholder={t("limits.timeWindowPlaceholder")}
         value={(() => {
           if (timeGrain === "seconds") {
             return timewindow_seconds;
@@ -123,16 +129,16 @@ const LimitRowDiv = (props: {
         }}
       >
         <option key={"seconds"} value={"seconds"}>
-          seconds
+          {t("limits.seconds")}
         </option>
         <option key={"minutes"} value={"minutes"}>
-          minutes
+          {t("limits.minutes")}
         </option>
         <option key={"hours"} value={"hours"}>
-          hours
+          {t("limits.hours")}
         </option>
         <option key={"days"} value={"days"}>
-          days
+          {t("limits.days")}
         </option>
       </select>
       <div
@@ -152,11 +158,12 @@ const LimitsInput = (props: {
     limits: Database["public"]["Tables"]["helicone_proxy_key_limits"]["Insert"][],
   ) => void;
 }) => {
+  const { t } = useTranslation("vault");
   const [limits, setLimits] = useState<LimitRow[]>([]);
 
   return (
     <div className="flex flex-col space-y-1.5 text-sm">
-      <label htmlFor="provider-key-name">Limits</label>
+      <label htmlFor="provider-key-name">{t("limits.label")}</label>
       {limits.map((limit, idx) => (
         <LimitRowDiv
           limit={limit}
@@ -207,7 +214,7 @@ const LimitsInput = (props: {
           ]);
         }}
       >
-        <div>Add new limit</div>
+        <div>{t("limits.addNew")}</div>
         <PlusCircleIcon className="h-5 w-5 text-gray-900" />
       </div>
     </div>
@@ -216,6 +223,7 @@ const LimitsInput = (props: {
 
 const CreateProxyKeyModal = (props: CreateProxyKeyModalProps) => {
   const { providerKeys, open, setOpen, onSuccess } = props;
+  const { t } = useTranslation(["vault", "common"]);
   const [limits, setLimits] = useState<
     Database["public"]["Tables"]["helicone_proxy_key_limits"]["Insert"][]
   >([]);
@@ -243,11 +251,11 @@ const CreateProxyKeyModal = (props: CreateProxyKeyModalProps) => {
     ) as HTMLInputElement;
 
     if (!proxyKeyName || proxyKeyName.value === "") {
-      setNotification("Please enter in a key name", "error");
+      setNotification(t("vault:notifications.enterKeyName"), "error");
       return;
     }
     if (!providerKeyName || providerKeyName.value === "") {
-      setNotification("Please enter in a provider key", "error");
+      setNotification(t("vault:notifications.enterProviderKey"), "error");
       return;
     }
 
@@ -268,13 +276,13 @@ const CreateProxyKeyModal = (props: CreateProxyKeyModalProps) => {
       )
       .then(({ data }) => {
         if (data) {
-          setNotification("Proxy Key Created", "success");
+          setNotification(t("vault:notifications.proxyKeyCreated"), "success");
           setReturnedKey(data);
           onSuccess();
         }
       })
       .catch(() => {
-        setNotification("Error Creating Proxy Key", "error");
+        setNotification(t("vault:notifications.proxyKeyCreateFailed"), "error");
       })
       .finally(() => setIsLoading(false));
   };
@@ -288,9 +296,9 @@ const CreateProxyKeyModal = (props: CreateProxyKeyModalProps) => {
           onSubmit={handleSubmitHandler}
           className="flex w-[400px] flex-col space-y-8 text-gray-900 dark:text-gray-100"
         >
-          <h1 className="text-lg font-semibold">Create Proxy Key</h1>
+          <h1 className="text-lg font-semibold">{t("vault:createProxyKey.title")}</h1>
           <div className="w-full space-y-1.5 text-sm">
-            <label htmlFor="proxy-key-name">Proxy Key Name</label>
+            <label htmlFor="proxy-key-name">{t("vault:createProxyKey.proxyKeyName")}</label>
             <input
               type="text"
               name="proxy-key-name"
@@ -299,11 +307,11 @@ const CreateProxyKeyModal = (props: CreateProxyKeyModalProps) => {
                 "block w-full rounded-md border border-gray-500 bg-gray-100 p-2 text-sm shadow-sm dark:bg-gray-900",
               )}
               required
-              placeholder="Proxy Key Name"
+              placeholder={t("vault:createProxyKey.proxyKeyNamePlaceholder")}
             />
           </div>
           <div className="w-full space-y-1.5 text-sm">
-            <label htmlFor="provider-key-name">Provider Key Name</label>
+            <label htmlFor="provider-key-name">{t("vault:createProxyKey.providerKeyName")}</label>
             <select
               id="provider-key-name"
               name="provider-key-name"
@@ -325,7 +333,7 @@ const CreateProxyKeyModal = (props: CreateProxyKeyModalProps) => {
               type="button"
               className="flex flex-row items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-semibold text-gray-900 shadow-sm hover:bg-gray-50 hover:text-gray-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-500 dark:border-gray-700 dark:bg-black dark:text-gray-100 dark:hover:bg-gray-900 dark:hover:text-gray-300"
             >
-              Cancel
+              {t("common:actions.cancel")}
             </button>
             <button
               type="submit"
@@ -334,18 +342,17 @@ const CreateProxyKeyModal = (props: CreateProxyKeyModalProps) => {
               {isLoading && (
                 <ArrowPathIcon className="mr-1.5 h-4 w-4 animate-spin" />
               )}
-              Create Proxy Key
+              {t("vault:createProxyKey.createButton")}
             </button>
           </div>
         </form>
       ) : (
         <div className="flex w-[400px] flex-col space-y-4">
           <h1 className="text-lg font-semibold text-gray-900">
-            Your Proxy Key
+            {t("vault:createProxyKey.yourKeyTitle")}
           </h1>
           <p className="text-sm text-gray-500">
-            Please copy this key and store it somewhere safe. You will not be
-            able to see it again.
+            {t("vault:createProxyKey.yourKeyDescription")}
           </p>
           <div className="w-full space-y-1.5 text-sm">
             <div className="flex w-full flex-row items-center gap-4">
@@ -363,7 +370,7 @@ const CreateProxyKeyModal = (props: CreateProxyKeyModalProps) => {
                 className="flex items-center rounded-md bg-black p-2 text-sm font-semibold text-white shadow-sm hover:bg-gray-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
                 onClick={() => {
                   navigator.clipboard.writeText(returnedKey.helicone_proxy_key);
-                  setNotification("Copied to clipboard!", "success");
+                  setNotification(t("vault:notifications.copiedToClipboard"), "success");
                 }}
               >
                 <ClipboardDocumentListIcon className="h-5 w-5 text-white" />
@@ -377,7 +384,7 @@ const CreateProxyKeyModal = (props: CreateProxyKeyModalProps) => {
               type="button"
               className="flex flex-row items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-semibold text-gray-900 shadow-sm hover:bg-gray-50 hover:text-gray-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-500"
             >
-              Close
+              {t("common:actions.close")}
             </button>
           </div>
         </div>

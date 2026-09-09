@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import {
   Sheet,
   SheetContent,
@@ -33,6 +34,7 @@ const EvaluatorDetailsSheet: React.FC<EvaluatorDetailsSheetProps> = ({
   selectedEvaluatorId,
   setSelectedEvaluatorId,
 }) => {
+  const { t } = useTranslation("evals");
   const { evaluators: evaluators, deleteEvaluator } = useEvaluators();
 
   const evaluator = useMemo(() => {
@@ -75,7 +77,7 @@ const EvaluatorDetailsSheet: React.FC<EvaluatorDetailsSheetProps> = ({
               />
             )
           ) : (
-            <p>This evaluator is a default evaluator.</p>
+            <p>{t("ui.thisEvaluatorIsADefaultEvaluator")}</p>
           )}
         </SheetDescription>
       </SheetContent>

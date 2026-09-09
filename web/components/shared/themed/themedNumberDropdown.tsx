@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import {
   Popover,
   PopoverContent,
@@ -25,6 +26,7 @@ interface ThemedNumberDropdownProps {
 
 const ThemedNumberDropdown = (props: ThemedNumberDropdownProps) => {
   const { options, onChange, value } = props;
+  const { t } = useTranslation("common");
   const [query, setQuery] = useState("");
   const [open, setOpen] = useState(false);
 
@@ -60,13 +62,13 @@ const ThemedNumberDropdown = (props: ThemedNumberDropdownProps) => {
           >
             {options.find((o) => o.key === value)?.param ||
               value ||
-              "Select or enter a value"}
+              t("select.selectOrEnter")}
           </Button>
         </PopoverTrigger>
         <PopoverContent className="w-full p-0">
           <Command>
             <CommandInput
-              placeholder="Select or enter a value"
+              placeholder={t("select.selectOrEnter")}
               value={query}
               onValueChange={(value) => {
                 setQuery(value);
@@ -75,7 +77,7 @@ const ThemedNumberDropdown = (props: ThemedNumberDropdownProps) => {
             />
             <CommandList>
               {filteredOptions.length === 0 && (
-                <CommandEmpty>No results found.</CommandEmpty>
+                <CommandEmpty>{t("empty.noResults")}</CommandEmpty>
               )}
               <CommandGroup>
                 {filteredOptions.map((option, i) => (

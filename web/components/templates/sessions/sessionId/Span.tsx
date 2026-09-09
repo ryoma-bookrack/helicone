@@ -1,3 +1,4 @@
+import { formatStandardDateTime } from "@/lib/i18n/format";
 import { Row } from "@/components/layout/common";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -639,7 +640,7 @@ export const TraceSpan = ({
                     <p className="text-xs font-normal text-slate-500 dark:text-slate-400">
                       <span className="font-semibold">Start:</span>{" "}
                       {typeof createdAt === "number"
-                        ? new Date(createdAt).toLocaleString()
+                        ? formatStandardDateTime(createdAt)
                         : "N/A"}
                     </p>
                   </Col>

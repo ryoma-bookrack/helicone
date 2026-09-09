@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { Menu, Transition } from "@headlessui/react";
 import { clsx } from "../../../shared/clsx";
 import { CheckIcon } from "@heroicons/react/24/outline";
@@ -27,6 +28,9 @@ interface RoleButtonProps {
 }
 
 const RoleButton = (props: RoleButtonProps) => {
+  const { t } = useTranslation("playground");
+  const { t: tCommon } = useTranslation("common");
+
   const {
     role,
     onRoleChange,
@@ -72,7 +76,7 @@ const RoleButton = (props: RoleButtonProps) => {
                     onRoleChange("user");
                   }}
                 >
-                  <div className="flex w-full items-center">User</div>
+                  <div className="flex w-full items-center">{t("ui.user")}</div>
                   {role === "user" && <CheckIcon className="h-5 w-5" />}
                 </button>
               )}
@@ -87,7 +91,7 @@ const RoleButton = (props: RoleButtonProps) => {
                     onRoleChange("assistant");
                   }}
                 >
-                  <div className="flex w-full items-center">Assistant</div>
+                  <div className="flex w-full items-center">{t("ui.assistant")}</div>
                   {role === "assistant" && <CheckIcon className="h-5 w-5" />}
                 </button>
               )}
@@ -102,7 +106,7 @@ const RoleButton = (props: RoleButtonProps) => {
                     onRoleChange("system");
                   }}
                 >
-                  <div className="flex w-full items-center">System</div>
+                  <div className="flex w-full items-center">{t("ui.system")}</div>
                   {role === "system" && <CheckIcon className="h-5 w-5" />}
                 </button>
               )}
@@ -117,7 +121,7 @@ const RoleButton = (props: RoleButtonProps) => {
                     onRoleChange("function");
                   }}
                 >
-                  <div className="flex w-full items-center">Function</div>
+                  <div className="flex w-full items-center">{t("ui.function")}</div>
                   {role === "function" && <CheckIcon className="h-5 w-5" />}
                 </button>
               )}
@@ -132,7 +136,7 @@ const RoleButton = (props: RoleButtonProps) => {
                     onRoleChange("tool");
                   }}
                 >
-                  <div className="flex w-full items-center">Tool</div>
+                  <div className="flex w-full items-center">{t("ui.tool")}</div>
                   {role === "tool" && <CheckIcon className="h-5 w-5" />}
                 </button>
               )}

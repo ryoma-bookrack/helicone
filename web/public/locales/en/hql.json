@@ -1,0 +1,182 @@
+{
+  "title": "HQL",
+  "untitledQuery": "Untitled query",
+  "tabs": {
+    "maxTabsError": "Maximum 10 tabs allowed. Close some tabs first.",
+    "tables": "Tables",
+    "queries": "Queries"
+  },
+  "search": {
+    "tables": "Search tables",
+    "queries": "Search queries"
+  },
+  "selectAllQueries": "Select all queries",
+  "waitlist": {
+    "title": "Get Early Access",
+    "description": "Be the first to know when HQL launches for your organization."
+  },
+  "readOnlyWarning": "Only read (SELECT) queries are allowed. Write operations are not permitted.",
+  "notifications": {
+    "schemaFailed": "Failed to get HQL schema",
+    "queryWritten": "Query written successfully",
+    "executionFailed": "Query execution failed",
+    "executionFailedUnknown": "Query execution failed - unknown error",
+    "executeFailed": "Failed to execute query"
+  },
+  "autocomplete": {
+    "clickhouseFunction": "ClickHouse function",
+    "sqlKeyword": "SQL keyword"
+  },
+  "result": {
+    "noResults": "No results",
+    "rows": "{{count}} rows",
+    "exportCsv": "Export CSV",
+    "copyQuery": "Copy query",
+    "runQuery": "Run query",
+    "saveQuery": "Save query",
+    "saved": "Saved",
+    "visualize": "Visualize"
+  },
+  "topBar": {
+    "newQuery": "New query",
+    "save": "Save",
+    "run": "Run",
+    "apiCommand": "API command"
+  },
+  "apiDialog": {
+    "title": "API Command",
+    "description": "Use this curl command to execute your query via the API.",
+    "copy": "Copy"
+  },
+  "chart": {
+    "title": "Chart",
+    "xAxis": "X Axis",
+    "yAxis": "Y Axis",
+    "chartType": "Chart Type",
+    "bar": "Bar",
+    "line": "Line",
+    "area": "Area"
+  },
+  "errors": {
+    "suggestionsLabel": "Suggestions:",
+    "fallbackTitle": "Query Error",
+    "invalidStatement": {
+      "title": "Invalid SQL Statement",
+      "suggestions": [
+        "Only SELECT statements are allowed",
+        "Remove any INSERT, UPDATE, DELETE, or DDL statements"
+      ]
+    },
+    "invalidTable": {
+      "title": "Invalid Table",
+      "suggestions": [
+        "Check the table name in your query",
+        "Only authorized tables can be queried"
+      ]
+    },
+    "syntaxError": {
+      "title": "SQL Syntax Error",
+      "suggestions": [
+        "Check your SQL syntax",
+        "Verify all keywords are spelled correctly",
+        "Ensure quotes and parentheses are balanced"
+      ]
+    },
+    "sqlInjectionAttempt": {
+      "title": "Security Violation"
+    },
+    "queryTimeout": {
+      "title": "Query Timeout",
+      "suggestions": [
+        "Add more specific filters to reduce data",
+        "Use LIMIT to restrict results",
+        "Optimize your WHERE conditions"
+      ]
+    },
+    "memoryLimitExceeded": {
+      "title": "Memory Limit Exceeded",
+      "suggestions": [
+        "Reduce the number of columns selected",
+        "Add date range filters",
+        "Use aggregations instead of raw data"
+      ]
+    },
+    "rowLimitExceeded": {
+      "title": "Too Many Rows",
+      "suggestions": [
+        "Add more WHERE conditions",
+        "Use a smaller date range",
+        "Apply LIMIT to your query"
+      ]
+    },
+    "resultLimitExceeded": {
+      "title": "Result Set Too Large",
+      "suggestions": [
+        "Add a LIMIT clause (max 10,000 rows)",
+        "Export to CSV for larger datasets"
+      ]
+    },
+    "unknownColumn": {
+      "title": "Unknown Column",
+      "suggestions": [
+        "Check column names against the schema",
+        "Use the Tables panel to see available columns",
+        "Column names are case-sensitive"
+      ]
+    },
+    "executionFailed": {
+      "title": "Query Execution Failed"
+    },
+    "noDataReturned": {
+      "title": "No Data Found",
+      "suggestions": [
+        "Adjust your filters",
+        "Check the date range",
+        "Verify the table contains data"
+      ]
+    },
+    "schemaFetchFailed": {
+      "title": "Schema Load Failed"
+    },
+    "queryNotFound": {
+      "title": "Query Not Found"
+    },
+    "queryNameExists": {
+      "title": "Duplicate Query Name",
+      "suggestions": ["Choose a different name for your query"]
+    },
+    "queryAccessDenied": {
+      "title": "Access Denied"
+    },
+    "missingQueryId": {
+      "title": "Missing Query ID"
+    },
+    "missingQueryName": {
+      "title": "Query Name Required",
+      "suggestions": ["Enter a name for your query"]
+    },
+    "missingQuerySql": {
+      "title": "SQL Required",
+      "suggestions": ["Enter a SQL query"]
+    },
+    "queryNameTooLong": {
+      "title": "Query Name Too Long",
+      "suggestions": ["Use a shorter name (max 255 characters)"]
+    },
+    "csvUploadFailed": {
+      "title": "CSV Export Failed",
+      "suggestions": ["Try again", "Check your network connection"]
+    },
+    "csvUrlNotReturned": {
+      "title": "Export URL Error"
+    },
+    "featureNotEnabled": {
+      "title": "Feature Not Available",
+      "suggestions": ["Contact your administrator to enable HQL access"]
+    },
+    "unexpectedError": {
+      "title": "Unexpected Error",
+      "suggestions": ["Try again", "If the problem persists, contact support"]
+    }
+  }
+}

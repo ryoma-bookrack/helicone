@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Plus } from "lucide-react";
 import React from "react";
+import { useTranslation } from "react-i18next";
 import FilterGroupNode from "./components/FilterGroupNode";
 import { useFilterAST } from "./context/filterContext";
 import {
@@ -19,8 +20,10 @@ interface FilterASTEditorProps {
 
 export const FilterASTEditor: React.FC<FilterASTEditorProps> = ({
   showCurlButton = false,
-  showTitle = true
+  showTitle = true,
 }) => {
+  const { t } = useTranslation("filters");
+  const { t: tc } = useTranslation("common");
   const { store: filterStore, helpers } = useFilterAST();
 
   return (
@@ -36,7 +39,7 @@ export const FilterASTEditor: React.FC<FilterASTEditorProps> = ({
                 }}
                 disabled={filterStore.filter === null}
                 className="h-auto min-h-[24px] w-fit border-none bg-transparent p-0 text-sm font-medium focus-visible:ring-0"
-                placeholder="Untitled Filter"
+                placeholder={t("untitledFilter")}
               />
             </div>
           )}
@@ -53,8 +56,13 @@ export const FilterASTEditor: React.FC<FilterASTEditorProps> = ({
               </Badge>
             )}
             {filterStore.filter !== null && (
-              <Button type="button" variant="ghost" size="xs" onClick={helpers.clearFilter}>
-                Clear
+              <Button
+                type="button"
+                variant="ghost"
+                size="xs"
+                onClick={helpers.clearFilter}
+              >
+                {tc("actions.clear")}
               </Button>
             )}
           </Row>
@@ -77,11 +85,13 @@ export const FilterASTEditor: React.FC<FilterASTEditorProps> = ({
             className="flex w-fit items-center gap-1"
             onClick={() => {
               filterStore.setFilter(DEFAULT_FILTER_GROUP_EXPRESSION);
-              filterStore.setActiveFilterName("Untitled Filter");
+              filterStore.setActiveFilterName(t("untitledFilter"));
             }}
           >
             <Plus size={12} />
-            <span className="text-[10px] font-normal">Add Condition Group</span>
+            <span className="text-[10px] font-normal">
+              {t("addConditionGroup")}
+            </span>
           </Button>
         )}
       </div>

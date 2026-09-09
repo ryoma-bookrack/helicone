@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import React, { useState, useMemo } from "react";
 import { Button } from "@/components/ui/button";
 import { PlayIcon } from "@heroicons/react/24/outline";
@@ -22,6 +23,9 @@ export const OriginalOutputCellRenderer = ({
   prompt?: any;
   wrapText: boolean;
 }) => {
+  const { t } = useTranslation("prompts");
+  const { t: tCommon } = useTranslation("common");
+
   const { requestsData, isRequestsLoading } =
     useExperimentRequestData(requestId);
   const [showPromptPlayground, setShowPromptPlayground] = useState(false);
@@ -204,7 +208,7 @@ export const OriginalOutputCellRenderer = ({
 //     return (
 //       <div className="w-full h-full whitespace-pre-wrap flex flex-row items-center space-x-2 pl-4">
 //         <span className="animate-ping inline-flex rounded-full bg-green-700 h-2 w-2"></span>
-//         <div className="italic">Generating...</div>
+//         <div className="italic">{t("ui.generating")}</div>
 //       </div>
 //     );
 //   }

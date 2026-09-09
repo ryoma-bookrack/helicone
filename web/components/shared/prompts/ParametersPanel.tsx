@@ -23,6 +23,7 @@ import {
   ProviderModel,
 } from "@helicone-package/cost/unified/types";
 import React, { useEffect, useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 import {
   PiBracketsCurlyBold,
   PiBrainBold,
@@ -45,7 +46,7 @@ export default function ParametersPanel({
   parameters,
   onParameterChange,
 }: ParametersPanelProps) {
-  // State for the creator selection (purely for organization)
+  const { t } = useTranslation("common");
   const [selectedCreator, setSelectedCreator] = useState<Creator>("OpenAI");
   const [isResponseFormatEditorOpen, setIsResponseFormatEditorOpen] =
     useState(false);
@@ -344,18 +345,20 @@ export default function ParametersPanel({
     <div className="flex w-full flex-col">
       {/* Header */}
       <GlassHeader className="h-14 px-4">
-        <h2 className="font-semibold text-secondary">Parameters</h2>
+        <h2 className="font-semibold text-secondary">
+          {t("prompts.parameters.title")}
+        </h2>
       </GlassHeader>
       <div className="w-full divide-y divide-slate-100 dark:divide-slate-900">
         {/* Creator / Model / Provider */}
         <div className="flex w-full flex-row items-center justify-between gap-4 px-4 py-1 first:pt-0">
           <ParameterLabel icon={<PiPlugsBold className="shrink-0" />}>
-            Creator / Model / Provider
+            {t("prompts.parameters.creatorModelProvider")}
           </ParameterLabel>
           <div className="flex gap-2">
             <Select value={selectedCreator} onValueChange={handleCreatorChange}>
               <SelectTrigger variant="helicone" className="h-8 w-28">
-                <SelectValue placeholder="Creator" />
+                <SelectValue placeholder={t("prompts.parameters.creator")} />
               </SelectTrigger>
               <SelectContent>
                 {creators.map((creator) => (
@@ -370,7 +373,7 @@ export default function ParametersPanel({
               onValueChange={handleModelChange}
             >
               <SelectTrigger variant="helicone" className="h-8 w-36">
-                <SelectValue placeholder="Model" />
+                <SelectValue placeholder={t("prompts.parameters.model")} />
               </SelectTrigger>
               <SelectContent>
                 {models.map((model) => (
@@ -385,7 +388,7 @@ export default function ParametersPanel({
               onValueChange={handleProviderChange}
             >
               <SelectTrigger variant="helicone" className="h-8 w-28">
-                <SelectValue placeholder="Provider" />
+                <SelectValue placeholder={t("prompts.parameters.provider")} />
               </SelectTrigger>
               <SelectContent>
                 {providers.map((provider) => (
@@ -401,7 +404,7 @@ export default function ParametersPanel({
         {/* Temperature */}
         <ParameterRow>
           <ParameterLabel icon={<PiPaintBrushBold />}>
-            Temperature
+            {t("prompts.parameters.temperature")}
           </ParameterLabel>
           <div className="flex items-center gap-2">
             <span className="text-sm">
@@ -424,7 +427,9 @@ export default function ParametersPanel({
         {/* Max Tokens */}
         {maxTokens && (
           <ParameterRow>
-            <ParameterLabel icon={<PiCoinsBold />}>Max Tokens</ParameterLabel>
+            <ParameterLabel icon={<PiCoinsBold />}>
+              {t("prompts.parameters.maxTokens")}
+            </ParameterLabel>
             <div className="flex items-center gap-2">
               <span className="text-sm">
                 {parameters.max_tokens?.toLocaleString()}
@@ -448,7 +453,7 @@ export default function ParametersPanel({
         {supportsReasoningEffort && (
           <ParameterRow>
             <ParameterLabel icon={<PiBrainBold />}>
-              Reasoning Effort
+              {t("prompts.parameters.reasoningEffort")}
             </ParameterLabel>
             <div className="flex items-center gap-2">
               <Select
@@ -460,12 +465,14 @@ export default function ParametersPanel({
                 }
               >
                 <SelectTrigger variant="helicone" className="h-8 w-28">
-                  <SelectValue placeholder="Effort" />
+                  <SelectValue placeholder={t("prompts.parameters.effort")} />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="low">Low</SelectItem>
-                  <SelectItem value="medium">Medium</SelectItem>
-                  <SelectItem value="high">High</SelectItem>
+                  <SelectItem value="low">{t("prompts.parameters.low")}</SelectItem>
+                  <SelectItem value="medium">
+                    {t("prompts.parameters.medium")}
+                  </SelectItem>
+                  <SelectItem value="high">{t("prompts.parameters.high")}</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -478,13 +485,13 @@ export default function ParametersPanel({
             <ParameterLabel
               icon={<PiBracketsCurlyBold className="text-secondary" />}
             >
-              Response Format
+              {t("prompts.parameters.responseFormat")}
             </ParameterLabel>
             <div className="flex flex-row items-center gap-2">
               <span className="text-sm">
                 {parameters.response_format?.type === "json_schema"
-                  ? "JSON Schema"
-                  : "Text"}
+                  ? t("prompts.parameters.jsonSchema")
+                  : t("prompts.parameters.text")}
               </span>
               <Button
                 variant="ghost"
@@ -502,7 +509,7 @@ export default function ParametersPanel({
         {supportsStopSequences && (
           <div className="flex w-full flex-row items-center justify-between pl-4">
             <ParameterLabel icon={<PiHandPalmBold />}>
-              Stop Sequences
+              {t("prompts.parameters.stopSequences")}
             </ParameterLabel>
             <ScrollableBadges
               mode="singleValue"
@@ -511,7 +518,7 @@ export default function ParametersPanel({
                 const newStop = [...(parameters.stop || []), value];
                 onParameterChange({ stop: newStop });
               }}
-              tooltipText="Add a stop sequence"
+              tooltipText={t("prompts.parameters.addStopSequence")}
               className="overflow-x-auto"
             />
           </div>

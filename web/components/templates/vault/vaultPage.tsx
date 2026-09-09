@@ -13,6 +13,7 @@ import ThemedTable, { ThemedTableProps } from "../../shared/themed/themedTable";
 import CreateProviderKeyModal from "./createProviderKeyModal";
 import CreateProxyKeyModal from "./createProxyKeyModal";
 import { useVaultPage } from "./useVaultPage";
+import { useTranslation } from "react-i18next";
 
 const VaultPage = ({
   variant = "basic",
@@ -33,6 +34,7 @@ const VaultPage = ({
     useState<DecryptedProviderKey["id"]>();
 
   const { setNotification } = useNotification();
+  const { t } = useTranslation(["vault", "common"]);
 
   const {
     isLoading,
@@ -51,11 +53,11 @@ const VaultPage = ({
       .then(() => {
         refetchProviderKeys();
         refetchProxyKeys();
-        setNotification("Provider Key Deleted", "success");
+        setNotification(t("vault:notifications.providerKeyDeleted"), "success");
         setDeleteProviderOpen(false);
       })
       .catch(() => {
-        setNotification("Error Deleting Provider Key", "error");
+        setNotification(t("vault:notifications.providerKeyDeleteFailed"), "error");
         setDeleteProviderOpen(false);
       });
   };
@@ -64,22 +66,22 @@ const VaultPage = ({
     fetch(`/api/proxy_keys/${id}/delete`, { method: "DELETE" })
       .then(() => {
         refetchProxyKeys();
-        setNotification("Proxy Key Deleted", "success");
+        setNotification(t("vault:notifications.proxyKeyDeleted"), "success");
         setDeleteProxyOpen(false);
       })
       .catch(() => {
-        setNotification("Error Deleting Proxy Key", "error");
+        setNotification(t("vault:notifications.proxyKeyDeleteFailed"), "error");
         setDeleteProxyOpen(false);
       });
   };
   const proxyKeyColumns: ThemedTableProps["columns"] = [
     {
-      name: "Name",
+      name: t("vault:proxyKeys.columns.name"),
       key: "helicone_proxy_key_name",
       hidden: false,
     },
     {
-      name: "Provider Key Name",
+      name: t("vault:proxyKeys.columns.providerKeyName"),
       key: "provider_key_name",
       hidden: false,
     },
@@ -87,12 +89,12 @@ const VaultPage = ({
 
   return (
     <>
-      <AuthHeader title={"Vault"} />
+      <AuthHeader title={t("vault:page.title")} />
       <div className="flex max-w-3xl flex-col space-y-12 divide-y divide-gray-300 py-4 dark:divide-gray-700">
         <div className="flex flex-col space-y-4">
           <div className="flex w-full flex-row items-center justify-between">
             <h1 className="text-2xl font-semibold text-gray-900 dark:text-gray-100">
-              Provider Keys
+              {t("vault:providerKeys.title")}
             </h1>
             <button
               onClick={() => {
@@ -100,13 +102,13 @@ const VaultPage = ({
               }}
               className="flex flex-row whitespace-nowrap rounded-md bg-gray-900 py-2 pl-3 pr-4 text-sm font-semibold text-white shadow-sm hover:bg-gray-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-500 dark:bg-gray-100 dark:text-black dark:hover:bg-gray-300"
             >
-              Add Provider Key
+              {t("vault:providerKeys.addButton")}
             </button>
           </div>
           <p className="text-gray-500">
             {variant === "portal"
-              ? "The key you enter will be added within the `Authorization` header of your API requests. Select which key you want to associate with this organization"
-              : "These keys will be used to authenticate with your provider."}
+              ? t("vault:providerKeys.portalDescription")
+              : t("vault:providerKeys.description")}
           </p>
           {isLoading ? (
             <ul className="flex flex-col space-y-6">
@@ -130,14 +132,14 @@ const VaultPage = ({
                       },
                     ]
                   : []),
-                { name: "Name", key: "provider_key_name", hidden: false },
+                { name: t("vault:providerKeys.columns.name"), key: "provider_key_name", hidden: false },
                 {
-                  name: "Key",
+                  name: t("vault:providerKeys.columns.key"),
                   key: "provider_key",
                   hidden: false,
                   secret: true,
                 },
-                { name: "Provider", key: "provider_name", hidden: true },
+                { name: t("vault:providerKeys.columns.provider"), key: "provider_name", hidden: true },
               ]}
               rows={
                 variant === "portal"
@@ -174,7 +176,7 @@ const VaultPage = ({
             >
               <KeyIcon className="h-8 w-8 text-gray-900 dark:text-gray-100" />
               <span className="mt-2 block text-sm font-semibold text-gray-900 dark:text-gray-100">
-                Add a provider key
+                {t("vault:providerKeys.emptyAction")}
               </span>
             </button>
           )}
@@ -183,7 +185,7 @@ const VaultPage = ({
           <div className="flex flex-col space-y-4 pt-12">
             <div className="flex w-full flex-row items-center justify-between">
               <h1 className="text-2xl font-semibold text-gray-900 dark:text-gray-100">
-                Helicone Proxy Keys
+                {t("vault:proxyKeys.title")}
               </h1>
               <button
                 onClick={() => {
@@ -191,12 +193,11 @@ const VaultPage = ({
                 }}
                 className="flex flex-row whitespace-nowrap rounded-md bg-gray-900 py-2 pl-3 pr-4 text-sm font-semibold text-white shadow-sm hover:bg-gray-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-500 dark:bg-gray-100 dark:text-black dark:hover:bg-gray-300"
               >
-                Create Proxy Key
+                {t("vault:proxyKeys.addButton")}
               </button>
             </div>
             <p className="text-gray-500">
-              These keys will replace your provider keys in your application.
-              This ensures that any usage will be logged in Helicone.
+              {t("vault:proxyKeys.description")}
             </p>
             {isLoading ? (
               <ul className="flex flex-col space-y-6">
@@ -226,7 +227,7 @@ const VaultPage = ({
               >
                 <KeyIcon className="h-8 w-8 text-gray-900 dark:text-gray-100" />
                 <span className="mt-2 block text-sm font-semibold text-gray-900 dark:text-gray-100">
-                  Add a proxy key
+                  {t("vault:proxyKeys.emptyAction")}
                 </span>
               </button>
             )}
@@ -249,12 +250,10 @@ const VaultPage = ({
       <ThemedModal open={deleteProviderOpen} setOpen={setDeleteProviderOpen}>
         <div className="flex w-full flex-col gap-4">
           <p className="text-lg font-semibold text-gray-900 dark:text-gray-100">
-            Delete Provider Key
+            {t("vault:deleteProviderKey.title")}
           </p>
           <p className="w-[400px] whitespace-pre-wrap text-sm text-gray-700 dark:text-gray-300">
-            This Provider Key will be deleted from your account. All proxy keys
-            that are mapped to this provider key will be deleted as well. Are
-            you sure you want to delete this provider key?
+            {t("vault:deleteProviderKey.description")}
           </p>
           <div className="flex justify-end gap-2">
             <button
@@ -262,7 +261,7 @@ const VaultPage = ({
               type="button"
               className="flex flex-row items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-semibold text-gray-900 shadow-sm hover:bg-gray-50 hover:text-gray-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-500 dark:border-gray-700 dark:bg-black dark:text-gray-100 dark:hover:bg-gray-900 dark:hover:text-gray-300"
             >
-              Cancel
+              {t("common:actions.cancel")}
             </button>
             <button
               onClick={async () => {
@@ -272,7 +271,7 @@ const VaultPage = ({
               }}
               className="flex items-center rounded-md bg-red-500 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white dark:text-black"
             >
-              Delete
+              {t("common:actions.delete")}
             </button>
           </div>
         </div>
@@ -280,11 +279,10 @@ const VaultPage = ({
       <ThemedModal open={deleteProxyOpen} setOpen={setDeleteProxyOpen}>
         <div className="flex w-full flex-col gap-4">
           <p className="text-lg font-semibold text-gray-900 dark:text-gray-100">
-            Delete Proxy Key
+            {t("vault:deleteProxyKey.title")}
           </p>
           <p className="w-[400px] whitespace-pre-wrap text-sm text-gray-700 dark:text-gray-300">
-            This Proxy Key will be deleted from your account. Are you sure you
-            want to delete this proxy key?
+            {t("vault:deleteProxyKey.description")}
           </p>
           <div className="flex justify-end gap-2">
             <button
@@ -292,7 +290,7 @@ const VaultPage = ({
               type="button"
               className="flex flex-row items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-semibold text-gray-900 shadow-sm hover:bg-gray-50 hover:text-gray-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-500 dark:border-gray-700 dark:bg-black dark:text-gray-100 dark:hover:bg-gray-900 dark:hover:text-gray-300"
             >
-              Cancel
+              {t("common:actions.cancel")}
             </button>
             <button
               onClick={async () => {
@@ -302,7 +300,7 @@ const VaultPage = ({
               }}
               className="flex items-center rounded-md bg-red-500 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white dark:text-black"
             >
-              Delete
+              {t("common:actions.delete")}
             </button>
           </div>
         </div>

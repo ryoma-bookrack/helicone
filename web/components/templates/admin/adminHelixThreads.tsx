@@ -1,4 +1,6 @@
+import { formatStandardDateTime } from "@/lib/i18n/format";
 import { useOrg } from "@/components/layout/org/organizationContext";
+import { useTranslation } from "react-i18next";
 import { useHeliconeAuthClient } from "@/packages/common/auth/client/AuthClientFactory";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -73,6 +75,7 @@ type StatusFilter = "all" | "escalated" | "resolved";
 type TierFilter = "all" | "free" | "pro" | "growth" | "enterprise";
 
 const AdminHelixThreads = () => {
+  const { t } = useTranslation("admin");
   const [sessionId, setSessionId] = useState<string>("");
   const [statusFilter, setStatusFilter] = useState<StatusFilter>("escalated");
   const [tierFilter, setTierFilter] = useState<TierFilter>("all");
@@ -103,7 +106,7 @@ const AdminHelixThreads = () => {
     setAdminName(name);
     localStorage.setItem(ADMIN_NAME_KEY, name);
     setIsEditingName(false);
-    toast.success("Name saved");
+    toast.success(t("helixThreads.nameSaved"));
   };
 
   const org = useOrg();
@@ -153,12 +156,12 @@ const AdminHelixThreads = () => {
       queryClient.invalidateQueries({
         queryKey: ["helix-thread", selectedSessionId],
       });
-      toast.success("Reply sent", {
-        description: "Your message has been added to the thread.",
+      toast.success(t("helixThreads.replySent"), {
+        description: t("helixThreads.replySentDescription"),
       });
     },
     onError: (error) => {
-      toast.error("Failed to send reply", {
+      toast.error(t("helixThreads.replyFailed"), {
         description: String(error),
       });
     },
@@ -180,14 +183,14 @@ const AdminHelixThreads = () => {
       queryClient.invalidateQueries({
         queryKey: ["helix-threads-list"],
       });
-      toast.success(resolved ? "Thread resolved" : "Thread reopened", {
+      toast.success(resolved ? t("helixThreads.threadResolved") : t("helixThreads.threadReopened"), {
         description: resolved
-          ? "The thread has been marked as resolved."
-          : "The thread has been reopened.",
+          ? t("helixThreads.threadResolvedDescription")
+          : t("helixThreads.threadReopenedDescription"),
       });
     },
     onError: (error) => {
-      toast.error("Failed to update thread status", {
+      toast.error(t("helixThreads.updateStatusFailed"), {
         description: String(error),
       });
     },
@@ -224,7 +227,7 @@ const AdminHelixThreads = () => {
 
   const handleCopyMessage = (content: string) => {
     navigator.clipboard.writeText(content);
-    toast.success("Copied to clipboard");
+    toast.success(t("common.copiedToClipboard"));
   };
 
   const handleSendReply = () => {
@@ -248,7 +251,7 @@ const AdminHelixThreads = () => {
               Back to list
             </Button>
           )}
-          <H3>Helix Support Threads</H3>
+          <H3>{t("helixThreads.title")}</H3>
           <Badge variant="secondary">{totalThreads} total</Badge>
         </div>
 
@@ -260,7 +263,7 @@ const AdminHelixThreads = () => {
                 size={16}
               />
               <Input
-                placeholder="Enter session ID..."
+                placeholder={t("helixThreads.sessionIdPlaceholder")}
                 value={sessionId}
                 onChange={(e) => setSessionId(e.target.value)}
                 className="w-64 pl-8"
@@ -279,7 +282,7 @@ const AdminHelixThreads = () => {
           <CardHeader className="pb-2">
             <div className="flex flex-col gap-2">
               <div className="flex items-center justify-between">
-                <H4>Recent Threads</H4>
+                <H4>{t("helixThreads.recentThreads")}</H4>
                 {totalPages > 1 && (
                   <div className="flex items-center gap-2">
                     <Button
@@ -315,12 +318,12 @@ const AdminHelixThreads = () => {
                   }}
                 >
                   <SelectTrigger className="h-8 w-[110px]">
-                    <SelectValue placeholder="Status" />
+                    <SelectValue placeholder={t("helixThreads.statusPlaceholder")} />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="all">All Status</SelectItem>
-                    <SelectItem value="escalated">Escalated</SelectItem>
-                    <SelectItem value="resolved">Resolved</SelectItem>
+                    <SelectItem value="all">{t("common.allStatus")}</SelectItem>
+                    <SelectItem value="escalated">{t("common.escalated")}</SelectItem>
+                    <SelectItem value="resolved">{t("common.resolved")}</SelectItem>
                   </SelectContent>
                 </Select>
                 <Select
@@ -331,14 +334,14 @@ const AdminHelixThreads = () => {
                   }}
                 >
                   <SelectTrigger className="h-8 w-[110px]">
-                    <SelectValue placeholder="Tier" />
+                    <SelectValue placeholder={t("helixThreads.tierPlaceholder")} />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="all">All Tiers</SelectItem>
-                    <SelectItem value="enterprise">Enterprise</SelectItem>
-                    <SelectItem value="pro">Pro</SelectItem>
-                    <SelectItem value="growth">Growth</SelectItem>
-                    <SelectItem value="free">Free</SelectItem>
+                    <SelectItem value="all">{t("common.allTiers")}</SelectItem>
+                    <SelectItem value="enterprise">{t("common.enterprise")}</SelectItem>
+                    <SelectItem value="pro">{t("common.pro")}</SelectItem>
+                    <SelectItem value="growth">{t("common.growth")}</SelectItem>
+                    <SelectItem value="free">{t("common.free")}</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -355,7 +358,7 @@ const AdminHelixThreads = () => {
               ) : threads.length === 0 ? (
                 <div className="flex flex-col items-center gap-2 p-8 text-center">
                   <MessageSquare className="text-muted-foreground" size={32} />
-                  <Muted>No threads found</Muted>
+                  <Muted>{t("helixThreads.noThreadsFound")}</Muted>
                 </div>
               ) : (
                 <div className="flex flex-col">
@@ -372,7 +375,7 @@ const AdminHelixThreads = () => {
                         <div className="flex items-center gap-2">
                           <User size={14} className="text-muted-foreground" />
                           <Small className="max-w-[160px] truncate font-medium">
-                            {thread.user_email || "Unknown user"}
+                            {thread.user_email || t("common.unknownUser")}
                           </Small>
                         </div>
                         <div className="flex items-center gap-1">
@@ -409,7 +412,7 @@ const AdminHelixThreads = () => {
                         {thread.first_message
                           ? thread.first_message.substring(0, 100) +
                             (thread.first_message.length > 100 ? "..." : "")
-                          : "No messages"}
+                          : t("common.noMessages")}
                       </Muted>
 
                       <div className="mt-1 flex items-center justify-between text-xs text-muted-foreground">
@@ -434,7 +437,7 @@ const AdminHelixThreads = () => {
             {!selectedSessionId ? (
               <div className="flex h-full flex-col items-center justify-center gap-4 p-8">
                 <MessageSquare className="text-muted-foreground" size={48} />
-                <H4>Select a thread</H4>
+                <H4>{t("helixThreads.selectThread")}</H4>
                 <Muted className="text-center">
                   Choose a thread from the list or enter a session ID to view
                   the conversation
@@ -454,7 +457,7 @@ const AdminHelixThreads = () => {
                   <div className="flex items-center justify-between">
                     <div className="flex flex-col gap-1">
                       <div className="flex items-center gap-2">
-                        <H4>Thread Details</H4>
+                        <H4>{t("helixThreads.threadDetails")}</H4>
                         {selectedThread.data.data.escalated ? (
                           <Badge variant="destructive">
                             <AlertCircle size={12} className="mr-1" />
@@ -494,7 +497,7 @@ const AdminHelixThreads = () => {
                             <CheckCircle size={14} className="mr-1" />
                             {resolveMutation.isPending
                               ? "Resolving..."
-                              : "Mark Resolved"}
+                              : t("helixThreads.markResolved")}
                           </>
                         ) : (
                           <>
@@ -507,13 +510,13 @@ const AdminHelixThreads = () => {
                       </Button>
                       <div className="flex flex-col items-end gap-1 text-sm">
                         <div className="flex items-center gap-2">
-                          <span className="text-muted-foreground">User:</span>
+                          <span className="text-muted-foreground">{t("common.user")}</span>
                           <button
                             onClick={() => {
                               const email = selectedThread.data.data?.user_email;
                               if (email) {
                                 navigator.clipboard.writeText(email);
-                                toast.success("Email copied to clipboard");
+                                toast.success(t("common.emailCopiedToClipboard"));
                               }
                             }}
                             className="flex items-center gap-1 hover:text-primary"
@@ -523,7 +526,7 @@ const AdminHelixThreads = () => {
                           </button>
                         </div>
                         <div className="flex items-center gap-2">
-                          <span className="text-muted-foreground">Org:</span>
+                          <span className="text-muted-foreground">{t("common.org")}</span>
                           <a
                             href={`/admin/org-search?orgId=${selectedThread.data.data.org_id}`}
                             className="font-mono text-xs text-primary hover:underline"
@@ -537,15 +540,15 @@ const AdminHelixThreads = () => {
                   <div className="mt-2 flex gap-4 text-xs text-muted-foreground">
                     <span>
                       Created:{" "}
-                      {new Date(
-                        selectedThread.data.data.created_at
-                      ).toLocaleString()}
+                      {formatStandardDateTime(
+                        selectedThread.data.data.created_at,
+                      )}
                     </span>
                     <span>
                       Updated:{" "}
-                      {new Date(
-                        selectedThread.data.data.updated_at
-                      ).toLocaleString()}
+                      {formatStandardDateTime(
+                        selectedThread.data.data.updated_at,
+                      )}
                     </span>
                   </div>
                 </div>
@@ -589,12 +592,12 @@ const AdminHelixThreads = () => {
                 <div className="border-t bg-muted/30 p-4">
                   {/* Admin name row */}
                   <div className="mb-2 flex items-center gap-2">
-                    <Small className="text-muted-foreground">Replying as:</Small>
+                    <Small className="text-muted-foreground">{t("helixThreads.replyingAs")}</Small>
                     {isEditingName ? (
                       <div className="flex items-center gap-2">
                         <Input
                           autoFocus
-                          placeholder="Your name"
+                          placeholder={t("helixThreads.yourName")}
                           defaultValue={adminName}
                           className="h-7 w-40"
                           onKeyDown={(e) => {
@@ -612,21 +615,21 @@ const AdminHelixThreads = () => {
                             }
                           }}
                         />
-                        <Muted className="text-xs">Enter to save</Muted>
+                        <Muted className="text-xs">{t("helixThreads.enterToSave")}</Muted>
                       </div>
                     ) : (
                       <button
                         onClick={() => setIsEditingName(true)}
                         className="flex items-center gap-1 rounded px-2 py-1 text-sm font-medium hover:bg-muted"
                       >
-                        {adminName || "Set your name"}
+                        {adminName || t("helixThreads.setYourName")}
                         <Pencil size={12} className="text-muted-foreground" />
                       </button>
                     )}
                   </div>
                   <div className="flex gap-2">
                     <Textarea
-                      placeholder="Type your reply..."
+                      placeholder={t("helixThreads.typeReply")}
                       value={replyMessage}
                       onChange={(e) => setReplyMessage(e.target.value)}
                       className="min-h-[80px] resize-none"
@@ -655,7 +658,7 @@ const AdminHelixThreads = () => {
             ) : (
               <div className="flex h-full flex-col items-center justify-center gap-4 p-8">
                 <AlertCircle className="text-destructive" size={48} />
-                <H4>Thread not found</H4>
+                <H4>{t("helixThreads.threadNotFound")}</H4>
                 <Muted className="text-center">
                   The thread with ID &quot;{selectedSessionId}&quot; could not
                   be found

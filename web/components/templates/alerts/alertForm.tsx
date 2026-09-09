@@ -1,4 +1,5 @@
 import { FormEvent, useMemo, useState, useEffect } from "react";
+import { Trans, useTranslation } from "react-i18next";
 import { useOrg } from "../../layout/org/organizationContext";
 import {
   useGetOrgMembers,
@@ -15,7 +16,7 @@ import {
 } from "@/components/ui/select";
 import { BookOpenIcon, BellIcon } from "@heroicons/react/24/outline";
 import { clsx } from "../../shared/clsx";
-import { alertTimeWindows } from "./constant";
+import { ALERT_TIME_WINDOW_KEYS, alertTimeWindows } from "./constant";
 import { Database } from "../../../db/database.types";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
@@ -82,6 +83,8 @@ interface AlertFormProps {
 
 const AlertFormContent = (props: AlertFormProps) => {
   const { handleSubmit, onCancel, initialValues } = props;
+  const { t } = useTranslation("alerts");
+  const { t: tCommon } = useTranslation("common");
   const { store: filterStore } = useFilterAST();
 
   const slackRedirectUrl = useMemo(() => {
@@ -213,21 +216,21 @@ const AlertFormContent = (props: AlertFormProps) => {
 
     if (selectedMetric === "response.status") {
       if (isNaN(alertThreshold) || alertThreshold < 0 || alertThreshold > 100) {
-        setNotification("Please enter a valid threshold", "error");
+        setNotification(t("notifications.invalidThreshold"), "error");
         return;
       }
     }
 
     if (selectedMetric === "cost") {
       if (isNaN(alertThreshold) || alertThreshold < 0) {
-        setNotification("Please enter a valid threshold", "error");
+        setNotification(t("notifications.invalidThreshold"), "error");
         return;
       }
     }
 
     if (selectedMetric === "count") {
       if (isNaN(alertThreshold) || alertThreshold < 0) {
-        setNotification("Please enter a valid threshold", "error");
+        setNotification(t("notifications.invalidThreshold"), "error");
         return;
       }
     }
@@ -240,15 +243,12 @@ const AlertFormContent = (props: AlertFormProps) => {
       selectedMetric !== "count"
     ) {
       if (!alertPercentile || alertPercentile.trim() === "") {
-        setNotification(
-          "Please enter a percentile value when using percentile aggregation",
-          "error",
-        );
+        setNotification(t("notifications.percentileRequired"), "error");
         return;
       }
       const percentileNum = Number(alertPercentile);
       if (isNaN(percentileNum) || percentileNum < 0 || percentileNum > 99.9) {
-        setNotification("Please enter a valid percentile (0-99.9)", "error");
+        setNotification(t("notifications.invalidPercentile"), "error");
         return;
       }
       percentileValue = percentileNum;
@@ -257,20 +257,17 @@ const AlertFormContent = (props: AlertFormProps) => {
       (!showEmails && !showSlackChannels) ||
       (selectedEmails.length < 1 && selectedSlackChannels.length < 1)
     ) {
-      setNotification(
-        "Please select at least one email or slack channel",
-        "error",
-      );
+      setNotification(t("notifications.selectEmailOrChannel"), "error");
       return;
     }
 
     if (!selectedMetric) {
-      setNotification("Please select a metric", "error");
+      setNotification(t("notifications.selectMetric"), "error");
       return;
     }
 
     if (selectedTimeWindow === "") {
-      setNotification("Please select a time window", "error");
+      setNotification(t("notifications.selectTimeWindow"), "error");
       return;
     }
 
@@ -314,7 +311,7 @@ const AlertFormContent = (props: AlertFormProps) => {
         <div className="flex items-center gap-2">
           <BellIcon className="h-5 w-5 text-gray-900 dark:text-gray-100" />
           <h1 className="text-xl font-semibold text-gray-900 dark:text-gray-100">
-            {initialValues ? "Edit Alert" : "Create Alert"}
+            {initialValues ? t("form.editTitle") : t("form.createTitle")}
           </h1>
         </div>
       </div>
@@ -327,7 +324,7 @@ const AlertFormContent = (props: AlertFormProps) => {
               htmlFor="alert-name"
               className="text-sm text-gray-500 dark:text-gray-200"
             >
-              Alert Name
+              {t("form.alertName")}
             </label>
             <Input
               type="text"
@@ -335,7 +332,7 @@ const AlertFormContent = (props: AlertFormProps) => {
               id="alert-name"
               required
               defaultValue={initialValues?.name || ""}
-              placeholder="My Alert"
+              placeholder={t("form.alertNamePlaceholder")}
             />
           </div>
 
@@ -343,7 +340,7 @@ const AlertFormContent = (props: AlertFormProps) => {
           <div className="flex flex-col gap-3 rounded-md border border-border bg-muted/20 p-4">
             <div className="flex flex-wrap items-center gap-x-2 gap-y-2">
               <span className="whitespace-nowrap text-muted-foreground">
-                When
+                {t("form.when")}
               </span>
               <Select
                 value={selectedMetric}
@@ -353,32 +350,27 @@ const AlertFormContent = (props: AlertFormProps) => {
                 }}
               >
                 <SelectTrigger className="h-9 w-[160px] rounded-none border-0 border-b border-border bg-transparent px-2 text-foreground shadow-none focus:border-foreground focus:ring-0">
-                  <SelectValue placeholder="Select metric" />
+                  <SelectValue placeholder={t("form.selectMetric")} />
                 </SelectTrigger>
                 <SelectContent>
                   {ALERT_METRICS.map((metric) => {
-                    const metricLabels: Record<AlertMetric, string> = {
-                      "response.status": "Error Rate",
-                      cost: "Cost",
-                      latency: "Latency",
-                      total_tokens: "Total Tokens",
-                      prompt_tokens: "Prompt Tokens",
-                      completion_tokens: "Completion Tokens",
-                      prompt_cache_read_tokens: "Prompt Cache Read Tokens",
-                      prompt_cache_write_tokens: "Prompt Cache Write Tokens",
-                      count: "Count",
-                    };
+                    const formMetricKey =
+                      metric === "response.status"
+                        ? "response.statusForm"
+                        : metric === "latency"
+                          ? "latencyForm"
+                          : metric;
 
                     return (
                       <SelectItem value={metric} key={metric}>
-                        {metricLabels[metric]}
+                        {t(`metrics.${formMetricKey}` as "metrics.cost")}
                       </SelectItem>
                     );
                   })}
                 </SelectContent>
               </Select>
               <span className="whitespace-nowrap text-muted-foreground">
-                is above
+                {t("form.isAbove")}
               </span>
               <div className="relative">
                 {selectedMetric === "cost" && (
@@ -413,7 +405,7 @@ const AlertFormContent = (props: AlertFormProps) => {
                 )}
               </div>
               <span className="whitespace-nowrap text-muted-foreground">
-                for
+                {t("form.for")}
               </span>
               <Select
                 value={selectedTimeWindow}
@@ -422,16 +414,14 @@ const AlertFormContent = (props: AlertFormProps) => {
                 }}
               >
                 <SelectTrigger className="h-9 w-[120px] rounded-none border-0 border-b border-border bg-transparent px-2 text-foreground shadow-none focus:border-foreground focus:ring-0">
-                  <SelectValue placeholder="Time" />
+                  <SelectValue placeholder={t("form.timePlaceholder")} />
                 </SelectTrigger>
                 <SelectContent>
-                  {Object.entries(alertTimeWindows).map(([key, value], idx) => {
-                    return (
-                      <SelectItem value={value.toString()} key={idx}>
-                        {key}
-                      </SelectItem>
-                    );
-                  })}
+                  {ALERT_TIME_WINDOW_KEYS.map((key) => (
+                    <SelectItem value={alertTimeWindows[key].toString()} key={key}>
+                      {t(`timeWindows.${key}`)}
+                    </SelectItem>
+                  ))}
                 </SelectContent>
               </Select>
             </div>
@@ -440,7 +430,7 @@ const AlertFormContent = (props: AlertFormProps) => {
               selectedMetric !== "count" && (
                 <div className="flex flex-wrap items-center gap-x-2 gap-y-2">
                   <span className="whitespace-nowrap text-muted-foreground">
-                    using
+                    {t("form.using")}
                   </span>
                   <Select
                     value={selectedAggregation}
@@ -449,7 +439,7 @@ const AlertFormContent = (props: AlertFormProps) => {
                     }
                   >
                     <SelectTrigger className="h-9 w-[120px] rounded-none border-0 border-b border-border bg-transparent px-2 text-foreground shadow-none focus:border-foreground focus:ring-0">
-                      <SelectValue placeholder="Aggregation" />
+                      <SelectValue placeholder={t("form.aggregationPlaceholder")} />
                     </SelectTrigger>
                     <SelectContent>
                       {ALERT_AGGREGATIONS.map((agg) => (
@@ -460,27 +450,27 @@ const AlertFormContent = (props: AlertFormProps) => {
                     </SelectContent>
                   </Select>
                   <span className="whitespace-nowrap text-muted-foreground">
-                    aggregation
+                    {t("form.aggregationSuffix")}
                   </span>
                   {selectedAggregation === "percentile" && (
                     <>
                       <span className="whitespace-nowrap text-muted-foreground">
-                        at
+                        {t("form.at")}
                       </span>
                       <Select
                         value={selectedPercentile}
                         onValueChange={setSelectedPercentile}
                       >
                         <SelectTrigger className="h-9 w-[80px] rounded-none border-0 border-b border-border bg-transparent px-2 text-foreground shadow-none focus:border-foreground focus:ring-0">
-                          <SelectValue placeholder="95th" />
+                          <SelectValue placeholder={t("form.percentilePlaceholder")} />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="50">50th</SelectItem>
-                          <SelectItem value="75">75th</SelectItem>
-                          <SelectItem value="90">90th</SelectItem>
-                          <SelectItem value="95">95th</SelectItem>
-                          <SelectItem value="99">99th</SelectItem>
-                          <SelectItem value="99.9">99.9th</SelectItem>
+                          <SelectItem value="50">{t("percentiles.50")}</SelectItem>
+                          <SelectItem value="75">{t("percentiles.75")}</SelectItem>
+                          <SelectItem value="90">{t("percentiles.90")}</SelectItem>
+                          <SelectItem value="95">{t("percentiles.95")}</SelectItem>
+                          <SelectItem value="99">{t("percentiles.99")}</SelectItem>
+                          <SelectItem value="99.9">{t("percentiles.99.9")}</SelectItem>
                         </SelectContent>
                       </Select>
                       <input
@@ -490,7 +480,7 @@ const AlertFormContent = (props: AlertFormProps) => {
                         value={selectedPercentile}
                       />
                       <span className="whitespace-nowrap text-muted-foreground">
-                        percentile
+                        {t("form.percentileSuffix")}
                       </span>
                     </>
                   )}
@@ -499,7 +489,7 @@ const AlertFormContent = (props: AlertFormProps) => {
 
             <div className="flex flex-wrap items-center gap-x-2 gap-y-2">
               <span className="whitespace-nowrap text-muted-foreground">
-                grouped by
+                {t("form.groupedBy")}
               </span>
               <Popover open={groupingOpen} onOpenChange={setGroupingOpen}>
                 <PopoverTrigger asChild>
@@ -517,16 +507,16 @@ const AlertFormContent = (props: AlertFormProps) => {
                           (opt) => opt.value === selectedGrouping,
                         )?.label ||
                         selectedGrouping
-                      : "None"}
+                      : t("form.none")}
                     <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                   </Button>
                 </PopoverTrigger>
                 <PopoverContent className="w-[250px] p-0" align="start">
                   <Command>
-                    <CommandInput placeholder="Search..." className="h-9" />
-                    <CommandEmpty>No grouping found.</CommandEmpty>
+                    <CommandInput placeholder={t("form.searchGrouping")} className="h-9" />
+                    <CommandEmpty>{t("form.noGroupingFound")}</CommandEmpty>
                     <CommandList>
-                      <CommandGroup heading="Standard">
+                      <CommandGroup heading={t("form.groupingStandard")}>
                         <CommandItem
                           value="none"
                           onSelect={() => {
@@ -540,7 +530,7 @@ const AlertFormContent = (props: AlertFormProps) => {
                               !selectedGrouping ? "opacity-100" : "opacity-0",
                             )}
                           />
-                          None
+                          {t("form.none")}
                         </CommandItem>
                         {groupingOptions.base.map((option) => (
                           <CommandItem
@@ -566,7 +556,7 @@ const AlertFormContent = (props: AlertFormProps) => {
                       {groupingOptions.properties.length > 0 && (
                         <>
                           <CommandSeparator />
-                          <CommandGroup heading="Custom Properties">
+                          <CommandGroup heading={t("form.groupingCustomProperties")}>
                             {groupingOptions.properties.map((option) => (
                               <CommandItem
                                 key={option.value}
@@ -597,13 +587,13 @@ const AlertFormContent = (props: AlertFormProps) => {
             </div>
 
             <div className="flex flex-col gap-2">
-              <span className="text-muted-foreground">filtered by</span>
+              <span className="text-muted-foreground">{t("form.filteredBy")}</span>
               <FilterASTEditor showTitle={false} />
             </div>
 
             <div className="flex flex-wrap items-center gap-x-2 gap-y-2">
               <span className="whitespace-nowrap text-muted-foreground">
-                with at least
+                {t("form.withAtLeast")}
               </span>
               <Input
                 type="number"
@@ -617,7 +607,7 @@ const AlertFormContent = (props: AlertFormProps) => {
                 step={1}
               />
               <span className="whitespace-nowrap text-muted-foreground">
-                requests
+                {t("form.requests")}
               </span>
             </div>
           </div>
@@ -634,7 +624,7 @@ const AlertFormContent = (props: AlertFormProps) => {
                   variant="ghost"
                   className="flex w-full items-center justify-between p-0 text-base font-semibold text-gray-900 hover:bg-transparent dark:text-gray-100"
                 >
-                  <span className="text-base font-semibold">Notification</span>
+                  <span className="text-base font-semibold">{t("form.notification")}</span>
                   <ChevronDown
                     className={clsx(
                       "h-4 w-4 transition-transform",
@@ -650,7 +640,7 @@ const AlertFormContent = (props: AlertFormProps) => {
                       htmlFor="alert-emails"
                       className="text-gray-500 dark:text-gray-200"
                     >
-                      Emails
+                      {t("form.emails")}
                     </label>
                     <Switch
                       size="md"
@@ -670,17 +660,19 @@ const AlertFormContent = (props: AlertFormProps) => {
                           >
                             <span className="truncate">
                               {selectedEmails.length > 0
-                                ? `${selectedEmails.length} email${selectedEmails.length > 1 ? "s" : ""} selected`
-                                : "Select emails to send alerts to"}
+                                ? t("form.emailsSelected", {
+                                    count: selectedEmails.length,
+                                  })
+                                : t("form.selectEmails")}
                             </span>
                             <ChevronsUpDown className="ml-2 h-3.5 w-3.5 shrink-0 opacity-50" />
                           </Button>
                         </PopoverTrigger>
                         <PopoverContent className="w-[300px] p-0" align="start">
                           <Command>
-                            <CommandInput placeholder="Search emails..." />
+                            <CommandInput placeholder={t("form.searchEmails")} />
                             <CommandList>
-                              <CommandEmpty>No emails found.</CommandEmpty>
+                              <CommandEmpty>{t("form.noEmailsFound")}</CommandEmpty>
                               <CommandGroup>
                                 {members.map((member) => (
                                   <CommandItem
@@ -745,7 +737,7 @@ const AlertFormContent = (props: AlertFormProps) => {
                       htmlFor="alert-slack-channels"
                       className="text-gray-500 dark:text-gray-200"
                     >
-                      Slack Channels
+                      {t("form.slackChannels")}
                     </label>
                     <Switch
                       size="md"
@@ -767,8 +759,10 @@ const AlertFormContent = (props: AlertFormProps) => {
                               >
                                 <span className="truncate">
                                   {selectedSlackChannels.length > 0
-                                    ? `${selectedSlackChannels.length} channel${selectedSlackChannels.length > 1 ? "s" : ""} selected`
-                                    : "Select slack channels to send alerts to"}
+                                    ? t("form.channelsSelected", {
+                                        count: selectedSlackChannels.length,
+                                      })
+                                    : t("form.selectChannels")}
                                 </span>
                                 <ChevronsUpDown className="ml-2 h-3.5 w-3.5 shrink-0 opacity-50" />
                               </Button>
@@ -778,10 +772,10 @@ const AlertFormContent = (props: AlertFormProps) => {
                               align="start"
                             >
                               <Command>
-                                <CommandInput placeholder="Search channels..." />
+                                <CommandInput placeholder={t("form.searchChannels")} />
                                 <CommandList>
                                   <CommandEmpty>
-                                    No channels found.
+                                    {t("form.noChannelsFound")}
                                   </CommandEmpty>
                                   <CommandGroup>
                                     {slackChannels.map((channel) => (
@@ -849,9 +843,11 @@ const AlertFormContent = (props: AlertFormProps) => {
                           )}
                         </div>
                         <small className="text-gray-500">
-                          If the channel is private, you will need to add the
-                          bot to the channel by mentioning{" "}
-                          <strong>@Helicone</strong> in the channel.
+                          <Trans
+                            i18nKey="form.privateChannelHint"
+                            ns="alerts"
+                            components={{ strong: <strong /> }}
+                          />
                         </small>
                       </>
                     ) : (
@@ -863,7 +859,7 @@ const AlertFormContent = (props: AlertFormProps) => {
                             orgContext?.currentOrg?.id || ""
                           }&redirect_uri=${slackRedirectUrl}`}
                         >
-                          Connect Slack
+                          {t("form.connectSlack")}
                         </a>
                       </Button>
                     ))}
@@ -890,7 +886,7 @@ const AlertFormContent = (props: AlertFormProps) => {
             className="flex items-center gap-2"
           >
             <BookOpenIcon className="h-4 w-4" />
-            <span>View Docs</span>
+            <span>{t("form.viewDocs")}</span>
           </a>
         </Button>
         <div className="flex gap-2">
@@ -899,13 +895,13 @@ const AlertFormContent = (props: AlertFormProps) => {
             type="button"
             className="flex flex-row items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-semibold text-gray-900 shadow-sm hover:bg-gray-50 hover:text-gray-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-500 dark:border-gray-700 dark:bg-black dark:text-gray-100 dark:hover:bg-gray-900 dark:hover:text-gray-300"
           >
-            Cancel
+            {tCommon("actions.cancel")}
           </button>
           <button
             type="submit"
             className="flex items-center rounded-md bg-black px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-gray-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white dark:bg-white dark:text-black dark:hover:bg-gray-200"
           >
-            {initialValues ? "Save" : "Create Alert"}
+            {initialValues ? tCommon("actions.save") : t("form.createAlert")}
           </button>
         </div>
       </div>

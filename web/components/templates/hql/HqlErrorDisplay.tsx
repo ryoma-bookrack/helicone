@@ -1,4 +1,5 @@
 import React from "react";
+import { useTranslation } from "react-i18next";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { AlertCircle, AlertTriangle, XCircle } from "lucide-react";
 import { HqlErrorCode, parseHqlError } from "@/lib/api/hql/errorTypes";
@@ -16,215 +17,101 @@ interface ErrorDisplay {
   suggestions?: string[];
 }
 
-// Map error codes to user-friendly display information
-const ERROR_DISPLAY_MAP: Record<
-  HqlErrorCode,
-  Omit<ErrorDisplay, "description">
-> = {
-  // SQL Validation Errors
-  [HqlErrorCode.INVALID_STATEMENT]: {
-    title: "Invalid SQL Statement",
-    severity: "error",
-    icon: XCircle,
-    suggestions: [
-      "Only SELECT statements are allowed",
-      "Remove any INSERT, UPDATE, DELETE, or DDL statements",
-    ],
-  },
-  [HqlErrorCode.INVALID_TABLE]: {
-    title: "Invalid Table",
-    severity: "error",
-    icon: XCircle,
-    suggestions: [
-      "Check the table name in your query",
-      "Only authorized tables can be queried",
-    ],
-  },
-  [HqlErrorCode.SYNTAX_ERROR]: {
-    title: "SQL Syntax Error",
-    severity: "warning",
-    icon: AlertTriangle,
-    suggestions: [
-      "Check your SQL syntax",
-      "Verify all keywords are spelled correctly",
-      "Ensure quotes and parentheses are balanced",
-    ],
-  },
-  [HqlErrorCode.SQL_INJECTION_ATTEMPT]: {
-    title: "Security Violation",
-    severity: "error",
-    icon: XCircle,
-  },
-
-  // Query Execution Errors
-  [HqlErrorCode.QUERY_TIMEOUT]: {
-    title: "Query Timeout",
-    severity: "warning",
-    icon: AlertTriangle,
-    suggestions: [
-      "Add more specific filters to reduce data",
-      "Use LIMIT to restrict results",
-      "Optimize your WHERE conditions",
-    ],
-  },
-  [HqlErrorCode.MEMORY_LIMIT_EXCEEDED]: {
-    title: "Memory Limit Exceeded",
-    severity: "warning",
-    icon: AlertTriangle,
-    suggestions: [
-      "Reduce the number of columns selected",
-      "Add date range filters",
-      "Use aggregations instead of raw data",
-    ],
-  },
-  [HqlErrorCode.ROW_LIMIT_EXCEEDED]: {
-    title: "Too Many Rows",
-    severity: "warning",
-    icon: AlertTriangle,
-    suggestions: [
-      "Add more WHERE conditions",
-      "Use a smaller date range",
-      "Apply LIMIT to your query",
-    ],
-  },
-  [HqlErrorCode.RESULT_LIMIT_EXCEEDED]: {
-    title: "Result Set Too Large",
-    severity: "warning",
-    icon: AlertTriangle,
-    suggestions: [
-      "Add a LIMIT clause (max 10,000 rows)",
-      "Export to CSV for larger datasets",
-    ],
-  },
-  [HqlErrorCode.UNKNOWN_COLUMN]: {
-    title: "Unknown Column",
-    severity: "error",
-    icon: XCircle,
-    suggestions: [
-      "Check column names against the schema",
-      "Use the Tables panel to see available columns",
-      "Column names are case-sensitive",
-    ],
-  },
-  [HqlErrorCode.EXECUTION_FAILED]: {
-    title: "Query Execution Failed",
-    severity: "error",
-    icon: XCircle,
-  },
-
-  // Data Errors
-  [HqlErrorCode.NO_DATA_RETURNED]: {
-    title: "No Data Found",
-    severity: "info",
-    icon: AlertCircle,
-    suggestions: [
-      "Adjust your filters",
-      "Check the date range",
-      "Verify the table contains data",
-    ],
-  },
-  [HqlErrorCode.SCHEMA_FETCH_FAILED]: {
-    title: "Schema Load Failed",
-    severity: "error",
-    icon: XCircle,
-  },
-
-  // Saved Query Errors
-  [HqlErrorCode.QUERY_NOT_FOUND]: {
-    title: "Query Not Found",
-    severity: "warning",
-    icon: AlertTriangle,
-  },
-  [HqlErrorCode.QUERY_NAME_EXISTS]: {
-    title: "Duplicate Query Name",
-    severity: "warning",
-    icon: AlertTriangle,
-    suggestions: ["Choose a different name for your query"],
-  },
-  [HqlErrorCode.QUERY_ACCESS_DENIED]: {
-    title: "Access Denied",
-    severity: "error",
-    icon: XCircle,
-  },
-
-  // Validation Errors
-  [HqlErrorCode.MISSING_QUERY_ID]: {
-    title: "Missing Query ID",
-    severity: "error",
-    icon: XCircle,
-  },
-  [HqlErrorCode.MISSING_QUERY_NAME]: {
-    title: "Query Name Required",
-    severity: "warning",
-    icon: AlertTriangle,
-    suggestions: ["Enter a name for your query"],
-  },
-  [HqlErrorCode.MISSING_QUERY_SQL]: {
-    title: "SQL Required",
-    severity: "warning",
-    icon: AlertTriangle,
-    suggestions: ["Enter a SQL query"],
-  },
-  [HqlErrorCode.QUERY_NAME_TOO_LONG]: {
-    title: "Query Name Too Long",
-    severity: "warning",
-    icon: AlertTriangle,
-    suggestions: ["Use a shorter name (max 255 characters)"],
-  },
-
-  // Export Errors
-  [HqlErrorCode.CSV_UPLOAD_FAILED]: {
-    title: "CSV Export Failed",
-    severity: "error",
-    icon: XCircle,
-    suggestions: ["Try again", "Check your network connection"],
-  },
-  [HqlErrorCode.CSV_URL_NOT_RETURNED]: {
-    title: "Export URL Error",
-    severity: "error",
-    icon: XCircle,
-  },
-
-  // Feature Access Errors
-  [HqlErrorCode.FEATURE_NOT_ENABLED]: {
-    title: "Feature Not Available",
-    severity: "error",
-    icon: XCircle,
-    suggestions: ["Contact your administrator to enable HQL access"],
-  },
-
-  // Generic Errors
-  [HqlErrorCode.UNEXPECTED_ERROR]: {
-    title: "Unexpected Error",
-    severity: "error",
-    icon: XCircle,
-    suggestions: ["Try again", "If the problem persists, contact support"],
-  },
+const ERROR_CODE_TO_KEY: Record<HqlErrorCode, string> = {
+  [HqlErrorCode.INVALID_STATEMENT]: "invalidStatement",
+  [HqlErrorCode.INVALID_TABLE]: "invalidTable",
+  [HqlErrorCode.SYNTAX_ERROR]: "syntaxError",
+  [HqlErrorCode.SQL_INJECTION_ATTEMPT]: "sqlInjectionAttempt",
+  [HqlErrorCode.QUERY_TIMEOUT]: "queryTimeout",
+  [HqlErrorCode.MEMORY_LIMIT_EXCEEDED]: "memoryLimitExceeded",
+  [HqlErrorCode.ROW_LIMIT_EXCEEDED]: "rowLimitExceeded",
+  [HqlErrorCode.RESULT_LIMIT_EXCEEDED]: "resultLimitExceeded",
+  [HqlErrorCode.UNKNOWN_COLUMN]: "unknownColumn",
+  [HqlErrorCode.EXECUTION_FAILED]: "executionFailed",
+  [HqlErrorCode.NO_DATA_RETURNED]: "noDataReturned",
+  [HqlErrorCode.SCHEMA_FETCH_FAILED]: "schemaFetchFailed",
+  [HqlErrorCode.QUERY_NOT_FOUND]: "queryNotFound",
+  [HqlErrorCode.QUERY_NAME_EXISTS]: "queryNameExists",
+  [HqlErrorCode.QUERY_ACCESS_DENIED]: "queryAccessDenied",
+  [HqlErrorCode.MISSING_QUERY_ID]: "missingQueryId",
+  [HqlErrorCode.MISSING_QUERY_NAME]: "missingQueryName",
+  [HqlErrorCode.MISSING_QUERY_SQL]: "missingQuerySql",
+  [HqlErrorCode.QUERY_NAME_TOO_LONG]: "queryNameTooLong",
+  [HqlErrorCode.CSV_UPLOAD_FAILED]: "csvUploadFailed",
+  [HqlErrorCode.CSV_URL_NOT_RETURNED]: "csvUrlNotReturned",
+  [HqlErrorCode.FEATURE_NOT_ENABLED]: "featureNotEnabled",
+  [HqlErrorCode.UNEXPECTED_ERROR]: "unexpectedError",
 };
 
-const getErrorDetails = (errorString: string): ErrorDisplay => {
-  const hqlError = parseHqlError(errorString);
-
-  // If we have a known error code, use the mapping
-  if (hqlError.code && ERROR_DISPLAY_MAP[hqlError.code]) {
-    const display = ERROR_DISPLAY_MAP[hqlError.code];
-    return {
-      ...display,
-      description: hqlError.details || hqlError.message,
-    };
-  }
-
-  // Fallback for unknown errors
-  return {
-    title: "Query Error",
-    description: hqlError.message,
-    severity: "error",
-    icon: XCircle,
-  };
+const ERROR_SEVERITY: Record<
+  HqlErrorCode,
+  Omit<ErrorDisplay, "description" | "title" | "suggestions">
+> = {
+  [HqlErrorCode.INVALID_STATEMENT]: { severity: "error", icon: XCircle },
+  [HqlErrorCode.INVALID_TABLE]: { severity: "error", icon: XCircle },
+  [HqlErrorCode.SYNTAX_ERROR]: { severity: "warning", icon: AlertTriangle },
+  [HqlErrorCode.SQL_INJECTION_ATTEMPT]: { severity: "error", icon: XCircle },
+  [HqlErrorCode.QUERY_TIMEOUT]: { severity: "warning", icon: AlertTriangle },
+  [HqlErrorCode.MEMORY_LIMIT_EXCEEDED]: {
+    severity: "warning",
+    icon: AlertTriangle,
+  },
+  [HqlErrorCode.ROW_LIMIT_EXCEEDED]: { severity: "warning", icon: AlertTriangle },
+  [HqlErrorCode.RESULT_LIMIT_EXCEEDED]: {
+    severity: "warning",
+    icon: AlertTriangle,
+  },
+  [HqlErrorCode.UNKNOWN_COLUMN]: { severity: "error", icon: XCircle },
+  [HqlErrorCode.EXECUTION_FAILED]: { severity: "error", icon: XCircle },
+  [HqlErrorCode.NO_DATA_RETURNED]: { severity: "info", icon: AlertCircle },
+  [HqlErrorCode.SCHEMA_FETCH_FAILED]: { severity: "error", icon: XCircle },
+  [HqlErrorCode.QUERY_NOT_FOUND]: { severity: "warning", icon: AlertTriangle },
+  [HqlErrorCode.QUERY_NAME_EXISTS]: { severity: "warning", icon: AlertTriangle },
+  [HqlErrorCode.QUERY_ACCESS_DENIED]: { severity: "error", icon: XCircle },
+  [HqlErrorCode.MISSING_QUERY_ID]: { severity: "error", icon: XCircle },
+  [HqlErrorCode.MISSING_QUERY_NAME]: { severity: "warning", icon: AlertTriangle },
+  [HqlErrorCode.MISSING_QUERY_SQL]: { severity: "warning", icon: AlertTriangle },
+  [HqlErrorCode.QUERY_NAME_TOO_LONG]: {
+    severity: "warning",
+    icon: AlertTriangle,
+  },
+  [HqlErrorCode.CSV_UPLOAD_FAILED]: { severity: "error", icon: XCircle },
+  [HqlErrorCode.CSV_URL_NOT_RETURNED]: { severity: "error", icon: XCircle },
+  [HqlErrorCode.FEATURE_NOT_ENABLED]: { severity: "error", icon: XCircle },
+  [HqlErrorCode.UNEXPECTED_ERROR]: { severity: "error", icon: XCircle },
 };
 
 export function HqlErrorDisplay({ error, className }: HqlErrorDisplayProps) {
+  const { t } = useTranslation("hql");
+
   if (!error) return null;
+
+  const hqlError = parseHqlError(error);
+
+  const getErrorDetails = (): ErrorDisplay => {
+    if (hqlError.code && ERROR_CODE_TO_KEY[hqlError.code]) {
+      const key = ERROR_CODE_TO_KEY[hqlError.code];
+      const meta = ERROR_SEVERITY[hqlError.code];
+      const suggestions = t(`errors.${key}.suggestions`, {
+        returnObjects: true,
+        defaultValue: [],
+      }) as string[];
+
+      return {
+        ...meta,
+        title: t(`errors.${key}.title`),
+        description: hqlError.details || hqlError.message,
+        suggestions: suggestions.length > 0 ? suggestions : undefined,
+      };
+    }
+
+    return {
+      title: t("errors.fallbackTitle"),
+      description: hqlError.message,
+      severity: "error",
+      icon: XCircle,
+    };
+  };
 
   const {
     title,
@@ -232,7 +119,7 @@ export function HqlErrorDisplay({ error, className }: HqlErrorDisplayProps) {
     severity,
     icon: Icon,
     suggestions,
-  } = getErrorDetails(error);
+  } = getErrorDetails();
 
   return (
     <Alert
@@ -251,7 +138,7 @@ export function HqlErrorDisplay({ error, className }: HqlErrorDisplayProps) {
         <p>{description}</p>
         {suggestions && suggestions.length > 0 && (
           <div className="mt-3">
-            <p className="mb-1 text-sm font-medium">Suggestions:</p>
+            <p className="mb-1 text-sm font-medium">{t("errors.suggestionsLabel")}</p>
             <ul className="list-inside list-disc space-y-1 text-sm opacity-90">
               {suggestions.map((suggestion, index) => (
                 <li key={index}>{suggestion}</li>

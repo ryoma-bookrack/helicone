@@ -1,3 +1,4 @@
+import { formatStandardDateTime } from "@/lib/i18n/format";
 import useNotification from "@/components/shared/notification/useNotification";
 import { MappedLLMRequest } from "@helicone-package/llm-mapper/types";
 import {
@@ -101,7 +102,7 @@ export const VectorDBContent: React.FC<VectorDBContentProps> = ({
   const formatTimestamp = (timestamp: string) => {
     try {
       const date = new Date(timestamp);
-      return date.toLocaleString();
+      return formatStandardDateTime(date);
     } catch (e) {
       return timestamp;
     }

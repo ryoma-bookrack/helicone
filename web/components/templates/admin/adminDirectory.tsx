@@ -1,4 +1,5 @@
 import { Plus, Search, Table } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { components } from "@/lib/clients/jawnTypes/public";
@@ -52,6 +53,7 @@ export function Directory({
   activeTab,
   setActiveTab,
 }: DirectoryProps) {
+  const { t } = useTranslation("admin");
   const [searchTerm, setSearchTerm] = useState("");
   const { setNotification } = useNotification();
   const queryClient = useQueryClient();
@@ -98,7 +100,7 @@ export function Directory({
       queryClient.invalidateQueries({
         queryKey: ["get", "/v1/admin/saved-queries"],
       });
-      setNotification("Successfully saved admin query", "success");
+      setNotification(t("directory.querySaved"), "success");
     },
     onError: (error: any) => {
       setNotification(error.message, "error");
@@ -175,7 +177,7 @@ export function Directory({
                   onClick={async () => {
                     const response = await handleSaveQueryAsync({
                       id: undefined,
-                      name: "Untitled query",
+                      name: t("directory.untitledQuery"),
                       sql: "select * from request_response_rmt",
                     });
 
@@ -184,7 +186,7 @@ export function Directory({
                     if (id) {
                       setCurrentQuery({
                         id,
-                        name: "Untitled query",
+                        name: t("directory.untitledQuery"),
                         sql: "select * from request_response_rmt",
                       });
                     }
@@ -194,7 +196,7 @@ export function Directory({
                   New query
                 </Button>
               </TooltipTrigger>
-              <TooltipContent>Create new query</TooltipContent>
+              <TooltipContent>{t("directory.createNewQuery")}</TooltipContent>
             </Tooltip>
           </TooltipProvider>
         </div>
@@ -305,6 +307,7 @@ function QueryList({
     }>
   >;
 }) {
+  const { t } = useTranslation("admin");
   const { setNotification } = useNotification();
   const queryClient = useQueryClient();
   const [selectedQueries, setSelectedQueries] = useState<Set<string>>(
@@ -323,7 +326,7 @@ function QueryList({
       return response;
     },
     onSuccess: () => {
-      setNotification("Query deleted successfully", "success");
+      setNotification(t("directory.queryDeleted"), "success");
       queryClient.invalidateQueries({
         queryKey: ["get", "/v1/admin/saved-queries"],
       });
@@ -361,7 +364,7 @@ function QueryList({
   });
 
   const handleDeleteQuery = (queryId: string, queryName: string) => {
-    if (confirm(`Are you sure you want to delete "${queryName}"?`)) {
+    if (confirm(t("directory.deleteQueryConfirm", { name: queryName }))) {
       deleteQueryMutation.mutate(queryId);
     }
   };
@@ -370,7 +373,10 @@ function QueryList({
     const count = selectedQueries.size;
     if (
       confirm(
-        `Are you sure you want to delete ${count} selected ${count === 1 ? "query" : "queries"}?`,
+        t("directory.bulkDeleteConfirm", {
+          count,
+          queries: t(`common.query_${count === 1 ? "one" : "other"}`),
+        }),
       )
     ) {
       bulkDeleteMutation.mutate(Array.from(selectedQueries));
@@ -423,7 +429,7 @@ function QueryList({
             <Checkbox
               checked={selectedQueries.size === queries.length}
               onCheckedChange={toggleSelectAll}
-              aria-label="Select all queries"
+              aria-label={t("directory.selectAllQueries")}
             />
           )}
           <h3 className="text-sm font-medium text-muted-foreground">
@@ -443,7 +449,7 @@ function QueryList({
         )}
       </div>
       {isLoading ? (
-        <div className="text-sm text-muted-foreground">Loading...</div>
+        <div className="text-sm text-muted-foreground">{t("common.loading")}</div>
       ) : (
         <div className="space-y-1">
           {queries.map((query, index) => (

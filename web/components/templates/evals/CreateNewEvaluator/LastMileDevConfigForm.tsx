@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { Col } from "@/components/layout/common";
 import { useTestDataStore } from "@/components/templates/evals/testing/testingStore";
 import { Input } from "@/components/ui/input";
@@ -32,6 +33,7 @@ function SelectDataEntryType({
   defaultValue: DataEntry;
   onChange: (value: DataEntry) => void;
 }) {
+  const { t } = useTranslation("evals");
   const { setTestConfig: setTestData } = useTestDataStore();
   useEffect(() => {
     setTestData((prev) => {
@@ -78,13 +80,13 @@ function SelectDataEntryType({
             }}
           >
             <SelectTrigger>
-              <SelectValue placeholder="Select type" />
+              <SelectValue placeholder={t("ui.selectType")} />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="prompt-input">Prompt Input</SelectItem>
-              <SelectItem value="input-body">Input Body</SelectItem>
-              <SelectItem value="output-body">Output Body</SelectItem>
-              <SelectItem value="system-prompt">System Prompt</SelectItem>
+              <SelectItem value="prompt-input">{t("ui.promptInput")}</SelectItem>
+              <SelectItem value="input-body">{t("ui.inputBody")}</SelectItem>
+              <SelectItem value="output-body">{t("ui.outputBody")}</SelectItem>
+              <SelectItem value="system-prompt">{t("ui.systemPrompt")}</SelectItem>
             </SelectContent>
           </Select>
         </div>
@@ -92,7 +94,7 @@ function SelectDataEntryType({
         {defaultValue._type === "prompt-input" && (
           <div>
             <Input
-              placeholder="Input Key"
+              placeholder={t("ui.inputKey")}
               value={defaultValue.inputKey}
               onChange={(e) => {
                 onChange({
@@ -117,11 +119,11 @@ function SelectDataEntryType({
               }}
             >
               <SelectTrigger>
-                <SelectValue placeholder="Select content type" />
+                <SelectValue placeholder={t("ui.selectContentType")} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="message">Message</SelectItem>
-                <SelectItem value="jsonify">Jsonify</SelectItem>
+                <SelectItem value="message">{t("ui.message")}</SelectItem>
+                <SelectItem value="jsonify">{t("ui.jsonify")}</SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -176,6 +178,7 @@ export const LastMileDevConfigForm: React.FC<{
   openTestPanel?: () => void;
   preset?: LastMileConfigForm;
 }> = ({ existingEvaluatorId, preset }) => {
+  const { t } = useTranslation("evals");
   const notification = useNotification();
 
   // Use the config store
@@ -224,31 +227,25 @@ export const LastMileDevConfigForm: React.FC<{
             <div className="space-y-3">
               <div className="mb-3 border-b pb-1">
                 <div className="flex items-baseline gap-2">
-                  <H3 className="text-lg">Basic Information</H3>
-                  <Muted className="text-sm">
-                    Define your LastMile evaluator&apos;s name and type
-                  </Muted>
+                  <H3 className="text-lg">{t("ui.basicInformation")}</H3>
+                  <Muted className="text-sm">{t("ui.defineYourLastmileEvaluatorsNameAndType")}</Muted>
                 </div>
               </div>
 
               <div className="space-y-3">
                 <div className="space-y-2">
                   <div className="flex items-center justify-between">
-                    <Label htmlFor="name" className="text-sm font-medium">
-                      Evaluator Name
-                    </Label>
+                    <Label htmlFor="name" className="text-sm font-medium">{t("ui.evaluatorName")}</Label>
                     <a
                       href="https://docs.lastmileai.dev"
                       target="_blank"
                       rel="noopener noreferrer"
                       className="text-xs text-blue-500 hover:text-blue-600"
-                    >
-                      LastMile AI Documentation
-                    </a>
+                    >{t("ui.lastmileAiDocumentation")}</a>
                   </div>
                   <Input
                     id="name"
-                    placeholder="Enter evaluator name"
+                    placeholder={t("ui.enterEvaluatorName")}
                     value={evaluatorName}
                     readOnly={!!existingEvaluatorId}
                     disabled={!!existingEvaluatorId}
@@ -266,24 +263,18 @@ export const LastMileDevConfigForm: React.FC<{
                     }}
                   />
                   {existingEvaluatorId && (
-                    <div className="mt-1 text-xs text-muted-foreground">
-                      Evaluator names cannot be changed after creation
-                    </div>
+                    <div className="mt-1 text-xs text-muted-foreground">{t("ui.evaluatorNamesCannotBeChangedAfterCreati")}</div>
                   )}
                 </div>
 
                 <div className="space-y-2">
                   <div className="flex items-center justify-between">
-                    <Label htmlFor="type" className="text-sm font-medium">
-                      Evaluator Type
-                    </Label>
+                    <Label htmlFor="type" className="text-sm font-medium">{t("ui.evaluatorType")}</Label>
                     <Tooltip>
                       <TooltipTrigger>
                         <InfoIcon className="h-3 w-3 text-muted-foreground" />
                       </TooltipTrigger>
-                      <TooltipContent className="max-w-xs">
-                        Choose the type of LastMile evaluator
-                      </TooltipContent>
+                      <TooltipContent className="max-w-xs">{t("ui.chooseTheTypeOfLastmileEvaluator")}</TooltipContent>
                     </Tooltip>
                   </div>
                   <Select
@@ -308,14 +299,12 @@ export const LastMileDevConfigForm: React.FC<{
                     }}
                   >
                     <SelectTrigger>
-                      <SelectValue placeholder="Select evaluator type" />
+                      <SelectValue placeholder={t("ui.selectEvaluatorType")} />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="relevance">Relevance</SelectItem>
-                      <SelectItem value="context_relevance">
-                        Context Relevance
-                      </SelectItem>
-                      <SelectItem value="faithfulness">Faithfulness</SelectItem>
+                      <SelectItem value="relevance">{t("ui.relevance")}</SelectItem>
+                      <SelectItem value="context_relevance">{t("ui.contextRelevance")}</SelectItem>
+                      <SelectItem value="faithfulness">{t("ui.faithfulness")}</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
@@ -328,17 +317,15 @@ export const LastMileDevConfigForm: React.FC<{
             <div className="space-y-3">
               <div className="mb-3 border-b pb-1">
                 <div className="flex items-baseline gap-2">
-                  <H3 className="text-lg">Configuration</H3>
-                  <Muted className="text-sm">
-                    Configure the data sources for your evaluator
-                  </Muted>
+                  <H3 className="text-lg">{t("ui.configuration")}</H3>
+                  <Muted className="text-sm">{t("ui.configureTheDataSourcesForYourEvaluator")}</Muted>
                 </div>
               </div>
 
               <div className="space-y-4 rounded-md bg-muted/10 p-3">
                 {evaluatorType.input && (
                   <SelectDataEntryType
-                    label="Input"
+                    label={t("ui.input")}
                     defaultValue={evaluatorType.input}
                     onChange={(value) => {
                       setEvaluatorType({
@@ -351,7 +338,7 @@ export const LastMileDevConfigForm: React.FC<{
 
                 {evaluatorType.output && (
                   <SelectDataEntryType
-                    label="Output"
+                    label={t("ui.output")}
                     defaultValue={evaluatorType.output}
                     onChange={(value) => {
                       setEvaluatorType({
@@ -365,7 +352,7 @@ export const LastMileDevConfigForm: React.FC<{
                 {evaluatorType._type === "faithfulness" &&
                   evaluatorType.groundTruth && (
                     <SelectDataEntryType
-                      label="Ground Truth"
+                      label={t("ui.groundTruth")}
                       defaultValue={evaluatorType.groundTruth}
                       onChange={(value) => {
                         setEvaluatorType({

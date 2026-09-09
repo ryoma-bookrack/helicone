@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { usePromptVersions } from "../../../../../../services/hooks/prompts/prompts";
 import { useState } from "react";
 import { Select, SelectContent, SelectItem } from "../../../../../ui/select";
@@ -15,6 +16,9 @@ import { Input } from "../../../../../ui/input";
 import LoadingAnimation from "../../../../../shared/loadingAnimation";
 
 export const NewExperimentDialog = () => {
+  const { t } = useTranslation("prompts");
+  const { t: tCommon } = useTranslation("common");
+
   const notification = useNotification();
   const [basePrompt, setBasePrompt] = useState<PromptObject>({
     model: "gpt-4",
@@ -82,7 +86,7 @@ export const NewExperimentDialog = () => {
     }
 
     if (!basePrompt.model) {
-      notification.setNotification("Please select a model", "error");
+      notification.setNotification(t("ui.pleaseSelectAModel"), "error");
       setIsLoading(false);
       return;
     }
@@ -97,13 +101,13 @@ export const NewExperimentDialog = () => {
       },
     });
     if (res.error || !res.data) {
-      notification.setNotification("Failed to create prompt", "error");
+      notification.setNotification(t("ui.failedToCreatePrompt"), "error");
       setIsLoading(false);
       return;
     }
 
     if (!res.data?.data?.id || !res.data?.data?.prompt_version_id) {
-      notification.setNotification("Failed to create prompt", "error");
+      notification.setNotification(t("ui.failedToCreatePrompt"), "error");
       setIsLoading(false);
       return;
     }
@@ -115,7 +119,7 @@ export const NewExperimentDialog = () => {
       },
     });
     if (!dataset.data?.data?.datasetId) {
-      notification.setNotification("Failed to create dataset", "error");
+      notification.setNotification(t("ui.failedToCreateDataset"), "error");
       setIsLoading(false);
       return;
     }
@@ -131,7 +135,7 @@ export const NewExperimentDialog = () => {
       },
     });
     if (!experiment.data?.data?.experimentId) {
-      notification.setNotification("Failed to create experiment", "error");
+      notification.setNotification(t("ui.failedToCreateExperiment"), "error");
       setIsLoading(false);
       return;
     }
@@ -154,12 +158,12 @@ export const NewExperimentDialog = () => {
     );
 
     if (result.error || !result.data) {
-      notification.setNotification("Failed to create subversion", "error");
+      notification.setNotification(t("ui.failedToCreateSubversion"), "error");
       setIsLoading(false);
       return;
     }
 
-    notification.setNotification("Prompt created successfully", "success");
+    notification.setNotification(t("ui.promptCreatedSuccessfully"), "success");
     setIsLoading(false);
     await router.push(
       `/prompts/${res.data?.data?.id}/subversion/${res.data?.data?.prompt_version_id}/experiment/${experiment.data?.data?.experimentId}`,
@@ -171,17 +175,17 @@ export const NewExperimentDialog = () => {
       {isLoading ? (
         <div className="flex h-full w-full flex-col items-center justify-center">
           <LoadingAnimation />
-          <h1 className="text-2xl font-semibold">Getting your experiments</h1>
+          <h1 className="text-2xl font-semibold">{t("ui.gettingYourExperiments")}</h1>
         </div>
       ) : (
         <div className="space-y-4 pr-8">
           <div className="flex flex-row space-x-2">
             <BeakerIcon className="h-6 w-6" />
-            <h3 className="text-md font-semibold">Original Prompt</h3>
+            <h3 className="text-md font-semibold">{t("ui.originalPrompt")}</h3>
           </div>
 
           <Input
-            placeholder="Prompt Name"
+            placeholder={t("ui.promptName")}
             value={promptName}
             onChange={(e) => setPromptName(e.target.value)}
           />
@@ -229,6 +233,8 @@ export const StartFromPromptDialog = ({
   prompts,
   onDialogClose,
 }: StartFromPromptDialogProps) => {
+  const { t } = useTranslation("experiments");
+  const { t: tCommon } = useTranslation("common");
   const router = useRouter();
   const [selectedPromptId, setSelectedPromptId] = useState<string | null>(null);
   const notification = useNotification();
@@ -266,7 +272,7 @@ export const StartFromPromptDialog = ({
     });
 
     if (experimentTableResult.error || !experimentTableResult.data) {
-      notification.setNotification("Failed to create experiment", "error");
+      notification.setNotification(t("ui.failedToCreateExperiment"), "error");
       return;
     }
 
@@ -280,13 +286,10 @@ export const StartFromPromptDialog = ({
       <div>
         <div className="flex flex-row items-center space-x-2 text-center">
           <BeakerIcon className="h-4 w-4" />
-          <h3 className="mb-2 text-lg font-medium">Start with a prompt</h3>
+          <h3 className="mb-2 text-lg font-medium">{t("ui.startWithAPrompt")}</h3>
         </div>
 
-        <p className="mb-2 text-sm text-slate-500">
-          Choose an existing prompt and select the version you want to
-          experiment on.
-        </p>
+        <p className="mb-2 text-sm text-slate-500">{t("ui.chooseAnExistingPromptAndSelectTheVersio")}</p>
         <div className="rounded-md border border-slate-200 dark:border-slate-700">
           <ScrollArea className="flex max-h-[30vh] flex-col overflow-y-auto px-1 py-2 pt-0">
             {prompts &&
@@ -310,9 +313,7 @@ export const StartFromPromptDialog = ({
             <PlusIcon className="h-6 w-6 text-slate-700 dark:text-slate-300" />
             <Dialog>
               <DialogTrigger asChild>
-                <span className="text-md font-normal text-slate-700 dark:text-slate-300">
-                  Create a new prompt
-                </span>
+                <span className="text-md font-normal text-slate-700 dark:text-slate-300">{t("ui.createANewPrompt")}</span>
               </DialogTrigger>
               <NewExperimentDialog />
             </Dialog>
@@ -320,7 +321,7 @@ export const StartFromPromptDialog = ({
         </div>
 
         <div className="mt-4 flex flex-row items-center justify-center space-x-2">
-          <h4 className="font-semibold">Version</h4>
+          <h4 className="font-semibold">{t("ui.version")}</h4>
           <Select
             value={selectedVersionId ?? ""}
             onValueChange={setSelectedVersionId}
@@ -362,17 +363,13 @@ export const StartFromPromptDialog = ({
             variant="outline"
             onClick={() => onDialogClose(false)}
             className="w-full"
-          >
-            Cancel
-          </Button>
+          >{tCommon("actions.cancel")}</Button>
           <Button
             variant="default"
             disabled={!selectedVersionId}
             onClick={handleCreateExperiment}
             className="w-full"
-          >
-            Create experiment
-          </Button>
+          >{t("ui.createExperiment")}</Button>
         </div>
       </div>
     </DialogContent>

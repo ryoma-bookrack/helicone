@@ -11,6 +11,7 @@ import { randomUUID } from "@/lib/randomUUID";
 import { OpenAIChatRequest } from "@helicone-package/llm-mapper/mappers/openai/chat-v2";
 import { useRouter } from "next/router";
 import React, { createContext, useContext, useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 type Tool = NonNullable<OpenAIChatRequest["tools"]>[0];
 type Message = NonNullable<OpenAIChatRequest["messages"]>[0];
@@ -109,6 +110,7 @@ export const HeliconeAgentProvider: React.FC<{
   setAgentChatOpen: (open: boolean) => void;
 }> = ({ children, agentChatOpen, setAgentChatOpen }) => {
   const router = useRouter();
+  const { t } = useTranslation("agent");
   const [tools, setTools] = useState<HeliconeAgentTool[]>([]);
   const [toolHandlers, setToolHandlers] = useState<
     Map<string, (args: any) => Promise<any> | any>
@@ -234,10 +236,10 @@ export const HeliconeAgentProvider: React.FC<{
       router.push(args.page);
       return {
         success: true,
-        message: "Successfully navigated to " + args.page,
+        message: t("navigation.success", { page: args.page }),
       };
     });
-  }, [router]);
+  }, [router, t]);
 
   const setToolHandler = (
     toolName: string,
@@ -253,9 +255,9 @@ export const HeliconeAgentProvider: React.FC<{
 
   const getInitialMessage = () => {
     if (router.pathname === "/quickstart") {
-      return "Hello, I'm Helix! I can provide personalized help for integrating with Helicone, so ask me anything.";
+      return t("initialMessages.quickstart");
     }
-    return "Hello! I'm Helix, your Helicone assistant. How can I help you today?";
+    return t("initialMessages.default");
   };
 
   const [messages, setMessages] = useState<Message[]>([
@@ -283,7 +285,7 @@ export const HeliconeAgentProvider: React.FC<{
       console.error(`No handler found for tool: ${toolName}`);
       return {
         success: false,
-        message: `No handler found for tool: ${toolName}`,
+        message: t("errors.noHandler", { toolName }),
       };
     }
     try {
@@ -292,7 +294,7 @@ export const HeliconeAgentProvider: React.FC<{
       console.error(error);
       return {
         success: false,
-        message: `Error executing tool: ${toolName}`,
+        message: t("errors.toolError", { toolName }),
       };
     }
   };

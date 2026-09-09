@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import React from "react";
 import LLMAsJudgeEvaluatorDetails from "../../details/LLMAsJudgeEvaluatorDetails";
 import PythonEvaluatorDetails from "../../details/PythonEvaluatorDetails";
@@ -13,7 +14,10 @@ export const EvaluatorEditor: React.FC<EvaluatorEditorProps> = ({
   evaluator,
   deleteEvaluator,
 }) => {
-  if (!evaluator) return <p>This evaluator is a default evaluator.</p>;
+  const { t } = useTranslation("evals");
+  const { t: tCommon } = useTranslation("common");
+
+  if (!evaluator) return <p>{t("ui.thisEvaluatorIsADefaultEvaluator")}</p>;
 
   if (evaluator.llm_template) {
     return (
@@ -40,7 +44,7 @@ export const EvaluatorEditor: React.FC<EvaluatorEditorProps> = ({
       />
     );
   } else {
-    return <p>This evaluator is a default evaluator.</p>;
+    return <p>{t("ui.thisEvaluatorIsADefaultEvaluator")}</p>;
   }
 };
 

@@ -1,3 +1,4 @@
+import { formatStandardDateTime } from "@/lib/i18n/format";
 import useNotification from "@/components/shared/notification/useNotification";
 import { MappedLLMRequest } from "@helicone-package/llm-mapper/types";
 import { PROMPT_MODES } from "../chatComponent/chatTopBar";
@@ -131,13 +132,13 @@ export const AssistantContent: React.FC<AssistantContentProps> = ({
             </div>
             <div>
               <p className="text-slate-600">Created At</p>
-              <p>{new Date(runDetails.created_at * 1000).toLocaleString()}</p>
+              <p>{formatStandardDateTime(runDetails.created_at * 1000)}</p>
             </div>
             {runDetails.completed_at && (
               <div>
                 <p className="text-slate-600">Completed At</p>
                 <p>
-                  {new Date(runDetails.completed_at * 1000).toLocaleString()}
+                  {formatStandardDateTime(runDetails.completed_at * 1000)}
                 </p>
               </div>
             )}

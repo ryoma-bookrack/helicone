@@ -1,3 +1,4 @@
+import { formatStandardDateTime } from "@/lib/i18n/format";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import {
@@ -195,9 +196,7 @@ const SessionNameSelection = ({
                               Created on
                             </h3>
                             <p className="truncate text-sm text-slate-500">
-                              {new Date(
-                                seshName.created_at,
-                              ).toLocaleDateString()}
+                              {formatStandardDateTime(seshName.created_at)}
                             </p>
                           </div>
                           {requiresPremium && (

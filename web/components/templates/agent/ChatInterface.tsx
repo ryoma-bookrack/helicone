@@ -4,7 +4,9 @@ import React, {
   forwardRef,
   useImperativeHandle,
   useState,
+  useMemo,
 } from "react";
+import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import {
@@ -52,11 +54,11 @@ interface ChatInterfaceProps {
 }
 
 const models = [
-  { id: "claude-sonnet-4-5-20250514, gpt-5-mini, gpt-5", label: "Auto" },
-  { id: "gpt-5/openai", label: "GPT-5" },
-  { id: "gpt-5-mini/openai", label: "GPT-5 Mini" },
-  { id: "claude-sonnet-4-5-20250514/anthropic", label: "Claude Sonnet 4.5" },
-];
+  { id: "claude-sonnet-4-5-20250514, gpt-5-mini, gpt-5", labelKey: "models.auto" },
+  { id: "gpt-5/openai", labelKey: "models.gpt5" },
+  { id: "gpt-5-mini/openai", labelKey: "models.gpt5Mini" },
+  { id: "claude-sonnet-4-5-20250514/anthropic", labelKey: "models.claudeSonnet" },
+] as const;
 
 const ChatInterface = forwardRef<{ focus: () => void }, ChatInterfaceProps>(
   (
@@ -75,6 +77,7 @@ const ChatInterface = forwardRef<{ focus: () => void }, ChatInterfaceProps>(
     },
     ref,
   ) => {
+    const { t } = useTranslation("agent");
     const textareaRef = useRef<HTMLTextAreaElement>(null);
     const fileInputRef = useRef<HTMLInputElement>(null);
     const [input, setInput] = useState("");
@@ -213,7 +216,7 @@ const ChatInterface = forwardRef<{ focus: () => void }, ChatInterfaceProps>(
       const imageUrl = URL.createObjectURL(image);
       setSelectedImage({
         src: imageUrl,
-        alt: `Upload ${index + 1}`,
+        alt: t("message.uploadAlt", { index: index + 1 }),
       });
     };
 
@@ -225,8 +228,17 @@ const ChatInterface = forwardRef<{ focus: () => void }, ChatInterfaceProps>(
       setSelectedImage(null);
     };
 
+    const localizedModels = useMemo(
+      () =>
+        models.map((model) => ({
+          ...model,
+          label: t(model.labelKey),
+        })),
+      [t],
+    );
+
     const currentModel =
-      models.find((m) => m.id === selectedModel) || models[0];
+      localizedModels.find((m) => m.id === selectedModel) || localizedModels[0];
 
     const [isAccordionOpen, setIsAccordionOpen] = useState(true);
 
@@ -241,7 +253,7 @@ const ChatInterface = forwardRef<{ focus: () => void }, ChatInterfaceProps>(
         }
         return {
           success: true,
-          message: "Successfully escalated to a human",
+          message: t("escalation.escalateSuccess"),
         };
       });
     }, []);
@@ -268,7 +280,7 @@ const ChatInterface = forwardRef<{ focus: () => void }, ChatInterfaceProps>(
                       isAccordionOpen ? "rotate-0" : "-rotate-90",
                     )}
                   />
-                  {messageQueue.length ?? "0"} Queued
+                  {t("chat.queued", { count: messageQueue.length ?? "0" })}
                 </div>
                 <div
                   className={cn(
@@ -353,10 +365,10 @@ const ChatInterface = forwardRef<{ focus: () => void }, ChatInterfaceProps>(
               onPaste={handlePaste}
               placeholder={
                 isStreaming
-                  ? "Type your message (will be queued)..."
+                  ? t("chat.placeholderStreaming")
                   : isDragOver
-                    ? "Drop images here..."
-                    : `Type your message... (Press ⌘ + I to open this window)`
+                    ? t("chat.placeholderDragOver")
+                    : t("chat.placeholderDefault")
               }
               className="w-full resize-none border-0 bg-transparent p-2 text-[13px] focus-visible:ring-0 focus-visible:ring-offset-0"
               style={{ minHeight: "24px" }}
@@ -377,7 +389,7 @@ const ChatInterface = forwardRef<{ focus: () => void }, ChatInterfaceProps>(
                     </Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="start" className="w-40">
-                    {models.map((model) => (
+                    {localizedModels.map((model) => (
                       <DropdownMenuItem
                         key={model.id}
                         onClick={() => onModelChange(model.id)}
@@ -408,17 +420,17 @@ const ChatInterface = forwardRef<{ focus: () => void }, ChatInterfaceProps>(
                         ) : isEscalated ? (
                           <>
                             <CheckCircle size={10} />
-                            <span>Support</span>
+                            <span>{t("chat.support")}</span>
                           </>
                         ) : (
                           <>
                             <Users size={10} />
-                            <span>Support</span>
+                            <span>{t("chat.support")}</span>
                           </>
                         )}
                       </Button>
                     </TooltipTrigger>
-                    <TooltipContent>Talk to a human</TooltipContent>
+                    <TooltipContent>{t("chat.talkToHuman")}</TooltipContent>
                   </Tooltip>
                 )}
               </div>
@@ -479,8 +491,8 @@ const ChatInterface = forwardRef<{ focus: () => void }, ChatInterfaceProps>(
                   </TooltipTrigger>
                   <TooltipContent className="text-xs">
                     {isStreaming && !input.trim() && uploadedImages.length === 0
-                      ? "Stop"
-                      : "Send"}
+                      ? t("chat.stop")
+                      : t("chat.send")}
                   </TooltipContent>
                 </Tooltip>
               </div>

@@ -7,6 +7,7 @@ import {
 } from "@heroicons/react/24/outline";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { useOrg } from "../../layout/org/organizationContext";
 import useNotification from "../../shared/notification/useNotification";
 import { logger } from "@/lib/telemetry/logger";
@@ -39,6 +40,8 @@ import { ExternalLinkIcon } from "lucide-react";
 interface WebhooksPageProps {}
 
 const WebhooksPage = (props: WebhooksPageProps) => {
+  const { t } = useTranslation("webhooks");
+  const { t: tCommon } = useTranslation("common");
   const { setNotification } = useNotification();
   const org = useOrg();
   const [addWebhookOpen, setAddWebhookOpen] = useState(false);
@@ -119,17 +122,17 @@ const WebhooksPage = (props: WebhooksPageProps) => {
         return response;
       } catch (error: any) {
         logger.error({ error }, "Webhook creation error");
-        throw new Error(error.message || "Failed to create webhook");
+        throw new Error(error.message || t("notifications.createFailed"));
       }
     },
     onSuccess: () => {
-      setNotification("Webhook created!", "success");
+      setNotification(t("notifications.created"), "success");
       refetchWebhooks();
       setAddWebhookOpen(false);
       setWebhookError(undefined);
     },
     onError: (error: Error) => {
-      setNotification(`Error: ${error.message}`, "error");
+      setNotification(t("notifications.error", { message: error.message }), "error");
       setWebhookError(error.message);
     },
   });
@@ -146,7 +149,7 @@ const WebhooksPage = (props: WebhooksPageProps) => {
       });
     },
     onSuccess: () => {
-      setNotification("Webhook deleted!", "success");
+      setNotification(t("notifications.deleted"), "success");
       refetchWebhooks();
     },
   });
@@ -165,13 +168,13 @@ const WebhooksPage = (props: WebhooksPageProps) => {
     onSuccess: (data) => {
       const response = data as any;
       if (response?.data?.success) {
-        setNotification("Test webhook sent successfully!", "success");
+        setNotification(t("notifications.testSuccess"), "success");
       } else {
-        setNotification(response?.data?.message || "Test webhook sent", "info");
+        setNotification(response?.data?.message || t("notifications.testSent"), "info");
       }
     },
     onError: (error: Error) => {
-      setNotification(`Test failed: ${error.message}`, "error");
+      setNotification(t("notifications.testFailed", { message: error.message }), "error");
     },
     onSettled: () => {
       setTestingWebhook(null);
@@ -188,7 +191,7 @@ const WebhooksPage = (props: WebhooksPageProps) => {
 
   const copyToClipboard = (text: string) => {
     navigator.clipboard.writeText(text);
-    setNotification("Copied to clipboard!", "success");
+    setNotification(t("notifications.copied"), "success");
   };
 
   if (!org?.currentOrg?.tier) {
@@ -241,7 +244,7 @@ const WebhooksPage = (props: WebhooksPageProps) => {
       <div className="flex flex-col space-y-4">
         <AuthHeader
           isWithinIsland={true}
-          title={<div className="ml-8 flex items-center gap-2">Webhooks</div>}
+          title={<div className="ml-8 flex items-center gap-2">{t("title")}</div>}
         />
 
         <div className="mx-8 mb-2 flex items-center justify-between">
@@ -257,7 +260,7 @@ const WebhooksPage = (props: WebhooksPageProps) => {
               rel="noopener noreferrer"
               className="flex items-center gap-1"
             >
-              Learn more about Helicone webhooks
+              {t("learnMore")}
               <ExternalLinkIcon className="h-4 w-4" />
             </a>
           </Button>
@@ -270,7 +273,7 @@ const WebhooksPage = (props: WebhooksPageProps) => {
                 onClick={handleAddWebhook}
               >
                 <PlusIcon className="h-4 w-4" />
-                Add Webhook
+                {t("addWebhook")}
               </Button>
             </DialogTrigger>
             <DialogContent className="max-w-2xl">
@@ -295,21 +298,15 @@ const WebhooksPage = (props: WebhooksPageProps) => {
             <TableHeader className="bg-card">
               <TableRow>
                 <TableHead className="text-xs font-medium">
-                  Destination
+                  {t("columns.destination")}
                 </TableHead>
-                <TableHead className="text-xs font-medium">Created</TableHead>
-                <TableHead className="text-xs font-medium">Version</TableHead>
-                <TableHead className="text-xs font-medium">
-                  Sample Rate
-                </TableHead>
-                <TableHead className="text-xs font-medium">
-                  Property Filters
-                </TableHead>
-                <TableHead className="text-xs font-medium">
-                  Include Data
-                </TableHead>
-                <TableHead className="text-xs font-medium">HMAC Key</TableHead>
-                <TableHead className="text-xs font-medium">Actions</TableHead>
+                <TableHead className="text-xs font-medium">{t("columns.created")}</TableHead>
+                <TableHead className="text-xs font-medium">{t("columns.version")}</TableHead>
+                <TableHead className="text-xs font-medium">{t("columns.sampleRate")}</TableHead>
+                <TableHead className="text-xs font-medium">{t("columns.propertyFilters")}</TableHead>
+                <TableHead className="text-xs font-medium">{t("columns.includeData")}</TableHead>
+                <TableHead className="text-xs font-medium">{t("columns.hmacKey")}</TableHead>
+                <TableHead className="text-xs font-medium">{t("columns.actions")}</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -369,11 +366,11 @@ const WebhooksPage = (props: WebhooksPageProps) => {
                   <TableCell>
                     {(webhook.config as any)?.["includeData"] !== false ? (
                       <span className="inline-flex items-center rounded-full bg-green-100 px-2.5 py-0.5 text-xs font-medium text-green-800">
-                        Enabled
+                        {t("includeData.enabled")}
                       </span>
                     ) : (
                       <span className="inline-flex items-center rounded-full bg-gray-100 px-2.5 py-0.5 text-xs font-medium text-gray-800">
-                        Disabled
+                        {t("includeData.disabled")}
                       </span>
                     )}
                   </TableCell>
@@ -419,12 +416,12 @@ const WebhooksPage = (props: WebhooksPageProps) => {
                         {testingWebhook === webhook.id ? (
                           <>
                             <div className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />
-                            <span className="ml-1">Testing...</span>
+                            <span className="ml-1">{t("actions.testing")}</span>
                           </>
                         ) : (
                           <>
                             <BeakerIcon className="mr-1 h-4 w-4" />
-                            Test
+                            {t("actions.test")}
                           </>
                         )}
                       </Button>
@@ -436,7 +433,7 @@ const WebhooksPage = (props: WebhooksPageProps) => {
                           deleteWebhook.mutate(webhook.id);
                         }}
                       >
-                        Delete
+                        {tCommon("actions.delete")}
                       </Button>
                     </div>
                   </TableCell>

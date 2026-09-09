@@ -1,3 +1,7 @@
+import {
+  formatStandardDate,
+  formatStandardDateTime,
+} from "@/lib/i18n/format";
 import { getTimeInterval } from "@/lib/timeCalculations/time";
 import { getTimeMap } from "@/lib/timeCalculations/constants";
 
@@ -93,36 +97,10 @@ export function getTooltipTimeFormatter(start: Date, end: Date) {
 
     const date = new Date(payload.time);
 
-    if (timeRange < 1000 * 60 * 60 * 24) {
-      // For less than a day, show date and time with minutes
-      return `${date.toLocaleDateString()}, ${date.toLocaleTimeString(
-        undefined,
-        {
-          hour: "2-digit",
-          minute: "2-digit",
-        },
-      )}`;
-    } else if (timeRange < 1000 * 60 * 60 * 24 * 7) {
-      // For less than a week, show date and hour
-      return `${date.toLocaleDateString()}, ${date.toLocaleTimeString(
-        undefined,
-        {
-          hour: "2-digit",
-        },
-      )}`;
-    } else if (timeRange < 1000 * 60 * 60 * 24 * 90) {
-      // For less than 90 days, show date with month, day
-      return date.toLocaleDateString(undefined, {
-        month: "short",
-        day: "numeric",
-        year: "numeric",
-      });
-    } else {
-      // For longer periods, show month and year
-      return date.toLocaleDateString(undefined, {
-        month: "short",
-        year: "numeric",
-      });
+    if (timeRange < 1000 * 60 * 60 * 24 * 90) {
+      return formatStandardDateTime(date);
     }
+
+    return formatStandardDate(date);
   };
 }

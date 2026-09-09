@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { Col } from "@/components/layout/common";
 import { useInvalidateEvaluators } from "@/components/templates/evals/EvaluatorHook";
 import { useTestDataStore } from "@/components/templates/evals/testing/testingStore";
@@ -42,6 +43,8 @@ export const PythonEvaluatorConfigForm: React.FC<{
   openTestPanel,
   onSubmit,
 }) => {
+  const { t } = useTranslation("evals");
+  const { t: tCommon } = useTranslation("common");
   const notification = useNotification();
   const jawn = useJawnClient();
   const invalidateEvaluators = useInvalidateEvaluators();
@@ -108,7 +111,7 @@ export const PythonEvaluatorConfigForm: React.FC<{
           },
         });
         if (!result.data?.data) {
-          notification.setNotification("Failed to update evaluator", "error");
+          notification.setNotification(t("ui.failedToUpdateEvaluator"), "error");
         } else {
           notification.setNotification(
             "Evaluator updated successfully",
@@ -129,7 +132,7 @@ export const PythonEvaluatorConfigForm: React.FC<{
           },
         });
         if (!result.data?.data) {
-          notification.setNotification("Failed to create evaluator", "error");
+          notification.setNotification(t("ui.failedToCreateEvaluator"), "error");
         } else {
           notification.setNotification(
             "Evaluator created successfully",
@@ -141,7 +144,7 @@ export const PythonEvaluatorConfigForm: React.FC<{
       }
     } catch (error) {
       logger.error({ error }, "Error submitting Python evaluator");
-      notification.setNotification("An error occurred", "error");
+      notification.setNotification(t("ui.anErrorOccurred"), "error");
     }
   };
 
@@ -187,36 +190,32 @@ export const PythonEvaluatorConfigForm: React.FC<{
           <Col className="space-y-6">
             <div>
               <div className="flex items-baseline gap-2">
-                <H3 className="text-lg">Basic Information</H3>
-                <Muted className="text-sm">
-                  Define your evaluator&apos;s name and purpose
-                </Muted>
+                <H3 className="text-lg">{t("ui.basicInformation")}</H3>
+                <Muted className="text-sm">{t("ui.defineYourEvaluatorsNameAndPurpose")}</Muted>
               </div>
               <Separator className="my-2" />
               <div className="mt-4 space-y-4">
                 <div className="space-y-2">
-                  <Label htmlFor="name">Evaluator Name</Label>
+                  <Label htmlFor="name">{t("ui.evaluatorName")}</Label>
                   <Input
                     id="name"
                     value={pythonName}
                     onChange={(e) => setPythonName(e.target.value)}
-                    placeholder="Enter a name for your evaluator"
+                    placeholder={t("ui.enterANameForYourEvaluator")}
                     readOnly={!!existingEvaluatorId}
                     disabled={!!existingEvaluatorId}
                   />
                   {existingEvaluatorId && (
-                    <div className="mt-1 text-xs text-muted-foreground">
-                      Evaluator names cannot be changed after creation
-                    </div>
+                    <div className="mt-1 text-xs text-muted-foreground">{t("ui.evaluatorNamesCannotBeChangedAfterCreati")}</div>
                   )}
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="description">Description</Label>
+                  <Label htmlFor="description">{t("ui.description")}</Label>
                   <Textarea
                     id="description"
                     value={pythonDescription}
                     onChange={(e) => setPythonDescription(e.target.value)}
-                    placeholder="Describe what your evaluator does"
+                    placeholder={t("ui.describeWhatYourEvaluatorDoes")}
                     className="min-h-[100px]"
                   />
                   <Muted className="text-xs">
@@ -229,10 +228,8 @@ export const PythonEvaluatorConfigForm: React.FC<{
 
             <div>
               <div className="flex items-baseline gap-2">
-                <H3 className="text-lg">Python Code</H3>
-                <Muted className="text-sm">
-                  Write your evaluator&apos;s Python code
-                </Muted>
+                <H3 className="text-lg">{t("ui.pythonCode")}</H3>
+                <Muted className="text-sm">{t("ui.writeYourEvaluatorsPythonCode")}</Muted>
               </div>
               <Separator className="my-2" />
 

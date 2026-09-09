@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import {
   Collapsible,
@@ -21,6 +22,9 @@ import { AlertCircle, CheckCircle2, PlayCircle, XCircle } from "lucide-react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 
 export function TestEvaluator() {
+  const { t } = useTranslation("evals");
+  const { t: tCommon } = useTranslation("common");
+
   const { testConfig, setTestConfig, testInput, setTestInput } =
     useTestDataStore();
 
@@ -92,11 +96,9 @@ export function TestEvaluator() {
         <div className="space-y-4 p-4">
           {/* Request ID Input */}
           <div className="flex items-center gap-2">
-            <Label className="whitespace-nowrap text-sm font-medium">
-              Request ID
-            </Label>
+            <Label className="whitespace-nowrap text-sm font-medium">{t("ui.requestId")}</Label>
             <Input
-              placeholder="Enter request ID"
+              placeholder={t("ui.enterRequestId")}
               className="flex-grow"
               value={requestId}
               onChange={(e) => {
@@ -108,7 +110,7 @@ export function TestEvaluator() {
           {/* Test Input Section */}
           <div className="space-y-2">
             <div className="flex items-center justify-between">
-              <h3 className="text-sm font-medium">Test Input</h3>
+              <h3 className="text-sm font-medium">{t("ui.testInput")}</h3>
             </div>
 
             <Tabs
@@ -118,19 +120,11 @@ export function TestEvaluator() {
               className="w-full"
             >
               <TabsList className="grid h-9 w-full grid-cols-4 bg-muted/30 p-0">
-                <TabsTrigger value="inputBody" className="text-xs">
-                  Input Body
-                </TabsTrigger>
-                <TabsTrigger value="outputBody" className="text-xs">
-                  Output Body
-                </TabsTrigger>
-                <TabsTrigger value="inputs" className="text-xs">
-                  Input Variables
-                </TabsTrigger>
+                <TabsTrigger value="inputBody" className="text-xs">{t("ui.inputBody")}</TabsTrigger>
+                <TabsTrigger value="outputBody" className="text-xs">{t("ui.outputBody")}</TabsTrigger>
+                <TabsTrigger value="inputs" className="text-xs">{t("ui.inputVariables")}</TabsTrigger>
                 {promptTemplate !== undefined && (
-                  <TabsTrigger value="prompt" className="text-xs">
-                    Prompt Template
-                  </TabsTrigger>
+                  <TabsTrigger value="prompt" className="text-xs">{t("ui.promptTemplate")}</TabsTrigger>
                 )}
               </TabsList>
 
@@ -141,7 +135,7 @@ export function TestEvaluator() {
                 {Object.entries(testInput?.inputs?.inputs ?? []).length ===
                 0 ? (
                   <div className="py-2 text-center">
-                    <Muted>No input variables defined</Muted>
+                    <Muted>{t("ui.noInputVariablesDefined")}</Muted>
                     <Button
                       variant="outline"
                       size="sm"
@@ -191,7 +185,7 @@ export function TestEvaluator() {
                               });
                             }}
                             className="max-w-[200px]"
-                            placeholder="Variable name"
+                            placeholder={t("ui.variableName")}
                           />
                           <span>:</span>
                           <Input
@@ -214,7 +208,7 @@ export function TestEvaluator() {
                               });
                             }}
                             className="flex-grow"
-                            placeholder="Value"
+                            placeholder={t("ui.value")}
                           />
                           <Button
                             variant="ghost"
@@ -329,7 +323,7 @@ export function TestEvaluator() {
       <div className="shrink-0 border-t bg-muted/10">
         <div className="space-y-3 p-4">
           <div className="flex items-center justify-between">
-            <h3 className="text-sm font-medium">Test Results</h3>
+            <h3 className="text-sm font-medium">{t("ui.testResults")}</h3>
             <Button
               onClick={async () => {
                 if (!testConfig) return;
@@ -366,17 +360,17 @@ export function TestEvaluator() {
           <div className="max-h-[180px] overflow-y-auto rounded-md border bg-background p-3">
             {result === null ? (
               <div className="py-4 text-center">
-                <Muted>Run a test to see results</Muted>
+                <Muted>{t("ui.runATestToSeeResults")}</Muted>
               </div>
             ) : result._type === "running" ? (
               <div className="py-4 text-center">
-                <Muted>Running test...</Muted>
+                <Muted>{t("ui.runningTest")}</Muted>
               </div>
             ) : result._type === "error" ? (
               <div className="flex items-start gap-2 rounded-md border border-destructive/20 bg-destructive/10 p-3">
                 <AlertCircle className="mt-0.5 h-5 w-5 shrink-0 text-destructive" />
                 <div>
-                  <H4 className="text-sm text-destructive">Error</H4>
+                  <H4 className="text-sm text-destructive">{t("ui.error")}</H4>
                   <pre className="mt-1 whitespace-pre-wrap text-xs">
                     {typeof result.error === "object"
                       ? JSON.stringify(result.error, null, 2)
@@ -389,7 +383,7 @@ export function TestEvaluator() {
                 <div className="flex items-center gap-2 rounded-md bg-muted p-3">
                   <CheckCircle2 className="h-5 w-5 shrink-0 text-primary" />
                   <div>
-                    <H4 className="text-sm">Score</H4>
+                    <H4 className="text-sm">{t("ui.score")}</H4>
                     <div className="text-lg font-semibold">{result.output}</div>
                   </div>
                 </div>
@@ -397,7 +391,7 @@ export function TestEvaluator() {
                 {result.traces && result.traces.length > 0 && (
                   <Collapsible>
                     <CollapsibleTrigger className="flex w-full items-center justify-between rounded-md border p-2 text-sm">
-                      <span>View Execution Traces</span>
+                      <span>{t("ui.viewExecutionTraces")}</span>
                       <ChevronDown className="h-4 w-4" />
                     </CollapsibleTrigger>
                     <CollapsibleContent className="mt-2 space-y-2">

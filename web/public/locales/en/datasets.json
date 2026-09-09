@@ -1,0 +1,78 @@
+{
+  "page": {
+    "title": "Datasets",
+    "untitled": "Untitled Dataset"
+  },
+  "table": {
+    "name": "Name",
+    "createdAt": "Created At",
+    "datasetType": "Dataset Type",
+    "rows": "Rows"
+  },
+  "types": {
+    "helicone": "Helicone",
+    "experiment": "Experiment",
+    "unknown": "Unknown"
+  },
+  "delete": {
+    "title": "Delete Dataset",
+    "description": "Are you sure you want to delete the dataset \"{{name}}\"? This action cannot be undone.",
+    "deleting": "Deleting..."
+  },
+  "notifications": {
+    "deleteError": "Error deleting dataset",
+    "deleteSuccess": "Dataset deleted successfully",
+    "requestsDuplicated": "Requests duplicated to this dataset",
+    "requestsDuplicatedError": "Failed to duplicate requests to this dataset",
+    "requestsRemoved": "Requests removed from dataset",
+    "requestsRemovedError": "Failed to remove requests from dataset",
+    "requestUpdated": "Dataset request updated",
+    "requestUpdateError": "Error updating dataset request",
+    "requestRemoved": "Request removed from dataset",
+    "requestRemoveError": "Failed to remove request from dataset",
+    "datasetCreated": "Dataset created",
+    "datasetCreateError": "Failed to create dataset",
+    "requestsAdded": "Requests added to dataset",
+    "requestsAddError": "Failed to add requests to dataset",
+    "copiedToClipboard": "Copied to clipboard"
+  },
+  "detail": {
+    "rowsCount": "{{count}} rows",
+    "requestBody": "Request Body",
+    "responseBody": "Response Body",
+    "clickToCopy": "Click to copy",
+    "copyTo": "Copy to...",
+    "duplicate": "Duplicate",
+    "remove": "Remove",
+    "viewOriginalRequest": "View original request"
+  },
+  "drawer": {
+    "editing": "Editing",
+    "discard": "Discard",
+    "saveChanges": "Save changes",
+    "previous": "Previous",
+    "next": "Next"
+  },
+  "removeModal": {
+    "title": "Remove {{count}} requests from dataset?",
+    "description": "You won't be able to undo this action.",
+    "confirmRemove": "Confirm remove"
+  },
+  "newDataset": {
+    "copyToDataset": "Copy to dataset",
+    "addToDataset": "Add to dataset",
+    "noDatasets": "No Datasets",
+    "createFirstBelow": "Create your first dataset below",
+    "createNew": "Create a new dataset",
+    "datasetName": "Dataset name",
+    "untitled": "Untitled",
+    "openDatasetAfter": "Open dataset after",
+    "copying": "Copying...",
+    "adding": "Adding...",
+    "copyRequests": "Copy {{count}} requests",
+    "addRequests": "Add {{count}} requests",
+    "sizeLimitTitle": "Dataset Size Limit",
+    "maxCapacity": "This dataset has reached the maximum capacity of {{max}} requests.",
+    "partialAdd": "Only {{limited}} of {{total}} requests will be added to stay within the limit of {{max}} requests per dataset."
+  }
+}

@@ -1,0 +1,43 @@
+{
+  "title": "Properties",
+  "columns": {
+    "value": "Value",
+    "requests": "Requests",
+    "avgPromptTokensPerReq": "Avg Prompt Tokens / Req",
+    "avgCompletionTokensPerReq": "Avg Completion Tokens / Req",
+    "avgLatencyPerReq": "Avg Latency / Req",
+    "avgCostPerReq": "Avg Cost / Req",
+    "totalCost": "Total Cost",
+    "cost": "Cost",
+    "avgPromptTokens": "Avg Prompt Tokens",
+    "avgCompTokens": "Avg Comp Tokens",
+    "avgLatency": "Avg Latency",
+    "avgCost": "Avg Cost"
+  },
+  "tabs": {
+    "table": "Table",
+    "charts": "Charts"
+  },
+  "selectProperty": "Select property",
+  "selectPropertyPlaceholder": "Select a property",
+  "searchProperties": "Search properties...",
+  "noPropertyData": "No property data available",
+  "showMore": "Show More",
+  "showLess": "Show Less",
+  "empty": "Empty",
+  "delete": {
+    "title": "Delete property",
+    "description": "This will delete the selected property from your Properties list.",
+    "deleting": "Deleting...",
+    "confirm": "Delete"
+  },
+  "restore": {
+    "button": "Restore",
+    "error": "Unable to restore property. Please try again."
+  },
+  "loadError": "Failed to load deleted properties.",
+  "charts": {
+    "topRequests": "Top Requests",
+    "topCosts": "Top Costs"
+  }
+}

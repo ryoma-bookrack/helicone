@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import {
   AdjustmentsHorizontalIcon,
   ChevronDownIcon,
@@ -26,6 +27,7 @@ const ColumnsDropdown: React.FC<{
   columnView: "all" | "inputs" | "outputs";
   setColumnView: (view: "all" | "inputs" | "outputs") => void;
 }> = ({ wrapText, setWrapText, columnView, setColumnView }) => {
+  const { t } = useTranslation("experiments");
   const [combineInputColumns, setCombineInputColumns] = useState(false);
 
   return (
@@ -40,7 +42,7 @@ const ColumnsDropdown: React.FC<{
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-60">
-        <DropdownMenuLabel>Columns</DropdownMenuLabel>
+        <DropdownMenuLabel>{t("ui.columns")}</DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
           <DropdownMenuItem
@@ -51,7 +53,7 @@ const ColumnsDropdown: React.FC<{
             }}
           >
             {columnView === "all" && <Check className="mr-2 h-4 w-4" />}
-            <span className="flex-1">Show all</span>
+            <span className="flex-1">{t("ui.showAll")}</span>
           </DropdownMenuItem>
           <DropdownMenuItem
             onClick={(e) => {
@@ -61,7 +63,7 @@ const ColumnsDropdown: React.FC<{
             }}
           >
             {columnView === "inputs" && <Check className="mr-2 h-4 w-4" />}
-            <span className="flex-1">Show inputs only</span>
+            <span className="flex-1">{t("ui.showInputsOnly")}</span>
           </DropdownMenuItem>
           <DropdownMenuItem
             onClick={(e) => {
@@ -71,11 +73,11 @@ const ColumnsDropdown: React.FC<{
             }}
           >
             {columnView === "outputs" && <Check className="mr-2 h-4 w-4" />}
-            <span className="flex-1">Show outputs only</span>
+            <span className="flex-1">{t("ui.showOutputsOnly")}</span>
           </DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
-        <DropdownMenuLabel>Views</DropdownMenuLabel>
+        <DropdownMenuLabel>{t("ui.views")}</DropdownMenuLabel>
         <DropdownMenuGroup>
           <DropdownMenuItem>
             <Switch
@@ -84,7 +86,7 @@ const ColumnsDropdown: React.FC<{
               onCheckedChange={setCombineInputColumns}
               className="mr-2"
             />
-            <span className="flex-1">Combine input columns</span>
+            <span className="flex-1">{t("ui.combineInputColumns")}</span>
           </DropdownMenuItem>
           <DropdownMenuItem>
             <Switch
@@ -93,7 +95,7 @@ const ColumnsDropdown: React.FC<{
               onCheckedChange={setWrapText}
               className="mr-2"
             />
-            <span className="flex-1">Wrap text</span>
+            <span className="flex-1">{t("ui.wrapText")}</span>
           </DropdownMenuItem>
         </DropdownMenuGroup>
       </DropdownMenuContent>
@@ -105,6 +107,7 @@ const ProviderKeyDropdown: React.FC<{
   providerKey: string | null;
   setProviderKey: (key: string) => void;
 }> = ({ providerKey, setProviderKey }) => {
+  const { t: tCommon } = useTranslation("common");
   const [open, setOpen] = useState(false);
 
   return (
@@ -130,7 +133,7 @@ const ProviderKeyDropdown: React.FC<{
       >
         <DropdownMenuLabel className="flex items-center space-x-2">
           <Cog6ToothIcon className="mr-2 h-6 w-6" />
-          <span className="text-base font-medium">Settings</span>
+          <span className="text-base font-medium">{tCommon("actions.settings")}</span>
         </DropdownMenuLabel>
         {!providerKey && (
           <InfoBox variant="warning" className="ml-2 p-2">

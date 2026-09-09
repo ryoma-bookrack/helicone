@@ -22,6 +22,7 @@ import { processStream } from "@/lib/api/llm-old/process-stream";
 import { MdKeyboardTab } from "react-icons/md";
 import { PiChatDotsBold } from "react-icons/pi";
 import { logger } from "@/lib/telemetry/logger";
+import { useTranslation } from "react-i18next";
 
 type SelectionState = {
   text: string;
@@ -71,6 +72,7 @@ export default function PromptBox({
   variables = [],
   disabled = false,
 }: PromptBoxProps) {
+  const { t } = useTranslation("common");
   const [suggestionState, dispatch] = useReducer(suggestionReducer, {
     isTyping: false,
     lastTypingTime: 0,
@@ -602,7 +604,7 @@ export default function PromptBox({
   const tools = [
     {
       icon: <h3 className="font-medium">{"{{}}"}</h3>,
-      label: "Make Into Input",
+      label: t("prompts.toolbar.makeIntoInput"),
       hotkey: "e",
       onSubmit: (varName: string) => {
         if (!selection || !textareaRef.current) return;
@@ -628,11 +630,11 @@ export default function PromptBox({
 
         handleTextEdit(newValue, newStart, newEnd);
       },
-      placeholder: "Input name...",
+      placeholder: t("prompts.toolbar.inputNamePlaceholder"),
     },
     {
       icon: <h3 className="font-medium">{"</>"}</h3>,
-      label: "Wrap In Delimiters",
+      label: t("prompts.toolbar.wrapInDelimiters"),
       hotkey: "j",
       onSubmit: (tagName: string) => {
         if (!selection || !textareaRef.current) return;
@@ -651,18 +653,18 @@ export default function PromptBox({
 
         handleTextEdit(newValue, newStart, newEnd);
       },
-      placeholder: "Delimiter name...",
+      placeholder: t("prompts.toolbar.delimiterPlaceholder"),
     },
     {
       icon: <PiChatDotsBold />,
-      label: "Perform an Edit",
+      label: t("prompts.toolbar.performEdit"),
       hotkey: "k",
       multiline: true,
       showConfirmation: true,
       onSubmit: handleGeneratedEdit,
       onAccept: handleAcceptEdit,
       onDeny: handleDenyEdit,
-      placeholder: "Describe your edit...",
+      placeholder: t("prompts.toolbar.editDescriptionPlaceholder"),
     },
   ];
 
@@ -680,7 +682,7 @@ export default function PromptBox({
         onKeyDown={handleKeyDown}
         onSelect={handleSelection}
         onBlur={handleBlur}
-        placeholder="Type your prompt..."
+        placeholder={t("prompts.toolbar.promptPlaceholder")}
         disabled={disabled}
         style={sharedTextAreaStyles}
         className="resize-none bg-transparent text-transparent"

@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { useMemo, useState } from "react";
 import ThemedDrawer from "../../../shared/themed/themedDrawer";
 import { useJawnClient } from "../../../../lib/clients/jawnHook";
@@ -24,6 +25,9 @@ interface ExperimentInputSelectorProps {
 export const ExperimentRandomInputSelector = (
   props: ExperimentInputSelectorProps,
 ) => {
+  const { t } = useTranslation("prompts");
+  const { t: tCommon } = useTranslation("common");
+
   const { open, setOpen, promptVersionId, onSuccess } = props;
   const jawn = useJawnClient();
   const { setNotification } = useNotification();
@@ -87,9 +91,7 @@ export const ExperimentRandomInputSelector = (
               Randomized Inputs ({selectedRandomInputs.length})
             </h2>
           </div>
-          <p className="pb-4 text-sm text-gray-500">
-            Select the inputs you want to include in the dataset.
-          </p>
+          <p className="pb-4 text-sm text-gray-500">{t("ui.selectTheInputsYouWantToIncludeInTheData")}</p>
 
           <div className="mb-4 flex items-center">
             <Button
@@ -117,14 +119,12 @@ export const ExperimentRandomInputSelector = (
             >
               +
             </Button>
-            <span className="text-sm text-slate-700 dark:text-slate-300">
-              Random Inputs
-            </span>
+            <span className="text-sm text-slate-700 dark:text-slate-300">{t("ui.randomInputs")}</span>
           </div>
 
           <ul className="flex w-full flex-col items-center space-y-4 overflow-y-auto pt-4">
-            {isLoading && <div>Loading inputs...</div>}
-            {isError && <div>Error loading inputs.</div>}
+            {isLoading && <div>{t("ui.loadingInputs")}</div>}
+            {isError && <div>{t("ui.errorLoadingInputs")}</div>}
             {!isLoading &&
               !isError &&
               selectedRandomInputs.map((request) => (
@@ -146,9 +146,7 @@ export const ExperimentRandomInputSelector = (
             variant={"secondary"}
             size={"sm"}
             onClick={() => setOpen(false)}
-          >
-            Cancel
-          </Button>
+          >{tCommon("actions.cancel")}</Button>
 
           <Button
             variant={"default"}
@@ -165,13 +163,11 @@ export const ExperimentRandomInputSelector = (
               if (onSuccess) {
                 onSuccess(true);
 
-                setNotification("Added inputs to dataset", "success");
+                setNotification(t("ui.addedInputsToDataset"), "success");
                 setOpen(false);
               }
             }}
-          >
-            Confirm
-          </Button>
+          >{tCommon("actions.confirm")}</Button>
         </div>
       </div>
     </ThemedDrawer>

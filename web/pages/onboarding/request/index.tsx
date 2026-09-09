@@ -10,6 +10,7 @@ import {
 import { OnboardingHeader } from "@/components/onboarding/OnboardingHeader";
 import { useEffect, useState, useRef } from "react";
 import { ArrowRight, Loader, Play } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { useOrgOnboarding } from "@/services/hooks/useOrgOnboarding";
 import { useOrg } from "@/components/layout/org/organizationContext";
 import { useRouter } from "next/navigation";
@@ -24,10 +25,11 @@ const MODELS = [
 ];
 
 export default function RequestPage() {
+  const { t } = useTranslation("onboarding");
   const org = useOrg();
   const router = useRouter();
   const { setNotification } = useNotification();
-  const [prompt, setPrompt] = useState("Write a haiku about AI");
+  const [prompt, setPrompt] = useState(t("request.defaultPrompt"));
   const [selectedModel, setSelectedModel] = useState("openai/gpt-4o-mini");
   const [response, setResponse] = useState("");
   const [isStreaming, setIsStreaming] = useState(false);
@@ -47,7 +49,7 @@ export default function RequestPage() {
 
   const onSendRequest = async () => {
     if (!prompt.trim()) {
-      setNotification("Please enter a prompt", "error");
+      setNotification(t("request.enterPrompt"), "error");
       return;
     }
 
@@ -92,22 +94,20 @@ export default function RequestPage() {
 
       if (result && result.error) {
         setError(result.error.message);
-        setNotification("Error generating response", "error");
+        setNotification(t("request.errorGenerating"), "error");
       } else {
         setHasCompleted(true);
-        setNotification("Request completed successfully!", "success");
+        setNotification(t("request.requestCompleted"), "success");
       }
     } catch (error) {
       if (error instanceof Error) {
         if (error.name === "AbortError") {
-          setError("Request was cancelled");
+          setError(t("request.requestCancelled"));
         } else {
           console.error("Error:", error);
-          setError(
-            error.message || "An error occurred while generating the response",
-          );
+          setError(error.message || t("request.errorOccurred"));
           setNotification(
-            error.message || "Failed to generate response",
+            error.message || t("request.failedToGenerate"),
             "error",
           );
         }
@@ -127,21 +127,21 @@ export default function RequestPage() {
     <OnboardingHeader>
       <div className="mx-auto flex max-w-md flex-col gap-6 px-4 py-12">
         <div className="flex flex-col gap-2">
-          <H1>Send a Request</H1>
-          <Muted>
-            Try out Helicone with a simple AI request to see it in action.
-          </Muted>
+          <H1>{t("request.title")}</H1>
+          <Muted>{t("request.subtitle")}</Muted>
         </div>
 
         <div className="flex flex-col gap-4">
           <Input
-            placeholder="Enter your prompt here..."
+            placeholder={t("request.promptPlaceholder")}
             value={prompt}
             onChange={(e) => setPrompt(e.target.value.slice(0, 100))}
             maxLength={100}
             disabled={hasCompleted}
           />
-          <Muted className="text-xs">{prompt.length}/100 characters</Muted>
+          <Muted className="text-xs">
+            {t("request.characters", { count: prompt.length })}
+          </Muted>
 
           <Select
             value={selectedModel}
@@ -175,10 +175,10 @@ export default function RequestPage() {
                     <Play size={16} className="mr-2" />
                   )}
                   {isCompleting
-                    ? "Skipping..."
+                    ? t("request.skipping")
                     : isStreaming
-                      ? "Generating..."
-                      : "Send Request"}
+                      ? t("request.generating")
+                      : t("request.sendRequest")}
                 </>
               </Button>
 
@@ -187,7 +187,7 @@ export default function RequestPage() {
                   className="cursor-pointer text-xs hover:underline"
                   onClick={handleViewDashboard}
                 >
-                  Skip to dashboard
+                  {t("request.skipToDashboard")}
                 </Muted>
               </div>
             </>
@@ -211,7 +211,7 @@ export default function RequestPage() {
               {isStreaming && (
                 <div className="mt-2 flex items-center gap-2">
                   <Loader size={14} className="animate-spin" />
-                  <Muted className="text-xs">Streaming...</Muted>
+                  <Muted className="text-xs">{t("request.streaming")}</Muted>
                 </div>
               )}
             </div>
@@ -227,11 +227,11 @@ export default function RequestPage() {
               {isCompleting ? (
                 <>
                   <Loader size={16} className="mr-2 animate-spin" />
-                  Completing onboarding...
+                  {t("request.completingOnboarding")}
                 </>
               ) : (
                 <>
-                  View in Dashboard
+                  {t("request.viewInDashboard")}
                   <ArrowRight size={16} className="ml-2" />
                 </>
               )}

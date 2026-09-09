@@ -13,15 +13,15 @@ import { useRouter } from "next/router";
 
 const KNOWN_HELICONE_PROPERTIES = {
   "helicone-session-id": {
-    label: "Session ID",
+    labelKey: "fields.sessionId",
     subType: "sessions",
   },
   "helicone-session-name": {
-    label: "Session Name",
+    labelKey: "fields.sessionName",
     subType: "sessions",
   },
   "helicone-session-path": {
-    label: "Session Path",
+    labelKey: "fields.sessionPath",
     subType: "sessions",
   },
 } as const;
@@ -80,10 +80,14 @@ export const useFilterUIDefinitions = () => {
         id: property.property,
         label:
           property.property.toLowerCase() in KNOWN_HELICONE_PROPERTIES
+            ? undefined
+            : property.property,
+        labelKey:
+          property.property.toLowerCase() in KNOWN_HELICONE_PROPERTIES
             ? KNOWN_HELICONE_PROPERTIES[
                 property.property.toLowerCase() as keyof typeof KNOWN_HELICONE_PROPERTIES
-              ].label
-            : property.property,
+              ].labelKey
+            : undefined,
         type: "searchable",
         operators: ["contains", "not-contains", "eq", "neq", "like", "ilike", "in"],
         onSearch: (searchTerm) => {
@@ -106,7 +110,7 @@ export const useFilterUIDefinitions = () => {
 
     const modelsDefinition: FilterUIDefinition = {
       id: "model",
-      label: "Model",
+      labelKey: "fields.model",
       type: "searchable",
       operators: ["contains", "not-contains", "eq", "neq", "like", "ilike", "in"],
 

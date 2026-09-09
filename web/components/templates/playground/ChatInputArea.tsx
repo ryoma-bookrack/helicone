@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import React from "react";
 
 import {
@@ -26,6 +27,9 @@ const ChatInputArea: React.FC<ChatInputAreaProps> = ({
   submitText,
   customNavBar,
 }) => {
+  const { t } = useTranslation("playground");
+  const { t: tCommon } = useTranslation("common");
+
   return (
     <li className="flex justify-between space-x-4 rounded-b-lg border-t border-gray-300 bg-white px-8 py-4 dark:border-gray-700 dark:bg-black">
       <div className="w-full">
@@ -46,9 +50,7 @@ const ChatInputArea: React.FC<ChatInputAreaProps> = ({
             "flex flex-row items-center rounded-md px-3 py-1.5 text-sm font-semibold text-black shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white dark:text-white",
           )}
         >
-          <PlusIcon className="mr-2 inline h-4 w-4 rounded-lg text-black dark:text-white" />
-          Add Message
-        </button>
+          <PlusIcon className="mr-2 inline h-4 w-4 rounded-lg text-black dark:text-white" />{t("ui.addMessage")}</button>
       </div>
 
       <div className="flex w-full justify-end space-x-4">
@@ -65,9 +67,7 @@ const ChatInputArea: React.FC<ChatInputAreaProps> = ({
             "flex flex-row items-center rounded-md px-3 py-1.5 text-sm font-semibold text-black shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white dark:text-white",
           )}
         >
-          <ArrowPathIcon className="mr-2 inline h-4 w-4 rounded-lg text-black dark:text-white" />
-          Reset
-        </button>
+          <ArrowPathIcon className="mr-2 inline h-4 w-4 rounded-lg text-black dark:text-white" />{t("ui.reset")}</button>
         {!customNavBar && (
           <button
             onClick={() => onSubmit(currentChat)}

@@ -19,6 +19,7 @@ import {
   ChartTooltipContent,
 } from "@/components/ui/chart";
 import { useCallback, useEffect, useMemo, useState } from "react";
+import { useTranslation, Trans } from "react-i18next";
 import { Responsive, ResponsiveProps, WidthProvider } from "react-grid-layout";
 import {
   getIncrementAsMinutes,
@@ -85,6 +86,7 @@ export type DashboardMode = "requests" | "costs" | "errors";
 
 const DashboardPage = (props: DashboardPageProps) => {
   const { user } = props;
+  const { t } = useTranslation("dashboard");
   const searchParams = useSearchParams();
   const orgContext = useOrg();
   const filterStore = useFilterStore();
@@ -215,7 +217,7 @@ const DashboardPage = (props: DashboardPageProps) => {
               metrics.totalCost.data.data / metrics.totalRequests?.data?.data,
             )}`
           : "$0.00",
-      label: "Avg Cost / Req",
+      label: t("metrics.avgCostPerReq"),
       icon: ChartBarIcon,
       isLoading: metrics.totalCost.isLoading || metrics.totalRequests.isLoading,
     },
@@ -228,8 +230,8 @@ const DashboardPage = (props: DashboardPageProps) => {
               metrics.averageTokensPerRequest.data.data
                 .average_prompt_tokens_per_response,
             )
-          : "n/a",
-      label: "Avg Prompt Tokens / Req",
+          : t("metrics.notAvailable"),
+      label: t("metrics.avgPromptTokensPerReq"),
       icon: ChartBarIcon,
       isLoading:
         metrics.averageTokensPerRequest.isLoading ||
@@ -244,8 +246,8 @@ const DashboardPage = (props: DashboardPageProps) => {
               metrics.averageTokensPerRequest.data.data
                 .average_completion_tokens_per_response,
             )
-          : "n/a",
-      label: "Avg Completion Tokens / Req",
+          : t("metrics.notAvailable"),
+      label: t("metrics.avgCompletionTokensPerReq"),
       icon: ChartBarIcon,
       isLoading:
         metrics.averageTokensPerRequest.isLoading ||
@@ -260,8 +262,8 @@ const DashboardPage = (props: DashboardPageProps) => {
               metrics.averageTokensPerRequest.data.data
                 .average_total_tokens_per_response,
             )
-          : "n/a",
-      label: "Avg Total Tokens / Req",
+          : t("metrics.notAvailable"),
+      label: t("metrics.avgTotalTokensPerReq"),
       icon: ChartBarIcon,
       isLoading:
         metrics.averageTokensPerRequest.isLoading ||
@@ -331,13 +333,13 @@ const DashboardPage = (props: DashboardPageProps) => {
   )
     .map(([name, value]) => {
       if (name === "-1") {
-        name = "timeout";
+        name = t("statusCodes.timeout");
       } else if (name === "-2") {
-        name = "pending";
+        name = t("statusCodes.pending");
       } else if (name === "-3") {
-        name = "cancelled";
+        name = t("statusCodes.cancelled");
       } else if (name === "-4") {
-        name = "threat";
+        name = t("statusCodes.threat");
       }
       return {
         name,
@@ -355,7 +357,7 @@ const DashboardPage = (props: DashboardPageProps) => {
       <div className="flex h-screen w-full flex-col overflow-x-hidden">
         {!shouldShowMockData && (
           <Header
-            title="Dashboard"
+            title={t("title")}
             leftActions={
               <div className="flex flex-row items-center gap-2">
                 {/* Time Filter */}
@@ -461,7 +463,7 @@ const DashboardPage = (props: DashboardPageProps) => {
                     <div className="flex flex-row items-center justify-between">
                       <div className="flex flex-col space-y-0.5">
                         <p className="text-sm text-muted-foreground">
-                          Requests
+                          {t("charts.requests")}
                         </p>
                         <p className="text-xl font-semibold text-foreground">
                           {metrics.totalRequests?.data?.data
@@ -482,11 +484,11 @@ const DashboardPage = (props: DashboardPageProps) => {
                         <ChartContainer
                           config={{
                             success: {
-                              label: "Success",
+                              label: t("charts.success"),
                               color: CHART_COLORS.success,
                             },
                             error: {
-                              label: "Error",
+                              label: t("charts.error"),
                               color: CHART_COLORS.error,
                             },
                           }}
@@ -581,7 +583,7 @@ const DashboardPage = (props: DashboardPageProps) => {
                   <div className="flex h-full flex-col border-b border-r border-border bg-card p-6 text-card-foreground">
                     <div className="flex flex-row items-center justify-between">
                       <div className="flex flex-col space-y-0.5">
-                        <p className="text-sm text-muted-foreground">Costs</p>
+                        <p className="text-sm text-muted-foreground">{t("charts.costs")}</p>
                         <div className="flex flex-col gap-0.5">
                           <p className="text-xl font-semibold text-foreground">
                             {metrics.totalCost.data?.data
@@ -649,7 +651,7 @@ const DashboardPage = (props: DashboardPageProps) => {
                                     setGatewayDiscountDismissed(true);
                                   }}
                                   className="text-muted-foreground opacity-0 transition-opacity hover:text-foreground group-hover:opacity-100"
-                                  aria-label="Dismiss"
+                                  aria-label={t("gatewayDiscount.dismiss")}
                                 >
                                   <svg
                                     width="12"
@@ -681,7 +683,7 @@ const DashboardPage = (props: DashboardPageProps) => {
                         <ChartContainer
                           config={{
                             costs: {
-                              label: "Costs",
+                              label: t("charts.costs"),
                               color: CHART_COLORS.blue,
                             },
                           }}
@@ -730,7 +732,7 @@ const DashboardPage = (props: DashboardPageProps) => {
                   <div className="flex h-full flex-col border-b border-r border-border bg-card p-6 text-card-foreground">
                     <div className="flex flex-row items-center justify-between">
                       <div className="flex flex-col space-y-0.5">
-                        <p className="text-sm text-muted-foreground">Users</p>
+                        <p className="text-sm text-muted-foreground">{t("charts.users")}</p>
                         <p className="text-xl font-semibold text-foreground">
                           {metrics.activeUsers.data?.data
                             ? formatLargeNumber(metrics.activeUsers.data?.data)
@@ -748,7 +750,7 @@ const DashboardPage = (props: DashboardPageProps) => {
                         <ChartContainer
                           config={{
                             users: {
-                              label: "Users",
+                              label: t("charts.users"),
                               color: CHART_COLORS.orange,
                             },
                           }}
@@ -817,11 +819,13 @@ const DashboardPage = (props: DashboardPageProps) => {
                   <div className="flex h-full flex-col border-b border-r border-border bg-card p-6 text-card-foreground">
                     <div className="flex flex-row items-center justify-between">
                       <div className="flex flex-col space-y-0.5">
-                        <p className="text-sm text-muted-foreground">Latency</p>
+                        <p className="text-sm text-muted-foreground">{t("charts.latency")}</p>
                         <p className="text-xl font-semibold text-foreground">
-                          {`${new Intl.NumberFormat("us").format(
-                            (metrics.averageLatency.data?.data ?? 0) / 1000,
-                          )} s / req`}
+                          {t("charts.latencyPerReq", {
+                            value: new Intl.NumberFormat("us").format(
+                              (metrics.averageLatency.data?.data ?? 0) / 1000,
+                            ),
+                          })}
                         </p>
                       </div>
                     </div>
@@ -835,7 +839,7 @@ const DashboardPage = (props: DashboardPageProps) => {
                         <ChartContainer
                           config={{
                             latency: {
-                              label: "Latency",
+                              label: t("charts.latency"),
                               color: CHART_COLORS.cyan,
                             },
                           }}
@@ -884,7 +888,11 @@ const DashboardPage = (props: DashboardPageProps) => {
                                 <ChartTooltipContent
                                   indicator="dot"
                                   valueFormatter={(value) =>
-                                    `${new Intl.NumberFormat("us").format(Number(value))} s`
+                                    t("charts.secondsUnit", {
+                                      value: new Intl.NumberFormat("us").format(
+                                        Number(value),
+                                      ),
+                                    })
                                   }
                                 />
                               }
@@ -913,12 +921,14 @@ const DashboardPage = (props: DashboardPageProps) => {
                     <div className="flex flex-row items-center justify-between">
                       <div className="flex flex-col space-y-0.5">
                         <p className="text-sm text-muted-foreground">
-                          Time to First Token
+                          {t("charts.timeToFirstToken")}
                         </p>
                         <p className="text-xl font-semibold text-foreground">
-                          {`Average: ${new Intl.NumberFormat("us").format(
-                            metrics.averageTimeToFirstToken.data?.data ?? 0,
-                          )} ms`}
+                          {t("charts.averageMs", {
+                            value: new Intl.NumberFormat("us").format(
+                              metrics.averageTimeToFirstToken.data?.data ?? 0,
+                            ),
+                          })}
                         </p>
                       </div>
                     </div>
@@ -932,7 +942,7 @@ const DashboardPage = (props: DashboardPageProps) => {
                         <ChartContainer
                           config={{
                             ttft: {
-                              label: "Time to First Token",
+                              label: t("charts.timeToFirstToken"),
                               color: CHART_COLORS.purple,
                             },
                           }}
@@ -983,7 +993,11 @@ const DashboardPage = (props: DashboardPageProps) => {
                                 <ChartTooltipContent
                                   indicator="dot"
                                   valueFormatter={(value) =>
-                                    `${new Intl.NumberFormat("us").format(Number(value))} ms`
+                                    t("charts.millisecondsUnit", {
+                                      value: new Intl.NumberFormat("us").format(
+                                        Number(value),
+                                      ),
+                                    })
                                   }
                                 />
                               }
@@ -1004,7 +1018,7 @@ const DashboardPage = (props: DashboardPageProps) => {
                   <div className="flex h-full flex-col border-b border-r border-border bg-card p-6 text-card-foreground">
                     <div className="flex flex-row items-center justify-between">
                       <div className="flex flex-col space-y-0.5">
-                        <p className="text-sm text-muted-foreground">Threats</p>
+                        <p className="text-sm text-muted-foreground">{t("charts.threats")}</p>
                         <p className="text-xl font-semibold text-foreground">
                           {formatLargeNumber(
                             Number(
@@ -1024,7 +1038,7 @@ const DashboardPage = (props: DashboardPageProps) => {
                         <ChartContainer
                           config={{
                             threats: {
-                              label: "Threats",
+                              label: t("charts.threats"),
                               color: CHART_COLORS.yellow,
                             },
                           }}
@@ -1101,20 +1115,23 @@ const DashboardPage = (props: DashboardPageProps) => {
                         setOpenSuggestGraph(true);
                       }}
                     >
-                      Request a new graph
+                      {t("suggestGraph.requestNewGraph")}
                     </button>
                     <div className="max-w-xs text-center text-sm text-muted-foreground">
-                      Or use our{" "}
-                      <a
-                        href="https://docs.helicone.ai/getting-started/integration-method/posthog"
-                        target="_blank"
-                        rel="noreferrer"
-                        className="text-blue-500 underline"
-                      >
-                        PostHog integration
-                      </a>{" "}
-                      to create custom graphs or get started with our pre-built
-                      template.
+                      <Trans
+                        i18nKey="suggestGraph.posthogIntegration"
+                        ns="dashboard"
+                        components={{
+                          link: (
+                            <a
+                              href="https://docs.helicone.ai/getting-started/integration-method/posthog"
+                              target="_blank"
+                              rel="noreferrer"
+                              className="text-blue-500 underline"
+                            />
+                          ),
+                        }}
+                      />
                     </div>
                   </div>
                 </div>
@@ -1123,21 +1140,23 @@ const DashboardPage = (props: DashboardPageProps) => {
                     <div className="flex flex-row items-center justify-between">
                       <div className="flex flex-col space-y-0.5">
                         <p className="text-sm text-muted-foreground">
-                          Tokens / Minute
+                          {t("charts.tokensPerMinute")}
                         </p>
                         <p className="text-xl font-semibold text-foreground">
-                          {`Max: ${formatLargeNumber(
-                            max(
-                              overTimeData.promptTokensOverTime.data?.data
-                                ?.map(
-                                  (d) => d.completion_tokens + d.prompt_tokens,
-                                )
-                                .filter((d) => d !== 0) ?? [],
-                            ) /
-                              Number(
-                                getIncrementAsMinutes(timeIncrement).toFixed(2),
-                              ),
-                          )} tokens`}
+                          {t("charts.maxTokens", {
+                            value: formatLargeNumber(
+                              max(
+                                overTimeData.promptTokensOverTime.data?.data
+                                  ?.map(
+                                    (d) => d.completion_tokens + d.prompt_tokens,
+                                  )
+                                  .filter((d) => d !== 0) ?? [],
+                              ) /
+                                Number(
+                                  getIncrementAsMinutes(timeIncrement).toFixed(2),
+                                ),
+                            ),
+                          })}
                         </p>
                       </div>
                     </div>
@@ -1151,15 +1170,15 @@ const DashboardPage = (props: DashboardPageProps) => {
                         <ChartContainer
                           config={{
                             promptPerMin: {
-                              label: "Prompt / min",
+                              label: t("charts.promptPerMin"),
                               color: CHART_COLORS.blue,
                             },
                             completionPerMin: {
-                              label: "Completion / min",
+                              label: t("charts.completionPerMin"),
                               color: CHART_COLORS.purple,
                             },
                             totalPerMin: {
-                              label: "Total / min",
+                              label: t("charts.totalPerMin"),
                               color: CHART_COLORS.orange,
                             },
                           }}
@@ -1256,7 +1275,11 @@ const DashboardPage = (props: DashboardPageProps) => {
                                 <ChartTooltipContent
                                   indicator="dot"
                                   valueFormatter={(value) =>
-                                    `${new Intl.NumberFormat("us").format(Number(value))} tokens`
+                                    t("charts.tokensUnit", {
+                                      value: new Intl.NumberFormat("us").format(
+                                        Number(value),
+                                      ),
+                                    })
                                   }
                                 />
                               }

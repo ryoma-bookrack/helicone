@@ -1,0 +1,107 @@
+{
+  "title": "Dashboard",
+  "metrics": {
+    "avgCostPerReq": "Avg Cost / Req",
+    "avgPromptTokensPerReq": "Avg Prompt Tokens / Req",
+    "avgCompletionTokensPerReq": "Avg Completion Tokens / Req",
+    "avgTotalTokensPerReq": "Avg Total Tokens / Req",
+    "notAvailable": "n/a"
+  },
+  "charts": {
+    "requests": "Requests",
+    "costs": "Costs",
+    "users": "Users",
+    "latency": "Latency",
+    "latencyPerReq": "{{value}} s / req",
+    "timeToFirstToken": "Time to First Token",
+    "averageMs": "Average: {{value}} ms",
+    "threats": "Threats",
+    "tokensPerMinute": "Tokens / Minute",
+    "maxTokens": "Max: {{value}} tokens",
+    "maxSeconds": "Max: {{value}} s",
+    "success": "Success",
+    "error": "Error",
+    "promptPerMin": "Prompt / min",
+    "completionPerMin": "Completion / min",
+    "totalPerMin": "Total / min",
+    "secondsUnit": "{{value}} s",
+    "millisecondsUnit": "{{value}} ms",
+    "tokensUnit": "{{value}} tokens"
+  },
+  "panels": {
+    "allErrors": "All Errors",
+    "percentOfRequests": "{{value}}% of requests",
+    "errorType": "Error Type",
+    "percentage": "Percentage",
+    "topModelsByRequests": "Top Models by Requests",
+    "topModelsByCost": "Top Models by Cost",
+    "topProviders": "Top Providers",
+    "topCountries": "Top Countries",
+    "name": "Name",
+    "provider": "Provider",
+    "country": "Country",
+    "cost": "Cost",
+    "requests": "Requests",
+    "scores": "Scores",
+    "feedbackBoolScores": "Feedback / Bool Scores",
+    "noScoreData": "No score data available",
+    "quantiles": "Quantiles",
+    "selectProperty": "Select property",
+    "latencyMetric": "Latency",
+    "promptTokensMetric": "Prompt tokens",
+    "completionTokensMetric": "Completion tokens",
+    "totalTokensMetric": "Total tokens",
+    "p75": "P75",
+    "p90": "P90",
+    "p95": "P95",
+    "p99": "P99"
+  },
+  "statusCodes": {
+    "timeout": "timeout",
+    "pending": "pending",
+    "cancelled": "cancelled",
+    "threat": "threat"
+  },
+  "gatewayDiscount": {
+    "saveWithGateway": "save <highlight>${{amount}}/mo</highlight> w/ AI Gateway",
+    "dismiss": "Dismiss"
+  },
+  "suggestGraph": {
+    "requestNewGraph": "Request a new graph",
+    "posthogIntegration": "Or use our <link>PostHog integration</link> to create custom graphs or get started with our pre-built template."
+  },
+  "emptyState": {
+    "title": "Integrate to unlock your analytics",
+    "description": "This is a preview. Integrate your LLM app with Helicone to see your real-time insights.",
+    "tryDemo": "Try Demo",
+    "quickStart": "Quick Start"
+  },
+  "export": {
+    "tooltip": "Export dashboard",
+    "title": "Export Dashboard",
+    "description": "All dashboard data as an Excel file with separate tabs for metrics, costs, requests, and more.",
+    "cancel": "Cancel",
+    "export": "Export",
+    "exporting": "Exporting...",
+    "success": "Dashboard data exported successfully!",
+    "error": "Error exporting dashboard data. Please try again."
+  },
+  "suggestModal": {
+    "metricTitle": "Metric Title",
+    "metricTitlePlaceholder": "e.g. Average Tokens per Request",
+    "type": "Type",
+    "typePlaceholder": "Time Graph | Number | Other",
+    "email": "Email address",
+    "useCase": "Use Case",
+    "useCasePlaceholder": "e.g. Monitor how close we are to OpenAI API limits.",
+    "whatElse": "What else should we know?",
+    "whatElsePlaceholder": "Hello",
+    "submit": "Submit",
+    "submitError": "Failed to submit feedback. Please try again.",
+    "submitSuccess": "Thank you for your feedback!"
+  },
+  "onboarding": {
+    "demoModalTitle": "Welcome to Helicone",
+    "floatingPrompt": "Need help getting started?"
+  }
+}

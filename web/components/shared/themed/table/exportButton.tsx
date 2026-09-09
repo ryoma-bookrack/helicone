@@ -17,6 +17,7 @@ import { ArrowPathIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
 import Papa from "papaparse";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { LuDownload } from "react-icons/lu";
 import { clsx } from "../../clsx";
 import useNotification from "../../notification/useNotification";
@@ -35,6 +36,7 @@ export default function ExportButton<T>({
   fetchRows,
   format: initialFormat = "CSV",
 }: ExportButtonProps<T>) {
+  const { t } = useTranslation("common");
   const [format, setFormat] = useState(initialFormat);
   const [open, setOpen] = useState(false);
   const [downloadingCSV, setDownloadingCSV] = useState(false);
@@ -80,10 +82,10 @@ export default function ExportButton<T>({
       link.click();
       document.body.removeChild(link);
 
-      setNotification(`${format} downloaded successfully!`, "success");
+      setNotification(t("export.downloadSuccess", { format }), "success");
     } catch (error) {
       logger.error({ error, format }, `Error exporting ${format}`);
-      setNotification(`Error exporting ${format}. Please try again.`, "error");
+      setNotification(t("export.downloadError", { format }), "error");
     } finally {
       setDownloadingCSV(false);
       setOpen(false);
@@ -103,7 +105,7 @@ export default function ExportButton<T>({
             <LuDownload className="h-4 w-4" />
           </Button>
         </TooltipTrigger>
-        <TooltipContent>Export data</TooltipContent>
+        <TooltipContent>{t("export.exportData")}</TooltipContent>
       </Tooltip>
 
       <ThemedModal open={open} setOpen={setOpen}>
@@ -111,19 +113,17 @@ export default function ExportButton<T>({
           <div className="flex flex-col space-y-8">
             <div className="flex flex-col space-y-4">
               <p className="text-md font-semibold text-gray-900 dark:text-gray-100 sm:text-lg">
-                Export {format}
+                {t("export.exportFormat", { format })}
               </p>
               <p className="sm:text-md text-sm text-gray-500">
-                Exporting is limited to {MAX_EXPORT_ROWS} rows due to the huge
-                amounts of data in the requests. For larger exports, please use
-                our{" "}
+                {t("export.limitDescription", { maxRows: MAX_EXPORT_ROWS })}{" "}
                 <Link
                   href="https://docs.helicone.ai/helicone-api/getting-started"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="font-semibold text-blue-600 underline"
                 >
-                  API
+                  {t("export.apiLink")}
                 </Link>
                 .
               </p>
@@ -134,17 +134,16 @@ export default function ExportButton<T>({
               onValueChange={(value) => setFormat(value as "CSV" | "JSONL")}
             >
               <SelectTrigger className="w-full">
-                <SelectValue placeholder="Select format" />
+                <SelectValue placeholder={t("export.selectFormat")} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="CSV">CSV</SelectItem>
-                <SelectItem value="JSONL">JSONL</SelectItem>
+                <SelectItem value="CSV">{t("export.csv")}</SelectItem>
+                <SelectItem value="JSONL">{t("export.jsonl")}</SelectItem>
               </SelectContent>
             </Select>
 
             <p className="sm:text-md text-sm text-gray-500">
-              Exporting may take a while depending on the amount of data. Please
-              do not close this modal once export is started.
+              {t("export.exportWarningData")}
             </p>
           </div>
 
@@ -154,7 +153,7 @@ export default function ExportButton<T>({
               onClick={() => setOpen(false)}
               className="flex flex-row items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-semibold text-gray-900 shadow-sm hover:bg-gray-50 hover:text-gray-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-500 dark:border-gray-700 dark:bg-black dark:text-gray-100 dark:hover:bg-gray-900 dark:hover:text-gray-300"
             >
-              Cancel
+              {t("actions.cancel")}
             </button>
             <button
               className="flex items-center rounded-md bg-black px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-gray-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white dark:bg-white dark:text-black dark:hover:bg-gray-200"
@@ -165,10 +164,10 @@ export default function ExportButton<T>({
                   <ArrowPathIcon
                     className={clsx("mr-2 inline h-5 w-5 animate-spin")}
                   />
-                  Exporting
+                  {t("export.exporting")}
                 </>
               ) : (
-                <p>Export</p>
+                <p>{t("export.export")}</p>
               )}
             </button>
           </div>

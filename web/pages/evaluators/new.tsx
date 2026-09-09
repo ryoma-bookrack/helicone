@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { ReactElement } from "react";
 import { useRouter } from "next/router";
 import AuthLayout from "@/components/layout/auth/authLayout";
@@ -10,6 +11,9 @@ import {
 import { useLLMEvaluatorSubmit } from "@/components/templates/evals/hooks/useEvaluatorSubmit";
 
 const CreateEvaluator = () => {
+  const { t } = useTranslation("evals");
+  const { t: tCommon } = useTranslation("common");
+
   const router = useRouter();
   const notification = useNotification();
 
@@ -53,7 +57,7 @@ const CreateEvaluator = () => {
   return (
     <div>
       <AuthHeader
-        title="Create Evaluator"
+        title={t("ui.createEvaluator")}
         breadcrumb={{
           title: "Evaluators",
           href: "/evaluators",

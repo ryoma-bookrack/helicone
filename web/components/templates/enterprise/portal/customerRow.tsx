@@ -1,8 +1,10 @@
 import { TableCell, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { AreaChart } from "@tremor/react";
+import { formatStandardDate } from "@/lib/i18n/format";
 import { getUSDateFromString } from "../../../shared/utils/utils";
 import { Fragment, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { clsx } from "../../../shared/clsx";
 import { useGetOrgMembers } from "../../../../services/hooks/organizations";
 import { formatISO } from "date-fns";
@@ -27,6 +29,8 @@ interface CustomerRowProps {
 
 const CustomerRow = (props: CustomerRowProps) => {
   const { org, refetchCustomerOrgs } = props;
+  const { t } = useTranslation("enterprise");
+  const { t: tCommon } = useTranslation("common");
   const [deleteOpen, setDeleteOpen] = useState(false);
   const [editOpen, setEditOpen] = useState(false);
 
@@ -66,12 +70,12 @@ const CustomerRow = (props: CustomerRowProps) => {
       if (new Date(d.time) > new Date()) {
         return {
           requests: null,
-          date: new Date(d.time).toLocaleDateString(),
+          date: formatStandardDate(d.time),
         };
       } else {
         return {
           requests: +d.count,
-          date: new Date(d.time).toLocaleDateString(),
+          date: formatStandardDate(d.time),
         };
       }
     }) ?? [];
@@ -112,7 +116,7 @@ const CustomerRow = (props: CustomerRowProps) => {
             variant="outline"
             className="border-emerald-200 bg-emerald-50 text-emerald-700 hover:bg-emerald-50"
           >
-            active
+            {t("portal.status.active")}
           </Badge>
         </TableCell>
         <TableCell>
@@ -174,7 +178,7 @@ const CustomerRow = (props: CustomerRowProps) => {
                           router.push("/dashboard");
                         }}
                       >
-                        View
+                        {t("portal.actions.view")}
                       </button>
                     )}
                   </Menu.Item>
@@ -192,7 +196,7 @@ const CustomerRow = (props: CustomerRowProps) => {
                           setEditOpen(true);
                         }}
                       >
-                        Edit
+                        {t("portal.actions.edit")}
                       </button>
                     )}
                   </Menu.Item>
@@ -209,7 +213,7 @@ const CustomerRow = (props: CustomerRowProps) => {
                           setDeleteOpen(true);
                         }}
                       >
-                        Delete
+                        {tCommon("actions.delete")}
                       </button>
                     )}
                   </Menu.Item>

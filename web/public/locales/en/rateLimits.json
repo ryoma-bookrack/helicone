@@ -1,0 +1,86 @@
+{
+  "title": "Rate Limits",
+  "loading": "Loading...",
+  "tabs": {
+    "requests": "Rate Limited Requests",
+    "rules": "Rate Limit Rules"
+  },
+  "tooltip": {
+    "intro": "Only one rate limit rule applies per request, based on the following priority:",
+    "priorityTitle": "Rule Priority & Sorting",
+    "priorityDescription": "Rules are automatically sorted by application priority:",
+    "segment": "Segment:",
+    "segmentDescription": "Property rules apply first, then User, then Global.",
+    "restrictiveness": "Restrictiveness:",
+    "restrictivenessDescription": "Within the same Segment & Unit, the rule with the lowest effective quota (quota / time window) applies first."
+  },
+  "chart": {
+    "rateLimitCount": "Rate Limit Count",
+    "time": "Time"
+  },
+  "rules": {
+    "errorFetching": "Error fetching rules",
+    "unknownError": "An unknown error occurred.",
+    "empty": "No rate limits defined yet. Create your first rate limit rule to get started.",
+    "createRule": "Create Rule",
+    "columns": {
+      "name": "Name",
+      "quota": "Quota",
+      "unit": "Unit",
+      "windowSec": "Window (sec)",
+      "appliesTo": "Applies To",
+      "created": "Created",
+      "actions": "Actions"
+    },
+    "appliesTo": {
+      "global": "Global",
+      "user": "User",
+      "property": "Property: {{segment}}"
+    },
+    "units": {
+      "request": "Requests",
+      "cents": "Cents"
+    },
+    "deleteTitle": "Are you sure you want to delete this rate limit rule?",
+    "deleteDescription": "This action cannot be undone. This will permanently delete the rate limit rule<strong> \"{{name}}\"</strong>.",
+    "deleting": "Deleting...",
+    "updateSuccess": "Successfully updated rate limit rule \"{{name}}\"",
+    "createSuccess": "Successfully created rate limit rule \"{{name}}\"",
+    "deleteSuccess": "Successfully deleted rate limit rule \"{{name}}\"",
+    "deleteFailed": "Failed to delete rule: {{error}}"
+  },
+  "modal": {
+    "createTitle": "Create New Rate Limit Rule",
+    "editTitle": "Edit Rate Limit Rule",
+    "createDescription": "Define a specific rate limit constraint. Requests must satisfy all applicable active rules.",
+    "editDescription": "Modify the details of this rate limit rule.",
+    "ruleName": "Rule Name",
+    "ruleNamePlaceholder": "e.g., \"Free Tier Daily Limit\"",
+    "quota": "Quota",
+    "quotaPlaceholder": "e.g., 1000",
+    "selectUnit": "Select unit",
+    "timeWindowSec": "Time Window (sec)",
+    "timeWindowPlaceholder": "e.g., 3600 (for 1 hour)",
+    "applyTo": "Apply To",
+    "selectScope": "Select scope...",
+    "scopeGlobal": "All Requests (Global)",
+    "scopeUser": "Each User ID",
+    "scopeProperty": "Custom Property",
+    "propertyKey": "Property Key",
+    "propertyKeyPlaceholder": "e.g., \"customerId\" or \"X-Feature-Flag\"",
+    "error": "Error",
+    "creating": "Creating...",
+    "saving": "Saving...",
+    "saveChanges": "Save Changes",
+    "propertyKeyEmpty": "Property Key cannot be empty when segment type is 'Custom Property'.",
+    "saveError": "An error occurred while saving the rule.",
+    "savedNoData": "Rule saved, but failed to retrieve updated data.",
+    "unknownError": "An unknown error occurred.",
+    "validation": {
+      "nameRequired": "Rule Name is required.",
+      "quotaNonNegative": "Quota must be a non-negative number.",
+      "windowNonNegative": "Time Window must be a non-negative number.",
+      "segmentInvalid": "Segment must be 'user', empty (global), or a valid property key (alphanumeric/hyphen/underscore)."
+    }
+  }
+}

@@ -1,14 +1,9 @@
-export function formatLargeNumber(value: number, roundLow?: boolean): string {
-  if (value >= 1000) {
-    return value.toLocaleString("en-US", { maximumFractionDigits: 0 });
-  } else if (value >= 1000) {
-    return value.toLocaleString("en-US", { maximumFractionDigits: 0 });
-  } else if (value >= 0.01) {
-    return value.toLocaleString("en-US");
-  }
+import { formatLargeNumber as formatLargeNumberI18n } from "@/lib/i18n/format";
 
-  if (roundLow) {
-    return "0";
-  }
-  return value.toFixed(5);
+export function formatLargeNumber(
+  value: number,
+  roundLow?: boolean,
+  locale = "zh",
+): string {
+  return formatLargeNumberI18n(value, locale, roundLow);
 }

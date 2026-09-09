@@ -1,3 +1,4 @@
+import { formatStandardDateTime } from "@/lib/i18n/format";
 import { IslandContainer } from "@/components/ui/islandContainer";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ThemedLineChart } from "@/components/ui/themedLineChart";
@@ -108,13 +109,13 @@ const UserIdPage = (props: UserIdPageProps) => {
                   <div className="flex flex-col items-start space-y-1">
                     <p className="text-sm font-semibold">First Active</p>
                     <p className="text-sm text-gray-500">
-                      {new Date(user.first_active).toLocaleString()}
+                      {formatStandardDateTime(user.first_active)}
                     </p>
                   </div>
                   <div className="flex flex-col items-start space-y-1">
                     <p className="text-sm font-semibold">Last Active</p>
                     <p className="text-sm text-gray-500">
-                      {new Date(user.last_active).toLocaleString()}
+                      {formatStandardDateTime(user.last_active)}
                     </p>
                   </div>
                   <div className="flex flex-col items-start space-y-1">

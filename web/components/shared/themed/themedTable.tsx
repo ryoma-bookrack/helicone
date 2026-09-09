@@ -8,6 +8,7 @@ import { clsx } from "../clsx";
 import { useState } from "react";
 import { TooltipLegacy as Tooltip } from "@/components/ui/tooltipLegacy";
 import useNotification from "../notification/useNotification";
+import { useTranslation } from "react-i18next";
 import {
   useGetOrgMembers,
   useGetOrgOwner,
@@ -37,6 +38,7 @@ export const SecretInput = (props: {
   const { value, variant = "primary" } = props;
   const [show, setShow] = useState(false);
   const { setNotification } = useNotification();
+  const { t } = useTranslation("common");
 
   const { user } = useHeliconeAuthClient();
 
@@ -91,13 +93,13 @@ export const SecretInput = (props: {
           </button>
           <div className="flex w-full min-w-[15rem]">
             {show ? (
-              <Tooltip title="Click to Copy" placement="top">
+              <Tooltip title={t("tooltips.clickToCopy")} placement="top">
                 <button
                   id="secret-key"
                   onClick={(e) => {
                     e.stopPropagation();
                     navigator.clipboard.writeText(value);
-                    setNotification("Copied to clipboard", "success");
+                    setNotification(t("notifications.copiedToClipboard"), "success");
                   }}
                   type="button"
                   className={clsx(
@@ -152,6 +154,7 @@ export const SecretInput = (props: {
 
 const ThemedTable = (props: ThemedTableProps) => {
   const { columns, rows, viewHandler, editHandler, deleteHandler } = props;
+  const { t } = useTranslation("common");
 
   return (
     <div className="overflow-auto rounded-lg bg-white ring-1 ring-gray-300 dark:bg-black dark:ring-gray-700">
@@ -188,7 +191,7 @@ const ThemedTable = (props: ThemedTableProps) => {
               scope="col"
               className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-gray-100 lg:table-cell"
             >
-              <span className="sr-only">Actions</span>
+              <span className="sr-only">{t("aria.actions")}</span>
             </th>
           </tr>
         </thead>

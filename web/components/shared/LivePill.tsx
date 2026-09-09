@@ -1,6 +1,7 @@
 import { ArrowPathIcon } from "@heroicons/react/24/outline";
 import clsx from "clsx";
 import { Button } from "../ui/button";
+import { useTranslation } from "react-i18next";
 
 interface LivePillProps {
   isLive: boolean;
@@ -11,6 +12,8 @@ interface LivePillProps {
 }
 export default function LivePill(props: LivePillProps) {
   const { isLive, setIsLive, isDataLoading, isRefetching, refetch } = props;
+  const { t } = useTranslation("common");
+
   return (
     <div className="flex h-8 flex-row items-center divide-x divide-border rounded-lg border border-border bg-slate-50 dark:bg-slate-950">
       <Button
@@ -26,7 +29,7 @@ export default function LivePill(props: LivePillProps) {
           )}
         />
         <span className="whitespace-nowrap text-xs">
-          {isLive ? "Live" : "Start Live"}
+          {isLive ? t("live.live") : t("live.startLive")}
         </span>
       </Button>
 

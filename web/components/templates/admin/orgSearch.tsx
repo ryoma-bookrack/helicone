@@ -1,4 +1,6 @@
+import { formatStandardDateTime } from "@/lib/i18n/format";
 import React, { useState, useRef, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import { useRouter } from "next/router";
 import { getJawnClient } from "@/lib/clients/jawn";
 import {
@@ -41,6 +43,7 @@ import {
 import { Switch } from "@/components/ui/switch";
 
 const OrgSearch = () => {
+  const { t } = useTranslation("admin");
   const router = useRouter();
   const [searchQuery, setSearchQuery] = useState("");
   const [expandedOrg, setExpandedOrg] = useState<string | null>(null);
@@ -204,10 +207,7 @@ const OrgSearch = () => {
       last12Months.push({
         date,
         monthKey: date.toISOString().slice(0, 7), // YYYY-MM format
-        month: date.toLocaleDateString("en-US", {
-          year: "numeric",
-          month: "short",
-        }),
+        month: date.toISOString().slice(0, 7),
       });
     }
 
@@ -280,7 +280,7 @@ const OrgSearch = () => {
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Search organizations..."
+            placeholder={t("orgSearch.searchPlaceholder")}
             className="rounded-none pl-10"
           />
         </div>
@@ -358,7 +358,7 @@ const OrgSearch = () => {
           <Card className="rounded-none border-dashed">
             <CardContent className="flex flex-col items-center justify-center gap-4 py-12">
               <div className="text-6xl">🔍</div>
-              <H3>Enter search criteria</H3>
+              <H3>{t("orgSearch.enterSearchCriteria")}</H3>
               <Muted>Use the search box above to find organizations</Muted>
             </CardContent>
           </Card>
@@ -371,7 +371,7 @@ const OrgSearch = () => {
             <Card className="rounded-none border-dashed">
               <CardContent className="flex flex-col items-center justify-center gap-4 py-12">
                 <div className="text-6xl">🕵️</div>
-                <H3>No organizations found</H3>
+                <H3>{t("orgSearch.noOrganizationsFound")}</H3>
                 <Muted>Try different search criteria</Muted>
               </CardContent>
             </Card>
@@ -462,6 +462,7 @@ const AddAdminDialog = ({
   orgId: string;
   orgName: string;
 }) => {
+  const { t } = useTranslation("admin");
   const queryClient = useQueryClient();
   const { setNotification } = useNotification();
   const [open, setOpen] = useState(false);
@@ -492,13 +493,13 @@ const AddAdminDialog = ({
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["orgSearchFast"] });
-      setNotification("Admins added to organization successfully", "success");
+      setNotification(t("orgSearch.addAdminSuccess"), "success");
       setOpen(false);
       setSelectedAdminIds([]);
     },
     onError: (error: any) => {
       setNotification(
-        error.message || "Failed to add admins to organization",
+        error.message || t("orgSearch.addAdminFailed"),
         "error",
       );
     },
@@ -514,7 +515,7 @@ const AddAdminDialog = ({
 
   const handleAddAdmins = () => {
     if (selectedAdminIds.length === 0) {
-      setNotification("Please select at least one admin", "error");
+      setNotification(t("orgSearch.selectAtLeastOneAdmin"), "error");
       return;
     }
     addAdminToOrgMutation.mutate(selectedAdminIds);
@@ -530,7 +531,7 @@ const AddAdminDialog = ({
       </DialogTrigger>
       <DialogContent className="max-w-md">
         <DialogHeader>
-          <DialogTitle>Add Admin to Organization</DialogTitle>
+          <DialogTitle>{t("orgSearch.addAdminToOrg")}</DialogTitle>
           <DialogDescription>Add admin users to {orgName}</DialogDescription>
         </DialogHeader>
 
@@ -538,12 +539,12 @@ const AddAdminDialog = ({
           {isLoadingAdmins ? (
             <div className="flex items-center justify-center gap-2 py-8">
               <Loader2 className="h-5 w-5 animate-spin text-muted-foreground" />
-              <Muted>Loading admins...</Muted>
+              <Muted>{t("orgSearch.loadingAdmins")}</Muted>
             </div>
           ) : (
             <>
               <div className="flex max-h-64 flex-col gap-2 overflow-y-auto">
-                <Small className="font-medium">Select Admins</Small>
+                <Small className="font-medium">{t("orgSearch.selectAdmins")}</Small>
                 {adminsData?.data?.map((admin) => (
                   <label
                     key={admin.user_id}
@@ -619,6 +620,7 @@ const OrgTableRow = ({
   sortAndFormatMonthlyUsage: (monthlyUsage: any[]) => any[];
   rowIndex: number;
 }) => {
+  const { t } = useTranslation("admin");
   const queryClient = useQueryClient();
   const { setNotification } = useNotification();
   const [deleteMemberDialogOpen, setDeleteMemberDialogOpen] = useState(false);
@@ -730,10 +732,10 @@ const OrgTableRow = ({
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["orgSearchFast"] });
-      setNotification("Member removed successfully", "success");
+      setNotification(t("orgSearch.memberRemoved"), "success");
     },
     onError: (error: any) => {
-      setNotification(error.message || "Failed to remove member", "error");
+      setNotification(error.message || t("orgSearch.memberRemoveFailed"), "error");
     },
   });
 
@@ -758,12 +760,12 @@ const OrgTableRow = ({
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["orgSearchFast"] });
-      setNotification("Member role updated successfully", "success");
+      setNotification(t("orgSearch.memberRoleUpdated"), "success");
       setChangeRoleDialogOpen(false);
       setRoleChange(null);
     },
     onError: (error: any) => {
-      setNotification(error.message || "Failed to update member role", "error");
+      setNotification(error.message || t("orgSearch.memberRoleUpdateFailed"), "error");
     },
   });
 
@@ -778,12 +780,12 @@ const OrgTableRow = ({
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["orgSearchFast"] });
-      setNotification("Organization cleaned up successfully", "success");
+      setNotification(t("orgSearch.orgCleanedUp"), "success");
       setDeleteOrgDialogOpen(false);
     },
     onError: (error: any) => {
       setNotification(
-        error.message || "Failed to delete organization",
+        error.message || t("orgSearch.orgDeleteFailed"),
         "error",
       );
     },
@@ -840,30 +842,21 @@ const OrgTableRow = ({
           {lightUsageLoading ? (
             <div className="flex items-center gap-1">
               <Loader2 className="h-3 w-3 animate-spin text-muted-foreground" />
-              <Muted className="text-xs">Loading...</Muted>
+              <Muted className="text-xs">{t("common.loading")}</Muted>
             </div>
           ) : lightUsageData?.last_request_at ? (
             <Muted className="text-xs">
-              {new Date(lightUsageData.last_request_at).toLocaleDateString(
-                "en-US",
-                {
-                  month: "short",
-                  day: "numeric",
-                  year: "numeric",
-                  hour: "2-digit",
-                  minute: "2-digit",
-                },
-              )}
+              {formatStandardDateTime(lightUsageData.last_request_at)}
             </Muted>
           ) : (
-            <Muted className="text-xs">No requests</Muted>
+            <Muted className="text-xs">{t("orgSearch.noRequests")}</Muted>
           )}
         </td>
         <td className="px-4 py-3">
           {lightUsageLoading ? (
             <div className="flex items-center gap-1">
               <Loader2 className="h-3 w-3 animate-spin text-muted-foreground" />
-              <Muted className="text-xs">Loading...</Muted>
+              <Muted className="text-xs">{t("common.loading")}</Muted>
             </div>
           ) : (
             <Muted className="text-xs">
@@ -950,7 +943,7 @@ const OrgTableRow = ({
                             e.stopPropagation();
                             navigator.clipboard.writeText(org.id);
                             setNotification(
-                              "Organization ID copied",
+                              t("common.organizationIdCopied"),
                               "success",
                             );
                           }}
@@ -964,7 +957,7 @@ const OrgTableRow = ({
                           Created
                         </Small>
                         <Muted className="text-xs">
-                          {new Date(org.created_at).toLocaleDateString()}
+                          {formatStandardDateTime(org.created_at)}
                         </Muted>
                       </div>
                       <div className="flex items-center justify-between gap-3">
@@ -1117,7 +1110,7 @@ const OrgTableRow = ({
                         <ChartContainer
                           config={{
                             requestCount: {
-                              label: "Requests",
+                              label: t("common.requests"),
                               color: "hsl(200 90% 50%)",
                             },
                           }}
@@ -1188,7 +1181,7 @@ const OrgTableRow = ({
                         <ChartContainer
                           config={{
                             cost: {
-                              label: "Cost",
+                              label: t("common.cost"),
                               color: "hsl(142 76% 36%)",
                             },
                           }}
@@ -1313,35 +1306,20 @@ const OrgTableRow = ({
                                 <SelectValue />
                               </SelectTrigger>
                               <SelectContent>
-                                <SelectItem value="owner">Owner</SelectItem>
-                                <SelectItem value="admin">Admin</SelectItem>
-                                <SelectItem value="member">Member</SelectItem>
+                                <SelectItem value="owner">{t("common.owner")}</SelectItem>
+                                <SelectItem value="admin">{t("common.admin")}</SelectItem>
+                                <SelectItem value="member">{t("common.member")}</SelectItem>
                               </SelectContent>
                             </Select>
                           </td>
                           <td className="whitespace-nowrap px-4 py-2 text-xs text-muted-foreground">
                             {member.last_sign_in_at
-                              ? new Date(
-                                  member.last_sign_in_at,
-                                ).toLocaleDateString("en-US", {
-                                  month: "short",
-                                  day: "numeric",
-                                  year: "numeric",
-                                  hour: "2-digit",
-                                  minute: "2-digit",
-                                })
+                              ? formatStandardDateTime(member.last_sign_in_at)
                               : "Never"}
                           </td>
                           <td className="whitespace-nowrap px-4 py-2 text-xs text-muted-foreground">
                             {member.created_at
-                              ? new Date(member.created_at).toLocaleDateString(
-                                  "en-US",
-                                  {
-                                    month: "short",
-                                    day: "numeric",
-                                    year: "numeric",
-                                  },
-                                )
+                              ? formatStandardDateTime(member.created_at)
                               : "N/A"}
                           </td>
                           <td className="whitespace-nowrap px-4 py-2 text-right text-sm">
@@ -1379,7 +1357,7 @@ const OrgTableRow = ({
       >
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Remove Member</DialogTitle>
+            <DialogTitle>{t("orgSearch.removeMember")}</DialogTitle>
             <DialogDescription>
               Are you sure you want to remove{" "}
               <span className="font-medium">{memberToDelete?.email}</span> from{" "}
@@ -1421,7 +1399,7 @@ const OrgTableRow = ({
       >
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Change Member Role</DialogTitle>
+            <DialogTitle>{t("orgSearch.changeMemberRole")}</DialogTitle>
             <DialogDescription>
               Are you sure you want to change{" "}
               <span className="font-medium">{roleChange?.memberEmail}</span>'s
@@ -1450,7 +1428,7 @@ const OrgTableRow = ({
                   Updating...
                 </>
               ) : (
-                "Change Role"
+                t("orgSearch.changeMemberRole")
               )}
             </Button>
           </div>
@@ -1461,7 +1439,7 @@ const OrgTableRow = ({
       <Dialog open={deleteOrgDialogOpen} onOpenChange={setDeleteOrgDialogOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Delete Organization</DialogTitle>
+            <DialogTitle>{t("orgSearch.deleteOrganization")}</DialogTitle>
             <DialogDescription>
               Are you sure you want to clean up{" "}
               <span className="font-medium">{org.name}</span>? This will:
@@ -1489,7 +1467,7 @@ const OrgTableRow = ({
                   Deleting...
                 </>
               ) : (
-                "Delete Organization"
+                t("orgSearch.deleteOrganization")
               )}
             </Button>
           </div>
@@ -1507,6 +1485,7 @@ const FeatureFlagsSection = ({
   orgId: string;
   orgName: string;
 }) => {
+  const { t } = useTranslation("admin");
   const queryClient = useQueryClient();
   const { setNotification } = useNotification();
   const [newFlag, setNewFlag] = useState("");
@@ -1541,11 +1520,11 @@ const FeatureFlagsSection = ({
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["org-feature-flags", orgId] });
-      setNotification("Feature flag added successfully", "success");
+      setNotification(t("orgSearch.featureFlagAdded"), "success");
       setNewFlag("");
     },
     onError: (error: any) => {
-      setNotification(error.message || "Failed to add feature flag", "error");
+      setNotification(error.message || t("orgSearch.featureFlagAddFailed"), "error");
     },
   });
 
@@ -1560,11 +1539,11 @@ const FeatureFlagsSection = ({
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["org-feature-flags", orgId] });
-      setNotification("Feature flag removed successfully", "success");
+      setNotification(t("orgSearch.featureFlagRemoved"), "success");
     },
     onError: (error: any) => {
       setNotification(
-        error.message || "Failed to remove feature flag",
+        error.message || t("orgSearch.featureFlagRemoveFailed"),
         "error",
       );
     },
@@ -1572,7 +1551,7 @@ const FeatureFlagsSection = ({
 
   const handleAddFlag = () => {
     if (!newFlag.trim()) {
-      setNotification("Please enter a feature flag name", "error");
+      setNotification(t("orgSearch.enterFeatureFlagName"), "error");
       return;
     }
     setAddDialogOpen(true);
@@ -1596,12 +1575,12 @@ const FeatureFlagsSection = ({
   return (
     <div className="flex w-full flex-col gap-2">
       <div className="flex items-center justify-between">
-        <Small className="font-medium">Feature Flags</Small>
+        <Small className="font-medium">{t("orgSearch.featureFlags")}</Small>
         {!isLoadingFlags && (
           <div className="flex items-center gap-2">
             <Input
               type="text"
-              placeholder="Add flag..."
+              placeholder={t("orgSearch.addFlagPlaceholder")}
               value={newFlag}
               onChange={(e) => setNewFlag(e.target.value)}
               onKeyDown={(e) => {
@@ -1631,7 +1610,7 @@ const FeatureFlagsSection = ({
       {isLoadingFlags ? (
         <div className="flex items-center gap-2 py-2">
           <Loader2 className="h-4 w-4 animate-spin text-muted-foreground" />
-          <Muted className="text-xs">Loading...</Muted>
+          <Muted className="text-xs">{t("common.loading")}</Muted>
         </div>
       ) : (
         <div className="flex min-h-[2rem] flex-wrap gap-2 border border-border bg-background p-2">
@@ -1659,7 +1638,7 @@ const FeatureFlagsSection = ({
               </Badge>
             ))
           ) : (
-            <Muted className="py-1 text-xs">No feature flags</Muted>
+            <Muted className="py-1 text-xs">{t("orgSearch.noFeatureFlags")}</Muted>
           )}
         </div>
       )}
@@ -1668,7 +1647,7 @@ const FeatureFlagsSection = ({
       <Dialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Delete Feature Flag</DialogTitle>
+            <DialogTitle>{t("orgSearch.deleteFeatureFlag")}</DialogTitle>
             <DialogDescription>
               Are you sure you want to remove the feature flag{" "}
               <span className="font-medium">"{flagToDelete}"</span> from{" "}
@@ -1707,7 +1686,7 @@ const FeatureFlagsSection = ({
       <Dialog open={addDialogOpen} onOpenChange={setAddDialogOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Add Feature Flag</DialogTitle>
+            <DialogTitle>{t("orgSearch.addFeatureFlag")}</DialogTitle>
             <DialogDescription>
               Are you sure you want to add the feature flag{" "}
               <span className="font-medium">"{newFlag}"</span> to {orgName}?
@@ -1747,6 +1726,7 @@ const GatewayDiscountSection = ({
   orgName: string;
   gatewayDiscountEnabled: boolean;
 }) => {
+  const { t } = useTranslation("admin");
   const queryClient = useQueryClient();
   const { setNotification } = useNotification();
   const [confirmDialogOpen, setConfirmDialogOpen] = useState(false);
@@ -1767,13 +1747,13 @@ const GatewayDiscountSection = ({
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["orgSearchFast"] });
-      setNotification("Gateway discount updated successfully", "success");
+      setNotification(t("orgSearch.gatewayDiscountUpdated"), "success");
       setConfirmDialogOpen(false);
       setPendingValue(null);
     },
     onError: (error: any) => {
       setNotification(
-        error.message || "Failed to update gateway discount",
+        error.message || t("orgSearch.gatewayDiscountUpdateFailed"),
         "error",
       );
       setPendingValue(null);
@@ -1794,7 +1774,7 @@ const GatewayDiscountSection = ({
   return (
     <div className="flex w-full flex-col gap-2">
       <div className="flex items-center justify-between">
-        <Small className="font-medium">Gateway Discount</Small>
+        <Small className="font-medium">{t("orgSearch.gatewayDiscount")}</Small>
         <div className="flex items-center gap-2">
           <Switch
             checked={gatewayDiscountEnabled}
@@ -1811,7 +1791,7 @@ const GatewayDiscountSection = ({
       <Dialog open={confirmDialogOpen} onOpenChange={setConfirmDialogOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Update Gateway Discount</DialogTitle>
+            <DialogTitle>{t("orgSearch.updateGatewayDiscount")}</DialogTitle>
             <DialogDescription>
               Are you sure you want to {pendingValue ? "enable" : "disable"}{" "}
               gateway discount for{" "}

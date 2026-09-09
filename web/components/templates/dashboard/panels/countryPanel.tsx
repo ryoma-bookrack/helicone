@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import StyledAreaChart from "../styledAreaChart";
 import { useCountries, CountryData } from "../../../../services/hooks/country";
 import { TimeFilter } from "@/types/timeFilter";
@@ -15,6 +16,7 @@ interface CountryPanelProps {
 }
 
 const CountryPanel = (props: CountryPanelProps) => {
+  const { t } = useTranslation("dashboard");
   const { timeFilter, userFilters } = props;
   const org = useOrg();
   const shouldShowMockData = org?.currentOrg?.has_onboarded === false;
@@ -52,14 +54,14 @@ const CountryPanel = (props: CountryPanelProps) => {
     data: countryData,
     maxValue,
     formatValue: (value) => value.toLocaleString(),
-    modalTitle: "Top Countries",
-    modalValueLabel: "Requests",
+    modalTitle: t("panels.topCountries"),
+    modalValueLabel: t("panels.requests"),
   });
 
   return (
     <>
       <StyledAreaChart
-        title={`Top Countries`}
+        title={t("panels.topCountries")}
         value={undefined}
         isDataOverTimeLoading={isCountriesLoading && !shouldShowMockData}
         withAnimation={true}
@@ -67,8 +69,8 @@ const CountryPanel = (props: CountryPanelProps) => {
       >
         <div className="flex h-full flex-col overflow-hidden">
           <div className="flex flex-row items-center justify-between pb-2">
-            <p className="text-xs font-semibold text-foreground">Country</p>
-            <p className="text-xs font-semibold text-foreground">Requests</p>
+            <p className="text-xs font-semibold text-foreground">{t("panels.country")}</p>
+            <p className="text-xs font-semibold text-foreground">{t("panels.requests")}</p>
           </div>
           <div className="flex-grow overflow-y-auto">{barList}</div>
         </div>

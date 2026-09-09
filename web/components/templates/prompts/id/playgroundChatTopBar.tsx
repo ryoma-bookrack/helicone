@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import React from "react";
 import { ChevronUpDownIcon } from "@heroicons/react/20/solid";
 
@@ -25,6 +26,9 @@ export const PlaygroundChatTopBar: React.FC<PlaygroundChatTopBarProps> = ({
   setIsEditMode,
   isPromptCreatedFromUi,
 }) => {
+  const { t } = useTranslation("prompts");
+  const { t: tCommon } = useTranslation("common");
+
   return (
     <div className="flex h-12 w-full flex-row items-center justify-between rounded-t-md border-slate-200 bg-slate-50 px-2 text-slate-900 dark:border-slate-900 dark:bg-slate-950 dark:text-slate-100">
       <div className="flex flex-row items-center space-x-2 py-2">
@@ -37,9 +41,7 @@ export const PlaygroundChatTopBar: React.FC<PlaygroundChatTopBarProps> = ({
                   ? "text-slate-700 dark:text-slate-300"
                   : "ml-2 rounded-md border border-[#CBD5E1] bg-[#F1F5F9] py-2 text-slate-700 dark:border-slate-700 dark:bg-black dark:text-slate-300"
               }`}
-            >
-              Edit
-            </button>
+            >{tCommon("actions.edit")}</button>
           )}
           <button
             onClick={() => setIsEditMode(false)}
@@ -48,9 +50,7 @@ export const PlaygroundChatTopBar: React.FC<PlaygroundChatTopBarProps> = ({
                 ? "text-slate-700 dark:text-slate-300"
                 : "mr-2 rounded-md border border-[#CBD5E1] bg-[#F1F5F9] py-2 text-slate-700 dark:border-slate-700 dark:bg-black dark:text-slate-300"
             }`}
-          >
-            Preview
-          </button>
+          >{t("ui.preview")}</button>
         </div>
       </div>
       <div className="flex flex-row items-center space-x-2">

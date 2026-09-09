@@ -1,0 +1,78 @@
+{
+  "page": {
+    "title": "数据集",
+    "untitled": "未命名数据集"
+  },
+  "table": {
+    "name": "名称",
+    "createdAt": "创建时间",
+    "datasetType": "数据集类型",
+    "rows": "行数"
+  },
+  "types": {
+    "helicone": "Helicone",
+    "experiment": "实验",
+    "unknown": "未知"
+  },
+  "delete": {
+    "title": "删除数据集",
+    "description": "确定要删除数据集「{{name}}」吗？此操作无法撤销。",
+    "deleting": "删除中..."
+  },
+  "notifications": {
+    "deleteError": "删除数据集失败",
+    "deleteSuccess": "数据集已删除",
+    "requestsDuplicated": "请求已复制到此数据集",
+    "requestsDuplicatedError": "复制请求到此数据集失败",
+    "requestsRemoved": "请求已从数据集中移除",
+    "requestsRemovedError": "从数据集中移除请求失败",
+    "requestUpdated": "数据集请求已更新",
+    "requestUpdateError": "更新数据集请求失败",
+    "requestRemoved": "请求已从数据集中移除",
+    "requestRemoveError": "从数据集中移除请求失败",
+    "datasetCreated": "数据集已创建",
+    "datasetCreateError": "创建数据集失败",
+    "requestsAdded": "请求已添加到数据集",
+    "requestsAddError": "添加请求到数据集失败",
+    "copiedToClipboard": "已复制到剪贴板"
+  },
+  "detail": {
+    "rowsCount": "{{count}} 行",
+    "requestBody": "请求体",
+    "responseBody": "响应体",
+    "clickToCopy": "点击复制",
+    "copyTo": "复制到...",
+    "duplicate": "复制",
+    "remove": "移除",
+    "viewOriginalRequest": "查看原始请求"
+  },
+  "drawer": {
+    "editing": "编辑中",
+    "discard": "放弃",
+    "saveChanges": "保存更改",
+    "previous": "上一条",
+    "next": "下一条"
+  },
+  "removeModal": {
+    "title": "从数据集中移除 {{count}} 条请求？",
+    "description": "此操作无法撤销。",
+    "confirmRemove": "确认移除"
+  },
+  "newDataset": {
+    "copyToDataset": "复制到数据集",
+    "addToDataset": "添加到数据集",
+    "noDatasets": "暂无数据集",
+    "createFirstBelow": "在下方创建你的第一个数据集",
+    "createNew": "创建新数据集",
+    "datasetName": "数据集名称",
+    "untitled": "未命名",
+    "openDatasetAfter": "添加后打开数据集",
+    "copying": "复制中...",
+    "adding": "添加中...",
+    "copyRequests": "复制 {{count}} 条请求",
+    "addRequests": "添加 {{count}} 条请求",
+    "sizeLimitTitle": "数据集大小限制",
+    "maxCapacity": "此数据集已达到 {{max}} 条请求的上限。",
+    "partialAdd": "为不超过每个数据集 {{max}} 条请求的限制，仅会添加 {{limited}} / {{total}} 条请求。"
+  }
+}

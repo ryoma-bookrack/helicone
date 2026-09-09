@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/tooltip";
 import { Column } from "@tanstack/react-table";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { LuColumns3, LuInfo } from "react-icons/lu";
@@ -34,6 +35,7 @@ interface ViewColumnsProps<T> {
 
 export default function ViewColumns<T>(props: ViewColumnsProps<T>) {
   const { columns, activeColumns, setActiveColumns } = props;
+  const { t } = useTranslation("common");
 
   const categories = columns.reduce(
     (acc, column) => {
@@ -67,7 +69,7 @@ export default function ViewColumns<T>(props: ViewColumnsProps<T>) {
               </Button>
             </DropdownMenuTrigger>
           </TooltipTrigger>
-          <TooltipContent>Manage columns</TooltipContent>
+          <TooltipContent>{t("columns.manageColumns")}</TooltipContent>
         </Tooltip>
         <DropdownMenuContent
           className="h-[66vh] w-[calc(100vw-2rem)] max-w-4xl overflow-hidden rounded-lg border border-slate-300 bg-white p-0 shadow-xl dark:border-slate-700 dark:bg-black sm:w-[calc(100vw-4rem)] md:w-[calc(100vw-8rem)]"
@@ -79,7 +81,7 @@ export default function ViewColumns<T>(props: ViewColumnsProps<T>) {
               <Col className="relative h-full flex-1 p-4">
                 <div className="mb-4 flex flex-row items-center justify-start space-x-2">
                   <h3 className="text-xs font-medium text-foreground">
-                    Column Reorder
+                    {t("columns.columnReorder")}
                   </h3>
                   <Tooltip>
                     <TooltipTrigger asChild>
@@ -92,16 +94,11 @@ export default function ViewColumns<T>(props: ViewColumnsProps<T>) {
                       </button>
                     </TooltipTrigger>
                     <TooltipContent side="left">
-                      <p>The ordering only affects your Requests table</p>
+                      <p>{t("columns.orderingNote")}</p>
                     </TooltipContent>
                   </Tooltip>
                 </div>
-                <i className="text-xs text-slate-500">
-                  Note: If something is not shown, or your columns are in an
-                  unexpected state, please click{" "}
-                  <span className="font-bold">Back to preset</span> on the
-                  bottom left of the right panel
-                </i>
+                <i className="text-xs text-slate-500">{t("columns.presetNote")}</i>
 
                 <div className="h-[calc(100%-6rem)] overflow-y-auto">
                   <DragList items={activeColumns} setItems={setActiveColumns} />
@@ -133,7 +130,7 @@ export default function ViewColumns<T>(props: ViewColumnsProps<T>) {
                       }}
                       className="text-xs"
                     >
-                      Back to preset
+                      {t("columns.backToPreset")}
                     </Button>
                     <Row>
                       <Button
@@ -149,7 +146,7 @@ export default function ViewColumns<T>(props: ViewColumnsProps<T>) {
                         }}
                         className="text-xs"
                       >
-                        Deselect All
+                        {t("columns.deselectAll")}
                       </Button>
                       <Button
                         variant="ghost"
@@ -161,7 +158,7 @@ export default function ViewColumns<T>(props: ViewColumnsProps<T>) {
                         }}
                         className="text-xs"
                       >
-                        Select All
+                        {t("columns.selectAll")}
                       </Button>
                     </Row>
                   </Row>

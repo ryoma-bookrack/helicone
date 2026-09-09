@@ -3,6 +3,7 @@ import { CodeHighlighter } from "@/components/shared/CodeHighlighter";
 import { getRouterCode } from "@/components/templates/gateway/routerUseDialog";
 import { MoveUpRight } from "lucide-react";
 import Link from "next/link";
+import { useTranslation } from "react-i18next";
 
 interface IntegrationCodeTabsProps {
   apiKey?: string;
@@ -15,13 +16,17 @@ export function IntegrationCodeTabs({
   defaultTab = "javascript",
   theme = "github-dark",
 }: IntegrationCodeTabsProps) {
+  const { t } = useTranslation("common");
+
   return (
     <Tabs defaultValue={defaultTab} className="w-full">
       <div className="mb-2 flex items-center justify-between">
         <TabsList className="w-auto">
-          <TabsTrigger value="javascript">JavaScript</TabsTrigger>
-          <TabsTrigger value="python">Python</TabsTrigger>
-          <TabsTrigger value="curl">cURL</TabsTrigger>
+          <TabsTrigger value="javascript">
+            {t("languages.javascript")}
+          </TabsTrigger>
+          <TabsTrigger value="python">{t("languages.python")}</TabsTrigger>
+          <TabsTrigger value="curl">{t("languages.curl")}</TabsTrigger>
         </TabsList>
 
         <Link
@@ -30,7 +35,7 @@ export function IntegrationCodeTabs({
           rel="noopener noreferrer"
           className="flex items-center gap-1 text-xs text-muted-foreground/60 transition-colors hover:text-muted-foreground"
         >
-          <span>Using another SDK?</span>
+          <span>{t("integration.usingAnotherSdk")}</span>
           <MoveUpRight size={10} />
         </Link>
       </div>

@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -28,21 +29,19 @@ export const DeleteEvaluator = ({
   setShowDeleteModal: (showDeleteModal: boolean) => void;
   deleteEvaluator: ReturnType<typeof useEvaluators>["deleteEvaluator"];
 }) => {
+  const { t } = useTranslation("evals");
+  const { t: tCommon } = useTranslation("common");
   const { experiments } = useEvaluatorDetails(evaluator, () => {});
 
   const [deleteConfirmation, setDeleteConfirmation] = useState("");
   return (
     <>
-      <Button variant="destructive" onClick={() => setShowDeleteModal(true)}>
-        Delete
-      </Button>
+      <Button variant="destructive" onClick={() => setShowDeleteModal(true)}>{tCommon("actions.delete")}</Button>
 
       <AlertDialog open={showDeleteModal} onOpenChange={setShowDeleteModal}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>
-              Are you sure you want to delete this evaluator?
-            </AlertDialogTitle>
+            <AlertDialogTitle>{t("ui.areYouSureYouWantToDeleteThisEvaluator")}</AlertDialogTitle>
             <AlertDialogDescription>
               This action cannot be undone. Please type the name of the
               evaluator to confirm:
@@ -63,7 +62,7 @@ export const DeleteEvaluator = ({
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogCancel>{tCommon("actions.cancel")}</AlertDialogCancel>
             <AlertDialogAction
               onClick={() => {
                 if (deleteConfirmation === evaluator.name) {
@@ -73,9 +72,7 @@ export const DeleteEvaluator = ({
                 }
               }}
               disabled={deleteConfirmation !== evaluator.name}
-            >
-              Delete
-            </AlertDialogAction>
+            >{tCommon("actions.delete")}</AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>

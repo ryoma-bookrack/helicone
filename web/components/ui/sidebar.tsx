@@ -23,6 +23,7 @@ import {
 } from "@/components/ui/tooltip";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { cn } from "@/lib/utils";
+import { useTranslation } from "react-i18next";
 
 const SIDEBAR_COOKIE_NAME = "sidebar_state";
 const SIDEBAR_COOKIE_MAX_AGE = 60 * 60 * 24 * 7;
@@ -191,6 +192,7 @@ const Sidebar = React.forwardRef<
     },
     ref,
   ) => {
+    const { t } = useTranslation("common");
     const { isMobile, state, openMobile, setOpenMobile } = useSidebar();
 
     if (collapsible === "none") {
@@ -223,8 +225,8 @@ const Sidebar = React.forwardRef<
             side={side}
           >
             <SheetHeader className="sr-only">
-              <SheetTitle>Sidebar</SheetTitle>
-              <SheetDescription>Displays the mobile sidebar.</SheetDescription>
+              <SheetTitle>{t("aria.sidebarTitle")}</SheetTitle>
+              <SheetDescription>{t("aria.sidebarDescription")}</SheetDescription>
             </SheetHeader>
             <div className="flex h-full w-full flex-col">{children}</div>
           </SheetContent>
@@ -283,6 +285,7 @@ const SidebarTrigger = React.forwardRef<
   React.ElementRef<typeof Button>,
   React.ComponentProps<typeof Button>
 >(({ className, onClick, ...props }, ref) => {
+  const { t } = useTranslation("common");
   const { toggleSidebar } = useSidebar();
 
   return (
@@ -299,7 +302,7 @@ const SidebarTrigger = React.forwardRef<
       {...props}
     >
       <PanelLeft />
-      <span className="sr-only">Toggle Sidebar</span>
+      <span className="sr-only">{t("aria.toggleSidebar")}</span>
     </Button>
   );
 });
@@ -309,16 +312,19 @@ const SidebarRail = React.forwardRef<
   HTMLButtonElement,
   React.ComponentProps<"button">
 >(({ className, ...props }, ref) => {
+  const { t } = useTranslation("common");
   const { toggleSidebar } = useSidebar();
+
+  const toggleLabel = t("aria.toggleSidebar");
 
   return (
     <button
       ref={ref}
       data-sidebar="rail"
-      aria-label="Toggle Sidebar"
+      aria-label={toggleLabel}
       tabIndex={-1}
       onClick={toggleSidebar}
-      title="Toggle Sidebar"
+      title={toggleLabel}
       className={cn(
         "absolute inset-y-0 z-20 hidden w-4 -translate-x-1/2 transition-all ease-linear after:absolute after:inset-y-0 after:left-1/2 after:w-[2px] hover:after:bg-sidebar-border group-data-[side=left]:-right-4 group-data-[side=right]:left-0 sm:flex",
         "[[data-side=left]_&]:cursor-w-resize [[data-side=right]_&]:cursor-e-resize",

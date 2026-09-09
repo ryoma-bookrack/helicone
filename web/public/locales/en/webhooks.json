@@ -1,0 +1,55 @@
+{
+  "title": "Webhooks",
+  "learnMore": "Learn more about Helicone webhooks",
+  "addWebhook": "Add Webhook",
+  "columns": {
+    "destination": "Destination",
+    "created": "Created",
+    "version": "Version",
+    "sampleRate": "Sample Rate",
+    "propertyFilters": "Property Filters",
+    "includeData": "Include Data",
+    "hmacKey": "HMAC Key",
+    "actions": "Actions"
+  },
+  "includeData": {
+    "enabled": "Enabled",
+    "disabled": "Disabled"
+  },
+  "actions": {
+    "test": "Test",
+    "testing": "Testing..."
+  },
+  "notifications": {
+    "created": "Webhook created!",
+    "deleted": "Webhook deleted!",
+    "testSuccess": "Test webhook sent successfully!",
+    "testSent": "Test webhook sent",
+    "testFailed": "Test failed: {{message}}",
+    "copied": "Copied to clipboard!",
+    "error": "Error: {{message}}",
+    "createFailed": "Failed to create webhook"
+  },
+  "form": {
+    "title": "Listen to events",
+    "description": "Configure a webhook to receive real-time updates about your API requests.",
+    "endpointUrl": "Endpoint URL",
+    "endpointPlaceholder": "https://",
+    "sampleRate": "Sample Rate",
+    "includeEnhancedData": "Include Enhanced Data",
+    "includeEnhancedDataHint": "When enabled, webhooks will include additional data such as costs, token counts, latency metrics, and S3 URLs.",
+    "propertyFilters": "Properties Filters",
+    "propertyFiltersHint": "Filter which events are sent to the webhook using",
+    "customProperties": "custom properties",
+    "addProperty": "Add Property",
+    "selectProperty": "Select property",
+    "searchPlaceholder": "Type in anything...",
+    "noResults": "No results found.",
+    "suggestions": "Suggestions",
+    "valuePlaceholder": "Value",
+    "validation": {
+      "destinationRequired": "Destination URL is required",
+      "destinationProtocol": "Destination URL must start with http:// or https://"
+    }
+  }
+}

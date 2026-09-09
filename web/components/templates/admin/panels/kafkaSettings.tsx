@@ -1,5 +1,6 @@
 import { TextInput } from "@tremor/react";
 import { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import useNotification from "../../../shared/notification/useNotification";
 import {
   useGetSetting,
@@ -18,14 +19,13 @@ const settingNames: Array<components["schemas"]["SettingName"]> = [
 ];
 
 const KafkaSettings = () => {
+  const { t } = useTranslation("admin");
   const { setNotification } = useNotification();
 
-  // States
   const [miniBatchSize, setMiniBatchSize] = useState<number>(0);
   const [selectedSetting, setSelectedSetting] =
     useState<components["schemas"]["SettingName"]>("kafka:dlq");
 
-  // Fetch current setting
   const {
     setting,
     isLoading: isLoadingSetting,
@@ -36,13 +36,11 @@ const KafkaSettings = () => {
     }
   });
 
-  // Update setting mutation
   const { updateSetting, isUpdatingSetting } = useUpdateSetting(() => {
-    setNotification("Setting updated successfully", "success");
+    setNotification(t("panels.kafka.updatedSuccess"), "success");
     refetchSetting();
   });
 
-  // Effect to update miniBatchSize when setting changes
   useEffect(() => {
     if (setting && "miniBatchSize" in setting) {
       setMiniBatchSize(setting.miniBatchSize);
@@ -51,11 +49,15 @@ const KafkaSettings = () => {
 
   return (
     <>
-      <h2 className="text-lg font-semibold text-white">Kafka Settings</h2>
+      <h2 className="text-lg font-semibold text-white">
+        {t("panels.kafka.title")}
+      </h2>
       <div className="flex flex-col space-y-2">
         <div className="grid grid-cols-2 gap-4">
           <div className="col-span-1">
-            <label className="text-sm text-white">Select Setting</label>
+            <label className="text-sm text-white">
+              {t("panels.kafka.selectSetting")}
+            </label>
             <select
               value={selectedSetting}
               onChange={(e) =>
@@ -63,7 +65,7 @@ const KafkaSettings = () => {
                   e.target.value as components["schemas"]["SettingName"],
                 )
               }
-              className="mt-1 block w-full rounded-md border-gray-300 text-black shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" // Added text-black to ensure text color is visible
+              className="mt-1 block w-full rounded-md border-gray-300 text-black shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
             >
               {settingNames.map((key) => (
                 <option key={key} value={key}>
@@ -76,7 +78,7 @@ const KafkaSettings = () => {
         <div className="grid grid-cols-2 gap-4">
           <div className="col-span-1">
             <TextInput
-              placeholder="Mini Batch Size"
+              placeholder={t("panels.kafka.miniBatchSize")}
               value={miniBatchSize.toString()}
               onValueChange={(value) => setMiniBatchSize(Number(value))}
             />
@@ -86,7 +88,10 @@ const KafkaSettings = () => {
               variant={"default"}
               onClick={() => {
                 if (miniBatchSize != 0 && !miniBatchSize) {
-                  setNotification("Mini Batch Size is required", "error");
+                  setNotification(
+                    t("panels.kafka.miniBatchSizeRequired"),
+                    "error",
+                  );
                   return;
                 }
                 updateSetting({
@@ -98,7 +103,7 @@ const KafkaSettings = () => {
               }}
               disabled={isUpdatingSetting || isLoadingSetting}
             >
-              Update Setting
+              {t("panels.kafka.updateSetting")}
             </Button>
           </div>
         </div>

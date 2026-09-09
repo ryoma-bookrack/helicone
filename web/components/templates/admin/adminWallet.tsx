@@ -2,6 +2,7 @@ import {
   calculateNetAmount,
   dollarsToCents,
 } from "@helicone-package/common/stripe/feeCalculator";
+import { useTranslation } from "react-i18next";
 import { useState } from "react";
 
 import {
@@ -61,8 +62,8 @@ import {
 } from "lucide-react";
 import { useEffect, useRef } from "react";
 
-const formatCurrency = (amount: number | undefined) => {
-  if (amount === undefined) return "UNDEFINED";
+const formatCurrency = (amount: number | undefined, undefinedLabel = "—") => {
+  if (amount === undefined) return undefinedLabel;
   return remoteFormatCurrency(amount, "USD", 2);
 };
 
@@ -74,6 +75,7 @@ type SortColumn =
   | "amount_received";
 
 export default function AdminWallet() {
+  const { t } = useTranslation("admin");
   const [activeTab, setActiveTab] = useState<string>("dashboard");
   const [searchTerm, setSearchTerm] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
@@ -487,12 +489,12 @@ export default function AdminWallet() {
     // Validate inputs
     const amount = parseFloat(modifyAmount);
     if (isNaN(amount) || amount <= 0) {
-      setModifyError("Please enter a valid positive amount");
+      setModifyError(t("wallet.validAmountRequired"));
       return;
     }
 
     if (!modifyReason.trim()) {
-      setModifyError("Please provide a reason for this modification");
+      setModifyError(t("wallet.reasonRequired"));
       return;
     }
 
@@ -524,7 +526,7 @@ export default function AdminWallet() {
       }
     } catch (error) {
       setModifyError(
-        error instanceof Error ? error.message : "Failed to modify balance",
+        error instanceof Error ? error.message : t("wallet.modifyBalanceFailed"),
       );
     } finally {
       setIsModifying(false);
@@ -568,7 +570,7 @@ export default function AdminWallet() {
     const limitValue = creditLimit.trim() ? parseFloat(creditLimit) : undefined;
 
     if (limitValue !== undefined && (isNaN(limitValue) || limitValue < 0)) {
-      setSettingsError("Credit limit must be a non-negative number");
+      setSettingsError(t("wallet.creditLimitNonNegative"));
       return;
     }
 
@@ -599,7 +601,7 @@ export default function AdminWallet() {
       }
     } catch (error) {
       setSettingsError(
-        error instanceof Error ? error.message : "Failed to update settings",
+        error instanceof Error ? error.message : t("wallet.updateSettingsFailed"),
       );
     } finally {
       setIsUpdatingSettings(false);
@@ -642,7 +644,7 @@ export default function AdminWallet() {
       }
     } catch (error) {
       setInvoiceError(
-        error instanceof Error ? error.message : "Failed to create invoice",
+        error instanceof Error ? error.message : t("wallet.createInvoiceFailed"),
       );
     } finally {
       setIsCreatingInvoice(false);
@@ -712,7 +714,7 @@ export default function AdminWallet() {
 
     const percent = parseInt(newDiscountPercent);
     if (isNaN(percent) || percent <= 0 || percent > 100) {
-      setDiscountError("Discount percent must be between 1 and 100");
+      setDiscountError(t("wallet.discountPercentRange"));
       return;
     }
 
@@ -736,7 +738,7 @@ export default function AdminWallet() {
       if (result.error) {
         setDiscountError(result.error);
       } else {
-        setDiscountSuccess("Discount added");
+        setDiscountSuccess(t("wallet.discountAdded"));
         setNewDiscountProvider("");
         setNewDiscountModel("");
         setNewDiscountPercent("");
@@ -746,7 +748,7 @@ export default function AdminWallet() {
       }
     } catch (error) {
       setDiscountError(
-        error instanceof Error ? error.message : "Failed to add discount",
+        error instanceof Error ? error.message : t("wallet.addDiscountFailed"),
       );
     }
   };
@@ -771,13 +773,13 @@ export default function AdminWallet() {
       if (result.error) {
         setDiscountError(result.error);
       } else {
-        setDiscountSuccess("Discount removed");
+        setDiscountSuccess(t("wallet.discountRemoved"));
         await refetchDiscountsList();
         setTimeout(() => setDiscountSuccess(null), 2000);
       }
     } catch (error) {
       setDiscountError(
-        error instanceof Error ? error.message : "Failed to remove discount",
+        error instanceof Error ? error.message : t("wallet.removeDiscountFailed"),
       );
     }
   };
@@ -810,7 +812,7 @@ export default function AdminWallet() {
                   className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground"
                 />
                 <Input
-                  placeholder="Search by org name, ID, owner email, or Stripe customer ID..."
+                  placeholder={t("wallet.searchPlaceholder")}
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                   className="pl-9"
@@ -847,7 +849,7 @@ export default function AdminWallet() {
                   className="animate-spin text-muted-foreground"
                 />
               ) : dashboardError ? (
-                <Small className="text-red-600">Error loading summary</Small>
+                <Small className="text-red-600">{t("wallet.errorLoadingSummary")}</Small>
               ) : (
                 <>
                   <div className="flex items-center gap-1.5">
@@ -896,8 +898,8 @@ export default function AdminWallet() {
 
             {/* Tabs Navigation */}
             <TabsList>
-              <TabsTrigger value="dashboard">Dashboard</TabsTrigger>
-              <TabsTrigger value="analytics">Analytics</TabsTrigger>
+              <TabsTrigger value="dashboard">{t("wallet.dashboard")}</TabsTrigger>
+              <TabsTrigger value="analytics">{t("wallet.analytics")}</TabsTrigger>
             </TabsList>
           </div>
 
@@ -923,7 +925,7 @@ export default function AdminWallet() {
                     size={24}
                     className="mx-auto mb-2 text-red-500"
                   />
-                  <p className="text-red-600">Error loading dashboard data</p>
+                  <p className="text-red-600">{t("wallet.errorLoadingDashboard")}</p>
                   <Small className="text-muted-foreground">
                     {dashboardError}
                   </Small>
@@ -942,7 +944,7 @@ export default function AdminWallet() {
                         <SortIcon column="org_created_at" />
                       </div>
                     </TableHead>
-                    <TableHead className="w-48">Owner</TableHead>
+                    <TableHead className="w-48">{t("common.owner")}</TableHead>
                     <TableHead
                       className="cursor-pointer select-none hover:bg-muted/50"
                       onClick={() => handleSort("total_payments")}
@@ -970,8 +972,8 @@ export default function AdminWallet() {
                         <SortIcon column="total_payments" />
                       </div>
                     </TableHead>
-                    <TableHead>Wallet (Live)</TableHead>
-                    <TableHead>Drift</TableHead>
+                    <TableHead>{t("wallet.walletLive")}</TableHead>
+                    <TableHead>{t("wallet.drift")}</TableHead>
                     <TableHead
                       className="cursor-pointer select-none hover:bg-muted/50"
                       onClick={() => handleSort("credit_limit")}
@@ -981,7 +983,7 @@ export default function AdminWallet() {
                         <SortIcon column="credit_limit" />
                       </div>
                     </TableHead>
-                    <TableHead>Actions</TableHead>
+                    <TableHead>{t("common.actions")}</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -1192,7 +1194,7 @@ export default function AdminWallet() {
                                 >
                                   {/* Overview */}
                                   <div className="flex flex-col gap-3">
-                                    <H4>Overview</H4>
+                                    <H4>{t("wallet.overview")}</H4>
                                     <div className="flex items-center gap-6">
                                       <div className="flex flex-col gap-1">
                                         <Small className="text-muted-foreground">
@@ -1253,13 +1255,13 @@ export default function AdminWallet() {
 
                                   {/* Modify Balance */}
                                   <div className="flex flex-col gap-2">
-                                    <H4>Modify Balance</H4>
+                                    <H4>{t("wallet.modifyBalance")}</H4>
                                     <div className="flex items-center gap-3">
                                       <Input
                                         type="number"
                                         step="0.01"
                                         min="0"
-                                        placeholder="Amount"
+                                        placeholder={t("wallet.amountPlaceholder")}
                                         value={modifyAmount}
                                         onChange={(e) =>
                                           setModifyAmount(e.target.value)
@@ -1299,7 +1301,7 @@ export default function AdminWallet() {
                                         </div>
                                       </RadioGroup>
                                       <Input
-                                        placeholder="Reason"
+                                        placeholder={t("wallet.reasonPlaceholder")}
                                         value={modifyReason}
                                         onChange={(e) =>
                                           setModifyReason(e.target.value)
@@ -1336,7 +1338,7 @@ export default function AdminWallet() {
 
                                   {/* Settings */}
                                   <div className="flex flex-col gap-2">
-                                    <H4>Wallet Settings</H4>
+                                    <H4>{t("wallet.walletSettings")}</H4>
                                     <div className="flex items-center gap-3">
                                       <div className="flex items-center gap-2">
                                         <input
@@ -1362,7 +1364,7 @@ export default function AdminWallet() {
                                         type="number"
                                         step="0.01"
                                         min="0"
-                                        placeholder="Credit Limit"
+                                        placeholder={t("wallet.creditLimitPlaceholder")}
                                         value={creditLimit}
                                         onChange={(e) =>
                                           setCreditLimit(e.target.value)
@@ -1381,7 +1383,7 @@ export default function AdminWallet() {
                                             className="animate-spin"
                                           />
                                         ) : (
-                                          "Update Settings"
+                                          t("wallet.updateSettings")
                                         )}
                                       </Button>
                                     </div>
@@ -1677,7 +1679,7 @@ export default function AdminWallet() {
                                                   className="animate-spin"
                                                 />
                                               ) : (
-                                                "Create Draft"
+                                                t("wallet.createDraft")
                                               )}
                                             </Button>
                                           )}
@@ -1704,7 +1706,7 @@ export default function AdminWallet() {
                                                 size={14}
                                                 className="animate-spin"
                                               />
-                                              <Small>Loading...</Small>
+                                              <Small>{t("common.loading")}</Small>
                                             </div>
                                           ) : invoicesList.length > 0 ? (
                                             <div className="max-h-48 overflow-auto rounded border">
@@ -1796,7 +1798,7 @@ export default function AdminWallet() {
                                                                     },
                                                                   )
                                                                 }
-                                                                placeholder="https://invoice.stripe.com/..."
+                                                                placeholder={t("wallet.hostedUrlPlaceholder")}
                                                                 className="h-6 w-48 text-xs"
                                                               />
                                                               <Button
@@ -1943,7 +1945,7 @@ export default function AdminWallet() {
                                 >
                                   {/* Discounts */}
                                   <div className="flex flex-col gap-3">
-                                    <H4>Discount Rules</H4>
+                                    <H4>{t("wallet.discountRules")}</H4>
                                     <Small className="text-muted-foreground">
                                       Configure per-model discount percentages.
                                       Rules are evaluated in order; first match
@@ -1958,7 +1960,7 @@ export default function AdminWallet() {
                                           size={14}
                                           className="animate-spin"
                                         />
-                                        <Small>Loading discounts...</Small>
+                                        <Small>{t("wallet.loadingDiscounts")}</Small>
                                       </div>
                                     ) : discountsList.length > 0 ? (
                                       <div className="max-h-48 overflow-auto rounded border">
@@ -2038,7 +2040,7 @@ export default function AdminWallet() {
                                             Provider
                                           </Small>
                                           <Input
-                                            placeholder="helicone"
+                                            placeholder={t("wallet.providerPlaceholder")}
                                             value={newDiscountProvider}
                                             onChange={(e) =>
                                               setNewDiscountProvider(
@@ -2053,7 +2055,7 @@ export default function AdminWallet() {
                                             Model Regex
                                           </Small>
                                           <Input
-                                            placeholder="gpt.*"
+                                            placeholder={t("wallet.modelPlaceholder")}
                                             value={newDiscountModel}
                                             onChange={(e) =>
                                               setNewDiscountModel(
@@ -2072,7 +2074,7 @@ export default function AdminWallet() {
                                               type="number"
                                               min="1"
                                               max="100"
-                                              placeholder="10"
+                                              placeholder={t("wallet.percentPlaceholder")}
                                               value={newDiscountPercent}
                                               onChange={(e) =>
                                                 setNewDiscountPercent(
@@ -2207,7 +2209,7 @@ export default function AdminWallet() {
 
                                   {/* Raw Tables */}
                                   <div className="flex flex-col gap-2">
-                                    <H4>Raw Tables</H4>
+                                    <H4>{t("wallet.rawTables")}</H4>
                                     <div className="flex gap-2">
                                       {[
                                         "credit_purchases",
@@ -2316,11 +2318,11 @@ export default function AdminWallet() {
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="minute">1 Minute</SelectItem>
-                    <SelectItem value="hour">1 Hour</SelectItem>
-                    <SelectItem value="day">1 Day</SelectItem>
-                    <SelectItem value="week">7 Days</SelectItem>
-                    <SelectItem value="month">1 Month</SelectItem>
+                    <SelectItem value="minute">{t("wallet.groupBy1Minute")}</SelectItem>
+                    <SelectItem value="hour">{t("wallet.groupBy1Hour")}</SelectItem>
+                    <SelectItem value="day">{t("wallet.groupBy1Day")}</SelectItem>
+                    <SelectItem value="week">{t("wallet.groupBy7Days")}</SelectItem>
+                    <SelectItem value="month">{t("wallet.groupBy1Month")}</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -2332,8 +2334,8 @@ export default function AdminWallet() {
 
               {/* Tabs Navigation */}
               <TabsList className="ml-auto">
-                <TabsTrigger value="dashboard">Dashboard</TabsTrigger>
-                <TabsTrigger value="analytics">Analytics</TabsTrigger>
+                <TabsTrigger value="dashboard">{t("wallet.dashboard")}</TabsTrigger>
+                <TabsTrigger value="analytics">{t("wallet.analytics")}</TabsTrigger>
               </TabsList>
             </div>
           </div>
@@ -2354,7 +2356,7 @@ export default function AdminWallet() {
       <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Delete Disallow Entry?</AlertDialogTitle>
+            <AlertDialogTitle>{t("wallet.deleteDisallowTitle")}</AlertDialogTitle>
             <AlertDialogDescription>
               Are you sure you want to remove{" "}
               <strong>{entryToDelete?.provider}</strong> /{" "}
@@ -2363,7 +2365,7 @@ export default function AdminWallet() {
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogCancel>{t("common.cancel")}</AlertDialogCancel>
             <AlertDialogAction
               onClick={handleDeleteDisallowEntry}
               className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
@@ -2381,12 +2383,12 @@ export default function AdminWallet() {
       >
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Delete Invoice?</AlertDialogTitle>
+            <AlertDialogTitle>{t("wallet.deleteInvoiceTitle")}</AlertDialogTitle>
             <AlertDialogDescription>
               Are you sure you want to delete this invoice record?
               <br />
               <br />
-              <strong>Period:</strong>{" "}
+              <strong>{t("common.period")}</strong>{" "}
               {invoiceToDelete && invoiceToDelete.startDate.split("T")[0]} -{" "}
               {invoiceToDelete && invoiceToDelete.endDate.split("T")[0]}
               <br />
@@ -2400,7 +2402,7 @@ export default function AdminWallet() {
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogCancel>{t("common.cancel")}</AlertDialogCancel>
             <AlertDialogAction
               onClick={handleDeleteInvoice}
               className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
@@ -2418,12 +2420,12 @@ export default function AdminWallet() {
       >
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Create Draft Invoice?</AlertDialogTitle>
+            <AlertDialogTitle>{t("wallet.createDraftInvoiceTitle")}</AlertDialogTitle>
             <AlertDialogDescription>
               This will create a draft invoice in Stripe for:
               <br />
               <br />
-              <strong>Period:</strong> {invoiceStartDate} - {invoiceEndDate}
+              <strong>{t("common.period")}</strong> {invoiceStartDate} - {invoiceEndDate}
               <br />
               <strong>Subtotal (credit to wallet):</strong>{" "}
               {formatCurrency(
@@ -2446,7 +2448,7 @@ export default function AdminWallet() {
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogCancel>{t("common.cancel")}</AlertDialogCancel>
             <AlertDialogAction onClick={handleCreateInvoice}>
               Create Draft
             </AlertDialogAction>

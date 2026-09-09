@@ -1,4 +1,5 @@
 import { CheckIcon } from "@heroicons/react/24/solid";
+import { useTranslation } from "react-i18next";
 import { clsx } from "./clsx";
 
 interface StepActionsProps {
@@ -19,9 +20,11 @@ export default function StepActions(props: StepActionsProps) {
     steps,
     allowStepSelection = "true",
   } = props;
+  const { t } = useTranslation("common");
+
   return (
     <div className="rounded-lg border border-gray-300 bg-white dark:border-gray-700 dark:bg-black">
-      <nav className="w-full" aria-label="Progress">
+      <nav className="w-full" aria-label={t("aria.progress")}>
         <ol
           role="list"
           className="overflow-hidden rounded-md lg:flex lg:rounded-none"

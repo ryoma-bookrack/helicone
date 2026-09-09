@@ -1,5 +1,8 @@
+import { useTranslation } from "react-i18next";
+
 const Blog = () => {
-  return "hello";
+  const { t } = useTranslation("marketing");
+  return t("redirects.blog");
 };
 
 export default Blog;

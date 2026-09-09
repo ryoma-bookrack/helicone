@@ -33,18 +33,14 @@ import {
 } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
+import { useTranslation } from "react-i18next";
 
 export type MemberRole = "admin" | "member";
 
-export const memberSchema = z.object({
-  email: z
-    .string()
-    .min(1, "Email is required")
-    .email("Please enter a valid email address"),
-  role: z.enum(["member", "admin"] as const),
-});
-
-type MemberFormData = z.infer<typeof memberSchema>;
+type MemberFormData = {
+  email: string;
+  role: MemberRole;
+};
 
 interface Member {
   email: string;
@@ -64,6 +60,7 @@ export const MembersTable = ({
   onRemoveMember,
   ownerEmail,
 }: MembersTableProps) => {
+  const { t } = useTranslation("onboarding");
   const [isOpen, setIsOpen] = useState(false);
   const [emailError, setEmailError] = useState("");
   const [newMemberForm, setNewMemberForm] = useState<MemberFormData>({
@@ -71,12 +68,23 @@ export const MembersTable = ({
     role: "member",
   });
 
-  // Memoize columns to prevent unnecessary re-renders
+  const memberSchema = useMemo(
+    () =>
+      z.object({
+        email: z
+          .string()
+          .min(1, t("members.emailRequired"))
+          .email(t("members.emailInvalid")),
+        role: z.enum(["member", "admin"] as const),
+      }),
+    [t],
+  );
+
   const columns = useMemo<ColumnDef<Member>[]>(
     () => [
       {
         accessorKey: "email",
-        header: "User",
+        header: t("members.user"),
         cell: ({ row }) => {
           const email = row.original.email;
           return (
@@ -85,11 +93,11 @@ export const MembersTable = ({
               {email === ownerEmail ? (
                 <div className="rounded bg-[hsl(var(--muted))] px-1.5">
                   <span className="text-xs font-medium text-[hsl(var(--foreground))]">
-                    YOU
+                    {t("members.you")}
                   </span>
                 </div>
               ) : (
-                <Badge variant="helicone-sky">INVITED</Badge>
+                <Badge variant="helicone-sky">{t("members.invited")}</Badge>
               )}
             </div>
           );
@@ -97,7 +105,7 @@ export const MembersTable = ({
       },
       {
         accessorKey: "role",
-        header: "Role",
+        header: t("members.role"),
         cell: ({ row }) => (
           <span className="capitalize">{row.original.role}</span>
         ),
@@ -122,10 +130,9 @@ export const MembersTable = ({
         },
       },
     ],
-    [ownerEmail, onRemoveMember],
+    [ownerEmail, onRemoveMember, t],
   );
 
-  // Memoize table data
   const tableData = useMemo(
     () => [{ email: ownerEmail, role: "owner" as MemberRole }, ...members],
     [members, ownerEmail],
@@ -141,11 +148,11 @@ export const MembersTable = ({
     try {
       memberSchema.parse(data);
       if (data.email === ownerEmail) {
-        setEmailError("This email belongs to the organization owner");
+        setEmailError(t("members.emailIsOwner"));
         return false;
       }
       if (members.some((m) => m.email === data.email)) {
-        setEmailError("This email has already been invited");
+        setEmailError(t("members.emailAlreadyInvited"));
         return false;
       }
       setEmailError("");
@@ -167,7 +174,7 @@ export const MembersTable = ({
 
     if (!isValid || isDuplicate) {
       if (isDuplicate) {
-        setEmailError("This email has already been invited");
+        setEmailError(t("members.emailAlreadyInvited"));
       }
       return;
     }
@@ -182,11 +189,11 @@ export const MembersTable = ({
     <div className="flex flex-col gap-1.5">
       <div className="flex items-center justify-between">
         <h2 className="text-sm font-medium text-[hsl(var(--foreground))]">
-          Members
+          {t("members.title")}
         </h2>
         <Button variant="outline" size="xs" onClick={() => setIsOpen(true)}>
           <Plus className="mr-2 h-4 w-4" />
-          Invite
+          {t("members.invite")}
         </Button>
       </div>
 
@@ -228,7 +235,7 @@ export const MembersTable = ({
                   colSpan={columns.length}
                   className="h-24 text-center text-[hsl(var(--muted-foreground))]"
                 >
-                  No members.
+                  {t("members.noMembers")}
                 </TableCell>
               </TableRow>
             )}
@@ -241,17 +248,17 @@ export const MembersTable = ({
           <div className="flex flex-col gap-4">
             <DialogHeader>
               <DialogTitle className="text-lg font-semibold text-[hsl(var(--foreground))]">
-                Invite a member
+                {t("members.inviteTitle")}
               </DialogTitle>
               <DialogDescription className="text-sm text-[hsl(var(--muted-foreground))]">
-                New members will receive an email to join your organization.
+                {t("members.inviteDescription")}
               </DialogDescription>
             </DialogHeader>
 
             <div className="flex flex-col gap-4">
               <div className="flex flex-col gap-2">
                 <label className="w-20 text-sm font-normal text-[hsl(var(--foreground))]">
-                  Email
+                  {t("members.email")}
                 </label>
                 <div className="flex flex-1 flex-col gap-1">
                   <Input
@@ -268,7 +275,7 @@ export const MembersTable = ({
                       emailError &&
                         "border-[hsl(var(--destructive))] focus-visible:ring-[hsl(var(--destructive))]",
                     )}
-                    placeholder="Email"
+                    placeholder={t("members.emailPlaceholder")}
                   />
                   {emailError && (
                     <span className="text-xs text-[hsl(var(--destructive))]">
@@ -280,7 +287,7 @@ export const MembersTable = ({
 
               <div className="flex flex-col gap-2">
                 <label className="w-20 text-sm font-normal text-[hsl(var(--foreground))]">
-                  Role
+                  {t("members.role")}
                 </label>
                 <Select
                   value={newMemberForm.role}
@@ -289,11 +296,11 @@ export const MembersTable = ({
                   }
                 >
                   <SelectTrigger className="flex-1 text-sm">
-                    <SelectValue placeholder="Select a role" />
+                    <SelectValue placeholder={t("members.selectRole")} />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="member">Member</SelectItem>
-                    <SelectItem value="admin">Admin</SelectItem>
+                    <SelectItem value="member">{t("members.member")}</SelectItem>
+                    <SelectItem value="admin">{t("members.admin")}</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -306,7 +313,7 @@ export const MembersTable = ({
                 disabled={!newMemberForm.email}
               >
                 <Mail className="mr-2 h-4 w-4" />
-                Send invitation
+                {t("members.sendInvitation")}
               </Button>
             </div>
           </div>
@@ -315,3 +322,8 @@ export const MembersTable = ({
     </div>
   );
 };
+
+export const memberSchema = z.object({
+  email: z.string().min(1).email(),
+  role: z.enum(["member", "admin"] as const),
+});

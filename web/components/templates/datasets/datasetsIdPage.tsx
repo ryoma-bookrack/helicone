@@ -1,3 +1,5 @@
+import { formatStandardDateTime } from "@/lib/i18n/format";
+import { useTranslation } from "react-i18next";
 import { Badge } from "@/components/ui/badge";
 import { useIntegration } from "@/services/hooks/useIntegrations";
 import {
@@ -41,6 +43,8 @@ type DatasetRow =
   | ReturnType<typeof useGetHeliconeDatasetRows>["rows"][number]
   | null;
 const DatasetIdPage = (props: DatasetIdPageProps) => {
+  const { t } = useTranslation("datasets");
+  const { t: tCommon } = useTranslation("common");
   const { id, currentPage, pageSize } = props;
   const router = useRouter();
   const org = useOrg();
@@ -92,7 +96,7 @@ const DatasetIdPage = (props: DatasetIdPageProps) => {
   }, [rows, selectedIds]);
 
   const [datasetName, setDatasetName] = useState<string>(
-    datasetNameFromQuery || "Loading...",
+    datasetNameFromQuery || tCommon("actions.loading"),
   );
 
   useEffect(() => {
@@ -192,16 +196,13 @@ const DatasetIdPage = (props: DatasetIdPageProps) => {
         },
       });
       if (res.data && !res.data.error) {
-        setNotification("Requests duplicated to this dataset", "success");
+        setNotification(t("notifications.requestsDuplicated"), "success");
         await refetch();
       } else {
-        setNotification(
-          "Failed to duplicate requests to this dataset",
-          "error",
-        );
+        setNotification(t("notifications.requestsDuplicatedError"), "error");
       }
     } catch (error) {
-      setNotification("Failed to duplicate requests to this dataset", "error");
+      setNotification(t("notifications.requestsDuplicatedError"), "error");
     }
   };
 
@@ -219,16 +220,16 @@ const DatasetIdPage = (props: DatasetIdPageProps) => {
         },
       });
       if (res.data && !res.data.error) {
-        setNotification("Requests removed from dataset", "success");
+        setNotification(t("notifications.requestsRemoved"), "success");
         await refetch();
         deselectAll();
 
         toggleSelectMode(false);
       } else {
-        setNotification("Failed to remove requests from dataset", "error");
+        setNotification(t("notifications.requestsRemovedError"), "error");
       }
     } catch (error) {
-      setNotification("Failed to remove requests from dataset", "error");
+      setNotification(t("notifications.requestsRemovedError"), "error");
     }
   };
 
@@ -275,7 +276,7 @@ const DatasetIdPage = (props: DatasetIdPageProps) => {
             <div className="w-full pt-4">
               <HcBreadcrumb
                 pages={[
-                  { href: "/datasets", name: "Datasets" },
+                  { href: "/datasets", name: t("page.title") },
                   {
                     href: `/datasets/${id}`,
                     name: datasetName,
@@ -286,11 +287,13 @@ const DatasetIdPage = (props: DatasetIdPageProps) => {
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-4">
                 <h1 className="text-4xl font-semibold text-black dark:text-white">
-                  {datasetName !== "Loading..."
+                  {datasetName !== tCommon("actions.loading")
                     ? datasetName
                     : datasets?.[0]?.name}
                 </h1>
-                <Badge variant="secondary">{`${count || 0} rows`}</Badge>
+                <Badge variant="secondary">
+                  {t("detail.rowsCount", { count: count || 0 })}
+                </Badge>
               </div>
             </div>
           </div>
@@ -301,15 +304,15 @@ const DatasetIdPage = (props: DatasetIdPageProps) => {
           fullWidth={true}
           defaultColumns={[
             {
-              header: "Created At",
+              header: t("table.createdAt"),
               accessorKey: "created_at",
               minSize: 200,
               accessorFn: (row) => {
-                return new Date(row.created_at ?? 0).toLocaleString();
+                return formatStandardDateTime(row.created_at ?? 0);
               },
             },
             {
-              header: "Request Body",
+              header: t("detail.requestBody"),
               accessorKey: "request_body",
               cell: ({ row }) => {
                 return getGenericRequestText(
@@ -319,7 +322,7 @@ const DatasetIdPage = (props: DatasetIdPageProps) => {
               size: 500,
             },
             {
-              header: "Response Body",
+              header: t("detail.responseBody"),
               accessorKey: "response_body",
               size: 500,
               cell: ({ row }) => {
@@ -331,7 +334,7 @@ const DatasetIdPage = (props: DatasetIdPageProps) => {
                   <div
                     onClick={() => navigator.clipboard.writeText(responseText)}
                     className="cursor-pointer"
-                    title="Click to copy"
+                    title={t("detail.clickToCopy")}
                   >
                     {responseText}
                   </div>
@@ -377,14 +380,14 @@ const DatasetIdPage = (props: DatasetIdPageProps) => {
               <div className="flex gap-2">
                 <GenericButton
                   onClick={() => setShowNewDatasetModal(true)}
-                  text="Copy to..."
+                  text={t("detail.copyTo")}
                   icon={
                     <FolderPlusIcon className="h-5 w-5 text-gray-900 dark:text-gray-100" />
                   }
                 ></GenericButton>
                 <GenericButton
                   onClick={handleDuplicateRequests}
-                  text="Duplicate"
+                  text={t("detail.duplicate")}
                   icon={
                     <Square2StackIcon className="h-5 w-5 text-gray-900 dark:text-gray-100" />
                   }
@@ -392,7 +395,7 @@ const DatasetIdPage = (props: DatasetIdPageProps) => {
                 <GenericButton
                   onClick={() => setShowRemoveModal(true)}
                   className="!border-destructive !bg-destructive hover:!bg-destructive/90"
-                  text="Remove"
+                  text={t("detail.remove")}
                   textClassName="text-white"
                   icon={<TrashIcon className="h-5 w-5 text-white" />}
                 />

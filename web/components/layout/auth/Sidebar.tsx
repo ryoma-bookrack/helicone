@@ -15,6 +15,7 @@ import {
 } from "lucide-react";
 import { useRouter } from "next/router";
 import React, { useMemo } from "react";
+import { useTranslation } from "react-i18next";
 import DesktopSidebar from "./DesktopSidebar";
 import { ChangelogItem, NavigationItem } from "./types";
 
@@ -26,53 +27,54 @@ interface SidebarProps {
 const Sidebar = ({ changelog, sidebarRef }: SidebarProps) => {
   const router = useRouter();
   const { pathname } = router;
+  const { t } = useTranslation("nav");
 
   const NAVIGATION: NavigationItem[] = useMemo(
     () => [
       {
-        name: "Dashboard",
+        name: t("dashboard"),
         href: "/dashboard",
         icon: Home,
         current: pathname.includes("/dashboard"),
       },
       {
-        name: "Requests",
+        name: t("requests"),
         href: "/requests",
         icon: SheetIcon,
         current: pathname.includes("/requests"),
       },
       {
-        name: "Segments",
+        name: t("segments"),
         href: "/segments",
         icon: null,
         current: false,
         subItems: [
           {
-            name: "Sessions",
+            name: t("sessions"),
             href: "/sessions",
             icon: ListTreeIcon,
             current: pathname.includes("/sessions"),
           },
           {
-            name: "Properties",
+            name: t("properties"),
             href: "/properties",
             icon: TagIcon,
             current: pathname.includes("/properties"),
           },
           {
-            name: "Users",
+            name: t("users"),
             href: "/users",
             icon: UsersIcon,
             current: pathname.includes("/users"),
           },
           {
-            name: "Cache",
+            name: t("cache"),
             href: "/cache",
             icon: ArchiveIcon,
             current: pathname.includes("/cache"),
           },
           {
-            name: "HQL",
+            name: t("hql"),
             href: "/hql",
             icon: Code2Icon,
             current: pathname.includes("/hql"),
@@ -80,25 +82,25 @@ const Sidebar = ({ changelog, sidebarRef }: SidebarProps) => {
         ],
       },
       {
-        name: "Improve",
+        name: t("improve"),
         href: "/improve",
         icon: null,
         current: false,
         subItems: [
           {
-            name: "Prompts",
+            name: t("prompts"),
             href: "/prompts",
             icon: ScrollTextIcon,
             current: pathname.includes("/prompts"),
           },
           {
-            name: "Datasets",
+            name: t("datasets"),
             href: "/datasets",
             icon: DatabaseIcon,
             current: pathname.includes("/datasets"),
           },
           {
-            name: "Playground",
+            name: t("playground"),
             href: "/playground",
             icon: TestTube2,
             current: pathname.includes("/playground"),
@@ -106,19 +108,19 @@ const Sidebar = ({ changelog, sidebarRef }: SidebarProps) => {
         ],
       },
       {
-        name: "Monitor",
+        name: t("monitor"),
         href: "/monitor",
         icon: null,
         current: false,
         subItems: [
           {
-            name: "Rate Limits",
+            name: t("rateLimits"),
             href: "/rate-limit",
             icon: ShieldCheckIcon,
             current: pathname === "/rate-limit",
           },
           {
-            name: "Alerts",
+            name: t("alerts"),
             href: "/alerts",
             icon: TriangleAlertIcon,
             current: pathname.includes("/alerts"),
@@ -126,7 +128,7 @@ const Sidebar = ({ changelog, sidebarRef }: SidebarProps) => {
         ],
       },
     ],
-    [pathname],
+    [pathname, t],
   );
 
   return (

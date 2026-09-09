@@ -1,4 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
+import { useTranslation } from "react-i18next";
 import { LineChart } from "@tremor/react";
 import { getJawnClient } from "../../../lib/clients/jawn";
 import { useLocalStorage } from "../../../services/hooks/localStorage";
@@ -35,6 +36,7 @@ interface TopOrgsResponse {
 interface AdminTopOrgsProps {}
 
 const AdminTopOrgs = (props: AdminTopOrgsProps) => {
+  const { t } = useTranslation("admin");
   const {} = props;
   const org = useOrg();
 
@@ -268,14 +270,14 @@ const AdminTopOrgs = (props: AdminTopOrgsProps) => {
   return (
     <div className="flex flex-col gap-8 p-4 md:p-6">
       <div className="flex flex-col gap-2">
-        <H1>Top Organizations Over Time</H1>
+        <H1>{t("topOrgs.title")}</H1>
         <Muted>View request counts for the top organizations over time</Muted>
       </div>
 
       <div className="flex flex-col gap-4 md:flex-row md:gap-6">
         <div className="flex flex-1 flex-col gap-2">
           <Label className="flex items-center justify-between">
-            <span className="font-semibold">Time Range</span>
+            <span className="font-semibold">{t("common.timeRange")}</span>
             <Small className="font-normal text-muted-foreground">
               Grouped by: {getGroupBy(timeRange)}
             </Small>
@@ -298,7 +300,7 @@ const AdminTopOrgs = (props: AdminTopOrgsProps) => {
         </div>
 
         <div className="flex flex-1 flex-col gap-2 md:max-w-xs">
-          <Label className="font-semibold">Number of Organizations</Label>
+          <Label className="font-semibold">{t("topOrgs.numberOfOrganizations")}</Label>
           <Select
             value={limit.toString()}
             onValueChange={(value) => setLimit(parseInt(value))}
@@ -320,7 +322,7 @@ const AdminTopOrgs = (props: AdminTopOrgsProps) => {
       <div className="rounded-lg border border-border bg-card shadow-sm">
         <div className="flex flex-col gap-6 p-6">
           <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-            <H2>Request Counts Over Time</H2>
+            <H2>{t("topOrgs.requestCountsOverTime")}</H2>
             <div className="flex gap-2">
               <Button
                 onClick={() => toggleAllOrgs(true)}
@@ -341,15 +343,15 @@ const AdminTopOrgs = (props: AdminTopOrgsProps) => {
 
           {topOrgsData.isLoading ? (
             <div className="flex h-64 items-center justify-center">
-              <p>Loading data...</p>
+              <p>{t("common.loadingData")}</p>
             </div>
           ) : topOrgsData.error ? (
             <div className="flex h-64 items-center justify-center">
-              <p className="text-red-500">Error loading data</p>
+              <p className="text-red-500">{t("common.errorLoadingData")}</p>
             </div>
           ) : chartData().length === 0 ? (
             <div className="flex h-64 items-center justify-center">
-              <p>No data available</p>
+              <p>{t("common.noDataAvailable")}</p>
             </div>
           ) : (
             <>
@@ -407,7 +409,7 @@ const AdminTopOrgs = (props: AdminTopOrgsProps) => {
 
       {!topOrgsData.isLoading && topOrgsData.data?.organizations && (
         <div className="flex flex-col gap-4">
-          <H2>Organization Details</H2>
+          <H2>{t("topOrgs.organizationDetails")}</H2>
           <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
             {topOrgsData.data.organizations.map((org, index) => (
               <div
@@ -436,7 +438,7 @@ const AdminTopOrgs = (props: AdminTopOrgsProps) => {
                   </div>
                   <div className="flex flex-col gap-1 pl-6">
                     <P className="text-sm">
-                      <span className="font-medium">Total Requests:</span>{" "}
+                      <span className="font-medium">{t("common.totalRequests")}</span>{" "}
                       {formatLargeNumber(
                         org.data.reduce(
                           (sum, point) => sum + point.request_count,

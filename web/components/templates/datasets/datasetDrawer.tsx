@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import {
   ClipboardDocumentIcon,
   PencilIcon,
@@ -53,6 +54,8 @@ const DatasetDrawerV2 = (props: DatasetDrawerV2Props) => {
     refetch,
   } = props;
 
+  const { t } = useTranslation("datasets");
+  const { t: tCommon } = useTranslation("common");
   const { setNotification } = useNotification();
   const router = useRouter();
   const jawn = useJawnClient();
@@ -117,9 +120,9 @@ const DatasetDrawerV2 = (props: DatasetDrawerV2Props) => {
         },
       );
       if (result.data?.error) {
-        setNotification("Error updating dataset request", "error");
+        setNotification(t("notifications.requestUpdateError"), "error");
       } else {
-        setNotification("Dataset request updated", "success");
+        setNotification(t("notifications.requestUpdated"), "success");
         setOriginalRequestBody(editedRequestBody);
         setOriginalResponseBody(editedResponseBody);
         setIsEditing(false);
@@ -145,11 +148,11 @@ const DatasetDrawerV2 = (props: DatasetDrawerV2Props) => {
           removeRequests: [selectedRow.id],
         },
       });
-      setNotification("Request removed from dataset", "success");
+      setNotification(t("notifications.requestRemoved"), "success");
       onDelete();
       setOpen(false);
     } catch (error) {
-      setNotification("Failed to remove request from dataset", "error");
+      setNotification(t("notifications.requestRemoveError"), "error");
     }
   };
 
@@ -167,13 +170,13 @@ const DatasetDrawerV2 = (props: DatasetDrawerV2Props) => {
               {isEditing ? (
                 <>
                   <span className="whitespace-nowrap rounded-md bg-[#F1F5F9] p-2 text-sm font-medium text-[#1876D2] dark:text-gray-100">
-                    Editing
+                    {t("drawer.editing")}
                   </span>
                   <Button variant="outline" onClick={handleDiscard}>
-                    <X className="mr-2 h-5 w-5" /> Discard
+                    <X className="mr-2 h-5 w-5" /> {t("drawer.discard")}
                   </Button>
                   <Button variant="default" onClick={handleSave}>
-                    <Check className="mr-2 h-5 w-5" /> Save changes
+                    <Check className="mr-2 h-5 w-5" /> {t("drawer.saveChanges")}
                   </Button>
                 </>
               ) : (
@@ -197,7 +200,7 @@ const DatasetDrawerV2 = (props: DatasetDrawerV2Props) => {
                             </button>
                           </TooltipTrigger>
                           <TooltipContent>
-                            <p>Previous</p>
+                            <p>{t("drawer.previous")}</p>
                           </TooltipContent>
                         </Tooltip>
                       </TooltipProvider>
@@ -218,7 +221,7 @@ const DatasetDrawerV2 = (props: DatasetDrawerV2Props) => {
                             </button>
                           </TooltipTrigger>
                           <TooltipContent>
-                            <p>Next</p>
+                            <p>{t("drawer.next")}</p>
                           </TooltipContent>
                         </Tooltip>
                       </TooltipProvider>
@@ -229,7 +232,10 @@ const DatasetDrawerV2 = (props: DatasetDrawerV2Props) => {
                       <TooltipTrigger asChild>
                         <button
                           onClick={() => {
-                            setNotification("Copied to clipboard", "success");
+                            setNotification(
+                              t("notifications.copiedToClipboard"),
+                              "success",
+                            );
                             navigator.clipboard.writeText(
                               JSON.stringify(selectedRow || {}, null, 4),
                             );
@@ -240,7 +246,7 @@ const DatasetDrawerV2 = (props: DatasetDrawerV2Props) => {
                         </button>
                       </TooltipTrigger>
                       <TooltipContent>
-                        <p>Copy</p>
+                        <p>{tCommon("actions.copy")}</p>
                       </TooltipContent>
                     </Tooltip>
                   </TooltipProvider>
@@ -255,7 +261,7 @@ const DatasetDrawerV2 = (props: DatasetDrawerV2Props) => {
                         </button>
                       </TooltipTrigger>
                       <TooltipContent>
-                        <p>Edit</p>
+                        <p>{tCommon("actions.edit")}</p>
                       </TooltipContent>
                     </Tooltip>
                   </TooltipProvider>
@@ -270,7 +276,7 @@ const DatasetDrawerV2 = (props: DatasetDrawerV2Props) => {
                         </button>
                       </TooltipTrigger>
                       <TooltipContent>
-                        <p>Delete</p>
+                        <p>{tCommon("actions.delete")}</p>
                       </TooltipContent>
                     </Tooltip>
                   </TooltipProvider>
@@ -290,7 +296,7 @@ const DatasetDrawerV2 = (props: DatasetDrawerV2Props) => {
             onResponseBodyChange={setEditedResponseBody}
           />
         ) : (
-          <p>Loading...</p>
+          <p>{tCommon("actions.loading")}</p>
         )}
       </ThemedDrawer>
 

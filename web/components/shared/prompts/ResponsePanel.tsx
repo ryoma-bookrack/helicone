@@ -9,6 +9,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { PiBrainBold, PiChatsBold, PiToolboxBold } from "react-icons/pi";
 import type { Components } from "react-markdown";
 import ReactMarkdown from "react-markdown";
@@ -25,13 +26,16 @@ export default function ResponsePanel({
   onAddToMessages,
   scrollToBottom,
 }: ResponsePanelProps) {
+  const { t } = useTranslation("common");
   const [view, setView] = useState<"render" | "text">("render");
 
   return (
     <div className="group flex flex-col">
       {/* Header */}
       <GlassHeader className="h-14 flex-shrink-0 px-4">
-        <h2 className="font-semibold text-secondary">Response</h2>
+        <h2 className="font-semibold text-secondary">
+          {t("prompts.response.title")}
+        </h2>
         <div className="flex flex-row items-center gap-2">
           {response && onAddToMessages && (
             <TooltipProvider delayDuration={100}>
@@ -50,7 +54,9 @@ export default function ResponsePanel({
                     <PiChatsBold className="h-4 w-4" />
                   </Button>
                 </TooltipTrigger>
-                <TooltipContent>Add response to messages</TooltipContent>
+                <TooltipContent>
+                  {t("prompts.response.addToMessages")}
+                </TooltipContent>
               </Tooltip>
             </TooltipProvider>
           )}
@@ -61,10 +67,10 @@ export default function ResponsePanel({
           >
             <TabsList variant="default" size="xs" asPill>
               <TabsTrigger value="render" asPill>
-                Render
+                {t("prompts.response.render")}
               </TabsTrigger>
               <TabsTrigger value="text" asPill>
-                Text
+                {t("prompts.parameters.text")}
               </TabsTrigger>
             </TabsList>
           </Tabs>
@@ -95,7 +101,7 @@ export default function ResponsePanel({
           )
         ) : (
           <p className="text-tertiary whitespace-pre-wrap text-sm">
-            Response will appear here...
+            {t("prompts.response.placeholder")}
           </p>
         )}
 

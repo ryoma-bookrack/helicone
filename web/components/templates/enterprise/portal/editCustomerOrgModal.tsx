@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import ThemedDrawer from "../../../shared/themed/themedDrawer";
 import CreateOrgForm, { OrgLimits } from "../../organization/createOrgForm";
 
@@ -17,12 +18,13 @@ interface EditCustomerOrgModalProps {
 
 const EditCustomerOrgModal = (props: EditCustomerOrgModalProps) => {
   const { open, setOpen, onSuccess, initialValues } = props;
+  const { t } = useTranslation("enterprise");
 
   return (
     <ThemedDrawer open={open} setOpen={setOpen}>
       <div className="flex flex-col space-y-4">
         <p className="border-b border-gray-300 py-4 text-2xl font-semibold text-black dark:border-gray-700 dark:text-white">
-          Edit Customer
+          {t("portal.editCustomer")}
         </p>
         <CreateOrgForm
           variant="reseller"

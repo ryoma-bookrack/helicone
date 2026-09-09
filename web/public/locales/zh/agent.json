@@ -1,0 +1,64 @@
+{
+  "title": "Agent 对话",
+  "beta": "Beta",
+  "escalation": {
+    "connected": "已连接人工支持",
+    "live": "在线",
+    "connectedDescription": "已连接我们的支持团队，他们很快就会在这里回复。",
+    "resolved": "支持工单已解决",
+    "resolvedDescription": "此对话已被我们的团队标记为已解决。",
+    "reopening": "重新打开中...",
+    "reopen": "重新打开",
+    "escalateSuccess": "已成功转接人工支持",
+    "escalateFailed": "❌ 抱歉，暂时无法连接支持团队。请重试或发送邮件至 support@helicone.ai"
+  },
+  "emptyState": "与我们的 AI 助手 Helix 开始对话。",
+  "executingTools_one": "正在执行 {{count}} 个工具...",
+  "executingTools_other": "正在执行 {{count}} 个工具...",
+  "errors": {
+    "generic": "出了点问题：{{message}}。请重试或新建对话。",
+    "parseFailed": "无法解析 AI 的响应",
+    "parseError": "解析响应失败",
+    "processingFailed": "处理消息时发生错误",
+    "chatError": "对话出错",
+    "toolExecutionFailed": "执行工具失败：{{toolName}}",
+    "noHandler": "未找到工具处理器：{{toolName}}",
+    "toolError": "执行工具出错：{{toolName}}",
+    "timeoutToolCall": "工具调用超时：本轮对话的工具调用次数过多。"
+  },
+  "initialMessages": {
+    "default": "你好！我是 Helix，你的 Helicone 助手。有什么可以帮你的？",
+    "quickstart": "你好，我是 Helix！我可以为 Helicone 集成提供个性化帮助，尽管问我。"
+  },
+  "navigation": {
+    "success": "已成功导航至 {{page}}"
+  },
+  "session": {
+    "noConversations": "暂无对话",
+    "support": "支持"
+  },
+  "message": {
+    "response": "响应",
+    "fromSupport": "{{name}} · Helicone 支持",
+    "tool": "工具",
+    "helpIntegrate": "帮我集成",
+    "imageAlt": "图片 {{index}}",
+    "uploadAlt": "上传 {{index}}"
+  },
+  "chat": {
+    "queued": "{{count}} 条排队",
+    "placeholderStreaming": "输入消息（将加入队列）...",
+    "placeholderDragOver": "将图片拖放到此处...",
+    "placeholderDefault": "输入消息...（按 ⌘ + I 打开此窗口）",
+    "support": "支持",
+    "talkToHuman": "联系人工客服",
+    "stop": "停止",
+    "send": "发送"
+  },
+  "models": {
+    "auto": "自动",
+    "gpt5": "GPT-5",
+    "gpt5Mini": "GPT-5 Mini",
+    "claudeSonnet": "Claude Sonnet 4.5"
+  }
+}

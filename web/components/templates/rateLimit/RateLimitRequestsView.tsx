@@ -10,22 +10,12 @@ import { Col } from "../../layout/common/col";
 import LoadingAnimation from "../../shared/loadingAnimation";
 import RequestsPage from "../requests/RequestsPage";
 import { useMemo } from "react";
+import { useTranslation } from "react-i18next";
 import {
   getSmartTickFormatter,
   getTooltipTimeFormatter,
 } from "./timeFormatters";
 import { EMPTY_STATE_PAGES } from "../requests/RequestsEmptyState";
-
-const chartConfig = {
-  count: {
-    label: "Rate Limit Count",
-    color: "rgb(226, 54, 112)",
-  },
-  time: {
-    label: "Time",
-    color: "rgb(226, 54, 112)",
-  },
-} satisfies ChartConfig;
 
 interface RateLimitRequestsViewProps {
   isLoading: boolean;
@@ -42,6 +32,18 @@ const RateLimitRequestsView = ({
   onConfigureClick,
   emptyStateIsVisible,
 }: RateLimitRequestsViewProps) => {
+  const { t } = useTranslation("rateLimits");
+
+  const chartConfig = {
+    count: {
+      label: t("chart.rateLimitCount"),
+      color: "rgb(226, 54, 112)",
+    },
+    time: {
+      label: t("chart.time"),
+      color: "rgb(226, 54, 112)",
+    },
+  } satisfies ChartConfig;
   const start = useMemo(() => timeFilter.start || new Date(0), [timeFilter]);
   const end = useMemo(() => timeFilter.end || new Date(), [timeFilter]);
 

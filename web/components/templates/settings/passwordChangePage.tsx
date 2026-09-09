@@ -13,8 +13,10 @@ import {
 } from "@/components/ui/card";
 import { Lock } from "lucide-react";
 import { useHeliconeAuthClient } from "@/packages/common/auth/client/AuthClientFactory";
+import { useTranslation } from "react-i18next";
 
 const PasswordChangePage = () => {
+  const { t } = useTranslation(["settings", "common"]);
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -26,23 +28,21 @@ const PasswordChangePage = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Reset states
     setError("");
     setSuccess(false);
 
-    // Validation
     if (!currentPassword || !newPassword || !confirmPassword) {
-      setError("All fields are required");
+      setError(t("settings:password.errors.allFieldsRequired"));
       return;
     }
 
     if (newPassword !== confirmPassword) {
-      setError("New passwords do not match");
+      setError(t("settings:password.errors.passwordMismatch"));
       return;
     }
 
     if (newPassword.length < 8) {
-      setError("New password must be at least 8 characters long");
+      setError(t("settings:password.errors.passwordTooShort"));
       return;
     }
 
@@ -62,7 +62,7 @@ const PasswordChangePage = () => {
       setNewPassword("");
       setConfirmPassword("");
     } catch (err) {
-      setError("Failed to change password. Please try again.");
+      setError(t("settings:password.errors.changeFailed"));
     } finally {
       setIsLoading(false);
     }
@@ -71,9 +71,9 @@ const PasswordChangePage = () => {
   return (
     <div className="flex flex-col gap-6 p-8">
       <div>
-        <H2>Change Password</H2>
+        <H2>{t("settings:password.title")}</H2>
         <P className="text-muted-foreground">
-          Update your account password to keep your account secure
+          {t("settings:password.subtitle")}
         </P>
       </div>
 
@@ -81,49 +81,53 @@ const PasswordChangePage = () => {
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Lock className="h-4 w-4" />
-            Password Settings
+            {t("settings:password.cardTitle")}
           </CardTitle>
-          <CardDescription>
-            Enter your current password and choose a new one
-          </CardDescription>
+          <CardDescription>{t("settings:password.cardDescription")}</CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="current-password">Current Password</Label>
+              <Label htmlFor="current-password">
+                {t("settings:password.currentPassword")}
+              </Label>
               <Input
                 id="current-password"
                 type="password"
                 value={currentPassword}
                 onChange={(e) => setCurrentPassword(e.target.value)}
-                placeholder="Enter your current password"
+                placeholder={t("settings:password.currentPasswordPlaceholder")}
                 disabled={isLoading}
               />
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="new-password">New Password</Label>
+              <Label htmlFor="new-password">
+                {t("settings:password.newPassword")}
+              </Label>
               <Input
                 id="new-password"
                 type="password"
                 value={newPassword}
                 onChange={(e) => setNewPassword(e.target.value)}
-                placeholder="Enter your new password"
+                placeholder={t("settings:password.newPasswordPlaceholder")}
                 disabled={isLoading}
               />
               <p className="text-xs text-muted-foreground">
-                Password must be at least 8 characters long
+                {t("settings:password.passwordHint")}
               </p>
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="confirm-password">Confirm New Password</Label>
+              <Label htmlFor="confirm-password">
+                {t("settings:password.confirmPassword")}
+              </Label>
               <Input
                 id="confirm-password"
                 type="password"
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
-                placeholder="Confirm your new password"
+                placeholder={t("settings:password.confirmPasswordPlaceholder")}
                 disabled={isLoading}
               />
             </div>
@@ -137,7 +141,7 @@ const PasswordChangePage = () => {
             {success && (
               <Alert className="border-green-500 bg-green-50 dark:bg-green-950/20">
                 <AlertDescription className="text-green-600 dark:text-green-400">
-                  Password changed successfully!
+                  {t("settings:password.success")}
                 </AlertDescription>
               </Alert>
             )}
@@ -155,10 +159,12 @@ const PasswordChangePage = () => {
                 }}
                 disabled={isLoading}
               >
-                Cancel
+                {t("common:actions.cancel")}
               </Button>
               <Button type="submit" disabled={isLoading}>
-                {isLoading ? "Changing..." : "Change Password"}
+                {isLoading
+                  ? t("settings:password.changing")
+                  : t("settings:password.changePassword")}
               </Button>
             </div>
           </form>

@@ -1,4 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
+import { useTranslation } from "react-i18next";
 import { useEffect, useState } from "react";
 
 import { Button } from "@/components/ui/button";
@@ -16,6 +17,7 @@ export interface AzureExperiment {
 }
 
 export const AnthropicSettings = () => {
+  const { t } = useTranslation("admin");
   const jawn = useJawnClient();
 
   const currentAnthropicSettings = useQuery({
@@ -47,11 +49,11 @@ export const AnthropicSettings = () => {
 
   return (
     <div className="flex flex-col space-y-4 p-6">
-      <h1 className="text-2xl font-semibold">On Prem Settings</h1>
+      <h1 className="text-2xl font-semibold">{t("onPrem.title")}</h1>
       <div className="flex max-w-4xl flex-col space-y-8">
         <Card className="bg-slate-200">
           <CardHeader>
-            <CardTitle>Anthropic Settings</CardTitle>
+            <CardTitle>{t("onPrem.anthropicSettings")}</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="space-y-2">
@@ -90,9 +92,9 @@ export const AnthropicSettings = () => {
                   })
                   .then((s) => {
                     if (s.response.ok) {
-                      setNotification("Settings saved", "success");
+                      setNotification(t("onPrem.settingsSaved"), "success");
                     } else {
-                      setNotification("Failed to save settings", "error");
+                      setNotification(t("onPrem.settingsSaveFailed"), "error");
                     }
                   });
               }}

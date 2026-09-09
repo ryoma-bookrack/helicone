@@ -1,0 +1,90 @@
+{
+  "page": {
+    "title": "Vault"
+  },
+  "providerKeys": {
+    "title": "Provider Keys",
+    "addButton": "Add Provider Key",
+    "description": "These keys will be used to authenticate with your provider.",
+    "portalDescription": "The key you enter will be added within the `Authorization` header of your API requests. Select which key you want to associate with this organization",
+    "emptyAction": "Add a provider key",
+    "columns": {
+      "name": "Name",
+      "key": "Key",
+      "provider": "Provider"
+    }
+  },
+  "proxyKeys": {
+    "title": "Helicone Proxy Keys",
+    "addButton": "Create Proxy Key",
+    "description": "These keys will replace your provider keys in your application. This ensures that any usage will be logged in Helicone.",
+    "emptyAction": "Add a proxy key",
+    "columns": {
+      "name": "Name",
+      "providerKeyName": "Provider Key Name"
+    }
+  },
+  "limits": {
+    "label": "Limits",
+    "addNew": "Add new limit",
+    "cost": "cost",
+    "count": "count",
+    "costPlaceholder": "Cost USD",
+    "countPlaceholder": "Count",
+    "timeWindowPlaceholder": "Time Window",
+    "for": "For",
+    "seconds": "seconds",
+    "minutes": "minutes",
+    "hours": "hours",
+    "days": "days",
+    "spent": "${{spent}} / ${{limit}} spent",
+    "requests": "{{count}} / {{limit}} requests",
+    "at": "@ {{window}}"
+  },
+  "createProviderKey": {
+    "title": "Create Provider Key",
+    "provider": "Provider",
+    "selectProvider": "Select provider",
+    "custom": "Custom",
+    "openai": "OpenAI",
+    "providerKey": "Provider Key",
+    "providerKeyTooltip": "This is the secret key that you get from the provider. It is used to authenticate and make requests to the provider's API.",
+    "authHeaderHint": "This will be placed in the <code>authorization</code> header with the <code>Bearer</code> prefix.",
+    "providerKeyPlaceholder": "sk-",
+    "keyName": "Key Name",
+    "keyNamePlaceholder": "Provider Key Name",
+    "createButton": "Create Provider Key"
+  },
+  "createProxyKey": {
+    "title": "Create Proxy Key",
+    "proxyKeyName": "Proxy Key Name",
+    "proxyKeyNamePlaceholder": "Proxy Key Name",
+    "providerKeyName": "Provider Key Name",
+    "createButton": "Create Proxy Key",
+    "yourKeyTitle": "Your Proxy Key",
+    "yourKeyDescription": "Please copy this key and store it somewhere safe. You will not be able to see it again."
+  },
+  "deleteProviderKey": {
+    "title": "Delete Provider Key",
+    "description": "This Provider Key will be deleted from your account. All proxy keys that are mapped to this provider key will be deleted as well. Are you sure you want to delete this provider key?"
+  },
+  "deleteProxyKey": {
+    "title": "Delete Proxy Key",
+    "description": "This Proxy Key will be deleted from your account. Are you sure you want to delete this proxy key?"
+  },
+  "notifications": {
+    "enterKeyName": "Please enter in a key name",
+    "enterProviderKey": "Please enter in a provider key",
+    "membersNotAllowed": "Members are not allowed to create provider keys",
+    "providerKeyCreated": "Successfully created provider key",
+    "providerKeyCreateFailed": "Failed to create provider key, you are only allowed 1 provider key",
+    "error": "Error: {{error}}",
+    "providerKeyDeleted": "Provider Key Deleted",
+    "providerKeyDeleteFailed": "Error Deleting Provider Key",
+    "proxyKeyCreated": "Proxy Key Created",
+    "proxyKeyCreateFailed": "Error Creating Proxy Key",
+    "proxyKeyDeleted": "Proxy Key Deleted",
+    "proxyKeyDeleteFailed": "Error Deleting Proxy Key",
+    "copiedToClipboard": "Copied to clipboard!"
+  }
+}

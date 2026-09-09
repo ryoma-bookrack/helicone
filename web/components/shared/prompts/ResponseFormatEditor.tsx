@@ -2,6 +2,7 @@ import MarkdownEditor from "@/components/shared/markdownEditor";
 import UniversalPopup from "@/components/shared/universal/Popup";
 import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { logger } from "@/lib/telemetry/logger";
 
 interface ResponseFormatEditorProps {
@@ -17,6 +18,7 @@ export default function ResponseFormatEditor({
   initialSchema,
   onSave,
 }: ResponseFormatEditorProps) {
+  const { t } = useTranslation("common");
   const [schemaJson, setSchemaJson] = useState(
     initialSchema ? JSON.stringify(initialSchema, null, 2) : "{}",
   );
@@ -57,7 +59,7 @@ export default function ResponseFormatEditor({
 
   return (
     <UniversalPopup
-      title="Edit Response Format Schema"
+      title={t("prompts.responseFormat.editTitle")}
       isOpen={isOpen}
       onClose={onClose}
       width="max-w-5xl w-full"
@@ -73,17 +75,19 @@ export default function ResponseFormatEditor({
         </div>
         <div className="flex flex-row items-center justify-end gap-2">
           {!isValidJson(schemaJson) && (
-            <p className="mr-auto text-sm text-red-500">Invalid JSON Schema</p>
+            <p className="mr-auto text-sm text-red-500">
+              {t("prompts.responseFormat.invalidSchema")}
+            </p>
           )}
           <Button variant="outline" onClick={onClose}>
-            Cancel
+            {t("actions.cancel")}
           </Button>
           <Button
             variant="action"
             onClick={handleSave}
-            disabled={!isValidJson(schemaJson)} // Use the helper directly
+            disabled={!isValidJson(schemaJson)}
           >
-            Save Schema
+            {t("prompts.responseFormat.saveSchema")}
           </Button>
         </div>
       </div>

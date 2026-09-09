@@ -1,0 +1,182 @@
+{
+  "title": "HQL",
+  "untitledQuery": "未命名查询",
+  "tabs": {
+    "maxTabsError": "最多允许 10 个标签页，请先关闭部分标签页。",
+    "tables": "表",
+    "queries": "查询"
+  },
+  "search": {
+    "tables": "搜索表",
+    "queries": "搜索查询"
+  },
+  "selectAllQueries": "全选查询",
+  "waitlist": {
+    "title": "抢先体验",
+    "description": "HQL 为你的组织上线时，我们将第一时间通知你。"
+  },
+  "readOnlyWarning": "仅允许只读（SELECT）查询，不允许写入操作。",
+  "notifications": {
+    "schemaFailed": "获取 HQL 架构失败",
+    "queryWritten": "查询写入成功",
+    "executionFailed": "查询执行失败",
+    "executionFailedUnknown": "查询执行失败 - 未知错误",
+    "executeFailed": "执行查询失败"
+  },
+  "autocomplete": {
+    "clickhouseFunction": "ClickHouse 函数",
+    "sqlKeyword": "SQL 关键字"
+  },
+  "result": {
+    "noResults": "无结果",
+    "rows": "{{count}} 行",
+    "exportCsv": "导出 CSV",
+    "copyQuery": "复制查询",
+    "runQuery": "运行查询",
+    "saveQuery": "保存查询",
+    "saved": "已保存",
+    "visualize": "可视化"
+  },
+  "topBar": {
+    "newQuery": "新建查询",
+    "save": "保存",
+    "run": "运行",
+    "apiCommand": "API 命令"
+  },
+  "apiDialog": {
+    "title": "API 命令",
+    "description": "使用以下 curl 命令通过 API 执行查询。",
+    "copy": "复制"
+  },
+  "chart": {
+    "title": "图表",
+    "xAxis": "X 轴",
+    "yAxis": "Y 轴",
+    "chartType": "图表类型",
+    "bar": "柱状图",
+    "line": "折线图",
+    "area": "面积图"
+  },
+  "errors": {
+    "suggestionsLabel": "建议：",
+    "fallbackTitle": "查询错误",
+    "invalidStatement": {
+      "title": "无效的 SQL 语句",
+      "suggestions": [
+        "仅允许 SELECT 语句",
+        "请移除 INSERT、UPDATE、DELETE 或 DDL 语句"
+      ]
+    },
+    "invalidTable": {
+      "title": "无效的表",
+      "suggestions": [
+        "检查查询中的表名",
+        "仅可查询已授权的表"
+      ]
+    },
+    "syntaxError": {
+      "title": "SQL 语法错误",
+      "suggestions": [
+        "检查 SQL 语法",
+        "确认关键字拼写正确",
+        "确保引号和括号成对匹配"
+      ]
+    },
+    "sqlInjectionAttempt": {
+      "title": "安全违规"
+    },
+    "queryTimeout": {
+      "title": "查询超时",
+      "suggestions": [
+        "添加更具体的筛选条件以减少数据量",
+        "使用 LIMIT 限制结果",
+        "优化 WHERE 条件"
+      ]
+    },
+    "memoryLimitExceeded": {
+      "title": "超出内存限制",
+      "suggestions": [
+        "减少选择的列数",
+        "添加日期范围筛选",
+        "使用聚合代替原始数据"
+      ]
+    },
+    "rowLimitExceeded": {
+      "title": "行数过多",
+      "suggestions": [
+        "添加更多 WHERE 条件",
+        "使用更小的日期范围",
+        "在查询中添加 LIMIT"
+      ]
+    },
+    "resultLimitExceeded": {
+      "title": "结果集过大",
+      "suggestions": [
+        "添加 LIMIT 子句（最多 10,000 行）",
+        "导出为 CSV 处理更大数据集"
+      ]
+    },
+    "unknownColumn": {
+      "title": "未知列",
+      "suggestions": [
+        "对照架构检查列名",
+        "使用「表」面板查看可用列",
+        "列名区分大小写"
+      ]
+    },
+    "executionFailed": {
+      "title": "查询执行失败"
+    },
+    "noDataReturned": {
+      "title": "未找到数据",
+      "suggestions": [
+        "调整筛选条件",
+        "检查日期范围",
+        "确认表中包含数据"
+      ]
+    },
+    "schemaFetchFailed": {
+      "title": "架构加载失败"
+    },
+    "queryNotFound": {
+      "title": "未找到查询"
+    },
+    "queryNameExists": {
+      "title": "查询名称重复",
+      "suggestions": ["为查询选择其他名称"]
+    },
+    "queryAccessDenied": {
+      "title": "访问被拒绝"
+    },
+    "missingQueryId": {
+      "title": "缺少查询 ID"
+    },
+    "missingQueryName": {
+      "title": "需要查询名称",
+      "suggestions": ["输入查询名称"]
+    },
+    "missingQuerySql": {
+      "title": "需要 SQL",
+      "suggestions": ["输入 SQL 查询"]
+    },
+    "queryNameTooLong": {
+      "title": "查询名称过长",
+      "suggestions": ["使用更短的名称（最多 255 个字符）"]
+    },
+    "csvUploadFailed": {
+      "title": "CSV 导出失败",
+      "suggestions": ["请重试", "检查网络连接"]
+    },
+    "csvUrlNotReturned": {
+      "title": "导出 URL 错误"
+    },
+    "featureNotEnabled": {
+      "title": "功能不可用",
+      "suggestions": ["联系管理员为你的组织启用 HQL 访问"]
+    },
+    "unexpectedError": {
+      "title": "意外错误",
+      "suggestions": ["请重试", "若问题持续，请联系支持"]
+    }
+  }
+}

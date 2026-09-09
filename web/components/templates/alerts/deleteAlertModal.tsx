@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { useJawnClient } from "../../../lib/clients/jawnHook";
 import { useOrg } from "../../layout/org/organizationContext";
 import { clsx } from "../../shared/clsx";
@@ -13,6 +14,8 @@ interface DeleteAlertModalProps {
 
 const DeleteAlertModal = (props: DeleteAlertModalProps) => {
   const { open, setOpen, onSuccess, alertId } = props;
+  const { t } = useTranslation("alerts");
+  const { t: tCommon } = useTranslation("common");
 
   const orgContext = useOrg();
   const jawn = useJawnClient();
@@ -20,10 +23,7 @@ const DeleteAlertModal = (props: DeleteAlertModalProps) => {
 
   const handleDeleteAlert = async (id: string) => {
     if (orgContext?.currentOrg?.id === undefined) {
-      setNotification(
-        "The organization you are trying to delete an alert for does not exist.",
-        "error",
-      );
+      setNotification(t("notifications.deleteOrgNotFound"), "error");
       return;
     }
     try {
@@ -36,17 +36,17 @@ const DeleteAlertModal = (props: DeleteAlertModalProps) => {
       });
 
       if (deleteError) {
-        setNotification(
-          "There was an error deleting your alert! Refresh your page to try again..",
-          "error",
-        );
+        setNotification(t("notifications.deleteError"), "error");
       }
 
       onSuccess();
       setOpen(false);
-      setNotification("Successfully deleted alert", "success");
+      setNotification(t("notifications.deleteSuccess"), "success");
     } catch (error) {
-      setNotification(`Error: ${error}`, "error");
+      setNotification(
+        t("notifications.error", { message: String(error) }),
+        "error",
+      );
     }
   };
 
@@ -54,12 +54,10 @@ const DeleteAlertModal = (props: DeleteAlertModalProps) => {
     <ThemedModal open={open} setOpen={setOpen}>
       <div className="flex w-full flex-col gap-4">
         <p className="text-lg font-semibold text-gray-900 dark:text-gray-100">
-          Delete Alert
+          {t("deleteModal.title")}
         </p>
         <p className="w-[400px] whitespace-pre-wrap text-sm text-gray-500">
-          This alert will be deleted from your account. All alert triggers will
-          remain in the alert history. Are you sure you want to delete this
-          alert permanently?
+          {t("deleteModal.description")}
         </p>
         <div className="mt-4 flex w-full justify-end gap-4">
           <button
@@ -68,7 +66,7 @@ const DeleteAlertModal = (props: DeleteAlertModalProps) => {
             }}
             className="flex flex-row items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-semibold text-gray-900 shadow-sm hover:bg-gray-50 hover:text-gray-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-500 dark:border-gray-700 dark:bg-black dark:text-gray-100 dark:hover:bg-gray-900 dark:hover:text-gray-300"
           >
-            Cancel
+            {tCommon("actions.cancel")}
           </button>
           <button
             onClick={() => {
@@ -78,7 +76,7 @@ const DeleteAlertModal = (props: DeleteAlertModalProps) => {
               "relative inline-flex items-center rounded-md bg-red-500 px-4 py-2 text-sm font-medium text-white hover:bg-red-700",
             )}
           >
-            Delete
+            {tCommon("actions.delete")}
           </button>
         </div>
       </div>

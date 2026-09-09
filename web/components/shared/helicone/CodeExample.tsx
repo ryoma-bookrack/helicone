@@ -1,11 +1,12 @@
 import React from "react";
 import { DiffHighlight } from "@/components/templates/welcome/diffHighlight";
+import { useTranslation } from "react-i18next";
 
 type CodeExampleType = {
   code: string;
   language: string;
   image?: string;
-  alt: string;
+  altKey: "webhook" | "properties" | "users";
   offset?: string;
 };
 
@@ -22,7 +23,7 @@ const CodeExamples = {
 }`,
     language: "javascript",
     image: "/static/featureUpgrade/webhook.webp",
-    alt: "Webhook",
+    altKey: "webhook",
     offset: "mt-[135px]",
   },
   properties: {
@@ -33,14 +34,14 @@ const CodeExamples = {
 "Helicone-Property-UseCase": "email_campaign"`,
     language: "javascript",
     image: "/static/featureUpgrade/custom-property.webp",
-    alt: "Properties",
+    altKey: "properties",
     offset: "mt-[-50px]",
   },
   users: {
     code: `"Helicone-User-Id": "john@doe.com"`,
     language: "javascript",
     image: "/static/featureUpgrade/user-metric.webp",
-    alt: "Users",
+    altKey: "users",
     offset: "mt-64",
   },
 } as const satisfies Record<string, CodeExampleType>;
@@ -48,21 +49,20 @@ const CodeExamples = {
 export type CodeExampleKey = keyof typeof CodeExamples;
 
 export const CodeExample = (codeExampleKey: CodeExampleKey) => {
+  const { t } = useTranslation("common");
   const codeExample = CodeExamples[codeExampleKey] as CodeExampleType;
 
   return (
     <div className="relative h-full w-full overflow-hidden rounded-lg md:w-[568.25px]">
-      {/* Background Image */}
       {codeExample.image && (
         // eslint-disable-next-line @next/next/no-img-element
         <img
           src={codeExample.image}
-          alt={codeExample.alt}
+          alt={t(`visuals.codeExample.${codeExample.altKey}`)}
           className="h-full w-full object-cover"
         />
       )}
 
-      {/* Code Section - Always render even without image */}
       <div
         className={`absolute inset-0 flex items-center justify-center ${
           codeExample.offset ?? ""

@@ -1,4 +1,5 @@
 import { useState, useRef, useCallback } from "react";
+import { useTranslation } from "react-i18next";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { getJawnClient } from "@/lib/clients/jawn";
 import { useOrg } from "@/components/layout/org/organizationContext";
@@ -113,19 +114,29 @@ const getTargetTier = (currentTier: string) => {
   return "pro-20251210";
 };
 
-const getStripeStatusBadge = (status: string | null | undefined) => {
-  if (!status) return { color: "bg-gray-100 text-gray-800", label: "Unknown" };
+const getStripeStatusBadge = (
+  status: string | null | undefined,
+  t: (key: string) => string,
+) => {
+  if (!status)
+    return { color: "bg-gray-100 text-gray-800", label: t("common.unknown") };
   switch (status) {
     case "active":
-      return { color: "bg-green-100 text-green-800", label: "Active" };
+      return { color: "bg-green-100 text-green-800", label: t("common.active") };
     case "canceled":
-      return { color: "bg-red-100 text-red-800", label: "Cancelled" };
+      return {
+        color: "bg-red-100 text-red-800",
+        label: t("pricingMigration.cancelledLabel"),
+      };
     case "past_due":
-      return { color: "bg-yellow-100 text-yellow-800", label: "Past Due" };
+      return { color: "bg-yellow-100 text-yellow-800", label: t("common.pastDue") };
     case "unpaid":
-      return { color: "bg-orange-100 text-orange-800", label: "Unpaid" };
+      return { color: "bg-orange-100 text-orange-800", label: t("common.unpaid") };
     case "not_found":
-      return { color: "bg-red-100 text-red-800", label: "Not Found" };
+      return {
+        color: "bg-red-100 text-red-800",
+        label: t("pricingMigration.notFoundLabel"),
+      };
     default:
       return { color: "bg-gray-100 text-gray-800", label: status };
   }
@@ -173,6 +184,7 @@ function BatchActionBar({
   onRunBatch,
   isReapply = false,
 }: BatchActionBarProps) {
+  const { t } = useTranslation("admin");
   const isThisTab = batchProcessing?.tab === tab;
   const isProcessing = isThisTab && batchProcessing?.isRunning;
   const hasFinished = isThisTab && !batchProcessing?.isRunning;
@@ -186,12 +198,14 @@ function BatchActionBar({
           <span className="text-sm font-medium">
             {isThisTab && batchProcessing ? (
               <>
-                Processing {batchProcessing.currentIndex + 1} of{" "}
-                {batchProcessing.totalCount}
-                {!batchProcessing.isRunning && " (stopped)"}
+                {t("common.processingBatch", {
+                  current: batchProcessing.currentIndex + 1,
+                  total: batchProcessing.totalCount,
+                })}
+                {!batchProcessing.isRunning && t("common.stopped")}
               </>
             ) : (
-              <>{selectedIds.size} selected</>
+              <>{t("common.selected", { count: selectedIds.size })}</>
             )}
           </span>
           {isThisTab && batchProcessing && (
@@ -206,10 +220,12 @@ function BatchActionBar({
                 className="w-32"
               />
               <span className="text-xs text-muted-foreground">
-                {batchProcessing.results.filter((r) => r.success).length}{" "}
-                success,{" "}
-                {batchProcessing.results.filter((r) => !r.success).length}{" "}
-                failed
+                {t("common.batchSuccessFailed", {
+                  success: batchProcessing.results.filter((r) => r.success)
+                    .length,
+                  failed: batchProcessing.results.filter((r) => !r.success)
+                    .length,
+                })}
               </span>
             </div>
           )}
@@ -218,7 +234,7 @@ function BatchActionBar({
           {isProcessing ? (
             <Button variant="destructive" size="sm" onClick={onStop}>
               <StopCircle size={14} className="mr-1" />
-              Stop
+              {t("common.stop")}
             </Button>
           ) : hasFinished ? (
             <Button variant="outline" size="sm" onClick={onClear}>
@@ -248,7 +264,7 @@ function BatchActionBar({
                 disabled={selectedIds.size === 0}
               >
                 <Play size={14} className="mr-1" />
-                {isReapply ? "Reapply Now" : "Now"} ({selectedIds.size})
+                {isReapply ? t("pricingMigration.reapplyNowWithCount", { count: selectedIds.size }) : t("pricingMigration.nowWithCount", { count: selectedIds.size })}
               </Button>
               <Button
                 variant="outline"
@@ -268,6 +284,7 @@ function BatchActionBar({
 }
 
 export default function AdminPricingMigration() {
+  const { t } = useTranslation("admin");
   const org = useOrg();
   const queryClient = useQueryClient();
   const [migrationStates, setMigrationStates] = useState<MigrationState>({});
@@ -408,7 +425,7 @@ export default function AdminPricingMigration() {
         ...prev,
         [orgId]: {
           status: "error",
-          error: error instanceof Error ? error.message : "Migration failed",
+          error: error instanceof Error ? error.message : t("pricingMigration.migrationFailed"),
         },
       }));
     },
@@ -447,7 +464,7 @@ export default function AdminPricingMigration() {
         ...prev,
         [orgId]: {
           status: "error",
-          error: error instanceof Error ? error.message : "Schedule failed",
+          error: error instanceof Error ? error.message : t("pricingMigration.scheduleFailed"),
         },
       }));
     },
@@ -520,7 +537,7 @@ export default function AdminPricingMigration() {
         [orgId]: {
           status: "error",
           error:
-            error instanceof Error ? error.message : "Switch to free failed",
+            error instanceof Error ? error.message : t("pricingMigration.switchToFreeFailed"),
         },
       }));
     },
@@ -778,7 +795,7 @@ export default function AdminPricingMigration() {
   return (
     <div className="flex flex-col gap-6 p-6">
       <div>
-        <H2>Pricing Migration</H2>
+        <H2>{t("pricingMigration.title")}</H2>
         <Muted>
           Migrate organizations from legacy pricing to the new 2025-12-10
           pricing model
@@ -789,7 +806,7 @@ export default function AdminPricingMigration() {
       <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
         <Card>
           <CardHeader className="pb-2">
-            <CardDescription>Pending Migrations</CardDescription>
+            <CardDescription>{t("pricingMigration.pendingMigrations")}</CardDescription>
             <CardTitle className="text-3xl">
               {pendingQuery.data?.summary?.total ?? "-"}
             </CardTitle>
@@ -814,7 +831,7 @@ export default function AdminPricingMigration() {
 
         <Card>
           <CardHeader className="pb-2">
-            <CardDescription>Completed Migrations</CardDescription>
+            <CardDescription>{t("pricingMigration.completedMigrations")}</CardDescription>
             <CardTitle className="text-3xl">
               {completedQuery.data?.summary?.total ?? "-"}
             </CardTitle>
@@ -839,7 +856,7 @@ export default function AdminPricingMigration() {
 
         <Card>
           <CardHeader className="pb-2">
-            <CardDescription>Migration Progress</CardDescription>
+            <CardDescription>{t("pricingMigration.migrationProgress")}</CardDescription>
             <CardTitle className="text-3xl">
               {pendingQuery.data && completedQuery.data
                 ? `${Math.round(
@@ -890,7 +907,7 @@ export default function AdminPricingMigration() {
             <CardHeader>
               <div className="flex flex-col gap-4">
                 <div>
-                  <CardTitle>Organizations Pending Migration</CardTitle>
+                  <CardTitle>{t("pricingMigration.organizationsPending")}</CardTitle>
                   <CardDescription>
                     These organizations are on legacy pricing and need to be
                     migrated
@@ -902,7 +919,7 @@ export default function AdminPricingMigration() {
                   <div className="relative max-w-sm flex-1">
                     <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
                     <Input
-                      placeholder="Search by name, ID, or email..."
+                      placeholder={t("pricingMigration.searchPlaceholder")}
                       value={searchQuery}
                       onChange={(e) => handleSearchChange(e.target.value)}
                       className="pl-9"
@@ -914,10 +931,10 @@ export default function AdminPricingMigration() {
                   >
                     <SelectTrigger className="w-[180px]">
                       <Filter className="mr-2 h-4 w-4" />
-                      <SelectValue placeholder="Filter by tier" />
+                      <SelectValue placeholder={t("pricingMigration.filterByTier")} />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="all">All Tiers</SelectItem>
+                      <SelectItem value="all">{t("common.allTiers")}</SelectItem>
                       {LEGACY_TIERS.map((tier) => (
                         <SelectItem key={tier} value={tier}>
                           {tier}
@@ -936,7 +953,7 @@ export default function AdminPricingMigration() {
               ) : pendingQuery.data?.organizations?.length === 0 ? (
                 <div className="flex flex-col items-center justify-center py-8 text-muted-foreground">
                   <CheckCircle className="mb-2 h-12 w-12" />
-                  <P>All organizations have been migrated!</P>
+                  <P>{t("pricingMigration.allMigrated")}</P>
                 </div>
               ) : (
                 <>
@@ -977,20 +994,21 @@ export default function AdminPricingMigration() {
                             disabled={batchProcessing?.isRunning}
                           />
                         </TableHead>
-                        <TableHead>Organization</TableHead>
-                        <TableHead>Owner</TableHead>
-                        <TableHead>Current Tier</TableHead>
-                        <TableHead>Stripe Status</TableHead>
-                        <TableHead>Stripe</TableHead>
-                        <TableHead>Members</TableHead>
-                        <TableHead>Status</TableHead>
-                        <TableHead className="text-right">Action</TableHead>
+                        <TableHead>{t("common.organization")}</TableHead>
+                        <TableHead>{t("common.owner")}</TableHead>
+                        <TableHead>{t("pricingMigration.currentTier")}</TableHead>
+                        <TableHead>{t("pricingMigration.stripeStatus")}</TableHead>
+                        <TableHead>{t("common.stripe")}</TableHead>
+                        <TableHead>{t("common.members")}</TableHead>
+                        <TableHead>{t("common.status")}</TableHead>
+                        <TableHead className="text-right">{t("pricingMigration.action")}</TableHead>
                       </TableRow>
                     </TableHeader>
                     <TableBody>
                       {pendingQuery.data?.organizations?.map((pendingOrg) => {
                         const stripeStatus = getStripeStatusBadge(
                           pendingOrg.stripe_status,
+                          t,
                         );
                         const isCancelled = isCancelledOrMissing(
                           pendingOrg.stripe_status,
@@ -1109,7 +1127,7 @@ export default function AdminPricingMigration() {
                                   {migrationStates[pendingOrg.id]?.status ===
                                   "migrating"
                                     ? "Switching..."
-                                    : "Switch to Free"}
+                                    : t("pricingMigration.switchToFree")}
                                 </Button>
                               ) : (
                                 <div className="flex items-center gap-1">
@@ -1204,7 +1222,7 @@ export default function AdminPricingMigration() {
         <TabsContent value="completed">
           <Card>
             <CardHeader>
-              <CardTitle>Migrated Organizations</CardTitle>
+              <CardTitle>{t("pricingMigration.migratedOrganizations")}</CardTitle>
               <CardDescription>
                 These organizations have been successfully migrated to new
                 pricing
@@ -1218,7 +1236,7 @@ export default function AdminPricingMigration() {
               ) : completedQuery.data?.organizations?.length === 0 ? (
                 <div className="flex flex-col items-center justify-center py-8 text-muted-foreground">
                   <Clock className="mb-2 h-12 w-12" />
-                  <P>No organizations have been migrated yet</P>
+                  <P>{t("pricingMigration.noMigratedYet")}</P>
                 </div>
               ) : (
                 <>
@@ -1260,13 +1278,13 @@ export default function AdminPricingMigration() {
                           disabled={batchProcessing?.isRunning}
                         />
                       </TableHead>
-                      <TableHead>Organization</TableHead>
-                      <TableHead>Owner</TableHead>
-                      <TableHead>Tier</TableHead>
-                      <TableHead>Stripe Customer</TableHead>
-                      <TableHead>Stripe Sub</TableHead>
-                      <TableHead>Status</TableHead>
-                      <TableHead className="text-right">Actions</TableHead>
+                      <TableHead>{t("common.organization")}</TableHead>
+                      <TableHead>{t("common.owner")}</TableHead>
+                      <TableHead>{t("common.tier")}</TableHead>
+                      <TableHead>{t("pricingMigration.stripeCustomer")}</TableHead>
+                      <TableHead>{t("pricingMigration.stripeSub")}</TableHead>
+                      <TableHead>{t("common.status")}</TableHead>
+                      <TableHead className="text-right">{t("common.actions")}</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
@@ -1446,7 +1464,7 @@ export default function AdminPricingMigration() {
                   <Small className="font-mono">{selectedOrg.id}</Small>
                 </div>
                 <div className="flex justify-between">
-                  <Muted>Tier</Muted>
+                  <Muted>{t("common.tier")}</Muted>
                   <Badge
                     variant="secondary"
                     className={getTierBadgeColor(selectedOrg.tier)}
@@ -1455,12 +1473,12 @@ export default function AdminPricingMigration() {
                   </Badge>
                 </div>
                 <div className="flex justify-between">
-                  <Muted>Owner</Muted>
+                  <Muted>{t("common.owner")}</Muted>
                   <Small>{selectedOrg.owner_email ?? "-"}</Small>
                 </div>
                 {selectedOrg.stripe_customer_id && (
                   <div className="flex items-center justify-between">
-                    <Muted>Stripe Customer</Muted>
+                    <Muted>{t("pricingMigration.stripeCustomer")}</Muted>
                     <Button
                       variant="link"
                       size="sm"
@@ -1476,7 +1494,7 @@ export default function AdminPricingMigration() {
                 )}
                 {selectedOrg.stripe_subscription_id && (
                   <div className="flex items-center justify-between">
-                    <Muted>Stripe Subscription</Muted>
+                    <Muted>{t("pricingMigration.stripeSubscription")}</Muted>
                     <Button
                       variant="link"
                       size="sm"
@@ -1498,10 +1516,10 @@ export default function AdminPricingMigration() {
               {(selectedOrg.tier === "pro-20251210" ||
                 selectedOrg.tier === "team-20251210") && (
                 <div className="border-t pt-6">
-                  <h4 className="mb-4 font-medium">Add Metered Usage</h4>
+                  <h4 className="mb-4 font-medium">{t("pricingMigration.addMeteredUsage")}</h4>
                   <div className="space-y-4">
                     <div className="space-y-2">
-                      <Label>Usage Type</Label>
+                      <Label>{t("pricingMigration.usageType")}</Label>
                       <Select
                         value={usageType}
                         onValueChange={(v) =>
@@ -1512,7 +1530,7 @@ export default function AdminPricingMigration() {
                           <SelectValue />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="requests">Requests</SelectItem>
+                          <SelectItem value="requests">{t("common.requests")}</SelectItem>
                           <SelectItem value="storage_gb">
                             Storage (GB)
                           </SelectItem>
@@ -1520,7 +1538,7 @@ export default function AdminPricingMigration() {
                       </Select>
                     </div>
                     <div className="space-y-2">
-                      <Label>Quantity</Label>
+                      <Label>{t("common.quantity")}</Label>
                       <Input
                         type="number"
                         placeholder={
@@ -1531,8 +1549,8 @@ export default function AdminPricingMigration() {
                       />
                       <Muted className="text-xs">
                         {usageType === "requests"
-                          ? "Number of requests to add"
-                          : "Number of GB to add"}
+                          ? t("pricingMigration.numberOfRequestsToAdd")
+                          : t("pricingMigration.numberOfGbToAdd")}
                       </Muted>
                     </div>
                     <Button
@@ -1541,7 +1559,7 @@ export default function AdminPricingMigration() {
                       className="w-full"
                     >
                       <Plus className="mr-2 h-4 w-4" />
-                      {addUsageMutation.isPending ? "Adding..." : "Add Usage"}
+                      {addUsageMutation.isPending ? t("common.adding") : t("pricingMigration.addUsage")}
                     </Button>
                     {addUsageMutation.isSuccess && (
                       <div className="flex items-center gap-2 text-sm text-green-600">
@@ -1554,7 +1572,7 @@ export default function AdminPricingMigration() {
                         <AlertCircle className="h-4 w-4" />
                         {addUsageMutation.error instanceof Error
                           ? addUsageMutation.error.message
-                          : "Failed to add usage"}
+                          : t("pricingMigration.addUsageFailed")}
                       </div>
                     )}
                   </div>
@@ -1574,14 +1592,14 @@ export default function AdminPricingMigration() {
           <AlertDialogHeader>
             <AlertDialogTitle>
               {confirmMigrateOrg?.migrationType === "instant"
-                ? "Migrate Now"
-                : "Schedule Migration"}
+                ? t("pricingMigration.migrateNow")
+                : t("pricingMigration.scheduleMigration")}
             </AlertDialogTitle>
             <AlertDialogDescription className="space-y-3">
               <p>
                 {confirmMigrateOrg?.migrationType === "instant"
-                  ? "Migrate immediately with usage backfill for "
-                  : "Schedule migration for next billing period for "}
+                  ? t("pricingMigration.migrateImmediatelyPrefix")
+                  : t("pricingMigration.scheduleMigrationPrefix")}
                 <strong>{confirmMigrateOrg?.name}</strong>?
               </p>
               <div className="rounded-md bg-muted p-3 text-sm">
@@ -1628,7 +1646,7 @@ export default function AdminPricingMigration() {
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogCancel>{t("common.cancel")}</AlertDialogCancel>
             <AlertDialogAction
               onClick={() =>
                 confirmMigrateOrg &&
@@ -1639,8 +1657,8 @@ export default function AdminPricingMigration() {
               }
             >
               {confirmMigrateOrg?.migrationType === "instant"
-                ? "Migrate Now"
-                : "Schedule Migration"}
+                ? t("pricingMigration.migrateNow")
+                : t("pricingMigration.scheduleMigration")}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
@@ -1655,14 +1673,14 @@ export default function AdminPricingMigration() {
           <AlertDialogHeader>
             <AlertDialogTitle>
               {confirmReapplyOrg?.migrationType === "instant"
-                ? "Reapply Now"
-                : "Schedule Reapply"}
+                ? t("pricingMigration.reapplyNow")
+                : t("pricingMigration.scheduleReapply")}
             </AlertDialogTitle>
             <AlertDialogDescription className="space-y-3">
               <p>
                 {confirmReapplyOrg?.migrationType === "instant"
-                  ? "Reapply immediately with usage backfill for "
-                  : "Schedule reapply for next billing period for "}
+                  ? t("pricingMigration.reapplyImmediatelyPrefix")
+                  : t("pricingMigration.scheduleReapplyPrefix")}
                 <strong>{confirmReapplyOrg?.name}</strong>?
               </p>
               <div className="rounded-md bg-muted p-3 text-sm">
@@ -1674,7 +1692,7 @@ export default function AdminPricingMigration() {
                     {confirmReapplyOrg?.tier}
                   </Badge>
                   <RotateCcw className="h-4 w-4" />
-                  <span className="text-muted-foreground">Reapply</span>
+                  <span className="text-muted-foreground">{t("common.reapply")}</span>
                 </div>
               </div>
               {confirmReapplyOrg?.migrationType === "instant" ? (
@@ -1701,7 +1719,7 @@ export default function AdminPricingMigration() {
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogCancel>{t("common.cancel")}</AlertDialogCancel>
             <AlertDialogAction
               onClick={() =>
                 confirmReapplyOrg &&
@@ -1712,8 +1730,8 @@ export default function AdminPricingMigration() {
               }
             >
               {confirmReapplyOrg?.migrationType === "instant"
-                ? "Reapply Now"
-                : "Schedule Reapply"}
+                ? t("pricingMigration.reapplyNow")
+                : t("pricingMigration.scheduleReapply")}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
@@ -1726,7 +1744,7 @@ export default function AdminPricingMigration() {
       >
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Switch to Free Tier</AlertDialogTitle>
+            <AlertDialogTitle>{t("pricingMigration.switchToFreeTier")}</AlertDialogTitle>
             <AlertDialogDescription className="space-y-3">
               <p>
                 Are you sure you want to switch{" "}
@@ -1759,7 +1777,7 @@ export default function AdminPricingMigration() {
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogCancel>{t("common.cancel")}</AlertDialogCancel>
             <AlertDialogAction
               onClick={() =>
                 confirmSwitchToFreeOrg &&

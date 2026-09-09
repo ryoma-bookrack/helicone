@@ -1,4 +1,5 @@
 import { components } from "@/lib/clients/jawnTypes/public";
+import { useTranslation } from "react-i18next";
 import { useClickhouseSchemas } from "@/services/hooks/heliconeSql";
 import { useMonaco, Editor } from "@monaco-editor/react";
 import { useEffect, useRef, useState } from "react";
@@ -41,6 +42,7 @@ ORDER BY total_cost_usd DESC
 LIMIT 50`;
 
 function AdminHql() {
+  const { t } = useTranslation("admin");
   const org = useOrg();
   const { setNotification } = useNotification();
   const { theme: currentTheme } = useTheme();
@@ -81,7 +83,7 @@ function AdminHql() {
     sql: string;
   }>({
     id: undefined,
-    name: "Untitled Query",
+    name: t("hql.untitledQuery"),
     sql: DEFAULT_QUERY,
   });
   const [queryLoading, setQueryLoading] = useState(false);
@@ -179,7 +181,7 @@ function AdminHql() {
       queryClient.invalidateQueries({
         queryKey: ["get", "/v1/admin/saved-queries"],
       });
-      setNotification("Successfully saved admin query", "success");
+      setNotification(t("directory.querySaved"), "success");
     },
     onError: (error: any) => {
       setNotification(error.message, "error");
@@ -313,8 +315,8 @@ function AdminHql() {
             kind: monaco.languages.CompletionItemKind.Keyword,
             insertText: keyword,
             detail: keyword.includes("(")
-              ? "ClickHouse function"
-              : "SQL keyword",
+              ? t("hql.clickhouseFunction")
+              : t("hql.sqlKeyword"),
             sortText: "1" + keyword, // Sort keywords before other suggestions
             range,
           })),
@@ -443,8 +445,7 @@ function AdminHql() {
                             startColumn: 1,
                             endLineNumber: 1,
                             endColumn: 1,
-                            message:
-                              "Only read (SELECT) queries are allowed. Write operations are not permitted.",
+                            message: t("hql.readOnlyWarning"),
                             severity: monaco.MarkerSeverity.Error,
                           },
                         ],
@@ -498,8 +499,7 @@ function AdminHql() {
                               startColumn: 1,
                               endLineNumber: 1,
                               endColumn: 1,
-                              message:
-                                "Only read (SELECT) queries are allowed. Write operations are not permitted.",
+                              message: t("hql.readOnlyWarning"),
                               severity: monaco.MarkerSeverity.Error,
                             },
                           ],
@@ -525,7 +525,7 @@ function AdminHql() {
             >
               {result.rowCount >= 100 && (
                 <Alert variant="warning" className="mb-2">
-                  <AlertTitle>Row Limit Reached</AlertTitle>
+                  <AlertTitle>{t("hql.rowLimitTitle")}</AlertTitle>
                   <AlertDescription>
                     Only the first 100 rows are shown. Please refine your query
                     for more specific results.

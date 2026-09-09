@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { MappedLLMRequest } from "@helicone-package/llm-mapper/types";
 import { FlaskConicalIcon, Loader2 } from "lucide-react";
@@ -29,6 +30,9 @@ const PlaygroundResponsePanel = ({
   response,
   isStreaming,
 }: PlaygroundResponsePanelProps) => {
+  const { t } = useTranslation("playground");
+  const { t: tCommon } = useTranslation("common");
+
   const handleAddToChat = () => {
     if (!response) return;
 
@@ -71,25 +75,21 @@ const PlaygroundResponsePanel = ({
           <div className="flex h-full flex-col items-center justify-center p-8 text-center">
             <div className="flex flex-col items-center gap-2">
               <FlaskConicalIcon className="h-8 w-8 text-slate-400" />
-              <p className="text-sm text-slate-500">No response yet</p>
-              <p className="text-xs text-slate-400">
-                Click Run to generate a response
-              </p>
+              <p className="text-sm text-slate-500">{t("ui.noResponseYet")}</p>
+              <p className="text-xs text-slate-400">{t("ui.clickRunToGenerateAResponse")}</p>
             </div>
           </div>
         ) : isStreaming ? (
           <div className="flex h-full flex-col items-center justify-center p-8 text-center">
             <div className="flex flex-col items-center gap-2">
               <Loader2 className="h-8 w-8 animate-spin text-slate-400" />
-              <p className="text-sm text-slate-500">Generating response...</p>
+              <p className="text-sm text-slate-500">{t("ui.generatingResponse")}</p>
             </div>
           </div>
         ) : (
           <>
             <div className="flex justify-between border-b border-border p-2">
-              <Button variant="outline" size="sm" onClick={handleAddToChat}>
-                Add to Chat
-              </Button>
+              <Button variant="outline" size="sm" onClick={handleAddToChat}>{t("ui.addToChat")}</Button>
               <Button
                 variant={"outline"}
                 size={"sm"}

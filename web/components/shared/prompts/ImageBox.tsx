@@ -1,4 +1,5 @@
 import { Message } from "@helicone-package/llm-mapper/types";
+import { useTranslation } from "react-i18next";
 
 interface ImageBoxProps {
   message: Message;
@@ -6,9 +7,10 @@ interface ImageBoxProps {
 }
 
 export default function ImageBox({ message, disabled = false }: ImageBoxProps) {
+  const { t } = useTranslation("common");
+
   if (!message.image_url) {
     return null;
-    // TODO: Support for base64 images?
   }
 
   return (
@@ -20,7 +22,7 @@ export default function ImageBox({ message, disabled = false }: ImageBoxProps) {
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
         src={message.image_url}
-        alt={message.content || "Image message"}
+        alt={message.content || t("prompts.imageMessage")}
         className="h-[300px] w-full select-none object-contain p-4"
         draggable={false}
       />

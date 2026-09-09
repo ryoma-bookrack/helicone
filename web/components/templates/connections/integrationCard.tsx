@@ -3,6 +3,7 @@ import { Card, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Switch } from "@/components/ui/switch";
 import { ArrowRightIcon } from "@heroicons/react/24/outline";
 import { LOGOS } from "./connectionSVG";
+import { useTranslation } from "react-i18next";
 
 interface IntegrationCardProps {
   title: string;
@@ -17,6 +18,7 @@ const IntegrationCard: React.FC<IntegrationCardProps> = ({
   enabled,
   onClick,
 }) => {
+  const { t } = useTranslation("connections");
   const Logo = LOGOS[title as keyof typeof LOGOS];
 
   return (
@@ -42,7 +44,7 @@ const IntegrationCard: React.FC<IntegrationCardProps> = ({
           onClick={onClick}
           className="flex items-center text-sm text-blue-600 hover:text-blue-800"
         >
-          Configure
+          {t("integration.configure")}
           <ArrowRightIcon className="ml-1 h-4 w-4" />
         </button>
       </CardFooter>

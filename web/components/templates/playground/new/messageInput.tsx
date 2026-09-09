@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { PlusIcon } from "@heroicons/react/20/solid";
 import { ChangeEvent, useState } from "react";
 import { clsx } from "../../../shared/clsx";
@@ -37,6 +38,9 @@ const EMPTY_MESSAGE: MessageInputItem = {
 };
 
 const MessageInput = (props: MessageInputProps) => {
+  const { t } = useTranslation("playground");
+  const { t: tCommon } = useTranslation("common");
+
   const {
     onMessageChange,
     initialValues,
@@ -124,7 +128,7 @@ const MessageInput = (props: MessageInputProps) => {
           // editable ? "border border-gray-300" : "border-none",
           "w-full h-24 bg-white border-gray-300 rounded-md text-sm"
         )}
-        placeholder="Type your message here"
+        placeholder={t("ui.typeYourMessageHere")}
         value={getContent(message.content)}
         onChange={(e) => {
           if (typeof message.content === "string") {
@@ -158,9 +162,7 @@ const MessageInput = (props: MessageInputProps) => {
       {/* /> */}
       {message.role === "user" && editable && (
         <button className="flex w-fit items-center rounded-md px-2 py-1 text-xs hover:bg-gray-300">
-          <PlusIcon className="mr-1 h-4 w-4" />
-          Add Image
-        </button>
+          <PlusIcon className="mr-1 h-4 w-4" />{t("ui.addImage")}</button>
       )}
     </div>
   );

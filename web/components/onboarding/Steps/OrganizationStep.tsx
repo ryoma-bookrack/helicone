@@ -1,10 +1,12 @@
 import { Input } from "@/components/ui/input";
+import { useTranslation } from "react-i18next";
 import React, { useState } from "react";
 import { useDraftOnboardingStore } from "@/services/hooks/useOrgOnboarding";
 import { useOrg } from "@/components/layout/org/organizationContext";
 import { cn } from "@/lib/utils";
 
 export const OrganizationStep = () => {
+  const { t } = useTranslation("onboarding");
   const orgId = useOrg()?.currentOrg?.id ?? "";
   const { draftName, setDraftName } = useDraftOnboardingStore(orgId)();
   const [error, setError] = useState("");
@@ -14,7 +16,7 @@ export const OrganizationStep = () => {
     setDraftName(newName);
 
     if (!newName) {
-      setError("Please enter an organization name :)");
+      setError(t("organization.nameRequired"));
     } else {
       setError("");
     }
@@ -23,12 +25,14 @@ export const OrganizationStep = () => {
   return (
     <div className="flex flex-col gap-6">
       <div className="flex flex-col gap-2">
-        <h2 className="text-[hsl(var(--foreground))]">Organization</h2>
+        <h2 className="text-[hsl(var(--foreground))]">
+          {t("organization.title")}
+        </h2>
         <Input
           type="text"
           value={draftName}
           onChange={handleNameChange}
-          placeholder="My Organization"
+          placeholder={t("organization.placeholder")}
           className={cn(
             "text-sm placeholder:text-[hsl(var(--muted-foreground))]",
             error &&
@@ -39,7 +43,7 @@ export const OrganizationStep = () => {
           <p className="text-sm text-[hsl(var(--destructive))]">{error}</p>
         ) : draftName ? (
           <p className="text-sm font-light text-[hsl(var(--muted-foreground))]">
-            Don&apos;t worry, you can rename your organization later.
+            {t("organization.renameHint")}
           </p>
         ) : null}
       </div>

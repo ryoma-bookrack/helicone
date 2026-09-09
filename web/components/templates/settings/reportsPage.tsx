@@ -26,8 +26,10 @@ import {
 } from "@/components/ui/command";
 import { Check, ChevronsUpDown, X } from "lucide-react";
 import { clsx } from "../../shared/clsx";
+import { Trans, useTranslation } from "react-i18next";
 
 const ReportsPage = () => {
+  const { t } = useTranslation(["settings", "common"]);
   const {
     data: report,
     isLoading: isLoadingReport,
@@ -148,7 +150,7 @@ const ReportsPage = () => {
         (selectedEmails.length < 1 && selectedSlackChannels.length < 1))
     ) {
       setNotification(
-        "Please select at least one email or slack channel",
+        t("settings:reports.notifications.selectEmailOrChannel"),
         "error",
       );
       return;
@@ -156,7 +158,7 @@ const ReportsPage = () => {
 
     const authFromCookie = getHeliconeCookie();
     if (authFromCookie.error || !authFromCookie.data) {
-      setNotification("Please login to create an alert", "error");
+      setNotification(t("settings:reports.notifications.loginRequired"), "error");
       return;
     }
 
@@ -184,11 +186,14 @@ const ReportsPage = () => {
       });
 
       if (error) {
-        setNotification(`Failed to update report ${error}`, "error");
+        setNotification(
+          t("settings:reports.notifications.updateFailed", { error }),
+          "error",
+        );
         return;
       }
 
-      setNotification("Successfully configured report", "success");
+      setNotification(t("settings:reports.notifications.configureSuccess"), "success");
       refetchReport();
       return;
     }
@@ -198,11 +203,14 @@ const ReportsPage = () => {
     });
 
     if (error) {
-      setNotification(`Failed to create report ${error}`, "error");
+      setNotification(
+        t("settings:reports.notifications.createFailed", { error }),
+        "error",
+      );
       return;
     }
 
-    setNotification("Successfully enabled report", "success");
+    setNotification(t("settings:reports.notifications.enableSuccess"), "success");
     refetchReport();
   };
 
@@ -211,7 +219,7 @@ const ReportsPage = () => {
       <form onSubmit={handleCustomizeReports} className="h-full w-full">
         <div className="col-span-4 flex flex-row items-center justify-between">
           <h1 className="text-xl font-semibold text-gray-900 dark:text-gray-100">
-            Reports
+            {t("settings:reports.title")}
           </h1>
 
           <Switch
@@ -221,8 +229,11 @@ const ReportsPage = () => {
           />
         </div>
         <small className="col-span-4">
-          Receive a weekly summary report every <strong>Monday</strong> at{" "}
-          <strong>10am UTC</strong>.
+          <Trans
+            i18nKey="reports.schedule"
+            ns="settings"
+            components={{ strong: <strong /> }}
+          />
         </small>
         {reportEnabled && (
           <div className="col-span-4 w-full space-y-1.5 rounded-md bg-card p-6">
@@ -230,7 +241,7 @@ const ReportsPage = () => {
             <div className="col-span-4 w-full space-y-1.5 text-sm">
               <div className="flex items-center justify-between">
                 <label htmlFor="alert-emails" className="text-gray-500">
-                  Emails
+                  {t("settings:reports.emails")}
                 </label>
                 <Switch
                   disabled={isLoading}
@@ -252,17 +263,23 @@ const ReportsPage = () => {
                       >
                         <span className="truncate">
                           {selectedEmails.length > 0
-                            ? `${selectedEmails.length} email${selectedEmails.length > 1 ? "s" : ""} selected`
-                            : "Select emails to send alerts to"}
+                            ? t("settings:reports.emailsSelected", {
+                                count: selectedEmails.length,
+                              })
+                            : t("settings:reports.selectEmails")}
                         </span>
                         <ChevronsUpDown className="ml-2 h-3.5 w-3.5 shrink-0 opacity-50" />
                       </Button>
                     </PopoverTrigger>
                     <PopoverContent className="w-[300px] p-0" align="start">
                       <Command>
-                        <CommandInput placeholder="Search emails..." />
+                        <CommandInput
+                          placeholder={t("settings:reports.searchEmails")}
+                        />
                         <CommandList>
-                          <CommandEmpty>No emails found.</CommandEmpty>
+                          <CommandEmpty>
+                            {t("settings:reports.noEmailsFound")}
+                          </CommandEmpty>
                           <CommandGroup>
                             {members.map((member) => (
                               <CommandItem
@@ -324,7 +341,7 @@ const ReportsPage = () => {
             <div className="col-span-4 w-full space-y-1.5 text-sm">
               <div className="flex items-center justify-between">
                 <label htmlFor="alert-slack-channels" className="text-gray-500">
-                  Slack Channels
+                  {t("settings:reports.slackChannels")}
                 </label>
                 <Switch
                   disabled={isLoadingSlackChannels}
@@ -348,17 +365,23 @@ const ReportsPage = () => {
                           >
                             <span className="truncate">
                               {selectedSlackChannels.length > 0
-                                ? `${selectedSlackChannels.length} channel${selectedSlackChannels.length > 1 ? "s" : ""} selected`
-                                : "Select slack channels to send alerts to"}
+                                ? t("settings:reports.channelsSelected", {
+                                    count: selectedSlackChannels.length,
+                                  })
+                                : t("settings:reports.selectChannels")}
                             </span>
                             <ChevronsUpDown className="ml-2 h-3.5 w-3.5 shrink-0 opacity-50" />
                           </Button>
                         </PopoverTrigger>
                         <PopoverContent className="w-[300px] p-0" align="start">
                           <Command>
-                            <CommandInput placeholder="Search channels..." />
+                            <CommandInput
+                              placeholder={t("settings:reports.searchChannels")}
+                            />
                             <CommandList>
-                              <CommandEmpty>No channels found.</CommandEmpty>
+                              <CommandEmpty>
+                                {t("settings:reports.noChannelsFound")}
+                              </CommandEmpty>
                               <CommandGroup>
                                 {slackChannels.map((channel) => (
                                   <CommandItem
@@ -423,9 +446,11 @@ const ReportsPage = () => {
                       )}
                     </div>
                     <small className="text-gray-500">
-                      If the channel is private, you will need to add the bot to
-                      the channel by mentioning <strong>@Helicone</strong> in
-                      the channel.
+                      <Trans
+                        i18nKey="reports.privateChannelHint"
+                        ns="settings"
+                        components={{ strong: <strong /> }}
+                      />
                     </small>
                   </>
                 ) : (
@@ -437,7 +462,7 @@ const ReportsPage = () => {
                         orgContext?.currentOrg?.id || ""
                       }&redirect_uri=${slackRedirectUrl}`}
                     >
-                      Connect Slack
+                      {t("settings:reports.connectSlack")}
                     </a>
                   </Button>
                 ))}
@@ -453,9 +478,9 @@ const ReportsPage = () => {
             type="button"
             variant="outline"
           >
-            Cancel
+            {t("common:actions.cancel")}
           </Button>
-          <Button type="submit">Save</Button>
+          <Button type="submit">{t("common:actions.save")}</Button>
         </div>
       </form>
     </div>

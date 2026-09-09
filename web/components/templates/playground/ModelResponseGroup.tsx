@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import React from "react";
 
 import { clsx } from "../../shared/clsx";
@@ -21,6 +22,9 @@ const ModelResponseGroup: React.FC<ModelResponseGroupProps> = ({
   modelMessage,
   setCurrentChat,
 }) => {
+  const { t } = useTranslation("playground");
+  const { t: tCommon } = useTranslation("common");
+
   return (
     <div className="flex flex-col space-y-8 border-t border-gray-300 bg-white px-8 py-4 dark:border-gray-700 dark:bg-black">
       <div className="flex w-full justify-between">
@@ -29,7 +33,7 @@ const ModelResponseGroup: React.FC<ModelResponseGroupProps> = ({
           onRoleChange={() => {}}
           disabled={true}
         />
-        <Tooltip title="Delete Row" placement="top">
+        <Tooltip title={t("ui.deleteRow")} placement="top">
           <button
             onClick={() => {
               setCurrentChat((prevChat) =>

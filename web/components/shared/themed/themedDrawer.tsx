@@ -7,6 +7,7 @@ import {
 import { ArrowsPointingInIcon } from "@heroicons/react/24/outline";
 import { TooltipLegacy as Tooltip } from "@/components/ui/tooltipLegacy";
 import { Fragment, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { clsx } from "../clsx";
 import { useTheme } from "next-themes";
 
@@ -28,6 +29,7 @@ const ThemedDrawer: React.FC<ThemedDrawerProps> = ({
   defaultWidth = "md:min-w-[60rem] w-full md:w-[60vw]",
 }) => {
   const [expanded, setExpanded] = useState(defaultExpanded);
+  const { t } = useTranslation("common");
 
   const { theme } = useTheme();
 
@@ -90,7 +92,11 @@ const ThemedDrawer: React.FC<ThemedDrawerProps> = ({
                           <ChevronDoubleRightIcon className="h-5 w-5" />
                         </button>
                         {!defaultExpanded && (
-                          <Tooltip title={clsx(expanded ? "Shrink" : "Expand")}>
+                          <Tooltip
+                            title={clsx(
+                              expanded ? t("actions.shrink") : t("actions.expand"),
+                            )}
+                          >
                             <button
                               onClick={() => setExpanded(!expanded)}
                               className="-m-1 rounded-md p-1 hover:bg-slate-200 dark:hover:bg-slate-800"

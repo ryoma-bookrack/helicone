@@ -23,6 +23,7 @@ export type InputParam = {
 interface Operator<T> {
   value: T;
   label: string;
+  labelKey?: string;
   type: ColumnType;
   inputParams?: InputParam[];
 }
@@ -31,31 +32,37 @@ const textOperators: Operator<keyof TextOperators>[] = [
   {
     value: "equals",
     label: "equals",
+    labelKey: "operators.equals",
     type: "text",
   },
   {
     value: "not-equals",
     label: "not equals",
+    labelKey: "operators.notEquals",
     type: "text",
   },
   {
     value: "contains",
     label: "contains",
+    labelKey: "operators.contains",
     type: "text",
   },
   {
     value: "not-contains",
     label: "not contains",
+    labelKey: "operators.notContains",
     type: "text",
   },
   {
     value: "ilike",
     label: "ilike",
+    labelKey: "operators.ilike",
     type: "text",
   },
   {
     value: "like",
     label: "like",
+    labelKey: "operators.like",
     type: "text",
   },
 ];
@@ -72,21 +79,25 @@ const numberOperators: Operator<keyof NumberOperators>[] = [
   {
     value: "equals",
     label: "equals",
+    labelKey: "operators.equals",
     type: "number",
   },
   {
     value: "not-equals",
     label: "not equals",
+    labelKey: "operators.notEquals",
     type: "number",
   },
   {
     value: "gte",
     label: "greater than or equal to",
+    labelKey: "operators.gte",
     type: "number",
   },
   {
     value: "lte",
     label: "less than or equal to",
+    labelKey: "operators.lte",
     type: "number",
   },
 ];
@@ -128,6 +139,7 @@ const timestampOperators: Operator<keyof TimestampOperators>[] = [
 type KeyOfUnion<T> = T extends T ? keyof T : never;
 export type SingleFilterDef<T extends keyof TablesAndViews> = {
   label: string;
+  labelKey?: string;
   operators: Operator<string>[];
   table: T;
   column: KeyOfUnion<TablesAndViews[T]>;
@@ -251,6 +263,7 @@ export const DASHBOARD_PAGE_TABLE_FILTERS: [
 ] = [
   {
     label: "Model",
+    labelKey: "fields.model",
     operators: textOperators,
     category: "request",
     table: "request_response_rmt",
@@ -258,6 +271,7 @@ export const DASHBOARD_PAGE_TABLE_FILTERS: [
   },
   {
     label: "Status",
+    labelKey: "fields.status",
     operators: STATUS_OPS,
     category: "request",
     table: "request_response_rmt",
@@ -265,6 +279,7 @@ export const DASHBOARD_PAGE_TABLE_FILTERS: [
   },
   {
     label: "Latency",
+    labelKey: "fields.latency",
     operators: numberOperators,
     category: "request",
     table: "request_response_rmt",
@@ -272,6 +287,7 @@ export const DASHBOARD_PAGE_TABLE_FILTERS: [
   },
   {
     label: "User",
+    labelKey: "fields.user",
     operators: textOperators,
     category: "request",
     table: "request_response_rmt",
@@ -296,6 +312,7 @@ export const REQUEST_TABLE_FILTERS: [
 ] = [
   {
     label: "Request",
+    labelKey: "fields.request",
     operators: VectorOperators,
     table: "request_response_rmt",
     column: "request_body",
@@ -303,6 +320,7 @@ export const REQUEST_TABLE_FILTERS: [
   },
   {
     label: "Request-Id",
+    labelKey: "fields.requestId",
     operators: booleanToTextOperators,
     table: "request_response_rmt",
     column: "request_id",
@@ -310,6 +328,7 @@ export const REQUEST_TABLE_FILTERS: [
   },
   {
     label: "Response",
+    labelKey: "fields.response",
     operators: VectorOperators,
     table: "request_response_rmt",
     column: "response_body",
@@ -317,6 +336,7 @@ export const REQUEST_TABLE_FILTERS: [
   },
   {
     label: "Prompt Tokens",
+    labelKey: "fields.promptTokens",
     operators: numberOperators,
     table: "request_response_rmt",
     column: "prompt_tokens",
@@ -324,6 +344,7 @@ export const REQUEST_TABLE_FILTERS: [
   },
   {
     label: "Completion Tokens",
+    labelKey: "fields.completionTokens",
     operators: numberOperators,
     table: "request_response_rmt",
     column: "completion_tokens",
@@ -331,6 +352,7 @@ export const REQUEST_TABLE_FILTERS: [
   },
   {
     label: "Total Tokens",
+    labelKey: "fields.totalTokens",
     operators: numberOperators,
     table: "request_response_rmt",
     column: "total_tokens",
@@ -338,6 +360,7 @@ export const REQUEST_TABLE_FILTERS: [
   },
   {
     label: "User",
+    labelKey: "fields.user",
     operators: textOperators,
     table: "request_response_rmt",
     column: "user_id",
@@ -345,6 +368,7 @@ export const REQUEST_TABLE_FILTERS: [
   },
   {
     label: "Model",
+    labelKey: "fields.model",
     operators: textOperators,
     table: "request_response_rmt",
     column: "model",
@@ -352,6 +376,7 @@ export const REQUEST_TABLE_FILTERS: [
   },
   {
     label: "Provider",
+    labelKey: "fields.provider",
     operators: textOperators,
     table: "request_response_rmt",
     column: "provider",
@@ -359,6 +384,7 @@ export const REQUEST_TABLE_FILTERS: [
   },
   {
     label: "Status",
+    labelKey: "fields.status",
     operators: STATUS_OPS,
     category: "response",
     table: "request_response_rmt",
@@ -366,6 +392,7 @@ export const REQUEST_TABLE_FILTERS: [
   },
   {
     label: "Path",
+    labelKey: "fields.path",
     operators: textOperators,
     table: "request_response_rmt",
     column: "target_url",
@@ -373,6 +400,7 @@ export const REQUEST_TABLE_FILTERS: [
   },
   {
     label: "Feedback",
+    labelKey: "fields.feedback",
     operators: booleanOperators,
     table: "request_response_rmt",
     column: "helicone-score-feedback",
@@ -380,6 +408,7 @@ export const REQUEST_TABLE_FILTERS: [
   },
   {
     label: "AI Gateway",
+    labelKey: "fields.aiGateway",
     operators: booleanOperators,
     table: "request_response_rmt",
     column: "request_referrer",

@@ -7,10 +7,12 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useHeliconeAgent } from "./HeliconeAgentContext";
+import { useTranslation } from "react-i18next";
 
 export function SessionDropdown() {
   const { sessions, currentSessionId, switchToSession, deleteSession } =
     useHeliconeAgent();
+  const { t } = useTranslation("agent");
 
   return (
     <DropdownMenu>
@@ -29,7 +31,7 @@ export function SessionDropdown() {
       >
         {sessions.length === 0 && (
           <div className="p-3 text-center text-sm text-muted-foreground">
-            No conversations yet
+            {t("session.noConversations")}
           </div>
         )}
 
@@ -62,7 +64,7 @@ export function SessionDropdown() {
                   <div className="flex items-center gap-1">
                     <Users className="h-3 w-3 shrink-0 text-purple-600 dark:text-purple-400" />
                     <span className="text-[10px] font-medium text-purple-600 dark:text-purple-400">
-                      Support
+                      {t("session.support")}
                     </span>
                   </div>
                 )}

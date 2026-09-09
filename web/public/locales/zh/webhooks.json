@@ -1,0 +1,55 @@
+{
+  "title": "Webhooks",
+  "learnMore": "了解 Helicone Webhooks",
+  "addWebhook": "添加 Webhook",
+  "columns": {
+    "destination": "目标地址",
+    "created": "创建时间",
+    "version": "版本",
+    "sampleRate": "采样率",
+    "propertyFilters": "属性筛选",
+    "includeData": "包含数据",
+    "hmacKey": "HMAC 密钥",
+    "actions": "操作"
+  },
+  "includeData": {
+    "enabled": "已启用",
+    "disabled": "已禁用"
+  },
+  "actions": {
+    "test": "测试",
+    "testing": "测试中..."
+  },
+  "notifications": {
+    "created": "Webhook 已创建！",
+    "deleted": "Webhook 已删除！",
+    "testSuccess": "测试 Webhook 发送成功！",
+    "testSent": "测试 Webhook 已发送",
+    "testFailed": "测试失败：{{message}}",
+    "copied": "已复制到剪贴板！",
+    "error": "错误：{{message}}",
+    "createFailed": "创建 Webhook 失败"
+  },
+  "form": {
+    "title": "监听事件",
+    "description": "配置 Webhook 以接收 API 请求的实时更新。",
+    "endpointUrl": "端点 URL",
+    "endpointPlaceholder": "https://",
+    "sampleRate": "采样率",
+    "includeEnhancedData": "包含增强数据",
+    "includeEnhancedDataHint": "启用后，Webhook 将包含成本、Token 数量、延迟指标和 S3 URL 等额外数据。",
+    "propertyFilters": "属性筛选",
+    "propertyFiltersHint": "使用以下方式筛选发送到 Webhook 的事件",
+    "customProperties": "自定义属性",
+    "addProperty": "添加属性",
+    "selectProperty": "选择属性",
+    "searchPlaceholder": "输入任意内容...",
+    "noResults": "未找到结果。",
+    "suggestions": "建议",
+    "valuePlaceholder": "值",
+    "validation": {
+      "destinationRequired": "目标 URL 为必填项",
+      "destinationProtocol": "目标 URL 必须以 http:// 或 https:// 开头"
+    }
+  }
+}

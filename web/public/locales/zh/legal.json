@@ -1,0 +1,204 @@
+{
+  "terms": {
+    "metaTitle": "服务条款",
+    "title": "服务条款",
+    "lastUpdated": "最后更新：2023 年 2 月 5 日",
+    "sections": {
+      "introduction": {
+        "title": "引言",
+        "description": "欢迎阅读 Helicone, Inc.（「公司」「我们」）的服务条款。本条款适用于 helicone.ai 网站及相关服务。使用服务即表示您同意本条款及隐私政策。如不同意，请通过 help@helicone.ai 联系我们。本条款适用于所有访问或使用服务的访客与用户。"
+      },
+      "communications": {
+        "title": "通信",
+        "description": "创建账户即表示您同意接收新闻通讯、营销或促销信息。您可随时通过退订链接或邮件选择退出。"
+      },
+      "purchases": {
+        "title": "购买",
+        "description": "购买服务时，您可能需要提供支付相关信息。您声明有权使用所选支付方式，且所提供信息真实准确。我们可委托第三方处理支付，并保留拒绝或取消订单的权利。"
+      },
+      "contestsSweepstakesPromotions": {
+        "title": "竞赛、抽奖与促销",
+        "description": "通过服务提供的竞赛、抽奖或促销活动可能受单独规则约束。如促销规则与本条款冲突，以促销规则为准。"
+      },
+      "subscriptions": {
+        "title": "订阅",
+        "description": "部分服务按订阅计费，按所选周期（月付或年付）预先扣款。订阅到期将自动续费，除非您取消。您须提供有效支付方式及准确账单信息。"
+      },
+      "freeTrial": {
+        "title": "免费试用",
+        "description": "我们可自行决定提供免费试用。注册试用可能需填写账单信息；试用结束前不会扣费。试用最后一天若未取消，将自动收取订阅费用。我们可随时修改或取消试用优惠。"
+      },
+      "feeChanges": {
+        "title": "费用变更",
+        "description": "我们可随时调整订阅费用，变更将在当前计费周期结束后生效，并会提前合理通知。继续使用服务即表示您接受新价格。"
+      },
+      "refunds": {
+        "title": "退款",
+        "description": "自合同原始购买日起七（7）天内，我们可为合同办理退款。"
+      },
+      "content": {
+        "title": "内容",
+        "description": "您可对通过服务发布的内容负责。发布内容即表示您拥有相应权利且不侵犯他人权益。您授予我们在服务范围内使用、修改、展示及分发该内容的许可。我们可监控用户内容，但无此义务。"
+      },
+      "prohibitedUses": {
+        "title": "禁止用途",
+        "description": "您仅可将服务用于合法目的，不得违反法律、伤害未成年人、发送垃圾信息、冒充他人、侵犯他人权利、干扰服务运行、引入恶意代码、发起攻击或从事其他有害行为。"
+      },
+      "analytics": {
+        "title": "分析",
+        "description": "我们可能使用第三方服务（如 Google Analytics、Mixpanel）监控和分析服务使用情况。请参阅各服务提供商的隐私政策了解详情及退出方式。"
+      },
+      "noUseByMinors": {
+        "title": "未成年人禁止使用",
+        "description": "服务仅面向年满十八（18）周岁的用户。未满 18 岁者不得访问或使用服务。"
+      },
+      "accounts": {
+        "title": "账户",
+        "description": "创建账户时，您须年满 18 岁并提供准确信息。您须对账户及密码保密，并对账户下发生的行为负责。我们可拒绝服务、终止账户或删除内容。"
+      },
+      "intellectualProperty": {
+        "title": "知识产权",
+        "description": "服务及其原创内容（不含用户内容）的知识产权归 Helicone, Inc. 及其许可方所有，受美国版权及商标法保护。"
+      },
+      "copyrightPolicy": {
+        "title": "版权政策",
+        "description": "我们尊重他人知识产权。如您认为服务上的内容侵犯版权，请发送邮件至 help@helicone.ai，主题为「Copyright Infringement」，并附详细说明。"
+      },
+      "dmcaNotice": {
+        "title": "DMCA 版权侵权通知与处理程序",
+        "description": "您可依据 DMCA 向我们的版权代理提交书面通知，包括签名、被侵权作品描述、侵权位置、联系方式及善意声明等。联系邮箱：help@helicone.ai。"
+      },
+      "errorReportingFeedback": {
+        "title": "错误报告与反馈",
+        "description": "您可向 help@helicone.ai 或通过第三方工具提交错误与反馈。您同意我们可无限制地使用该反馈，且不承担保密义务。第三方工具包括 Sentry 等。"
+      },
+      "linksToOtherWebSites": {
+        "title": "第三方网站链接",
+        "description": "服务可能包含第三方网站链接。我们不对第三方内容、隐私政策或做法负责。访问第三方网站前请自行阅读其条款与隐私政策。"
+      },
+      "disclaimerOfWarranties": {
+        "title": "免责声明",
+        "description": "服务按「现状」和「可用性」提供，不作任何明示或暗示保证。您使用服务的风险由您自行承担。在法律允许范围内，我们否认所有保证。"
+      },
+      "limitationOfLiability": {
+        "title": "责任限制",
+        "description": "在法律允许范围内，我们及关联方不对间接、附带、特殊或后果性损害承担责任。若存在责任，其上限不超过您为相关产品或服务支付的金额。"
+      },
+      "termination": {
+        "title": "终止",
+        "description": "我们可在任何原因下立即暂停或终止您的账户。您也可停止使用服务来终止账户。依其性质应在终止后继续有效的条款仍然有效。"
+      },
+      "governingLaw": {
+        "title": "适用法律",
+        "description": "本条款受加利福尼亚州法律管辖。我们未行使某项权利不构成弃权。若某条款无效，其余条款仍然有效。本条款构成双方就服务的完整协议。"
+      },
+      "changesToService": {
+        "title": "服务变更",
+        "description": "我们可自行决定撤回或修改服务或其任何部分，无需通知，且不对服务不可用承担责任。我们可能限制部分或全部用户访问。"
+      },
+      "amendmentsToTerms": {
+        "title": "条款修订",
+        "description": "我们可随时在本页面发布修订条款。您继续使用服务即表示接受修订。请定期查阅本页面以了解变更。"
+      },
+      "waiverAndSeverability": {
+        "title": "弃权与可分割性",
+        "description": "我们未放弃某条款不构成对该条款或其他条款的持续放弃。若某条款被认定无效，其余条款继续完全有效。"
+      },
+      "acknowledgement": {
+        "title": "确认",
+        "description": "使用服务即表示您已阅读并同意本服务条款。"
+      },
+      "contactUs": {
+        "title": "联系我们",
+        "description": "如有反馈、评论或技术支持请求，请发送邮件至：help@helicone.ai。"
+      }
+    }
+  },
+  "privacy": {
+    "metaTitle": "隐私政策",
+    "title": "隐私政策",
+    "lastUpdated": "最后更新：2023 年 2 月 28 日",
+    "sections": {
+      "introduction": {
+        "title": "引言",
+        "description": "Helicone, Inc. 运营 https://www.helicone.ai/（「服务」）。本隐私政策说明我们如何收集、使用和保护您的信息。使用服务即表示您同意本政策。除非另有定义，本政策中的术语与我们的条款和条件含义相同。"
+      },
+      "definitions": {
+        "title": "定义",
+        "description": "SERVICE 指由 Helicone, Inc. 运营的网站。PERSONAL DATA 指可识别在世个人的数据。USAGE DATA 指自动收集的使用数据。COOKIES 指存储在您设备上的小文件。DATA CONTROLLER、DATA PROCESSORS、DATA SUBJECT、USER 等术语见英文定义。"
+      },
+      "informationCollectionAndUse": {
+        "title": "信息收集与使用",
+        "description": "我们收集多种类型的信息，以提供并改进服务。"
+      },
+      "typesOfDataCollected": {
+        "title": "收集的数据类型",
+        "description": "我们可能收集电子邮件、姓名、电话、地址等个人数据，以及浏览器发送的使用数据、位置数据（经授权）及 Cookie 数据。我们可能还收集其他您在使用服务时提供的信息。"
+      },
+      "useOfData": {
+        "title": "数据使用",
+        "description": "Helicone, Inc. 将收集的数据用于提供和维护服务、通知变更、客户支持、分析改进、检测技术问题、履行合同义务、发送账户及营销通知等目的。"
+      },
+      "retentionOfData": {
+        "title": "数据保留",
+        "description": "我们仅在实现本政策目的所需期间保留个人数据，并可能为遵守法律义务、解决争议及执行协议而保留。使用数据通常保留较短时间，除非用于安全或功能改进。"
+      },
+      "transferOfData": {
+        "title": "数据传输",
+        "description": "您的信息可能被传输至并保存在您所在司法管辖区以外的计算机上。若您位于美国以外并提交信息，即表示同意向美国传输并处理数据。我们将采取合理措施确保数据安全。"
+      },
+      "disclosureOfData": {
+        "title": "数据披露",
+        "description": "在执法要求、商业交易（如并购）或其他经您同意的情况下，我们可能披露个人数据，包括向关联公司披露等。"
+      },
+      "securityOfData": {
+        "title": "数据安全",
+        "description": "我们重视数据安全，但互联网传输或电子存储无法保证 100% 安全。我们将采用商业上可接受的手段保护您的个人数据。"
+      },
+      "gdprRights": {
+        "title": "通用数据保护条例（GDPR）下的数据保护权利",
+        "description": "欧盟/欧洲经济区居民享有 GDPR 规定的访问、更正、删除、限制处理、数据可携及撤回同意等权利。如需行使权利，请联系 help@helicone.ai。您也有权向监管机构投诉。"
+      },
+      "caloppaRights": {
+        "title": "加州在线隐私保护法（CalOPPA）下的数据保护权利",
+        "description": "根据 CalOPPA，我们允许匿名访问、在首页提供隐私政策链接、通知政策变更，并允许用户通过邮件更新个人信息。我们尊重「Do Not Track」信号。"
+      },
+      "serviceProviders": {
+        "title": "服务提供商",
+        "description": "我们可能雇用第三方公司和个人协助提供服务，这些第三方仅在代表我们执行任务时访问个人数据，并有义务保密。"
+      },
+      "analytics": {
+        "title": "分析",
+        "description": "我们使用 Google Analytics、Cloudflare Analytics、PostHog 等分析服务。请参阅各提供商的隐私政策了解数据处理方式。"
+      },
+      "cicdTools": {
+        "title": "CI/CD 工具",
+        "description": "我们可能使用 GitHub、CircleCI 等 CI/CD 工具自动化开发流程。请参阅各服务隐私政策了解详情。"
+      },
+      "behavioralRemarketing": {
+        "title": "行为再营销",
+        "description": "我们使用 Google Ads、Twitter 等再营销服务，在您访问服务后于第三方网站展示广告。您可通过各平台设置退出个性化广告。"
+      },
+      "payments": {
+        "title": "支付",
+        "description": "付费服务由 Stripe 等第三方支付处理器处理。我们不会存储您的支付卡详情。请参阅 Stripe 隐私政策：https://stripe.com/us/privacy"
+      },
+      "linksToOtherSites": {
+        "title": "其他网站链接",
+        "description": "我们的服务可能包含非我们运营的第三方网站链接。我们不对第三方网站的内容或隐私做法负责，建议您查阅各网站隐私政策。"
+      },
+      "childrensPrivacy": {
+        "title": "儿童隐私",
+        "description": "我们的服务不面向 13 岁以下儿童。我们不会有意收集儿童个人数据。如发现此类数据，我们将采取措施删除。"
+      },
+      "changesToPrivacyPolicy": {
+        "title": "隐私政策变更",
+        "description": "我们可能不时更新本隐私政策，并在本页面发布新版本。重大变更前我们可能通过邮件或服务内通知告知您。"
+      },
+      "contactUs": {
+        "title": "联系我们",
+        "description": "如对本隐私政策有任何疑问，请发送邮件至：help@helicone.ai。"
+      }
+    }
+  }
+}

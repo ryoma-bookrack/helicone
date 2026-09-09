@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { PiPlusBold } from "react-icons/pi";
@@ -18,6 +19,9 @@ import { LineChart, SquareArrowOutUpRight } from "lucide-react";
 import Link from "next/link";
 
 export const MainPanel = () => {
+  const { t } = useTranslation("evals");
+  const { t: tCommon } = useTranslation("common");
+
   const { evaluators } = useEvaluators();
   const { openCreatePanel, openEditPanel, openTestPanel, panels } =
     useEvalPanelStore();
@@ -100,8 +104,8 @@ export const MainPanel = () => {
       <div className="flex h-screen w-full flex-col bg-background dark:bg-sidebar-background">
         <div className="flex h-full flex-1">
           <GenericEmptyState
-            title="Create Your First Evaluator"
-            description="Create an evaluator to score your LLM outputs and measure their quality."
+            title={t("ui.createYourFirstEvaluator")}
+            description={t("ui.createAnEvaluatorToScoreYourLlmOutputsAn")}
             icon={<LineChart size={28} className="text-accent-foreground" />}
             className="w-full"
             actions={
@@ -114,18 +118,14 @@ export const MainPanel = () => {
                     onClick={openCreatePanel}
                     variant="default"
                     disabled={!canCreateEvaluator}
-                  >
-                    Create Evaluator
-                    <PiPlusBold className="ml-2 h-4 w-4" />
+                  >{t("ui.createEvaluator")}<PiPlusBold className="ml-2 h-4 w-4" />
                   </Button>
                 </FreeTierLimitWrapper>
                 <Link
                   href="https://docs.helicone.ai/features/evaluation"
                   target="_blank"
                 >
-                  <Button variant="outline" className="gap-2">
-                    View Docs
-                    <SquareArrowOutUpRight className="h-4 w-4" />
+                  <Button variant="outline" className="gap-2">{t("ui.viewDocs")}<SquareArrowOutUpRight className="h-4 w-4" />
                   </Button>
                 </Link>
               </>
@@ -139,7 +139,7 @@ export const MainPanel = () => {
   return (
     <div className="flex h-screen w-full flex-col">
       <AuthHeader
-        title="Evaluators"
+        title={t("ui.evaluators")}
         actions={[
           <FreeTierLimitWrapper
             key="create-evaluator-wrapper"
@@ -153,9 +153,7 @@ export const MainPanel = () => {
               size="sm"
               className="items-center gap-1"
             >
-              <PiPlusBold className="h-3.5 w-3.5" />
-              Create Evaluator
-            </Button>
+              <PiPlusBold className="h-3.5 w-3.5" />{t("ui.createEvaluator")}</Button>
           </FreeTierLimitWrapper>,
         ]}
       />

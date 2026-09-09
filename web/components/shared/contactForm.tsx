@@ -3,6 +3,7 @@ import useNotification from "./notification/useNotification";
 import { useState } from "react";
 import { ArrowPathIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
+import { useTranslation } from "react-i18next";
 
 export type ContactFormData = {
   firstName: string;
@@ -24,6 +25,7 @@ const ContactForm = (props: ContactFormProps) => {
 
   const router = useRouter();
   const { setNotification } = useNotification();
+  const { t } = useTranslation("common");
   const [isLoading, setIsLoading] = useState(false);
   const [showCoupon, setShowCoupon] = useState(false);
 
@@ -68,17 +70,12 @@ const ContactForm = (props: ContactFormProps) => {
       .then((res) => res.json())
       .then((data) => {
         if (data.error) {
-          setNotification(
-            "Error submitting form. Please try again later.",
-            "error",
-          );
+          setNotification(t("form.submitError"), "error");
         } else {
-          // if the contact tag is mfs, take them to the sign up page
           if (contactTag === "mfs") {
             setTimeout(() => {
-              // Set the MFS local storage
               localStorage.setItem("mfs-email", email.value);
-              setNotification("Form submitted successfully!", "success");
+              setNotification(t("form.submitSuccess"), "success");
               setIsLoading(false);
               router.push("/signup");
             }, 1500);
@@ -86,7 +83,7 @@ const ContactForm = (props: ContactFormProps) => {
             const formElement = event.target as HTMLFormElement;
             formElement.reset();
             setIsLoading(false);
-            setNotification("Form submitted successfully!", "success");
+            setNotification(t("form.submitSuccess"), "success");
           }
         }
       });
@@ -104,7 +101,7 @@ const ContactForm = (props: ContactFormProps) => {
           htmlFor="first-name"
           className="lg:text-md block text-sm font-medium leading-6 text-gray-900"
         >
-          First Name
+          {t("form.firstName")}
         </label>
         <div className="mt-1">
           <input
@@ -121,7 +118,7 @@ const ContactForm = (props: ContactFormProps) => {
           htmlFor="last-name"
           className="lg:text-md block text-sm font-medium leading-6 text-gray-900"
         >
-          Last Name
+          {t("form.lastName")}
         </label>
         <div className="mt-1">
           <input
@@ -138,7 +135,7 @@ const ContactForm = (props: ContactFormProps) => {
           htmlFor="email"
           className="lg:text-md block text-sm font-medium leading-6 text-gray-900"
         >
-          Email address
+          {t("form.emailAddress")}
         </label>
         <div className="mt-1">
           <input
@@ -156,7 +153,7 @@ const ContactForm = (props: ContactFormProps) => {
           htmlFor="company-name"
           className="lg:text-md block text-sm font-medium leading-6 text-gray-900"
         >
-          Company Name
+          {t("form.companyName")}
         </label>
         <div className="mt-1">
           <input
@@ -173,7 +170,7 @@ const ContactForm = (props: ContactFormProps) => {
           htmlFor="company-description"
           className="lg:text-md block text-sm font-medium leading-6 text-gray-900"
         >
-          What does your company do and how you plan to use Helicone.
+          {t("form.companyDescriptionLabel")}
         </label>
         <div className="mt-1">
           <textarea
@@ -189,7 +186,8 @@ const ContactForm = (props: ContactFormProps) => {
       <div className="flex items-center justify-end gap-2 border-t border-gray-300 pt-4">
         {showCoupon ? (
           <p>
-            Use coupon code: <span className="font-semibold">MSFTHELI</span>
+            {t("form.useCouponCode")}{" "}
+            <span className="font-semibold">MSFTHELI</span>
           </p>
         ) : (
           <div />
@@ -200,7 +198,7 @@ const ContactForm = (props: ContactFormProps) => {
           rel="noopener noreferrer"
           className="whitespace-nowrap rounded-md bg-sky-100 px-4 py-1.5 text-sm font-semibold text-black focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-500"
         >
-          Schedule a call
+          {t("form.scheduleCall")}
         </Link>
         <button
           type="submit"
@@ -211,7 +209,7 @@ const ContactForm = (props: ContactFormProps) => {
           )}
           {contactTag === "mfs"
             ? showCoupon
-              ? "Get Started"
+              ? t("actions.getStarted")
               : buttonText
             : buttonText}
         </button>

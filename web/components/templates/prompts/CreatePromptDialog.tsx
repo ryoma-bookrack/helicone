@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { ProFeatureWrapper } from "@/components/shared/ProBlockerComponents/ProFeatureWrapper";
 import React, { useCallback, useRef, useState } from "react";
 import {
@@ -22,6 +23,9 @@ const CreatePromptDialog: React.FC<CreatePromptDialogProps> = ({
   hasAccess,
   onCreatePrompt,
 }) => {
+  const { t } = useTranslation("prompts");
+  const { t: tCommon } = useTranslation("common");
+
   const [imNotTechnical, setImNotTechnical] = useState<boolean>(false);
   const [newPromptName, setNewPromptName] = useState<string>("");
   const [newPromptModel, setNewPromptModel] = useState(MODEL_LIST[0].value);
@@ -39,21 +43,19 @@ const CreatePromptDialog: React.FC<CreatePromptDialogProps> = ({
     <Dialog>
       <DialogTrigger asChild className="w-min">
         <ProFeatureWrapper featureName="Prompts" enabled={hasAccess}>
-          <Button variant={"default"} size={"sm"}>
-            Create new prompt
-          </Button>
+          <Button variant={"default"} size={"sm"}>{t("ui.createNewPrompt")}</Button>
         </ProFeatureWrapper>
       </DialogTrigger>
       <DialogContent className="w-[900px]">
         <DialogHeader className="flex flex-row items-center justify-between">
-          <DialogTitle>Create a new prompt</DialogTitle>
+          <DialogTitle>{t("ui.createANewPrompt")}</DialogTitle>
           <div className="flex items-center space-x-2">
             <Switch
               id="im-not-technical"
               checked={imNotTechnical}
               onCheckedChange={setImNotTechnical}
             />
-            <Label htmlFor="im-not-technical">I&apos;m not technical</Label>
+            <Label htmlFor="im-not-technical">{t("ui.imNotTechnical")}</Label>
           </div>
         </DialogHeader>
         <div className="flex h-[570px] flex-col justify-between space-y-4">
@@ -61,7 +63,7 @@ const CreatePromptDialog: React.FC<CreatePromptDialogProps> = ({
             <>{/* ... (rest of the non-technical UI) ... */}</>
           ) : (
             <>
-              <p className="mb-2 text-gray-500">TS/JS Quick Start</p>
+              <p className="mb-2 text-gray-500">{t("ui.tsJsQuickStart")}</p>
               <DiffHighlight
                 code={`
 // 1. Add this line

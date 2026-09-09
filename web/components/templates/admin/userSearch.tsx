@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { useRouter } from "next/router";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { Search, Loader2, ChevronDown, ChevronUp, Copy } from "lucide-react";
@@ -9,6 +10,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { H1, Muted, P, Small } from "@/components/ui/typography";
 import useNotification from "@/components/shared/notification/useNotification";
+import { formatStandardDateTime } from "@/lib/i18n/format";
 
 type UserSearchResult = {
   id: string;
@@ -28,18 +30,23 @@ type UserSearchResponse = {
 
 const LIMIT = 50;
 
-const formatDateTime = (value: string | null) => {
+const formatDateTime = (
+  value: string | null,
+  neverLabel: string,
+  unknownLabel: string,
+) => {
   if (!value) {
-    return "Never";
+    return neverLabel;
   }
   const date = new Date(value);
   if (Number.isNaN(date.getTime())) {
-    return "Unknown";
+    return unknownLabel;
   }
-  return date.toLocaleString();
+  return formatStandardDateTime(date);
 };
 
 const UserSearch = () => {
+  const { t } = useTranslation("admin");
   const router = useRouter();
   const [searchQuery, setSearchQuery] = useState("");
   const [expandedUserId, setExpandedUserId] = useState<string | null>(null);
@@ -155,7 +162,7 @@ const UserSearch = () => {
   return (
     <div className="flex flex-col gap-6">
       <div className="flex flex-col gap-2">
-        <H1>User Search</H1>
+        <H1>{t("userSearch.title")}</H1>
         <P className="text-sm text-muted-foreground">
           Find users by email or user ID. Click a row to view organization
           membership details.
@@ -168,9 +175,9 @@ const UserSearch = () => {
           <Input
             value={searchQuery}
             onChange={(event) => setSearchQuery(event.target.value)}
-            placeholder="Search by email or user ID"
+            placeholder={t("userSearch.searchPlaceholder")}
             className="pl-10"
-            aria-label="Search users by email"
+            aria-label={t("userSearch.searchAriaLabel")}
           />
         </div>
         <Muted className="text-xs">
@@ -220,12 +227,12 @@ const UserSearch = () => {
               <table className="min-w-full divide-y divide-border">
                 <thead className="bg-muted/40">
                   <tr className="text-left text-xs uppercase text-muted-foreground">
-                    <th className="px-4 py-3 font-medium">Email</th>
-                    <th className="px-4 py-3 font-medium">Name</th>
-                    <th className="px-4 py-3 font-medium">Total Orgs</th>
-                    <th className="px-4 py-3 font-medium">Owner Roles</th>
+                    <th className="px-4 py-3 font-medium">{t("common.email")}</th>
+                    <th className="px-4 py-3 font-medium">{t("common.name")}</th>
+                    <th className="px-4 py-3 font-medium">{t("userSearch.totalOrgs")}</th>
+                    <th className="px-4 py-3 font-medium">{t("userSearch.ownerRoles")}</th>
                     <th className="px-4 py-3 font-medium">Created</th>
-                    <th className="px-4 py-3 font-medium">Last Sign In</th>
+                    <th className="px-4 py-3 font-medium">{t("userSearch.lastSignIn")}</th>
                     <th className="px-4 py-3 text-right font-medium">
                       Details
                     </th>
@@ -258,7 +265,7 @@ const UserSearch = () => {
                                 className="h-6 w-6"
                                 onClick={(event) => {
                                   event.stopPropagation();
-                                  handleCopy(user.email, "Email copied");
+                                  handleCopy(user.email, t("common.emailCopied"));
                                 }}
                               >
                                 <Copy className="h-3 w-3" />
@@ -281,10 +288,18 @@ const UserSearch = () => {
                           <td className="px-4 py-3">{organizationCount}</td>
                           <td className="px-4 py-3">{ownerCount}</td>
                           <td className="px-4 py-3">
-                            {formatDateTime(user.created_at)}
+                            {formatDateTime(
+                              user.created_at,
+                              t("common.never"),
+                              t("common.unknown"),
+                            )}
                           </td>
                           <td className="px-4 py-3">
-                            {formatDateTime(user.last_sign_in_at)}
+                            {formatDateTime(
+                              user.last_sign_in_at,
+                              t("common.never"),
+                              t("common.unknown"),
+                            )}
                           </td>
                           <td className="px-4 py-3 text-right">
                             <Button
@@ -333,7 +348,7 @@ const UserSearch = () => {
                                         variant="secondary"
                                         onClick={(event) => {
                                           event.stopPropagation();
-                                          handleCopy(user.id, "User ID copied");
+                                          handleCopy(user.id, t("common.userIdCopied"));
                                         }}
                                       >
                                         Copy
@@ -373,7 +388,7 @@ const UserSearch = () => {
                                           >
                                             <div className="flex flex-col">
                                               <span className="truncate">
-                                                {org.name || "Unnamed org"}
+                                                {org.name || t("common.unnamedOrg")}
                                               </span>
                                               <span className="text-[11px] uppercase text-muted-foreground">
                                                 Role: {org.role || "member"}

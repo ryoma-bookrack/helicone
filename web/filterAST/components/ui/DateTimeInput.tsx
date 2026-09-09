@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
+import { useTranslation } from "react-i18next";
 
 interface DateTimeInputProps {
   value: string;
@@ -24,6 +25,8 @@ const DateTimeInput: React.FC<DateTimeInputProps> = ({
   disabled = false,
   className = "",
 }) => {
+  const { t } = useTranslation("filters");
+  const { t: tc } = useTranslation("common");
   const [open, setOpen] = useState(false);
   const [date, setDate] = useState<Date | undefined>(
     value ? parseISO(value) : undefined,
@@ -94,7 +97,7 @@ const DateTimeInput: React.FC<DateTimeInputProps> = ({
           <div className="flex w-full items-center justify-between">
             <div className="flex items-center">
               <CalendarIcon className="mr-2 h-3 w-3" />
-              {formattedDate || "Select date & time"}
+              {formattedDate || t("selectDateTime")}
             </div>
             {date && (
               <Button
@@ -107,7 +110,7 @@ const DateTimeInput: React.FC<DateTimeInputProps> = ({
                   onValueChange("");
                 }}
               >
-                <span className="sr-only">Clear</span>
+                <span className="sr-only">{tc("actions.clear")}</span>
                 <span className="text-[10px]">✕</span>
               </Button>
             )}

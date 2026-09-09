@@ -14,8 +14,9 @@ import {
   MessageSquare,
   UserPlus,
 } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import Link from "next/link";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import {
   OnboardingState,
   useOrgOnboarding,
@@ -35,6 +36,7 @@ import HelixIntegrationDialog from "./HelixIntegrationDialog";
 import IntegrationGuide from "./integrationGuide";
 
 const QuickstartPage = () => {
+  const { t } = useTranslation("onboarding");
   const org = useOrg();
   const { setNotification } = useNotification();
   const { addKey } = useKeys();
@@ -68,10 +70,10 @@ const QuickstartPage = () => {
       setIsHelixDialogOpen(true);
       return {
         success: true,
-        message: "Successfully opened the integration guide dialog",
+        message: t("quickstart.integrationGuideOpened"),
       };
     });
-  }, [setToolHandler]);
+  }, [setToolHandler, t]);
 
   const handleCreateKey = useCallback(async () => {
     try {
@@ -119,34 +121,37 @@ const QuickstartPage = () => {
         currentStep: "REQUEST",
       } as OnboardingState);
       org?.refetchOrgs();
-      setNotification("Quickstart completed", "success");
+      setNotification(t("quickstart.completed"), "success");
     } catch (error) {
       console.error("Failed to finish quickstart:", error);
-      setNotification("Failed to finish quickstart", "error");
+      setNotification(t("quickstart.failedToFinish"), "error");
     } finally {
       setIsSkipping(false);
     }
   };
 
-  const steps = [
-    {
-      title: "Create Helicone API key",
-      description: "Create key",
-      link: "/settings/api-keys",
-    },
-    {
-      title: "Integrate",
-      description: "",
-      link: "",
-    },
-  ];
+  const steps = useMemo(
+    () => [
+      {
+        title: t("quickstart.steps.createKey.title"),
+        description: t("quickstart.steps.createKey.description"),
+        link: "/settings/api-keys",
+      },
+      {
+        title: t("quickstart.steps.integrate.title"),
+        description: t("quickstart.steps.integrate.description"),
+        link: "",
+      },
+    ],
+    [t],
+  );
 
   return (
     <div className="flex min-h-screen flex-col gap-8 p-6">
       <div className="mx-auto mt-4 w-full max-w-4xl items-start">
-        <H2>Quickstart</H2>
+        <H2>{t("quickstart.title")}</H2>
         <P className="mt-2 text-sm text-muted-foreground">
-          Get started with Helicone in 2 simple steps
+          {t("quickstart.subtitle")}
         </P>
       </div>
 
@@ -179,7 +184,7 @@ const QuickstartPage = () => {
                           size="sm"
                           onClick={() => {
                             navigator.clipboard.writeText(quickstartKey);
-                            setNotification("Copied to clipboard", "success");
+                            setNotification(t("quickstart.copiedToClipboard"), "success");
                           }}
                           className="h-auto p-1"
                         >
@@ -194,7 +199,9 @@ const QuickstartPage = () => {
                       className="w-fit"
                       variant="outline"
                     >
-                      {addKey.isPending ? "Creating..." : "Create API Key"}
+                      {addKey.isPending
+                        ? t("quickstart.creating")
+                        : t("quickstart.createApiKey")}
                     </Button>
                   )}
                 </div>
@@ -221,8 +228,8 @@ const QuickstartPage = () => {
                             className={`text-sm ${org?.currentOrg?.has_integrated ? "text-confirmative" : "text-muted-foreground"}`}
                           >
                             {org?.currentOrg?.has_integrated
-                              ? "Requests detected!"
-                              : "Waiting for requests via Jawn proxy..."}
+                              ? t("quickstart.requestsDetected")
+                              : t("quickstart.waitingForRequests")}
                           </span>
                         </div>
                         {!org?.currentOrg?.has_integrated ? (
@@ -235,14 +242,15 @@ const QuickstartPage = () => {
                             }}
                             disabled={isSkipping}
                           >
-                            {isSkipping ? "Saving..." : "Finish Quickstart"}
+                            {isSkipping
+                              ? t("quickstart.saving")
+                              : t("quickstart.finishQuickstart")}
                           </Button>
                         ) : null}
                       </div>
                       {!org?.currentOrg?.has_integrated ? (
                         <p className="mt-2 text-xs text-muted-foreground">
-                          Send traffic through your local Jawn proxy, or finish
-                          here and continue.
+                          {t("quickstart.proxyHint")}
                         </p>
                       ) : null}
                     </div>
@@ -252,7 +260,7 @@ const QuickstartPage = () => {
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
                         <Button variant="link" className="group w-fit p-0">
-                          Need some help?
+                          {t("quickstart.needHelp")}
                           <ChevronDown
                             size={16}
                             className="ml-2 transition-transform group-data-[state=open]:rotate-180"
@@ -266,7 +274,7 @@ const QuickstartPage = () => {
                             className="flex w-full items-center"
                           >
                             <Bot size={16} className="mr-2" />
-                            Ask Helix
+                            {t("quickstart.askHelix")}
                           </button>
                         </DropdownMenuItem>
                         <DropdownMenuItem asChild>
@@ -276,7 +284,7 @@ const QuickstartPage = () => {
                             className="flex items-center"
                           >
                             <BookOpen size={16} className="mr-2" />
-                            Documentation
+                            {t("quickstart.documentation")}
                           </Link>
                         </DropdownMenuItem>
                         <DropdownMenuItem asChild>
@@ -286,7 +294,7 @@ const QuickstartPage = () => {
                             className="flex items-center"
                           >
                             <MessageSquare size={16} className="mr-2" />
-                            Ask us on Discord
+                            {t("quickstart.askOnDiscord")}
                           </Link>
                         </DropdownMenuItem>
                       </DropdownMenuContent>
@@ -300,9 +308,9 @@ const QuickstartPage = () => {
 
         {hasKeys && (
           <div className="mt-8 flex flex-col gap-4">
-            <H3>Next Steps</H3>
+            <H3>{t("quickstart.nextSteps")}</H3>
             <P className="text-sm text-muted-foreground">
-              Explore popular features to get the most out of Helicone
+              {t("quickstart.nextStepsDescription")}
             </P>
 
             <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
@@ -319,9 +327,11 @@ const QuickstartPage = () => {
                       />
                     </div>
                     <div>
-                      <h4 className="font-semibold">View Dashboard</h4>
+                      <h4 className="font-semibold">
+                        {t("quickstart.viewDashboard.title")}
+                      </h4>
                       <p className="mt-1 text-sm text-muted-foreground">
-                        See your request analytics and usage metrics
+                        {t("quickstart.viewDashboard.description")}
                       </p>
                     </div>
                   </div>
@@ -341,9 +351,11 @@ const QuickstartPage = () => {
                       />
                     </div>
                     <div>
-                      <h4 className="font-semibold">Setup Sessions</h4>
+                      <h4 className="font-semibold">
+                        {t("quickstart.setupSessions.title")}
+                      </h4>
                       <p className="mt-1 text-sm text-muted-foreground">
-                        Track user conversations and interactions
+                        {t("quickstart.setupSessions.description")}
                       </p>
                     </div>
                   </div>
@@ -363,9 +375,11 @@ const QuickstartPage = () => {
                       />
                     </div>
                     <div>
-                      <h4 className="font-semibold">Invite Members</h4>
+                      <h4 className="font-semibold">
+                        {t("quickstart.inviteMembers.title")}
+                      </h4>
                       <p className="mt-1 text-sm text-muted-foreground">
-                        Collaborate with your team members
+                        {t("quickstart.inviteMembers.description")}
                       </p>
                     </div>
                   </div>

@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { useExperimentScores } from "@/services/hooks/prompts/experiment-scores";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect } from "react";
@@ -11,6 +12,9 @@ const ScoresGraphContainer = ({
   promptVersions: PromptVersion[];
   experimentId: string;
 }) => {
+  const { t } = useTranslation("prompts");
+  const { t: tCommon } = useTranslation("common");
+
   const { fetchExperimentHypothesisScores } = useExperimentScores(experimentId);
   const queryClient = useQueryClient();
 
@@ -60,7 +64,7 @@ const ScoresGraphContainer = ({
   }, [scores, experimentId, queryClient]);
 
   if (isLoading) {
-    return <div>Loading...</div>; // Or your loading component
+    return <div>{tCommon("actions.loading")}</div>; // Or your loading component
   }
 
   return (

@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import { useTranslation } from "react-i18next";
 import { FormEvent, useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { Button } from "@/components/ui/button";
@@ -21,6 +22,7 @@ const AuthForm = ({
   authFormType,
   customerPortalContent,
 }: AuthFormProps) => {
+  const { t } = useTranslation("auth");
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [email, setEmail] = useState("");
@@ -60,7 +62,7 @@ const AuthForm = ({
           <Link href="/signin" className="flex">
             <Image
               src="/static/logo.svg"
-              alt="Helicone"
+              alt={t("form.logoAlt")}
               height={80}
               width={80}
               priority
@@ -71,27 +73,27 @@ const AuthForm = ({
         <div className="mb-8">
           <h2 className="text-2xl font-semibold text-gray-900">
             {authFormType === "signin"
-              ? "Sign in to your account"
+              ? t("form.signInTitle")
               : authFormType === "signup"
-                ? "Create an account"
-                : "Reset your password"}
+                ? t("form.signUpTitle")
+                : t("form.resetTitle")}
           </h2>
           {authFormType === "signup" ? (
             <p className="mt-2 text-sm text-gray-600">
-              Already have an account?{" "}
+              {t("form.alreadyHaveAccount")}{" "}
               <Link href="/signin" className="text-sky-500 hover:text-sky-700">
-                Sign in here.
+                {t("form.signInLink")}
               </Link>
             </p>
           ) : null}
           {authFormType === "signin" ? (
             <p className="mt-2 text-sm text-gray-600">
-              Don&apos;t have an account?{" "}
+              {t("form.dontHaveAccount")}{" "}
               <Link
                 href="/secret-signup"
                 className="text-sky-500 hover:text-sky-700"
               >
-                Create account
+                {t("form.createAccount")}
               </Link>
             </p>
           ) : null}
@@ -109,7 +111,7 @@ const AuthForm = ({
                 htmlFor="email"
                 className="block text-sm font-medium text-gray-700"
               >
-                Email
+                {t("form.email")}
               </label>
               <Input
                 id="email"
@@ -117,7 +119,7 @@ const AuthForm = ({
                 type="email"
                 autoComplete="email"
                 required
-                placeholder="jane@acme.com"
+                placeholder={t("form.emailPlaceholder")}
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 className="w-full"
@@ -131,14 +133,14 @@ const AuthForm = ({
                 htmlFor="password"
                 className="block text-sm font-medium text-gray-700"
               >
-                Password
+                {t("form.password")}
               </label>
               <Input
                 id="password"
                 name="password"
                 type="password"
                 autoComplete="current-password"
-                placeholder="***********"
+                placeholder={t("form.passwordPlaceholder")}
                 required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
@@ -153,7 +155,7 @@ const AuthForm = ({
                 href="/reset"
                 className="text-sm text-sky-500 hover:text-sky-700"
               >
-                Forgot your password?
+                {t("form.forgotPassword")}
               </Link>
             </div>
           )}
@@ -164,18 +166,18 @@ const AuthForm = ({
             className="w-full bg-sky-500 py-2 text-white"
           >
             {authFormType === "signin"
-              ? "Sign in with email"
+              ? t("form.signInWithEmail")
               : authFormType === "signup"
-                ? "Create account"
+                ? t("form.createAccountButton")
                 : authFormType === "reset"
-                  ? "Reset password"
-                  : "Update password"}
+                  ? t("form.resetPasswordButton")
+                  : t("form.updatePasswordButton")}
           </Button>
         </form>
 
         {customerPortalContent && (
           <div className="mt-8 text-center text-xs italic text-gray-500">
-            Powered by Helicone
+            {t("form.poweredByHelicone")}
           </div>
         )}
       </div>

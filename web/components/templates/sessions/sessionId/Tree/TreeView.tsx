@@ -1,3 +1,4 @@
+import { formatStandardDateTime } from "@/lib/i18n/format";
 import React from "react";
 import {
   ResizableHandle,
@@ -328,7 +329,7 @@ const initialColumns: ColumnDef<TableTreeNode>[] = [
                 {formatDistanceToNow(date, { addSuffix: true })}
               </span>
             </TooltipTrigger>
-            <TooltipContent>{date.toLocaleString()}</TooltipContent>
+            <TooltipContent>{formatStandardDateTime(date)}</TooltipContent>
           </Tooltip>
         </TooltipProvider>
       );

@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import {
   Select,
@@ -57,6 +58,8 @@ const PromptPlayground: React.FC<PromptPlaygroundProps> = ({
   onPromptChange,
   className = "border rounded-md",
 }) => {
+  const { t } = useTranslation("prompts");
+  const { t: tCommon } = useTranslation("common");
   const replaceTemplateVariables = (
     content: string,
     inputs: Record<string, string>,
@@ -297,19 +300,17 @@ const PromptPlayground: React.FC<PromptPlaygroundProps> = ({
           <div className="flex items-center justify-between space-x-2 rounded-b-lg border-t border-slate-300 bg-white px-8 py-4 dark:border-slate-700 dark:bg-black">
             <div className="flex w-full space-x-2">
               <Button onClick={handleAddMessage} variant="outline" size="sm">
-                <PlusIcon className="mr-2 h-4 w-4" />
-                Add Message
-              </Button>
+                <PlusIcon className="mr-2 h-4 w-4" />{t("ui.addMessage")}</Button>
             </div>
             <div className="flex w-full items-center justify-end space-x-4">
-              <div className="font-normal">Model</div>
+              <div className="font-normal">{t("ui.model")}</div>
               <Select
                 value={selectedModel}
                 onValueChange={setSelectedModel}
                 defaultValue={initialModel}
               >
                 <SelectTrigger className="w-[200px]">
-                  <SelectValue placeholder="Select a model" />
+                  <SelectValue placeholder={t("ui.selectAModel")} />
                 </SelectTrigger>
                 <SelectContent>
                   {MODEL_LIST.map((model) => (
@@ -328,9 +329,7 @@ const PromptPlayground: React.FC<PromptPlaygroundProps> = ({
                   variant="default"
                   size="sm"
                   className="px-4 font-normal"
-                >
-                  Save prompt
-                </Button>
+                >{t("ui.savePrompt")}</Button>
               )}
             </div>
           </div>

@@ -6,12 +6,14 @@ import { Label } from "@/components/ui/label";
 import { EyeIcon, EyeOffIcon, Loader2 } from "lucide-react";
 import { useOpenPipeKey } from "@/services/hooks/useOpenPipeKey";
 import { useIntegration } from "@/services/hooks/useIntegrations";
+import { useTranslation } from "react-i18next";
 
 interface OpenPipeConfigProps {
   onClose: () => void;
 }
 
 const OpenPipeConfig: React.FC<OpenPipeConfigProps> = ({ onClose }) => {
+  const { t } = useTranslation("connections");
   const [apiKey, setApiKey] = useState("");
   const [autoDatasetSync, setAutoDatasetSync] = useState(false);
   const [showApiKey, setShowApiKey] = useState(false);
@@ -63,17 +65,17 @@ const OpenPipeConfig: React.FC<OpenPipeConfigProps> = ({ onClose }) => {
           disabled={isLoading}
           className="data-[state=checked]:bg-green-500"
         />
-        <Label htmlFor="autoDatasetSync">Enable OpenPipe Integration</Label>
+        <Label htmlFor="autoDatasetSync">{t("openPipe.enable")}</Label>
       </div>
       <div className="space-y-2">
-        <Label htmlFor="openPipeKey">OpenPipe API Key</Label>
+        <Label htmlFor="openPipeKey">{t("openPipe.apiKey")}</Label>
         <div className="relative">
           <Input
             id="openPipeKey"
             type={showApiKey ? "text" : "password"}
             value={apiKey}
             onChange={(e) => setApiKey(e.target.value)}
-            placeholder="Enter your OpenPipe API key"
+            placeholder={t("openPipe.apiKeyPlaceholder")}
             disabled={isLoading}
           />
           <Button
@@ -101,16 +103,15 @@ const OpenPipeConfig: React.FC<OpenPipeConfigProps> = ({ onClose }) => {
           onCheckedChange={handleAutoDatasetSyncChange}
           disabled={true || isLoading}
         />
-        <Label htmlFor="autoDatasetSync">Enable Auto Dataset Syncing</Label>
+        <Label htmlFor="autoDatasetSync">{t("openPipe.autoSync")}</Label>
         <i className="text-xs text-muted-foreground opacity-50">
-          {" "}
-          comming soon
+          {t("openPipe.comingSoon")}
         </i>
       </div>
 
       <Button onClick={handleSave} disabled={isSaving || isLoading}>
         {isSaving ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
-        Save Configuration
+        {t("openPipe.saveConfiguration")}
       </Button>
     </div>
   );

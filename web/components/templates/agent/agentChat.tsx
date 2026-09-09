@@ -1,4 +1,6 @@
+import { formatStandardDate } from "@/lib/i18n/format";
 import { useState, useRef, useEffect, useCallback } from "react";
+import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import BouncingDotsLoader from "@/components/ui/bouncing-dots-loader";
 
@@ -28,6 +30,7 @@ interface AgentChatProps {
 }
 
 const AgentChat = ({ onClose }: AgentChatProps) => {
+  const { t } = useTranslation("agent");
   const router = useRouter();
   const [isStreaming, setIsStreaming] = useState(false);
   const [isLoading, setisLoading] = useState(false);
@@ -72,7 +75,7 @@ const AgentChat = ({ onClose }: AgentChatProps) => {
   ) => {
     const errorMsg: Message = {
       role: "assistant",
-      content: `Something went wrong: ${errorMessage}. Please try again or create a new chat.`,
+      content: t("errors.generic", { message: errorMessage }),
     };
     updatedMessages = [...updatedMessages, errorMsg];
     return updatedMessages;
@@ -170,8 +173,7 @@ const AgentChat = ({ onClose }: AgentChatProps) => {
       const toolResultMessage: Message = {
         role: "tool",
         tool_call_id: currentToolCall.id,
-        content:
-          "Timeout tool call: This conversation turn has become too long with too many tool calls.",
+        content: t("errors.timeoutToolCall"),
       };
 
       const updatedMessages = [...messages, toolResultMessage];
@@ -216,7 +218,9 @@ const AgentChat = ({ onClose }: AgentChatProps) => {
       setAgentState((prev) => ({
         ...prev,
         pendingToolCalls: [],
-        error: `Failed to execute tool: ${currentToolCall.function.name}`,
+        error: t("errors.toolExecutionFailed", {
+          toolName: currentToolCall.function.name,
+        }),
         isProcessing: false,
       }));
       isProcessingRef.current = false;
@@ -250,11 +254,7 @@ const AgentChat = ({ onClose }: AgentChatProps) => {
           inputs: {
             page: router.pathname,
             model: selectedModel.split(",")[0],
-            date: new Date().toLocaleDateString("en-US", {
-              year: "numeric",
-              month: "long",
-              day: "numeric",
-            }),
+            date: formatStandardDate(new Date()),
           },
           endpoint: "agent",
           signal: abortController.current.signal,
@@ -331,14 +331,14 @@ const AgentChat = ({ onClose }: AgentChatProps) => {
                 console.error("Failed to parse response:", error);
                 const errorMessages = addErrorMessage(
                   currentMessages,
-                  "Failed to parse response from the AI",
+                  t("errors.parseFailed"),
                 );
                 updateCurrentSessionMessages(errorMessages, true);
                 setAgentState((prev) => ({
                   ...prev,
                   isProcessing: false,
                   pendingToolCalls: [],
-                  error: "Failed to parse response",
+                  error: t("errors.parseError"),
                 }));
               }
             },
@@ -349,14 +349,14 @@ const AgentChat = ({ onClose }: AgentChatProps) => {
         console.error("Chat error:", error);
         const errorMessages = addErrorMessage(
           currentMessages,
-          "An error occurred while processing your message",
+          t("errors.processingFailed"),
         );
         updateCurrentSessionMessages(errorMessages, true);
         setAgentState((prev) => ({
           ...prev,
           isProcessing: false,
           pendingToolCalls: [],
-          error: "Chat error occurred",
+          error: t("errors.chatError"),
         }));
       } finally {
         setIsStreaming(false);
@@ -481,10 +481,10 @@ const AgentChat = ({ onClose }: AgentChatProps) => {
       <div className="flex w-full items-center justify-between border-b border-border px-3 py-3">
         <div className="flex items-center gap-3">
           <span className="text-sm font-medium text-foreground">
-            Agent Chat
+            {t("title")}
           </span>
           <span className="inline-flex items-center rounded-md bg-orange-100 px-2 py-1 text-xs font-medium text-orange-800 dark:bg-orange-900/20 dark:text-orange-300">
-            Beta
+            {t("beta")}
           </span>
         </div>
         <div className="flex items-center gap-2">
@@ -518,15 +518,14 @@ const AgentChat = ({ onClose }: AgentChatProps) => {
             <div className="flex-1">
               <div className="flex items-center gap-2">
                 <span className="text-sm font-semibold text-green-800 dark:text-green-200">
-                  Human support connected
+                  {t("escalation.connected")}
                 </span>
                 <span className="rounded-full bg-green-500 px-2 py-0.5 text-xs font-medium text-white">
-                  Live
+                  {t("escalation.live")}
                 </span>
               </div>
               <p className="mt-0.5 text-xs text-green-700 dark:text-green-300">
-                Connected to our support team. They&apos;ll respond here
-                shortly.
+                {t("escalation.connectedDescription")}
               </p>
             </div>
           </div>
@@ -546,11 +545,11 @@ const AgentChat = ({ onClose }: AgentChatProps) => {
             <div className="flex-1">
               <div className="flex items-center gap-2">
                 <span className="text-sm font-semibold text-slate-800 dark:text-slate-200">
-                  Support ticket resolved
+                  {t("escalation.resolved")}
                 </span>
               </div>
               <p className="mt-0.5 text-xs text-slate-600 dark:text-slate-400">
-                This conversation has been marked as resolved by our team.
+                {t("escalation.resolvedDescription")}
               </p>
             </div>
             <Button
@@ -568,7 +567,7 @@ const AgentChat = ({ onClose }: AgentChatProps) => {
               className="flex items-center gap-1"
             >
               <RotateCcw size={14} />
-              {reopening ? "Reopening..." : "Reopen"}
+              {reopening ? t("escalation.reopening") : t("escalation.reopen")}
             </Button>
           </div>
         </div>
@@ -576,7 +575,7 @@ const AgentChat = ({ onClose }: AgentChatProps) => {
       <div className="flex-1 space-y-2 overflow-y-auto px-3 py-1">
         {messages.length === 0 && (
           <div className="text-center text-sm text-muted-foreground">
-            Start a conversation with Helix, our AI agent.
+            {t("emptyState")}
           </div>
         )}
 
@@ -599,8 +598,9 @@ const AgentChat = ({ onClose }: AgentChatProps) => {
 
         {agentState.pendingToolCalls.length > 0 && (
           <div className="text-xs text-muted-foreground">
-            Executing {agentState.pendingToolCalls.length} tool
-            {agentState.pendingToolCalls.length > 1 ? "s" : ""}...
+            {t("executingTools", {
+              count: agentState.pendingToolCalls.length,
+            })}
           </div>
         )}
 
@@ -627,8 +627,7 @@ const AgentChat = ({ onClose }: AgentChatProps) => {
             console.error("Failed to escalate:", error);
             const errorMessage: Message = {
               role: "assistant",
-              content:
-                "❌ Sorry, I couldn't connect you to support right now. Please try again or email support@helicone.ai",
+              content: t("escalation.escalateFailed"),
             };
             updateCurrentSessionMessages([...messages, errorMessage], true);
           } finally {

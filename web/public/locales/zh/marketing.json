@@ -1,0 +1,146 @@
+{
+  "nav": {
+    "srOnly": "Helicone",
+    "logoAlt": "Helicone - 面向开发者的开源 LLM 可观测性与监控平台",
+    "solutions": "解决方案",
+    "useCases": "使用场景",
+    "new": "新",
+    "docs": "文档",
+    "pricing": "定价",
+    "blog": "博客",
+    "contact": "联系我们",
+    "documentation": "文档",
+    "github": "Github",
+    "dashboard": "控制台",
+    "signIn": "登录",
+    "signUpFree": "免费注册",
+    "openMainMenu": "打开主菜单",
+    "closeMainMenu": "关闭菜单",
+    "checkoutBlog": "查看我们的博客",
+    "checkoutBlogDescription": "了解更多我们的技术能做什么",
+    "solutionsItems": {
+      "customerPortal": {
+        "name": "客户门户",
+        "description": "与客户共享 Helicone 使用情况"
+      },
+      "fineTuning": {
+        "name": "微调",
+        "description": "降低成本并提升质量"
+      },
+      "dataSegmentation": {
+        "name": "数据分段",
+        "description": "深入了解成本与用户行为。"
+      },
+      "debugging": {
+        "name": "调试",
+        "description": "快速定位并修复错误。"
+      },
+      "dataEtl": {
+        "name": "数据 ETL 与提取",
+        "description": "将 Helicone 变成数据仓库。"
+      },
+      "internalAuditing": {
+        "name": "内部审计",
+        "description": "确保合规与安全。"
+      },
+      "githubActions": {
+        "name": "Github Actions",
+        "description": "自动化并缓存 CI 流水线。"
+      }
+    }
+  },
+  "meta": {
+    "defaultTitle": "Helicone - 面向开发者的开源生成式 AI 平台",
+    "siteName": "Helicone",
+    "siteDescription": "面向 LLM 开发者的可观测性平台",
+    "customerSupport": "客户支持",
+    "notFoundDescription": "开发者如何构建 AI 应用。开箱即用的可观测性、工具链、微调与评估能力。",
+    "authDefaultDescription": "监控语言模型的使用与成本不应成为负担。使用 Helicone，你可以专注构建产品，而不是自建和维护分析系统。"
+  },
+  "faqs": {
+    "latency": {
+      "question": "使用 Helicone 代理会对请求延迟产生影响吗？",
+      "answer": "Helicone 利用 Cloudflare 全球服务器网络作为代理，高效路由 Web 流量。Cloudflare Workers 通过全球分布保持极低延迟，为 LLM 请求提供快速可靠的代理，延迟影响低于一毫秒。"
+    },
+    "selfHosted": {
+      "question": "你们提供自托管或托管部署方案吗？",
+      "answer": "我们推荐使用云服务，但也为企业客户提供专属托管部署方案。请联系 sales@helicone.ai 了解更多信息。"
+    },
+    "withoutProxy": {
+      "question": "我不想使用代理，还能用 Helicone 吗？",
+      "answer": "可以。即使不使用代理，你仍可使用 Helicone。我们提供 Python 和 Node.js 包来向 Helicone 发送数据。请访问文档页面了解更多。"
+    }
+  },
+  "notFound": {
+    "title": "404 错误",
+    "description": "你访问的页面不存在。存在究竟意味着什么？是页面的物理存在，还是页面的概念？谁知道呢？但我们知道的是，这个页面不存在——请点击下方按钮返回首页。",
+    "goHome": "返回首页",
+    "uselessWeb": "The Useless Web"
+  },
+  "stats": {
+    "metaTitle": "首页",
+    "activeOrgsMonth": "活跃组织/月",
+    "activeOrgsWeek": "活跃组织/周",
+    "activeOrgsDay": "活跃组织/日",
+    "totalUsers": "总用户数",
+    "userGrowthMonth": "用户增长/月",
+    "userGrowthWeek": "用户增长/周",
+    "userGrowthDay": "用户增长/日",
+    "requestsWeekOverWeek": "请求量周环比",
+    "requestsDayByDay": "请求量日环比",
+    "monthlyRetentionRate": "月留存率（至少活跃 1 天）",
+    "weeklyRetentionRate": "周留存率（活跃超过 1 天）"
+  },
+  "fineTuning": {
+    "metaTitle": "联系我们",
+    "badge": "Beta：",
+    "title": "微调",
+    "subtitle": "通过我们的微调服务降低成本并提升应用性能。",
+    "bullets": {
+      "evaluations": "评估",
+      "abTesting": "A/B 测试",
+      "automatedFineTuning": "自动化微调",
+      "datasetCollection": "数据集收集",
+      "jsonlExports": "JSONL 导出",
+      "costComparisons": "成本对比",
+      "performanceMeasurements": "性能测量",
+      "driftAnalysis": "漂移分析"
+    },
+    "chatWithFounders": "想和创始人聊聊？",
+    "contactUs": "联系我们",
+    "formButton": "联系我们",
+    "formPlaceholder": "我对 Helicone 的微调功能感兴趣！"
+  },
+  "customerPortal": {
+    "metaTitle": "联系我们",
+    "badge": "发布：",
+    "title": "客户门户",
+    "subtitle": "轻松与客户共享 Helicone 控制台与分析数据。每月仅需 $799。",
+    "bullets": {
+      "billingUsageApis": "账单 / 用量 API",
+      "whiteLabeling": "白标",
+      "embeddableDashboards": "可嵌入控制台",
+      "alerts": "告警",
+      "customerRateLimiting": "客户限流",
+      "customerFacingApiTokens": "面向客户的 API 令牌",
+      "customDomains": "自定义域名",
+      "customProxyEndpoint": "自定义代理端点"
+    },
+    "chatWithFounders": "想和创始人聊聊？",
+    "contactUs": "联系我们",
+    "formButton": "联系我们",
+    "formPlaceholder": "我对 Helicone 的客户门户功能感兴趣！",
+    "screenshotAlt": "应用截图"
+  },
+  "redirects": {
+    "blog": "正在跳转到博客...",
+    "career": "正在跳转到招聘页面...",
+    "webinar": "正在跳转到网络研讨会..."
+  },
+  "footer": {
+    "copyright": "© 2025 Helicone, Inc. 保留所有权利。",
+    "privacyPolicy": "隐私政策",
+    "termsOfUse": "使用条款",
+    "workWithUs": "加入我们"
+  }
+}

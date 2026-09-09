@@ -22,15 +22,16 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { Trans, useTranslation } from "react-i18next";
+import { useLocaleFormat } from "@/hooks/useLocaleFormat";
 
 const RateLimitPage = () => {
+  const { t } = useTranslation("settings");
+  const { formatDate } = useLocaleFormat();
   const [currentMonth, setCurrentMonth] = useState(startOfMonth(new Date()));
   const timeIncrement = "day";
 
   const startOfMonthFormatted = formatISO(currentMonth, {
-    representation: "date",
-  });
-  const endOfMonthFormatted = formatISO(endOfMonth(currentMonth), {
     representation: "date",
   });
 
@@ -56,11 +57,6 @@ const RateLimitPage = () => {
     setCurrentMonth((prevMonth) => startOfMonth(subMonths(prevMonth, 1)));
   };
 
-  const getMonthName = (dateString: string) => {
-    const date = new Date(dateString);
-    return date.toLocaleString("default", { month: "long" });
-  };
-
   const isNextMonthDisabled = isAfter(addMonths(currentMonth, 1), new Date());
   const { setNotification } = useNotification();
 
@@ -73,7 +69,7 @@ const RateLimitPage = () => {
               <ChevronLeft className="h-4 w-4" />
             </Button>
             <CardTitle className="text-3xl font-bold">
-              {getMonthName(startOfMonthFormatted)}
+              {formatDate(currentMonth, { month: "long" })}
             </CardTitle>
             {!isNextMonthDisabled && (
               <Button variant="outline" size="icon" onClick={nextMonth}>
@@ -83,24 +79,19 @@ const RateLimitPage = () => {
           </div>
         </CardHeader>
         <CardContent className="space-y-4">
-          <p className="font-semibold">
-            Your requests are never dropped and will always be returned to the
-            client. Helicone will always do its best effort to make sure the
-            user gets their request.
-          </p>
+          <p className="font-semibold">{t("rateLimits.neverDropped")}</p>
           <p className="text-muted-foreground">
-            Below is a summary of the rate-limiting{" "}
-            <span className="font-semibold">logged</span> occurrences for your
-            organization last month. This simply indicates that some of your
-            requests were processed but not logged in your dashboard due to
-            reaching a rate limit - If you&apos;d like to increase your rate
-            limit, please feel free to reach out to us at{" "}
+            <Trans
+              i18nKey="rateLimits.summary"
+              ns="settings"
+              components={{ strong: <span className="font-semibold" /> }}
+            />{" "}
             <Button
               variant="link"
               className="h-auto p-0"
               onClick={() => {
                 navigator.clipboard.writeText("sales@helicone.ai");
-                setNotification("Email copied to clipboard", "success");
+                setNotification(t("rateLimits.emailCopied"), "success");
               }}
             >
               sales@helicone.ai
@@ -113,7 +104,7 @@ const RateLimitPage = () => {
       {!isLoading && metrics.totalRateLimits.data && (
         <Card>
           <CardHeader>
-            <CardTitle>Rate-Limits this month</CardTitle>
+            <CardTitle>{t("rateLimits.chartTitle")}</CardTitle>
           </CardHeader>
           <CardContent>
             <BarChart
@@ -121,11 +112,11 @@ const RateLimitPage = () => {
               data={
                 overTimeData.rateLimits.data?.data?.map((r) => ({
                   date: getTimeMap(timeIncrement)(r.time),
-                  "rate-limits": r.count,
+                  [t("rateLimits.chartCategory")]: r.count,
                 })) ?? []
               }
               index="date"
-              categories={["rate-limits"]}
+              categories={[t("rateLimits.chartCategory")]}
               colors={["cyan"]}
               showYAxis={false}
             />
@@ -135,28 +126,28 @@ const RateLimitPage = () => {
 
       <Card>
         <CardHeader>
-          <CardTitle>Rate Limit Tiers</CardTitle>
+          <CardTitle>{t("rateLimits.tiersTitle")}</CardTitle>
         </CardHeader>
         <CardContent>
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>Tier</TableHead>
-                <TableHead>Rate limits</TableHead>
+                <TableHead>{t("rateLimits.tierColumn")}</TableHead>
+                <TableHead>{t("rateLimits.rateLimitsColumn")}</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               <TableRow>
-                <TableCell>Free</TableCell>
-                <TableCell>834 logs / 5 seconds</TableCell>
+                <TableCell>{t("rateLimits.freeTier")}</TableCell>
+                <TableCell>{t("rateLimits.freeLimit")}</TableCell>
               </TableRow>
               <TableRow>
-                <TableCell>Pro</TableCell>
-                <TableCell>8334 logs / 5 seconds</TableCell>
+                <TableCell>{t("rateLimits.proTier")}</TableCell>
+                <TableCell>{t("rateLimits.proLimit")}</TableCell>
               </TableRow>
               <TableRow>
-                <TableCell>Enterprise</TableCell>
-                <TableCell>Custom</TableCell>
+                <TableCell>{t("rateLimits.enterpriseTier")}</TableCell>
+                <TableCell>{t("rateLimits.enterpriseLimit")}</TableCell>
               </TableRow>
             </TableBody>
           </Table>

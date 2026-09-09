@@ -1,4 +1,5 @@
 import { useCallback } from "react";
+import { useTranslation } from "react-i18next";
 import {
   BarChart,
   Ticket,
@@ -29,54 +30,58 @@ import {
 } from "@/components/ui/sidebar";
 import { Button } from "@/components/ui/button";
 
-const navigation = [
-  {
-    group: "Analytics",
-    items: [
-      { name: "HQL", href: "/admin/hql", icon: Zap },
-      { name: "Org Search", href: "/admin/org-search", icon: Users },
-      { name: "User Search", href: "/admin/user-search", icon: User },
-      { name: "Top Orgs", href: "/admin/top-orgs", icon: BarChart },
-      { name: "Metrics", href: "/admin/metrics", icon: BarChart },
-    ],
-  },
-  {
-    group: "Configuration",
-    items: [
-      { name: "Banners", href: "/admin/banners", icon: Bell },
-      { name: "Backfill", href: "/admin/backfill", icon: Database },
-      { name: "Admin Settings", href: "/admin/settings", icon: Settings },
-      { name: "On Prem", href: "/admin/on-prem", icon: Ticket },
-    ],
-  },
-  {
-    group: "Business",
-    items: [
-      { name: "Wallet", href: "/admin/wallet", icon: Wallet },
-      {
-        name: "Stripe Projections",
-        href: "/admin/projections",
-        icon: BarChart,
-      },
-      { name: "Governance", href: "/admin/governance-orgs", icon: Users },
-      {
-        name: "Helix Threads",
-        href: "/admin/helix-threads",
-        icon: MessageCircle,
-      },
-      {
-        name: "Pricing Migration",
-        href: "/admin/pricing-migration",
-        icon: ArrowRightLeft,
-      },
-    ],
-  },
-];
+const useAdminNavigation = () => {
+  const { t } = useTranslation("nav");
+  return [
+    {
+      group: t("admin.analytics"),
+      items: [
+        { name: t("admin.hql"), href: "/admin/hql", icon: Zap },
+        { name: t("admin.orgSearch"), href: "/admin/org-search", icon: Users },
+        { name: t("admin.userSearch"), href: "/admin/user-search", icon: User },
+        { name: t("admin.topOrgs"), href: "/admin/top-orgs", icon: BarChart },
+        { name: t("admin.metrics"), href: "/admin/metrics", icon: BarChart },
+      ],
+    },
+    {
+      group: t("admin.configuration"),
+      items: [
+        { name: t("admin.banners"), href: "/admin/banners", icon: Bell },
+        { name: t("admin.backfill"), href: "/admin/backfill", icon: Database },
+        { name: t("admin.adminSettings"), href: "/admin/settings", icon: Settings },
+        { name: t("admin.onPrem"), href: "/admin/on-prem", icon: Ticket },
+      ],
+    },
+    {
+      group: t("admin.business"),
+      items: [
+        { name: t("admin.wallet"), href: "/admin/wallet", icon: Wallet },
+        {
+          name: t("admin.stripeProjections"),
+          href: "/admin/projections",
+          icon: BarChart,
+        },
+        { name: t("admin.governance"), href: "/admin/governance-orgs", icon: Users },
+        {
+          name: t("admin.helixThreads"),
+          href: "/admin/helix-threads",
+          icon: MessageCircle,
+        },
+        {
+          name: t("admin.pricingMigration"),
+          href: "/admin/pricing-migration",
+          icon: ArrowRightLeft,
+        },
+      ],
+    },
+  ];
+};
 
 export function AdminSidebar() {
   const router = useRouter();
   const { pathname } = router;
   const { toggleSidebar, state } = useSidebar();
+  const navigation = useAdminNavigation();
 
   const isCurrentPage = useCallback(
     (href: string) => {

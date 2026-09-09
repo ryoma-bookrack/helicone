@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { useQuantiles } from "../../../services/hooks/quantiles";
 import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from "recharts";
 import {
@@ -35,14 +36,25 @@ export const QuantilesGraph = ({
   timeFilter,
   timeIncrement,
 }: QuantilesGraphProps) => {
-  const quantilesMetrics = new Map([
-    ["Latency", "latency"],
-    ["Prompt tokens", "prompt_tokens"],
-    ["Completion tokens", "completion_tokens"],
-    ["Total tokens", "total_tokens"],
-  ]);
+  const { t } = useTranslation("dashboard");
 
-  const [currentMetric, setCurrentMetric] = useState("Latency");
+  const quantilesMetrics = useMemo(
+    () =>
+      new Map([
+        [t("panels.latencyMetric"), "latency"],
+        [t("panels.promptTokensMetric"), "prompt_tokens"],
+        [t("panels.completionTokensMetric"), "completion_tokens"],
+        [t("panels.totalTokensMetric"), "total_tokens"],
+      ]),
+    [t],
+  );
+
+  const metricKeys = useMemo(
+    () => Array.from(quantilesMetrics.keys()),
+    [quantilesMetrics],
+  );
+
+  const [currentMetric, setCurrentMetric] = useState(metricKeys[0] ?? "");
   const org = useOrg();
   const shouldShowMockData = org?.currentOrg?.has_onboarded === false;
 
@@ -69,20 +81,24 @@ export const QuantilesGraph = ({
     quantilesData?.map((d) => d.p99).filter((d) => d !== 0) ?? [],
   );
 
+  const isLatencyMetric = currentMetric === t("panels.latencyMetric");
+
   return (
     <div className="flex h-full flex-col border-b border-r border-border bg-card p-6 text-card-foreground">
       <div className="flex w-full flex-row items-center justify-between">
         <div className="flex w-full flex-col space-y-0.5">
-          <p className="text-sm text-muted-foreground">Quantiles</p>
-          {currentMetric === "Latency" ? (
+          <p className="text-sm text-muted-foreground">{t("panels.quantiles")}</p>
+          {isLatencyMetric ? (
             <p className="text-xl font-semibold text-foreground">
-              {`Max: ${new Intl.NumberFormat("us").format(
-                maxQuantile / 1000,
-              )} s`}
+              {t("charts.maxSeconds", {
+                value: new Intl.NumberFormat("us").format(maxQuantile / 1000),
+              })}
             </p>
           ) : (
             <p className="text-xl font-semibold text-foreground">
-              {`Max: ${new Intl.NumberFormat("us").format(maxQuantile)} tokens`}
+              {t("charts.maxTokens", {
+                value: new Intl.NumberFormat("us").format(maxQuantile),
+              })}
             </p>
           )}
         </div>
@@ -90,10 +106,10 @@ export const QuantilesGraph = ({
           {(!quantilesIsLoading || shouldShowMockData) && (
             <Select value={currentMetric} onValueChange={setCurrentMetric}>
               <SelectTrigger>
-                <SelectValue placeholder="Select property" />
+                <SelectValue placeholder={t("panels.selectProperty")} />
               </SelectTrigger>
               <SelectContent>
-                {Array.from(quantilesMetrics.entries()).map(([key, value]) => (
+                {metricKeys.map((key) => (
                   <SelectItem key={key} value={key}>
                     {key}
                   </SelectItem>
@@ -113,19 +129,19 @@ export const QuantilesGraph = ({
           <ChartContainer
             config={{
               P75: {
-                label: "P75",
+                label: t("panels.p75"),
                 color: CHART_COLORS.blue,
               },
               P90: {
-                label: "P90",
+                label: t("panels.p90"),
                 color: CHART_COLORS.purple,
               },
               P95: {
-                label: "P95",
+                label: t("panels.p95"),
                 color: CHART_COLORS.cyan,
               },
               P99: {
-                label: "P99",
+                label: t("panels.p99"),
                 color: CHART_COLORS.pink,
               },
             }}
@@ -135,8 +151,7 @@ export const QuantilesGraph = ({
               data={
                 quantilesData?.map((r) => {
                   const time = new Date(r.time);
-                  // Convert to seconds if Latency, otherwise use raw values
-                  const divisor = currentMetric === "Latency" ? 1000 : 1;
+                  const divisor = isLatencyMetric ? 1000 : 1;
                   return {
                     date: getTimeMap(timeIncrement)(time),
                     P75: r.p75 / divisor,
@@ -215,9 +230,9 @@ export const QuantilesGraph = ({
                       const formatted = new Intl.NumberFormat("us").format(
                         Number(value),
                       );
-                      return currentMetric === "Latency"
-                        ? `${formatted} s`
-                        : `${formatted} tokens`;
+                      return isLatencyMetric
+                        ? t("charts.secondsUnit", { value: formatted })
+                        : t("charts.tokensUnit", { value: formatted });
                     }}
                   />
                 }

@@ -16,7 +16,9 @@ import { useTheme } from "next-themes";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useCallback, useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { clsx } from "../shared/clsx";
+import LocaleSwitcher from "../shared/LocaleSwitcher";
 import AddMemberModal from "../templates/organization/addMemberModal";
 import CreateOrgForm from "../templates/organization/createOrgForm";
 import {
@@ -34,6 +36,7 @@ export default function OrgDropdown() {
   const heliconeAuthClient = useHeliconeAuthClient();
   const { setTheme, theme } = useTheme();
   const org = useOrg();
+  const { t } = useTranslation("common");
 
   const { ownedOrgs, memberOrgs, customerOrgs } = useMemo(() => {
     const owned =
@@ -121,7 +124,7 @@ export default function OrgDropdown() {
                 className="cursor-pointer text-xs"
                 onClick={() => setAddOpen(true)}
               >
-                Invite members
+                {t("actions.inviteMembers")}
               </DropdownMenuItem>
             )}
           </DropdownMenuGroup>
@@ -133,7 +136,7 @@ export default function OrgDropdown() {
               disableClickClose
             >
               <div className="flex w-full items-center justify-between text-xs">
-                <span>Dark mode</span>
+                <span>{t("actions.darkMode")}</span>
                 <Switch
                   checked={theme === "dark"}
                   onCheckedChange={() =>
@@ -143,6 +146,13 @@ export default function OrgDropdown() {
                 />
               </div>
             </DropdownMenuItem>
+            <DropdownMenuItem
+              className={cn("cursor-default hover:bg-transparent")}
+              disableHover
+              disableClickClose
+            >
+              <LocaleSwitcher />
+            </DropdownMenuItem>
           </DropdownMenuGroup>
           <DropdownMenuSeparator />
 
@@ -150,14 +160,14 @@ export default function OrgDropdown() {
             <Link href="/settings" rel="noopener noreferrer">
               <DropdownMenuItem className="text-xs">
                 <Cog6ToothIcon className="mr-2 h-4 w-4" />
-                Settings
+                {t("actions.settings")}
               </DropdownMenuItem>
             </Link>
           )}
 
           <DropdownMenuItem onSelect={handleSignOut} className="text-xs">
             <LogOutIcon className="mr-2 h-4 w-4" />
-            Sign out
+            {t("actions.signOut")}
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>

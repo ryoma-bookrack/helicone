@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { useState, useRef, useEffect } from "react";
 import { Check, DatabaseIcon } from "lucide-react"; // Add DatabaseIcon import
 import { TableCellsIcon } from "@heroicons/react/24/outline";
@@ -38,6 +39,8 @@ export default function NewDataset({
   onComplete,
   isCopyMode = false,
 }: NewDatasetProps) {
+  const { t } = useTranslation("datasets");
+  const { t: tCommon } = useTranslation("common");
   const [selectedOption, setSelectedOption] = useState<string | "new" | null>(
     null,
   );
@@ -187,11 +190,11 @@ export default function NewDataset({
         },
       });
       if (res.data && res.data.data) {
-        setNotification("Dataset created", "success");
+        setNotification(t("notifications.datasetCreated"), "success");
         await refetchDatasets();
         return res.data.data.datasetId;
       } else {
-        setNotification("Failed to create dataset", "error");
+        setNotification(t("notifications.datasetCreateError"), "error");
         return null;
       }
     }
@@ -211,11 +214,17 @@ export default function NewDataset({
       return (
         <InfoBox variant="warning" className="mb-2">
           <div className="flex flex-col">
-            <P className="font-medium">Dataset Size Limit</P>
+            <P className="font-medium">{t("newDataset.sizeLimitTitle")}</P>
             <Muted>
               {limitedRequestIds.length === 0
-                ? `This dataset has reached the maximum capacity of ${MAX_REQUESTS_PER_DATASET} requests.`
-                : `Only ${limitedRequestIds.length} of ${request_ids.length} requests will be added to stay within the limit of ${MAX_REQUESTS_PER_DATASET} requests per dataset.`}
+                ? t("newDataset.maxCapacity", {
+                    max: MAX_REQUESTS_PER_DATASET,
+                  })
+                : t("newDataset.partialAdd", {
+                    limited: limitedRequestIds.length,
+                    total: request_ids.length,
+                    max: MAX_REQUESTS_PER_DATASET,
+                  })}
             </Muted>
           </div>
         </InfoBox>
@@ -253,14 +262,14 @@ export default function NewDataset({
     <Card className="m-0 w-[450px] space-y-4 border-none p-0 shadow-none">
       <CardHeader className="p-0 pb-4">
         <CardTitle className="text-2xl font-semibold">
-          {isCopyMode ? "Copy to dataset" : "Add to dataset"}{" "}
+          {isCopyMode ? t("newDataset.copyToDataset") : t("newDataset.addToDataset")}{" "}
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-4 rounded-xl border border-[#E2E8F0] p-2 dark:border-slate-700">
         {isDatasetsLoading ? (
           <div className="flex h-[115px] items-center justify-center">
             <p className="text-sm text-slate-700 dark:text-slate-100">
-              Loading...
+              {tCommon("actions.loading")}
             </p>
           </div>
         ) : datasets.length > 0 ? (
@@ -282,7 +291,7 @@ export default function NewDataset({
                 </div>
                 <div className="text-md flex flex-1 items-center justify-between font-normal leading-none">
                   <span className="text-[#334155]">
-                    {dataset.name || "Untitled"}
+                    {dataset.name || t("newDataset.untitled")}
                   </span>
                   <span className="flex items-center text-[#6B7280] text-muted-foreground">
                     <TableCellsIcon className="mr-1 inline h-4 w-4" />
@@ -296,10 +305,10 @@ export default function NewDataset({
           <div className="flex h-[115px] flex-col items-center justify-center">
             <DatabaseIcon className="h-12 w-12 text-slate-700 dark:text-slate-300" />
             <p className="mt-2 text-sm text-slate-700 dark:text-slate-300">
-              No Datasets
+              {t("newDataset.noDatasets")}
             </p>
             <p className="mt-1 text-xs text-slate-700 dark:text-slate-300">
-              Create your first dataset below
+              {t("newDataset.createFirstBelow")}
             </p>
           </div>
         )}
@@ -318,13 +327,13 @@ export default function NewDataset({
               )}
             </div>
             <span className="text-md font-normal text-[#334155]">
-              Create a new dataset
+              {t("newDataset.createNew")}
             </span>
           </div>
         </div>
         {selectedOption === "new" && (
           <div className="pl-7">
-            <Label htmlFor="new-dataset-name">Dataset name</Label>
+            <Label htmlFor="new-dataset-name">{t("newDataset.datasetName")}</Label>
             <Input
               id="new-dataset-name"
               value={newDatasetName}
@@ -341,7 +350,7 @@ export default function NewDataset({
             htmlFor="open-after"
             className="text-sm font-medium leading-none text-slate-700 peer-disabled:cursor-not-allowed peer-disabled:opacity-70 dark:text-slate-300"
           >
-            Open dataset after
+            {t("newDataset.openDatasetAfter")}
           </label>
           <Checkbox
             id="open-after"
@@ -351,7 +360,7 @@ export default function NewDataset({
         </div>
         <div className="flex w-full justify-between p-0">
           <Button variant="outline" onClick={onComplete}>
-            Cancel
+            {tCommon("actions.cancel")}
           </Button>
 
           <FreeTierLimitWrapper feature="datasets" itemCount={datasetCount}>
@@ -388,24 +397,28 @@ export default function NewDataset({
                 );
 
                 if (res.data && !res.data.error) {
-                  setNotification("Requests added to dataset", "success");
+                  setNotification(t("notifications.requestsAdded"), "success");
                   if (openDatasetOnAdd) {
                     router.push(`/datasets/${datasetId}`);
                   }
                   onComplete();
                 } else {
-                  setNotification("Failed to add requests to dataset", "error");
+                  setNotification(t("notifications.requestsAddError"), "error");
                 }
                 setAddingRequests(false);
               }}
             >
               {addingRequests
                 ? isCopyMode
-                  ? "Copying..."
-                  : "Adding..."
+                  ? t("newDataset.copying")
+                  : t("newDataset.adding")
                 : isCopyMode
-                  ? `Copy ${limitedRequestIds.length} requests`
-                  : `Add ${limitedRequestIds.length} requests`}{" "}
+                  ? t("newDataset.copyRequests", {
+                      count: limitedRequestIds.length,
+                    })
+                  : t("newDataset.addRequests", {
+                      count: limitedRequestIds.length,
+                    })}{" "}
             </Button>
           </FreeTierLimitWrapper>
         </div>

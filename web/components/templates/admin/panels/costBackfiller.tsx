@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { providers, ModelRow, ModelWithProvider } from "@helicone-package/cost";
 import {
   ChevronDown,
@@ -26,6 +27,7 @@ interface SelectableModelWithProvider extends ModelWithProvider {
 }
 
 const CostBackfiller = () => {
+  const { t } = useTranslation("admin");
   const [allModels, setAllModels] = useState<SelectableModelWithProvider[]>(
     () => {
       return providers
@@ -64,7 +66,7 @@ const CostBackfiller = () => {
 
   const { backfillCosts, backfillCostsAsync, isBackfillingCosts } =
     useBackfillCosts(() => {
-      toast.success("Cost backfill completed successfully!");
+      toast.success(t("panels.costBackfiller.backfillCompleted"));
       setQueryPreview("");
       setBackfillError(null); // Clear error on success
     });
@@ -156,12 +158,12 @@ const CostBackfiller = () => {
 
   const handleCheckCounts = async () => {
     if (!hasSelections) {
-      toast.error("Please select at least one model to check");
+      toast.error(t("panels.costBackfiller.selectModelToCheck"));
       return;
     }
 
     if (!isFromDateValid || !isToDateValid) {
-      toast.error("Please fix the date format errors");
+      toast.error(t("panels.costBackfiller.fixDateErrors"));
       return;
     }
 
@@ -208,9 +210,9 @@ const CostBackfiller = () => {
           : null,
       });
 
-      toast.success("Row counts retrieved successfully!");
+      toast.success(t("panels.costBackfiller.rowCountsRetrieved"));
     } catch (error) {
-      toast.error("Failed to check row counts");
+      toast.error(t("panels.costBackfiller.checkRowCountsFailed"));
       logger.error(
         {
           error,
@@ -223,12 +225,12 @@ const CostBackfiller = () => {
 
   const handlePreviewQuery = async () => {
     if (!hasSelections) {
-      toast.error("Please select at least one model to backfill");
+      toast.error(t("panels.costBackfiller.selectModelToBackfill"));
       return;
     }
 
     if (!isFromDateValid || !isToDateValid) {
-      toast.error("Please fix the date format errors");
+      toast.error(t("panels.costBackfiller.fixDateErrors"));
       return;
     }
 
@@ -250,10 +252,10 @@ const CostBackfiller = () => {
 
       if (result.data?.query) {
         setQueryPreview(result.data.query);
-        toast.success("Query preview generated!");
+        toast.success(t("panels.costBackfiller.queryPreviewGenerated"));
       }
     } catch (error) {
-      toast.error("Failed to generate query preview");
+      toast.error(t("panels.costBackfiller.generatePreviewFailed"));
       logger.error(
         {
           error,
@@ -266,14 +268,12 @@ const CostBackfiller = () => {
 
   const handleExecuteQuery = async () => {
     if (!queryPreview) {
-      toast.error("Please preview the query first");
+      toast.error(t("panels.costBackfiller.previewFirst"));
       return;
     }
 
     if (!confirmed) {
-      toast.error(
-        "Please confirm the operation by toggling the confirm switch",
-      );
+      toast.error(t("panels.costBackfiller.confirmToggleRequired"));
       return;
     }
 
@@ -302,7 +302,7 @@ const CostBackfiller = () => {
     } catch (error) {
       const errorMessage = `Failed to execute cost backfill: ${error instanceof Error ? error.message : "Unknown error"}`;
       setBackfillError(errorMessage);
-      toast.error("Failed to execute cost backfill");
+      toast.error(t("panels.costBackfiller.executeBackfillFailed"));
       logger.error(
         {
           error,
@@ -322,7 +322,7 @@ const CostBackfiller = () => {
         return;
       }
     } catch (error) {
-      toast.error("Failed to deduplicate request response table");
+      toast.error(t("panels.costBackfiller.dedupFailed"));
       logger.error(
         {
           error,
@@ -339,7 +339,7 @@ const CostBackfiller = () => {
           <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary text-sm font-semibold text-primary-foreground">
             1
           </div>
-          <H3>Select Models to Backfill</H3>
+          <H3>{t("panels.costBackfiller.selectModels")}</H3>
         </div>
 
         <div className="mt-4 rounded-md border border-border bg-card">
@@ -442,7 +442,7 @@ const CostBackfiller = () => {
           <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary text-sm font-semibold text-primary-foreground">
             2
           </div>
-          <H3>Specify Date Range</H3>
+          <H3>{t("panels.costBackfiller.specifyDateRange")}</H3>
         </div>
         <P className="text-muted-foreground">
           If no From Date is specified, then it will backfill everything. If no
@@ -458,7 +458,7 @@ const CostBackfiller = () => {
               type="text"
               value={fromDate}
               onChange={(e) => setFromDate(e.target.value)}
-              placeholder="YYYY-MM-DD HH:MM:SS.XXX"
+              placeholder={t("common.dateFormatPlaceholder")}
               className={`font-mono w-full rounded-md border px-3 py-2 text-sm ${
                 isFromDateValid
                   ? "border-border"
@@ -485,7 +485,7 @@ const CostBackfiller = () => {
               type="text"
               value={toDate}
               onChange={(e) => setToDate(e.target.value)}
-              placeholder="YYYY-MM-DD HH:MM:SS.XXX"
+              placeholder={t("common.dateFormatPlaceholder")}
               className={`font-mono w-full rounded-md border px-3 py-2 text-sm ${
                 isToDateValid
                   ? "border-border"
@@ -511,7 +511,7 @@ const CostBackfiller = () => {
           <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary text-sm font-semibold text-primary-foreground">
             3
           </div>
-          <H3>Check Current Row Counts</H3>
+          <H3>{t("panels.costBackfiller.checkRowCounts")}</H3>
         </div>
         <P className="text-muted-foreground">
           Check how many rows currently have costs vs. those that need
@@ -630,7 +630,7 @@ const CostBackfiller = () => {
           <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary text-sm font-semibold text-primary-foreground">
             4
           </div>
-          <H3>Preview Query</H3>
+          <H3>{t("panels.costBackfiller.previewQuery")}</H3>
         </div>
         <P className="text-muted-foreground">
           Generate a preview of the SQL query that will be executed to ensure
@@ -657,7 +657,7 @@ const CostBackfiller = () => {
         {queryPreview && (
           <div className="mt-4 rounded-md border border-border bg-muted/30">
             <div className="flex items-center gap-2 border-b border-border p-3">
-              <Small className="font-medium">Generated SQL Query:</Small>
+              <Small className="font-medium">{t("panels.costBackfiller.generatedSqlQuery")}</Small>
             </div>
             <div className="p-3">
               <pre className="font-mono overflow-x-auto whitespace-pre-wrap rounded border border-border bg-background p-3 text-xs">
@@ -673,7 +673,7 @@ const CostBackfiller = () => {
           <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary text-sm font-semibold text-primary-foreground">
             5
           </div>
-          <H3>Execute Backfill</H3>
+          <H3>{t("panels.costBackfiller.executeBackfill")}</H3>
         </div>
 
         <div className="mt-4 space-y-4">
@@ -745,7 +745,7 @@ const CostBackfiller = () => {
           <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary text-sm font-semibold text-primary-foreground">
             6
           </div>
-          <H3>Deduplicate Data</H3>
+          <H3>{t("panels.costBackfiller.deduplicateData")}</H3>
         </div>
         <P className="text-muted-foreground">
           After backfilling, deduplicate the table to remove any duplicate
@@ -756,7 +756,7 @@ const CostBackfiller = () => {
           <div className="mb-4 flex items-center gap-2 rounded-md border border-amber-200 bg-amber-50 p-3">
             <AlertTriangle size={16} className="text-amber-600" />
             <Small className="text-amber-800">
-              <strong>Note:</strong> Deduplication is a long-running operation
+              <strong>{t("common.note")}</strong> Deduplication is a long-running operation
               that may take several minutes to even hours to complete. If
               backfilling hundreds of thousands of rows, (which may occur for
               popular models), expect to wait a while. The process will continue
@@ -790,7 +790,7 @@ const CostBackfiller = () => {
           <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary text-sm font-semibold text-primary-foreground">
             7
           </div>
-          <H3>Verify Results</H3>
+          <H3>{t("panels.costBackfiller.verifyResults")}</H3>
         </div>
         <P className="text-muted-foreground">
           After deduplication completes, you can re-run step 3 to verify that

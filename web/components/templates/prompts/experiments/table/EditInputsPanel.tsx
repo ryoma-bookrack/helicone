@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import MarkdownEditor from "@/components/shared/markdownEditor";
 import {
   Accordion,
@@ -40,6 +41,9 @@ const EditInputsPanel = ({
   onClose,
   autoInputs,
 }: EditInputsPanelProps) => {
+  const { t } = useTranslation("prompts");
+  const { t: tCommon } = useTranslation("common");
+
   const { updateExperimentTableRow } = useExperimentTable(experimentId);
   const [inputKV, setInputKV] = useState(inputRecord?.inputKV ?? {});
   const [showAlertDialog, setShowAlertDialog] = useState(false);
@@ -91,15 +95,13 @@ const EditInputsPanel = ({
       <div className="flex items-center justify-between border-b border-slate-200 p-4 dark:border-slate-800">
         <div className="flex items-center gap-3">
           <TextCursorInputIcon className="text-slate-500" />
-          <h3 className="font-medium text-slate-900 dark:text-slate-100">
-            Edit inputs
-          </h3>
+          <h3 className="font-medium text-slate-900 dark:text-slate-100">{t("ui.editInputs")}</h3>
         </div>
         <div className="flex items-center gap-3">
           {hasUnsavedChanges && (
             <Badge variant="helicone" className="gap-2 text-slate-500">
               <TriangleAlertIcon className="h-3 w-3" />
-              <span>Unsaved changes</span>
+              <span>{t("ui.unsavedChanges2")}</span>
             </Badge>
           )}
           <XIcon
@@ -176,29 +178,21 @@ const EditInputsPanel = ({
               <Button
                 variant="outline"
                 onClick={() => setShowAlertDialog(true)}
-              >
-                Discard
-              </Button>
+              >{t("ui.discard")}</Button>
             </AlertDialogTrigger>
             <AlertDialogContent>
               <AlertDialogHeader>
-                <AlertDialogTitle>Discard changes</AlertDialogTitle>
-                <AlertDialogDescription>
-                  You made changes to your inputs. Do you want to discard them?
-                </AlertDialogDescription>
+                <AlertDialogTitle>{t("ui.discardChanges")}</AlertDialogTitle>
+                <AlertDialogDescription>{t("ui.youMadeChangesToYourInputsDoYouWantToDis")}</AlertDialogDescription>
               </AlertDialogHeader>
               <AlertDialogFooter className="w-full items-stretch gap-2">
-                <AlertDialogCancel>Go back</AlertDialogCancel>
-                <AlertDialogAction onClick={onClose}>
-                  Yes, discard
-                </AlertDialogAction>
+                <AlertDialogCancel>{t("ui.goBack")}</AlertDialogCancel>
+                <AlertDialogAction onClick={onClose}>{t("ui.yesDiscard")}</AlertDialogAction>
               </AlertDialogFooter>
             </AlertDialogContent>
           </AlertDialog>
 
-          <Button onClick={handleSaveChanges} className="cursor-pointer">
-            Save Changes
-          </Button>
+          <Button onClick={handleSaveChanges} className="cursor-pointer">{t("ui.saveChanges")}</Button>
         </div>
       )}
     </div>

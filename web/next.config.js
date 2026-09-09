@@ -3,11 +3,13 @@ const withBundleAnalyzer = require("@next/bundle-analyzer")({
 });
 
 const { configureRuntimeEnv } = require("next-runtime-env/build/configure");
+const { i18n } = require("./next-i18next.config");
 
 configureRuntimeEnv();
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  i18n,
   eslint: {
     ignoreDuringBuilds: true,
   },

@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { Badge } from "@/components/ui/badge";
 import {
   Dialog,
@@ -66,6 +67,8 @@ const icon = (model: string) => {
 };
 
 const ExperimentTableHeader = (props: ExperimentHeaderProps) => {
+  const { t } = useTranslation("experiments");
+  const { t: tCommon } = useTranslation("common");
   const {
     promptVersionId,
     originalPromptTemplate,
@@ -278,14 +281,10 @@ const ExperimentTableHeader = (props: ExperimentHeaderProps) => {
           <div className="flex items-center">
             <FlaskConicalIcon className="mr-2.5 h-5 w-5 text-slate-500" />
             <DialogTitle asChild>
-              <h3 className="mr-3 text-base font-medium text-slate-950 dark:text-white">
-                View Prompt
-              </h3>
+              <h3 className="mr-3 text-base font-medium text-slate-950 dark:text-white">{t("ui.viewPrompt")}</h3>
             </DialogTitle>
             <div className="flex items-center gap-1">
-              <p className="text-sm font-medium leading-4 text-slate-500">
-                Forked from
-              </p>
+              <p className="text-sm font-medium leading-4 text-slate-500">{t("ui.forkedFrom")}</p>
               <Badge variant="helicone" className="text-slate-500">
                 <FlaskConicalIcon className="mr-1 h-3.5 w-3.5" />
                 {(promptTemplate?.parent_prompt_version?.metadata
@@ -298,8 +297,8 @@ const ExperimentTableHeader = (props: ExperimentHeaderProps) => {
         <Tabs defaultValue="preview" className="h-full w-full">
           {!isOriginal && (
             <TabsList>
-              <TabsTrigger value="preview">Preview</TabsTrigger>
-              <TabsTrigger value="diff">Diff</TabsTrigger>
+              <TabsTrigger value="preview">{t("ui.preview")}</TabsTrigger>
+              <TabsTrigger value="diff">{t("ui.diff")}</TabsTrigger>
             </TabsList>
           )}
           <TabsContent value="preview" className="max-h-[80vh] overflow-y-auto">
@@ -379,9 +378,7 @@ const ExperimentTableHeader = (props: ExperimentHeaderProps) => {
         <div className="mt-8 flex items-center justify-between">
           <div className="flex items-center gap-1">
             <LightbulbIcon className="h-4 w-4 text-slate-500" />
-            <p className="text-sm text-slate-500">
-              To make changes, please create a new prompt.
-            </p>
+            <p className="text-sm text-slate-500">{t("ui.toMakeChangesPleaseCreateANewPrompt")}</p>
           </div>
 
           <Button
@@ -393,9 +390,7 @@ const ExperimentTableHeader = (props: ExperimentHeaderProps) => {
                 setShowViewPrompt(false);
               }
             }}
-          >
-            Fork Prompt
-          </Button>
+          >{t("ui.forkPrompt")}</Button>
         </div>
       </DialogContent>
     </Dialog>
@@ -427,6 +422,8 @@ const PromptColumnHeader = ({
   promptVersionId: string;
   onDeleteColumn?: () => void;
 }) => {
+  const { t } = useTranslation("experiments");
+  const { t: tCommon } = useTranslation("common");
   const [labelData, setLabelData] = useState(label);
   const [isEditing, setIsEditing] = useState(false);
   const [editedLabel, setEditedLabel] = useState(labelData);
@@ -524,7 +521,7 @@ const PromptColumnHeader = ({
                 </Button>
               </DialogTrigger>
               <DialogContent className="sm:max-w-[425px]">
-                <DialogTitle>Delete Prompt Version</DialogTitle>
+                <DialogTitle>{t("ui.deletePromptVersion")}</DialogTitle>
                 <DialogDescription>
                   Once deleted, this prompt version will no longer be available.
                   Do you want to delete it?
@@ -533,17 +530,13 @@ const PromptColumnHeader = ({
                   <Button
                     variant="outline"
                     onClick={() => setIsDeleteDialogOpen(false)}
-                  >
-                    Cancel
-                  </Button>
+                  >{tCommon("actions.cancel")}</Button>
                   <Button
                     onClick={() => {
                       onDeleteColumn();
                       setIsDeleteDialogOpen(false);
                     }}
-                  >
-                    Yes, delete
-                  </Button>
+                  >{t("ui.yesDelete")}</Button>
                 </DialogFooter>
               </DialogContent>
             </Dialog>

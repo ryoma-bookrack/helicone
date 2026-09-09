@@ -12,7 +12,7 @@ import { logger } from "@/lib/telemetry/logger";
 import { MappedLLMRequest } from "@helicone-package/llm-mapper/types";
 import { useGetPromptInputs } from "@/services/hooks/prompts";
 import { useLocalStorage } from "@/services/hooks/localStorage";
-import { formatDate } from "@/utils/date";
+import { formatStandardDateTime } from "@/lib/i18n/format";
 import { useQuery } from "@tanstack/react-query";
 import {
   CreditCard,
@@ -49,7 +49,6 @@ import FeedbackAction from "../feedback/thumbsUpThumbsDown";
 import { RenderMappedRequest } from "./RenderHeliconeRequest";
 import ScrollableBadges from "./ScrollableBadges";
 import StatusBadge from "./statusBadge";
-import { getUSDateFromString } from "@/components/shared/utils/utils";
 import { JsonRenderer } from "./components/chatComponent/single/JsonRenderer";
 import { useGetPromptVersion } from "@/services/hooks/prompts";
 import PromptVersionPill from "@/components/templates/prompts2025/PromptVersionPill";
@@ -239,18 +238,18 @@ export default function RequestDrawer(props: RequestDivProps) {
     if (!request) return { requestInfo: [], tokenInfo: [], parameterInfo: [] };
 
     // Request Information
-    const requestInfo = [
+    const requestInfo: {
+      label: string;
+      value: string | number;
+      fullValue?: string;
+    }[] = [
       {
         label: "Provider",
         value: request.heliconeMetadata.provider || "Unknown",
       },
       {
         label: "Created At",
-        value: formatDate(request.heliconeMetadata.createdAt),
-        fullValue: getUSDateFromString(
-          request.heliconeMetadata.createdAt,
-          true,
-        ),
+        value: formatStandardDateTime(request.heliconeMetadata.createdAt),
       },
       { label: "Request ID", value: request.id },
       { label: "User", value: request.heliconeMetadata.user || "Unknown" },
@@ -798,27 +797,13 @@ export default function RequestDrawer(props: RequestDivProps) {
                         {item.label}
                       </XSmall>
 
-                      {item.label === "Created At" ? (
-                        <TooltipProvider>
-                          <Tooltip delayDuration={100}>
-                            <TooltipTrigger asChild>
-                              <p className="min-w-0 cursor-pointer truncate text-right text-xs">
-                                {item.value}
-                              </p>
-                            </TooltipTrigger>
-                            <TooltipContent side="bottom" className="text-xs">
-                              {item.fullValue}
-                            </TooltipContent>
-                          </Tooltip>
-                        </TooltipProvider>
-                      ) : (
-                        <TooltipProvider>
+                      <TooltipProvider>
                           <Tooltip delayDuration={100}>
                             <TooltipTrigger asChild>
                               <p
                                 className="min-w-0 cursor-pointer truncate text-right text-xs"
                                 onClick={() => {
-                                  navigator.clipboard.writeText(item.value);
+                                  navigator.clipboard.writeText(String(item.value));
                                   setNotification(
                                     `${item.label} copied`,
                                     "success",
@@ -836,7 +821,6 @@ export default function RequestDrawer(props: RequestDivProps) {
                             </TooltipContent>
                           </Tooltip>
                         </TooltipProvider>
-                      )}
                     </div>
                   ))}
                 </div>

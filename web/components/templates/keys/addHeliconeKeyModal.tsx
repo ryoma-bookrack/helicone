@@ -2,6 +2,7 @@ import { ClipboardDocumentListIcon } from "@heroicons/react/24/outline";
 import { clsx } from "../../shared/clsx";
 import useNotification from "../../shared/notification/useNotification";
 import ThemedModal from "../../shared/themed/themedModal";
+import { Trans, useTranslation } from "react-i18next";
 
 interface AddHeliconeKeyModalProps {
   open: boolean;
@@ -11,18 +12,21 @@ interface AddHeliconeKeyModalProps {
 
 const AddHeliconeKeyModal = (props: AddHeliconeKeyModalProps) => {
   const { open, setOpen, apiKey } = props;
+  const { t } = useTranslation(["keys", "common"]);
   const { setNotification } = useNotification();
 
   return (
     <ThemedModal open={open} setOpen={setOpen}>
       <div className="flex w-[400px] flex-col space-y-4">
         <h1 className="text-lg font-semibold text-gray-900">
-          Your Helicone Key
+          {t("keys:modal.yourKeyTitle")}
         </h1>
         <p className="text-sm text-gray-500">
-          This will be the <b>only</b> time you can see your API key. Please
-          save it somewhere safe and accessible. If you lose your API key, you
-          will need to generate a new one.
+          <Trans
+            i18nKey="modal.yourKeyDescriptionFull"
+            ns="keys"
+            components={{ b: <b /> }}
+          />
         </p>
         <div className="w-full space-y-1.5 text-sm">
           <div className="flex w-full flex-row items-center gap-4">
@@ -40,7 +44,7 @@ const AddHeliconeKeyModal = (props: AddHeliconeKeyModalProps) => {
               className="flex items-center rounded-md bg-black p-2 text-sm font-semibold text-white shadow-sm hover:bg-gray-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
               onClick={() => {
                 navigator.clipboard.writeText(apiKey);
-                setNotification("Copied to clipboard!", "success");
+                setNotification(t("keys:notifications.copiedToClipboard"), "success");
               }}
             >
               <ClipboardDocumentListIcon className="h-5 w-5 text-white" />
@@ -54,7 +58,7 @@ const AddHeliconeKeyModal = (props: AddHeliconeKeyModalProps) => {
             type="button"
             className="flex flex-row items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-semibold text-gray-900 shadow-sm hover:bg-gray-50 hover:text-gray-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-500"
           >
-            Close
+            {t("common:actions.close")}
           </button>
         </div>
       </div>

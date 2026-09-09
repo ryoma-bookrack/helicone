@@ -1,4 +1,5 @@
 import { InvoiceTable, SortConfig } from "@/components/admin/InvoiceTable";
+import { useTranslation } from "react-i18next";
 import {
   MOCK_DISCOUNTS,
   MOCK_INVOICES,
@@ -55,13 +56,14 @@ const InvoiceModal = ({
   invoice: any;
   onClose: () => void;
 }) => {
+  const { t } = useTranslation("admin");
   if (!isOpen) return null;
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
       <div className="flex max-h-[80vh] w-full max-w-4xl flex-col rounded-lg border border-border bg-background shadow-lg">
         <div className="flex items-center justify-between border-b border-border p-4">
-          <H3>Raw Invoice Data</H3>
+          <H3>{t("projections.rawInvoiceData")}</H3>
           <Button variant="ghost" size="sm" onClick={onClose}>
             ✕
           </Button>
@@ -147,6 +149,7 @@ const RevenueChartCell = ({
   isHighlighted?: boolean;
   isOld?: boolean;
 }) => {
+  const { t } = useTranslation("admin");
   const chartData = useMemo(
     () => transformInvoiceData(billedInvoices, upcomingInvoices, 6),
     [billedInvoices, upcomingInvoices]
@@ -214,11 +217,11 @@ const RevenueChartCell = ({
         <ChartContainer
           config={{
             billed: {
-              label: "Billed",
+              label: t("common.billedLabel"),
               color: "hsl(200 90% 50%)",
             },
             upcoming: {
-              label: "Upcoming",
+              label: t("common.upcomingLabel"),
               color: "hsla(142, 76%, 36%, 0.4)",
             },
           }}
@@ -291,6 +294,7 @@ const DepositChartCell = ({
   deposits: DepositDataPoint[];
   isLoading?: boolean;
 }) => {
+  const { t } = useTranslation("admin");
   const chartData = useMemo(() => {
     // Create 6 month buckets
     const endDate = new Date();
@@ -351,7 +355,7 @@ const DepositChartCell = ({
       <div className="flex items-center justify-between mb-2">
         <div className="flex items-center gap-2">
           <div className="flex flex-col">
-            <Small className="font-semibold">Deposits</Small>
+            <Small className="font-semibold">{t("common.deposits")}</Small>
             <Muted className="text-[10px]">(not in All Products)</Muted>
           </div>
           {trend !== null && (
@@ -387,7 +391,7 @@ const DepositChartCell = ({
         <ChartContainer
           config={{
             billed: {
-              label: "Deposits",
+              label: t("common.deposits"),
               color: "hsl(142 76% 36%)",
             },
           }}
@@ -441,6 +445,7 @@ const DepositChartCell = ({
 };
 
 const AdminProjections = () => {
+  const { t } = useTranslation("admin");
   const jawn = useJawnClient();
   const [refreshCounter, setRefreshCounter] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
@@ -571,7 +576,7 @@ const AdminProjections = () => {
         });
       } catch (err) {
         logger.error({ error: err }, "Error fetching subscription data");
-        setError("Failed to load subscription data. Using mock data instead.");
+        setError(t("projections.loadFailed"));
         setRawData({
           invoices: MOCK_INVOICES,
           discounts: MOCK_DISCOUNTS,
@@ -687,7 +692,7 @@ const AdminProjections = () => {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <H1>Revenue Projections</H1>
+          <H1>{t("projections.title")}</H1>
           <Muted>Track subscription revenue across all products</Muted>
         </div>
         <Button
@@ -713,7 +718,7 @@ const AdminProjections = () => {
         <div className="flex items-center justify-center py-12">
           <div className="flex items-center gap-3">
             <Loader2 size={24} className="animate-spin text-muted-foreground" />
-            <Muted>Loading subscription data...</Muted>
+            <Muted>{t("projections.loadingSubscriptionData")}</Muted>
           </div>
         </div>
       )}
@@ -725,7 +730,7 @@ const AdminProjections = () => {
             {/* New Products Section */}
             <div className="border-t border-border">
               <div className="px-4 py-2 bg-muted/30 border-b border-border">
-                <Small className="font-medium text-muted-foreground uppercase tracking-wide">New Products</Small>
+                <Small className="font-medium text-muted-foreground uppercase tracking-wide">{t("common.newProducts")}</Small>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-3">
                 {productChartData
@@ -764,7 +769,7 @@ const AdminProjections = () => {
             {/* Legacy Products Section */}
             <div className="border-t border-border">
               <div className="px-4 py-2 bg-muted/30 border-b border-border">
-                <Small className="font-medium text-muted-foreground uppercase tracking-wide">Legacy</Small>
+                <Small className="font-medium text-muted-foreground uppercase tracking-wide">{t("common.legacy")}</Small>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-3">
                 {productChartData
@@ -840,7 +845,7 @@ const AdminProjections = () => {
                         {/* Month selector */}
                         {availableMonths.length > 0 && (
                           <div className="mb-4">
-                            <Small className="font-medium mb-2 block">Select Month</Small>
+                            <Small className="font-medium mb-2 block">{t("projections.selectMonth")}</Small>
                             <div className="flex flex-wrap gap-1.5">
                               {availableMonths.map((monthKey) => (
                                 <Button
@@ -865,13 +870,13 @@ const AdminProjections = () => {
                             {/* Summary */}
                             <div className="mb-4 grid grid-cols-2 gap-4">
                               <div className="rounded-lg border border-border bg-muted/30 p-3">
-                                <Muted className="text-xs">Current Revenue</Muted>
+                                <Muted className="text-xs">{t("projections.currentRevenue")}</Muted>
                                 <p className="text-xl font-bold tabular-nums">
                                   ${revenueData.current.toFixed(2)}
                                 </p>
                               </div>
                               <div className="rounded-lg border border-border bg-muted/30 p-3">
-                                <Muted className="text-xs">Projected Revenue</Muted>
+                                <Muted className="text-xs">{t("projections.projectedRevenue")}</Muted>
                                 <p className="text-xl font-bold tabular-nums">
                                   ${revenueData.projected.toFixed(2)}
                                 </p>
@@ -919,7 +924,7 @@ const AdminProjections = () => {
                             )}
                           </>
                         ) : (
-                          <Muted>No revenue data available</Muted>
+                          <Muted>{t("projections.noRevenueData")}</Muted>
                         )}
                       </CardContent>
                     )}

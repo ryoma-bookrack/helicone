@@ -1,5 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { BarChart } from "@tremor/react";
+import { useTranslation } from "react-i18next";
 import { getJawnClient } from "../../../lib/clients/jawn";
 import { useLocalStorage } from "../../../services/hooks/localStorage";
 import { useOrg } from "../../layout/org/organizationContext";
@@ -17,6 +18,7 @@ interface AdminStatsProps {}
 
 const AdminMetrics = (props: AdminStatsProps) => {
   const {} = props;
+  const { t } = useTranslation("admin");
   const org = useOrg();
   const timeFilters = [
     "1 days",
@@ -37,6 +39,16 @@ const AdminMetrics = (props: AdminStatsProps) => {
     "month",
   );
 
+  const timeFilterLabels = {
+    "1days": t("metrics.timeFilters.1days"),
+    "7days": t("metrics.timeFilters.7days"),
+    "1month": t("metrics.timeFilters.1month"),
+    "3months": t("metrics.timeFilters.3months"),
+    "6months": t("metrics.timeFilters.6months"),
+    "12months": t("metrics.timeFilters.12months"),
+    "24months": t("metrics.timeFilters.24months"),
+  };
+
   const metricsOverTime = useQuery({
     queryKey: ["newOrgsOverTime", org?.currentOrg?.id, timeFilter, groupBy],
     queryFn: async (query) => {
@@ -55,11 +67,11 @@ const AdminMetrics = (props: AdminStatsProps) => {
   });
   return (
     <div className="flex flex-col gap-8 p-4 md:p-6">
-      <H1>Admin Metrics</H1>
+      <H1>{t("metrics.title")}</H1>
 
       <div className="flex flex-col gap-4 md:flex-row md:gap-6">
         <div className="flex flex-1 flex-col gap-2 md:max-w-xs">
-          <Label className="font-semibold">Time Filter</Label>
+          <Label className="font-semibold">{t("common.timeFilter")}</Label>
           <Select
             value={timeFilter}
             onValueChange={(value) => setTimeFilter(value as any)}
@@ -68,9 +80,11 @@ const AdminMetrics = (props: AdminStatsProps) => {
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
-              {timeFilters.map((timeFilter) => (
-                <SelectItem value={timeFilter} key={timeFilter}>
-                  {timeFilter}
+              {timeFilters.map((filter) => (
+                <SelectItem value={filter} key={filter}>
+                  {timeFilterLabels[
+                    filter.replace(" ", "") as keyof typeof timeFilterLabels
+                  ] ?? filter}
                 </SelectItem>
               ))}
             </SelectContent>
@@ -78,7 +92,7 @@ const AdminMetrics = (props: AdminStatsProps) => {
         </div>
 
         <div className="flex flex-1 flex-col gap-2 md:max-w-xs">
-          <Label className="font-semibold">Group By</Label>
+          <Label className="font-semibold">{t("common.groupBy")}</Label>
           <Select
             value={groupBy}
             onValueChange={(value) => setGroupBy(value as any)}
@@ -87,9 +101,9 @@ const AdminMetrics = (props: AdminStatsProps) => {
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
-              {groupBys.map((groupBy) => (
-                <SelectItem value={groupBy} key={groupBy}>
-                  {groupBy}
+              {groupBys.map((group) => (
+                <SelectItem value={group} key={group}>
+                  {t(`metrics.groupByOptions.${group}`)}
                 </SelectItem>
               ))}
             </SelectContent>
@@ -98,7 +112,7 @@ const AdminMetrics = (props: AdminStatsProps) => {
       </div>
       <div className="flex max-w-6xl flex-col gap-6">
         <div className="flex h-full w-full flex-col gap-4 rounded-lg border border-border bg-card p-6 shadow-sm">
-          <H2>Orgs Over Time</H2>
+          <H2>{t("metrics.orgsOverTime")}</H2>
           <BarChart
             data={
               metricsOverTime.data?.newOrgsOvertime.map((ot) => ({
@@ -114,7 +128,7 @@ const AdminMetrics = (props: AdminStatsProps) => {
 
         <div className="flex h-full w-full flex-col gap-4 rounded-lg border border-border bg-card p-6 shadow-sm">
           <H2>
-            New Users/{groupBy} (Since {timeFilter} ago)
+            {t("common.newUsersPerGroup", { groupBy, timeFilter })}
           </H2>
           <BarChart
             data={
@@ -130,7 +144,7 @@ const AdminMetrics = (props: AdminStatsProps) => {
         </div>
 
         <div className="flex h-full w-full flex-col gap-4 rounded-lg border border-border bg-card p-6 shadow-sm">
-          <H2>Users Over Time</H2>
+          <H2>{t("metrics.usersOverTime")}</H2>
           <BarChart
             data={
               metricsOverTime.data?.usersOverTime.map((ot) => ({

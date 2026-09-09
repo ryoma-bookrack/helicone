@@ -1,4 +1,5 @@
 import { Fragment, useEffect, useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Listbox, Transition } from "@headlessui/react";
 import { CheckIcon, ChevronDownIcon } from "@heroicons/react/20/solid";
 import { clsx } from "../clsx";
@@ -23,6 +24,7 @@ interface ThemedDropdownProps<T> {
 }
 
 export default function ThemedDropdown<T>(props: ThemedDropdownProps<T>) {
+  const { t } = useTranslation("common");
   const {
     selectedValue,
     onSelect,
@@ -30,7 +32,7 @@ export default function ThemedDropdown<T>(props: ThemedDropdownProps<T>) {
     label,
     verticalAlign = "bottom",
     align = "left",
-    placeholder = "Select an option",
+    placeholder = t("select.selectAnOption"),
     disabled = false,
   } = props;
   let { options } = props;
@@ -138,7 +140,7 @@ export default function ThemedDropdown<T>(props: ThemedDropdownProps<T>) {
                 >
                   {categories && Object.keys(categories).length >= 2 && (
                     <div className="border-b-2 border-gray-300 px-3 py-2 text-xs text-gray-500 dark:border-gray-700">
-                      Categories
+                      {t("select.categories")}
                       <div className="flex flex-wrap">
                         {Object.entries(categories).map(
                           ([category, items], index) => (

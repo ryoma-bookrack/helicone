@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import {
   ArrowsPointingOutIcon,
   ClipboardIcon,
@@ -67,6 +68,9 @@ export const PrettyInput = ({
   keyName: string;
   selectedProperties: Record<string, string> | undefined;
 }) => {
+  const { t } = useTranslation("playground");
+  const { t: tCommon } = useTranslation("common");
+
   const getRenderText = () => {
     if (selectedProperties) {
       return selectedProperties[keyName] || "{{undefined}}";
@@ -190,6 +194,8 @@ export const RenderWithPrettyInputKeys = (props: {
 };
 
 const ChatRow = (props: ChatRowProps) => {
+  const { t } = useTranslation("playground");
+  const { t: tCommon } = useTranslation("common");
   const { index, message, callback, deleteRow } = props;
 
   const [currentMessage, setCurrentMessage] =
@@ -353,9 +359,7 @@ const ChatRow = (props: ChatRowProps) => {
                 height={256}
               />
             ) : (
-              <div className="flex h-[150px] w-[200px] items-center justify-center border border-gray-300 bg-white text-center text-xs italic text-gray-500">
-                Unsupported Image Type
-              </div>
+              <div className="flex h-[150px] w-[200px] items-center justify-center border border-gray-300 bg-white text-center text-xs italic text-gray-500">{t("ui.unsupportedImageType")}</div>
             )}
             <button
               onClick={() => {
@@ -466,7 +470,7 @@ const ChatRow = (props: ChatRowProps) => {
               }}
             />
             <div className="flex items-center space-x-2">
-              <Tooltip title="Edit" placement="top">
+              <Tooltip title={tCommon("actions.edit")} placement="top">
                 <button
                   onClick={() => {
                     if (isEditing) {
@@ -495,18 +499,18 @@ const ChatRow = (props: ChatRowProps) => {
                   )}
                 </button>
               </Tooltip>
-              <Tooltip title="Copy" placement="top">
+              <Tooltip title={tCommon("actions.copy")} placement="top">
                 <button
                   onClick={() => {
                     navigator.clipboard.writeText(contentAsString || "");
-                    setNotification("Copied to clipboard", "success");
+                    setNotification(t("ui.copiedToClipboard"), "success");
                   }}
                   className="font-semibold text-gray-500"
                 >
                   <ClipboardIcon className="h-5 w-5" />
                 </button>
               </Tooltip>
-              <Tooltip title="Delete" placement="top">
+              <Tooltip title={tCommon("actions.delete")} placement="top">
                 <button
                   onClick={() => {
                     deleteRow(currentMessage.id || "");

@@ -6,6 +6,7 @@ import { P, Small } from "@/components/ui/typography";
 import { toSnakeCase } from "@/utils/strings";
 import { Tool } from "@helicone-package/llm-mapper/types";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import {
   PiNumberCircleOneBold,
   PiPlusBold,
@@ -29,6 +30,7 @@ interface ToolEditorProps {
   onCancel: () => void;
 }
 export default function ToolEditor({ onSave, onCancel }: ToolEditorProps) {
+  const { t } = useTranslation("common");
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [parameters, setParameters] = useState<Parameter[]>([]);
@@ -63,7 +65,6 @@ export default function ToolEditor({ onSave, onCancel }: ToolEditorProps) {
     const updatedParameters = [...parameters];
     const currentType = updatedParameters[index].type;
 
-    // Cycle through types: string -> number -> boolean -> string
     let newType: ParameterType = "string";
     if (currentType === "string") newType = "number";
     else if (currentType === "number") newType = "boolean";
@@ -79,7 +80,6 @@ export default function ToolEditor({ onSave, onCancel }: ToolEditorProps) {
   };
 
   const handleSave = () => {
-    // Create properties object from parameters
     const properties: Record<string, any> = {};
 
     parameters.forEach((param) => {
@@ -109,12 +109,14 @@ export default function ToolEditor({ onSave, onCancel }: ToolEditorProps) {
     <div className="flex w-full flex-col gap-6">
       <div className="flex flex-col gap-2">
         <GlassHeader className="h-14 flex-shrink-0 px-4">
-          <h2 className="font-semibold text-secondary">Name</h2>
+          <h2 className="font-semibold text-secondary">
+            {t("prompts.toolEditor.name")}
+          </h2>
         </GlassHeader>
         <div className="px-4">
           <Input
             id="tool-name"
-            placeholder="Enter tool name"
+            placeholder={t("prompts.toolEditor.enterToolName")}
             value={name}
             onChange={(e) => setName(e.target.value)}
           />
@@ -123,7 +125,9 @@ export default function ToolEditor({ onSave, onCancel }: ToolEditorProps) {
 
       <div className="flex flex-col gap-2">
         <GlassHeader className="h-14 flex-shrink-0 px-4">
-          <h2 className="font-semibold text-secondary">Description</h2>
+          <h2 className="font-semibold text-secondary">
+            {t("prompts.toolEditor.description")}
+          </h2>
         </GlassHeader>
         <PromptBox value={description} onChange={setDescription} />
       </div>
@@ -132,7 +136,7 @@ export default function ToolEditor({ onSave, onCancel }: ToolEditorProps) {
         <GlassHeader className="h-14 flex-shrink-0 px-4">
           <div className="flex w-full items-center justify-between">
             <h2 className="font-semibold text-secondary">
-              Parameters ({parameters.length})
+              {t("prompts.toolEditor.parameters", { count: parameters.length })}
             </h2>
             <Button
               variant="outline"
@@ -141,14 +145,14 @@ export default function ToolEditor({ onSave, onCancel }: ToolEditorProps) {
               className="flex items-center gap-1"
             >
               <PiPlusBold className="h-4 w-4" />
-              Add Parameter
+              {t("prompts.toolEditor.addParameter")}
             </Button>
           </div>
         </GlassHeader>
         <div className="flex flex-col gap-2 px-4">
           {parameters.length === 0 && (
             <P className="py-4 text-center text-muted-foreground">
-              No parameters added yet.
+              {t("prompts.toolEditor.noParameters")}
             </P>
           )}
 
@@ -160,7 +164,7 @@ export default function ToolEditor({ onSave, onCancel }: ToolEditorProps) {
               <div className="flex items-center gap-3">
                 <div className="flex-1">
                   <Input
-                    placeholder="Parameter name"
+                    placeholder={t("prompts.toolEditor.parameterName")}
                     value={param.name}
                     onChange={(e) =>
                       handleParameterNameChange(index, e.target.value)
@@ -189,7 +193,9 @@ export default function ToolEditor({ onSave, onCancel }: ToolEditorProps) {
                   </Button>
 
                   <div className="flex items-center gap-1">
-                    <Small className="text-muted-foreground">Required</Small>
+                    <Small className="text-muted-foreground">
+                      {t("prompts.toolEditor.required")}
+                    </Small>
                     <Switch
                       checked={param.required}
                       onCheckedChange={(checked) =>
@@ -210,7 +216,7 @@ export default function ToolEditor({ onSave, onCancel }: ToolEditorProps) {
               </div>
               <div className="flex-1">
                 <Input
-                  placeholder="Parameter description"
+                  placeholder={t("prompts.toolEditor.parameterDescription")}
                   value={param.description}
                   onChange={(e) =>
                     handleParameterDescriptionChange(index, e.target.value)
@@ -224,14 +230,14 @@ export default function ToolEditor({ onSave, onCancel }: ToolEditorProps) {
 
       <div className="mt-4 flex justify-end gap-2 p-4">
         <Button variant="outline" onClick={onCancel}>
-          Cancel
+          {t("actions.cancel")}
         </Button>
         <Button
           variant="action"
           onClick={handleSave}
           disabled={!name || !description}
         >
-          Save Tool
+          {t("prompts.toolEditor.saveTool")}
         </Button>
       </div>
     </div>

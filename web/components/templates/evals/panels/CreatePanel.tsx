@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { Col, Row } from "@/components/layout/common";
 import { LLMEvaluatorConfigForm } from "@/components/templates/evals/CreateNewEvaluator/LLMEvaluatorConfigForm";
 import { PythonEvaluatorConfigForm } from "@/components/templates/evals/CreateNewEvaluator/PythonEvaluatorConfigForm";
@@ -39,6 +40,9 @@ export const useCreatePanelTabs = create<{
 );
 
 export const CreatePanel = () => {
+  const { t } = useTranslation("evals");
+  const { t: tCommon } = useTranslation("common");
+
   const { selectedTab, setSelectedTab } = useCreatePanelTabs();
   const { resetPanels, openTestPanel } = useEvalPanelStore();
   const { isSubmitting, setHideFormButtons } = useEvalFormStore();
@@ -158,7 +162,7 @@ export const CreatePanel = () => {
   return (
     <Col className="flex h-full flex-col overflow-hidden bg-background">
       <Row className="shrink-0 items-center justify-between border-b bg-muted/30 px-4 py-2">
-        <H3 className="text-lg font-medium">Create new evaluator</H3>
+        <H3 className="text-lg font-medium">{t("ui.createNewEvaluator")}</H3>
         <Button
           variant="ghost"
           size="icon"
@@ -175,15 +179,9 @@ export const CreatePanel = () => {
         className="flex flex-grow flex-col overflow-hidden"
       >
         <TabsList className="flex w-full justify-start space-x-2 bg-muted/30 px-4 py-2">
-          <TabsTrigger value="llm-as-a-judge" className="text-xs">
-            LLM-as-a-judge
-          </TabsTrigger>
-          <TabsTrigger value="python" className="text-xs">
-            Python
-          </TabsTrigger>
-          <TabsTrigger value="lastmile" className="text-xs">
-            LastMile AutoEval
-          </TabsTrigger>
+          <TabsTrigger value="llm-as-a-judge" className="text-xs">{t("ui.llmAsAJudge2")}</TabsTrigger>
+          <TabsTrigger value="python" className="text-xs">{t("ui.python")}</TabsTrigger>
+          <TabsTrigger value="lastmile" className="text-xs">{t("ui.lastmileAutoeval")}</TabsTrigger>
         </TabsList>
         <div className="flex flex-grow flex-col overflow-hidden">
           <TabsContent
@@ -237,9 +235,7 @@ export const CreatePanel = () => {
           {/* Left side empty or could include form validation indicators */}
         </div>
         <div className="flex items-center gap-2">
-          <Button variant="outline" onClick={handleTest}>
-            Test Evaluator
-          </Button>
+          <Button variant="outline" onClick={handleTest}>{t("ui.testEvaluator")}</Button>
           <Button
             variant="default"
             className="bg-primary text-primary-foreground hover:bg-primary/90"
@@ -275,9 +271,7 @@ export const CreatePanel = () => {
                     fill="currentColor"
                     d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
                   ></path>
-                </svg>
-                Creating...
-              </span>
+                </svg>{t("ui.creating")}</span>
             ) : (
               "Create Evaluator"
             )}

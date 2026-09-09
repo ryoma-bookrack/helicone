@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
+import { useTranslation } from "react-i18next";
 import { z } from "zod";
 import { $JAWN_API } from "@/lib/clients/jawn";
 import { logger } from "@/lib/telemetry/logger";
@@ -35,28 +36,28 @@ type UpdateRateLimitPayload =
   components["schemas"]["UpdateRateLimitRuleParams"];
 type RateLimitRuleView = components["schemas"]["RateLimitRuleView"];
 
-// Zod schema for client-side validation (mirrors backend, suitable for both)
-const RateLimitRuleClientSchema = z.object({
-  name: z.string().min(1, "Rule Name is required."),
-  quota: z.number().nonnegative("Quota must be a non-negative number."),
-  window_seconds: z
-    .number()
-    .nonnegative("Time Window must be a non-negative number."),
-  unit: z.enum(["request", "cents"]),
-  segment: z
-    .string()
-    .optional() // Keep optional
-    .refine(
-      (val) =>
-        val === undefined || // Allow undefined (global)
-        val === "user" ||
-        /^[a-zA-Z0-9_-]+$/.test(val || ""), // Allow user or valid key
-      {
-        message:
-          "Segment must be 'user', empty (global), or a valid property key (alphanumeric/hyphen/underscore).",
-      },
-    ),
-});
+// Zod schema factory for client-side validation (mirrors backend, suitable for both)
+const createRateLimitRuleClientSchema = (t: (key: string) => string) =>
+  z.object({
+    name: z.string().min(1, t("modal.validation.nameRequired")),
+    quota: z.number().nonnegative(t("modal.validation.quotaNonNegative")),
+    window_seconds: z
+      .number()
+      .nonnegative(t("modal.validation.windowNonNegative")),
+    unit: z.enum(["request", "cents"]),
+    segment: z
+      .string()
+      .optional()
+      .refine(
+        (val) =>
+          val === undefined ||
+          val === "user" ||
+          /^[a-zA-Z0-9_-]+$/.test(val || ""),
+        {
+          message: t("modal.validation.segmentInvalid"),
+        },
+      ),
+  });
 
 interface RateLimitRuleModalProps {
   open: boolean;
@@ -71,6 +72,13 @@ const RateLimitRuleModal = ({
   onSuccess,
   rule, // <-- Destructure optional rule
 }: RateLimitRuleModalProps) => {
+  const { t } = useTranslation("rateLimits");
+  const { t: tCommon } = useTranslation("common");
+  const rateLimitRuleClientSchema = useMemo(
+    () => createRateLimitRuleClientSchema(t),
+    [t],
+  );
+
   const queryClient = useQueryClient();
   const org = useOrg();
   const isEditMode = !!rule; // Determine mode based on rule prop
@@ -148,9 +156,7 @@ const RateLimitRuleModal = ({
           },
           "Failed to save rate limit rule",
         );
-        throw new Error(
-          resp.error || "An error occurred while saving the rule.",
-        );
+        throw new Error(resp.error || t("modal.saveError"));
       }
 
       // Ensure return type matches expected Result structure
@@ -167,12 +173,12 @@ const RateLimitRuleModal = ({
       } else {
         // Handle unexpected success case where data might be null/undefined
         logger.warn("Rate limit rule saved, but no data returned.");
-        setError("Rule saved, but failed to retrieve updated data.");
+        setError(t("modal.savedNoData"));
         onOpenChange(false); // Still close modal
       }
     },
     onError: (error: Error) => {
-      setError(error.message ?? "An unknown error occurred.");
+      setError(error.message ?? t("modal.unknownError"));
     },
   });
 
@@ -187,9 +193,7 @@ const RateLimitRuleModal = ({
       segment = "user";
     } else if (segmentType === "property") {
       if (!customPropertyKey.trim()) {
-        setError(
-          "Property Key cannot be empty when segment type is 'Custom Property'.",
-        );
+        setError(t("modal.propertyKeyEmpty"));
         return;
       }
       segment = customPropertyKey.trim();
@@ -207,7 +211,7 @@ const RateLimitRuleModal = ({
     };
 
     // Validate using Zod
-    const validationResult = RateLimitRuleClientSchema.safeParse(formData);
+    const validationResult = rateLimitRuleClientSchema.safeParse(formData);
 
     if (!validationResult.success) {
       const formattedErrors = validationResult.error.errors
@@ -234,32 +238,32 @@ const RateLimitRuleModal = ({
         <DialogHeader>
           {/* Conditional Title/Description */}
           <DialogTitle>
-            {isEditMode ? "Edit Rate Limit Rule" : "Create New Rate Limit Rule"}
+            {isEditMode ? t("modal.editTitle") : t("modal.createTitle")}
           </DialogTitle>
           <DialogDescription>
             {isEditMode
-              ? "Modify the details of this rate limit rule."
-              : "Define a specific rate limit constraint. Requests must satisfy all applicable active rules."}
+              ? t("modal.editDescription")
+              : t("modal.createDescription")}
           </DialogDescription>
         </DialogHeader>
         <div className="grid gap-4 py-4">
           <div className="grid grid-cols-4 items-center gap-4">
             <Label htmlFor="name" className="text-right">
-              Rule Name
+              {t("modal.ruleName")}
             </Label>
             <Input
               id="name"
               value={name}
               onChange={(e) => setName(e.target.value)}
               className="col-span-3"
-              placeholder='e.g., "Free Tier Daily Limit"'
+              placeholder={t("modal.ruleNamePlaceholder")}
               disabled={mutation.isPending}
             />
           </div>
 
           <div className="grid grid-cols-4 items-center gap-4">
             <Label htmlFor="quota" className="text-right">
-              Quota
+              {t("modal.quota")}
             </Label>
             <div className="col-span-3 grid grid-cols-2 gap-2">
               <Input
@@ -267,7 +271,7 @@ const RateLimitRuleModal = ({
                 type="number"
                 value={quota}
                 onChange={(e) => setQuota(e.target.value)}
-                placeholder="e.g., 1000"
+                placeholder={t("modal.quotaPlaceholder")}
                 min="0"
                 disabled={mutation.isPending}
               />
@@ -277,11 +281,11 @@ const RateLimitRuleModal = ({
                 disabled={mutation.isPending}
               >
                 <SelectTrigger>
-                  <SelectValue placeholder="Select unit" />
+                  <SelectValue placeholder={t("modal.selectUnit")} />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="request">Requests</SelectItem>
-                  <SelectItem value="cents">Cents</SelectItem>
+                  <SelectItem value="request">{t("rules.units.request")}</SelectItem>
+                  <SelectItem value="cents">{t("rules.units.cents")}</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -289,7 +293,7 @@ const RateLimitRuleModal = ({
 
           <div className="grid grid-cols-4 items-center gap-4">
             <Label htmlFor="windowSeconds" className="pt-2 text-right">
-              Time Window (sec)
+              {t("modal.timeWindowSec")}
             </Label>
             <Input
               id="windowSeconds"
@@ -297,7 +301,7 @@ const RateLimitRuleModal = ({
               className="col-span-3"
               value={windowSeconds}
               onChange={(e) => setWindowSeconds(e.target.value)}
-              placeholder="e.g., 3600 (for 1 hour)"
+              placeholder={t("modal.timeWindowPlaceholder")}
               min="0"
               disabled={mutation.isPending}
             />
@@ -305,7 +309,7 @@ const RateLimitRuleModal = ({
 
           <div className="grid grid-cols-4 items-center gap-4">
             <Label htmlFor="segmentType" className="text-right">
-              Apply To
+              {t("modal.applyTo")}
             </Label>
             <div className="col-span-3">
               <Select
@@ -319,13 +323,12 @@ const RateLimitRuleModal = ({
                 disabled={mutation.isPending}
               >
                 <SelectTrigger>
-                  <SelectValue placeholder="Select scope..." />
+                  <SelectValue placeholder={t("modal.selectScope")} />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="global">All Requests (Global)</SelectItem>
-                  <SelectItem value="user">Each User ID</SelectItem>{" "}
-                  {/* Updated label */}
-                  <SelectItem value="property">Custom Property</SelectItem>
+                  <SelectItem value="global">{t("modal.scopeGlobal")}</SelectItem>
+                  <SelectItem value="user">{t("modal.scopeUser")}</SelectItem>
+                  <SelectItem value="property">{t("modal.scopeProperty")}</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -334,14 +337,14 @@ const RateLimitRuleModal = ({
           {segmentType === "property" && (
             <div className="grid grid-cols-4 items-center gap-4">
               <Label htmlFor="customPropertyKey" className="text-right">
-                Property Key
+                {t("modal.propertyKey")}
               </Label>
               <Input
                 id="customPropertyKey"
                 value={customPropertyKey}
                 onChange={(e) => setCustomPropertyKey(e.target.value)}
                 className="col-span-3"
-                placeholder='e.g., "customerId" or "X-Feature-Flag"'
+                placeholder={t("modal.propertyKeyPlaceholder")}
                 disabled={mutation.isPending}
               />
             </div>
@@ -351,7 +354,7 @@ const RateLimitRuleModal = ({
           <div className="px-4 pb-2 text-sm text-destructive">
             {" "}
             {/* Adjusted padding */}
-            <P className="mb-1 font-semibold">Error</P>
+            <P className="mb-1 font-semibold">{t("modal.error")}</P>
             <pre className="font-sans whitespace-pre-wrap">{error}</pre>
           </div>
         )}
@@ -361,7 +364,7 @@ const RateLimitRuleModal = ({
             onClick={() => handleOpenChange(false)}
             disabled={mutation.isPending}
           >
-            Cancel
+            {tCommon("actions.cancel")}
           </Button>
           <Button
             type="submit"
@@ -371,11 +374,11 @@ const RateLimitRuleModal = ({
             {/* Conditional Button Text */}
             {mutation.isPending
               ? isEditMode
-                ? "Saving..."
-                : "Creating..."
+                ? t("modal.saving")
+                : t("modal.creating")
               : isEditMode
-                ? "Save Changes"
-                : "Create Rule"}
+                ? t("modal.saveChanges")
+                : t("rules.createRule")}
           </Button>
         </DialogFooter>
       </DialogContent>

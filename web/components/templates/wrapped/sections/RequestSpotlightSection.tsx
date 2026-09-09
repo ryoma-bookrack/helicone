@@ -1,3 +1,4 @@
+import { formatStandardDateTime } from "@/lib/i18n/format";
 import React, { useState } from "react";
 import { useRouter } from "next/router";
 import dynamic from "next/dynamic";
@@ -88,13 +89,8 @@ const formatCost = (cost: number): string => {
   return `$${cost.toFixed(6)}`;
 };
 
-const formatDate = (dateString: string): string => {
-  const date = new Date(dateString);
-  return date.toLocaleDateString("en-US", {
-    month: "short",
-    day: "numeric",
-  });
-};
+const formatDate = (dateString: string): string =>
+  formatStandardDateTime(dateString);
 
 const providerDisplayName = (provider: string): string => {
   const names: Record<string, string> = {

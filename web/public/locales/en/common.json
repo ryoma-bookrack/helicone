@@ -1,0 +1,449 @@
+{
+  "locale": {
+    "english": "English",
+    "switchToChinese": "切换到中文",
+    "switchToEnglish": "Switch to English"
+  },
+  "time": {
+    "justNow": "Just now",
+    "minutesAgo": "{{count}}m ago",
+    "hoursAgo": "{{count}}h ago"
+  },
+  "actions": {
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "create": "Create",
+    "update": "Update",
+    "confirm": "Confirm",
+    "close": "Close",
+    "back": "Back",
+    "next": "Next",
+    "submit": "Submit",
+    "copy": "Copy",
+    "copied": "Copied",
+    "search": "Search",
+    "filter": "Filter",
+    "export": "Export",
+    "import": "Import",
+    "refresh": "Refresh",
+    "loading": "Loading...",
+    "retry": "Retry",
+    "viewAll": "View all",
+    "learnMore": "Learn more",
+    "getStarted": "Get started",
+    "signOut": "Sign out",
+    "settings": "Settings",
+    "inviteMembers": "Invite members",
+    "darkMode": "Dark mode",
+    "clear": "Clear",
+    "upgrade": "Upgrade",
+    "apply": "Apply",
+    "expand": "Expand",
+    "shrink": "Shrink"
+  },
+  "empty": {
+    "noData": "No data",
+    "noResults": "No results found",
+    "noOptions": "No options found."
+  },
+  "errors": {
+    "generic": "Something went wrong, please try again",
+    "notFound": "Not found",
+    "unauthorized": "Unauthorized",
+    "notFoundTitle": "404 Error",
+    "notFoundDescription": "The page you are looking for does not exist or has been moved.",
+    "goHome": "Go Home",
+    "uselessWebLink": "The Useless Web",
+    "boundary": {
+      "title": "Oops! Something went wrong.",
+      "description": "We apologize for the inconvenience. The error has been logged and we'll look into it.",
+      "detailsHeading": "Error details:",
+      "copyFullReport": "Copy full error report",
+      "componentStackHeading": "Component Stack:",
+      "copyStack": "Copy stack",
+      "copyComponentStack": "Copy component stack",
+      "reloadPage": "Reload Page"
+    }
+  },
+  "aria": {
+    "progress": "Progress",
+    "dismiss": "Dismiss",
+    "toggleSidebar": "Toggle Sidebar",
+    "sidebarTitle": "Sidebar",
+    "sidebarDescription": "Displays the mobile sidebar.",
+    "carousel": "carousel",
+    "carouselSlide": "slide",
+    "previousSlide": "Previous slide",
+    "nextSlide": "Next slide",
+    "copyToClipboard": "Copy {{label}} to clipboard",
+    "copyCode": "Copy code",
+    "progress": "Progress",
+    "removeOption": "Remove large option",
+    "useSetting": "Use setting",
+    "actions": "Actions",
+    "toggleExpandAllRows": "Toggle expand all rows",
+    "iconAlt": "{{title}} icon"
+  },
+  "date": {
+    "pickDate": "Pick a date",
+    "unknownDate": "Unknown date"
+  },
+  "select": {
+    "option": "Select option",
+    "selectAnOption": "Select an option",
+    "selectOrEnter": "Select or enter a value",
+    "categories": "Categories"
+  },
+  "form": {
+    "firstName": "First Name",
+    "lastName": "Last Name",
+    "emailAddress": "Email address",
+    "companyName": "Company Name",
+    "companyDescriptionLabel": "What does your company do and how you plan to use Helicone.",
+    "submitError": "Error submitting form. Please try again later.",
+    "submitSuccess": "Form submitted successfully!",
+    "useCouponCode": "Use coupon code:",
+    "scheduleCall": "Schedule a call",
+    "enterValue": "Enter a value",
+    "key": "Key",
+    "value": "Value"
+  },
+  "notifications": {
+    "codeCopied": "Code copied to clipboard",
+    "codeCopyFailed": "Failed to copy code",
+    "copiedToClipboard": "Copied to clipboard"
+  },
+  "deprecation": {
+    "title": "Deprecation Notice",
+    "message": "We are deprecating the {{feature}} feature and it will be removed from the platform on September 1st, 2025."
+  },
+  "freeTier": {
+    "defaultMessage": "You've used {{itemCount}}/{{freeLimit}} {{feature}}. Upgrade for unlimited access."
+  },
+  "trial": {
+    "upgrade": "Upgrade",
+    "startTrial": "Start Trial",
+    "enableTitle": "Enable {{featureName}}",
+    "startTitle": "Start {{featureName}} Trial",
+    "enableDescription": "Upgrade your plan to enable {{featureName}}.",
+    "startDescription": "Start a free trial to access {{featureName}}.",
+    "confirmEnableDescription": "Would you like to enable {{featureName}}? This will add it to your current subscription.",
+    "confirmStartDescription": "Would you like to start your {{featureName}} trial? You can cancel anytime during the trial period."
+  },
+  "languages": {
+    "javascript": "JavaScript",
+    "python": "Python",
+    "curl": "cURL"
+  },
+  "integration": {
+    "usingAnotherSdk": "Using another SDK?"
+  },
+  "live": {
+    "live": "Live",
+    "startLive": "Start Live"
+  },
+  "pricing": {
+    "bestValue": "BEST VALUE",
+    "popular": "POPULAR",
+    "currentPlan": "CURRENT PLAN"
+  },
+  "demo": {
+    "buttonText": "Demo 🚀",
+    "removeDemo": "Remove demo",
+    "welcomeBanner": "Welcome to the Helicone demo! Complete the onboarding process to explore all features.",
+    "welcomeBannerFull": "Welcome to the Helicone demo! Complete the onboarding process to unlock the full demo on the last step."
+  },
+  "export": {
+    "exportData": "Export data",
+    "selectFormat": "Select format",
+    "csv": "CSV",
+    "jsonl": "JSONL",
+    "export": "Export",
+    "exporting": "Exporting",
+    "exportFormat": "Export {{format}}",
+    "csvTitle": "Export CSV",
+    "csvDescription": "Exporting by CSV is limited to 500 rows due to the huge amounts of data in the requests. For larger exports, please use our",
+    "limitDescription": "Exporting is limited to {{maxRows}} rows due to the huge amounts of data in the requests. For larger exports, please use our",
+    "exportWarning": "Export may take a lot of time. Please do not close this modal once export is started.",
+    "exportWarningData": "Exporting may take a while depending on the amount of data. Please do not close this modal once export is started.",
+    "apiLink": "API",
+    "downloadSuccess": "{{format}} downloaded successfully!",
+    "downloadError": "Error exporting {{format}}. Please try again."
+  },
+  "table": {
+    "loading": "Loading Data...",
+    "userLabel": "User:",
+    "totalTokensLabel": "Total Tokens:",
+    "completionLabel": "Completion:",
+    "promptLabel": "Prompt:",
+    "sort": "Sort",
+    "selectColumn": "Select a column",
+    "rowSelected": "{{count}} row selected",
+    "rowsSelected": "{{count}} rows selected"
+  },
+  "tableHeader": {
+    "filters": "Filters",
+    "columns": "Columns",
+    "onlySelectedColumns": "Only selected columns",
+    "allEventProperties": "All event properties",
+    "propertiesOnExport": "Properties on export",
+    "notificationMethod": "Notification method",
+    "closeSearch": "Close search",
+    "openSearch": "Open search",
+    "manageColumns": "Manage columns",
+    "exportData": "Export data",
+    "toggleView": "Toggle view"
+  },
+  "columns": {
+    "manageColumns": "Manage columns",
+    "columnReorder": "Column Reorder",
+    "orderingNote": "The ordering only affects your Requests table",
+    "presetNote": "Note: If something is not shown, or your columns are in an unexpected state, please click Back to preset on the bottom left of the right panel",
+    "backToPreset": "Back to preset",
+    "backToPresetNote": "Back to preset to restore default columns",
+    "allColumns": "All columns",
+    "default": "Default",
+    "deselectAll": "Deselect All",
+    "selectAll": "Select All"
+  },
+  "tooltips": {
+    "clickToCopy": "Click to Copy"
+  },
+  "timeFilter": {
+    "pickDateTime": "Pick a date and time",
+    "quickSelect": "Quick Select:",
+    "customRange": "Custom Range:",
+    "datePicker": "Date Picker:",
+    "hours": "Hour(s)",
+    "days": "Day(s)",
+    "weeks": "Week(s)",
+    "now": "- Now",
+    "startAfterEndWarning": "Warning: Start date is after end date"
+  },
+  "modals": {
+    "productHunt": {
+      "launchTitle": "Product Hunt Launch! 🎉",
+      "promoTitle": "Launch Promo 🎉",
+      "helpTitle": "We need your help! 🫶",
+      "launchedMessage": "We just launched on Product Hunt today and would love your support!",
+      "creditMessage": "We are giving away $500 in credit to all new Growth users.",
+      "upvoteMessage": "To see the code, please give us an upvote!",
+      "promoDescription": "Get $500 in credit when you upgrade to Growth today. Use code",
+      "creditExpires": "*The credit expires in 6 months.",
+      "launchCardMessage": "We just launched today and would love your support! 🙏"
+    }
+  },
+  "features": {
+    "sessions": {
+      "llm": "LLM",
+      "tool": "Tool",
+      "image": "Image",
+      "threat": "Threat",
+      "vectorDb": "Vector DB",
+      "assistant": "Assistant",
+      "moderation": "Moderation",
+      "embedding": "Embedding"
+    }
+  },
+  "visuals": {
+    "rateLimitBackground": "Rate limit background",
+    "codeExample": {
+      "webhook": "Webhook",
+      "properties": "Properties",
+      "users": "Users"
+    },
+    "datasets": {
+      "fineTuning": "Dataset for fine-tuning",
+      "testing": "Dataset for testing",
+      "evaluation": "Dataset for evaluation",
+      "experiments": "Dataset for experiments",
+      "badData": "Bad data",
+      "paidUser": "Paid user dataset",
+      "production": "Production dataset",
+      "test": "Test dataset",
+      "customerFeedback": "Customer feedback",
+      "supportQueries": "Support queries",
+      "trainingExamples": "Training examples",
+      "name": "Name",
+      "createdAt": "Created At",
+      "rows": "Rows",
+      "experiment": "Experiment",
+      "fineTune": "Fine-tune"
+    }
+  },
+  "emptyStates": {
+    "default": {
+      "title": "No Data Available",
+      "description": "Start sending requests through Helicone to see your analytics here.",
+      "ctaPrimary": "Get Started",
+      "ctaSecondary": "View Docs"
+    },
+    "prompts": {
+      "title": "Create Your First Prompt",
+      "description": "Design, version, and deploy prompts through the AI Gateway. No code changes needed.",
+      "ctaPrimary": "Create First Prompt",
+      "ctaSecondary": "View Docs"
+    },
+    "sessions": {
+      "title": "Track Your First Session",
+      "description": "To start tracking your agentic workflow, simply add these headers:",
+      "ctaSecondary": "View Docs"
+    },
+    "cache": {
+      "title": "Cache Common Responses",
+      "description": "Caching reduces API costs and improve response times. Control cache behaviors using these parameters:",
+      "ctaSecondary": "View Docs"
+    },
+    "rateLimits": {
+      "title": "Configure Your Rate Limits",
+      "description": "Requests will appear here once they hit your configured limits. Monitor your API usage with 1 simple header:",
+      "ctaPrimary": "Create Rate Limit",
+      "ctaSecondary": "View Docs"
+    },
+    "users": {
+      "title": "Start Tracking User Metrics",
+      "description": "Start tracking per-user request volumes and usage patterns with a simple header:",
+      "ctaSecondary": "View Docs"
+    },
+    "properties": {
+      "title": "Create Your First Custom Property",
+      "description": "Add custom metadata to your requests. Track metrics and user behaviors for deeper insights.",
+      "ctaSecondary": "View Docs"
+    },
+    "datasets": {
+      "title": "Create Your First Dataset",
+      "description": "Curate your dataset from requests data to fine-tune LLMs or test prompts.",
+      "ctaPrimary": "Go to requests",
+      "ctaSecondary": "View Docs"
+    },
+    "webhooks": {
+      "title": "No Webhooks Configured",
+      "description": "Set up webhooks to automate your workflow and integrate with external tools.",
+      "ctaPrimary": "Add Webhook",
+      "ctaSecondary": "View Docs"
+    },
+    "alerts": {
+      "title": "Create Your First Alert",
+      "description": "Receive real-time notifications in Slack or via email when something goes wrong.",
+      "ctaPrimary": "Create Alert"
+    },
+    "hql": {
+      "title": "Request Access to HQL",
+      "description": "Query your Helicone data with HQL (Helicone Query Language). Analyze requests, tokens, costs, and custom properties across your entire LLM usage.",
+      "ctaPrimary": "Request Access",
+      "ctaSecondary": "View Docs"
+    }
+  },
+  "prompts": {
+    "autoImprove": {
+      "intro": "Auto-Improve uses AI to suggest improvements to your prompt based on your eval results.",
+      "introDetailed": "Auto-Improve will read your prompt to understand how it comes off now vs its instructional intent. Then it will suggest improvements to get it closer to its full potential.",
+      "start": "Start Auto-Improve",
+      "connecting": "Connecting you with our systems...",
+      "current": "(Current)",
+      "suggested": "(Suggested)",
+      "saveSuggested": "Save Suggested Version"
+    },
+    "evals": {
+      "title": "Evals",
+      "addEval": "Add Eval",
+      "emptyState": "No evaluators configured yet.",
+      "emptyStateDetailed": "Measure the performance of your prompt with Evals. Press the \"Add Eval\" button to choose or create one.",
+      "selectEvaluators": "Select Evaluators",
+      "selectEvaluatorsCount": "Select Evaluators ({{count}})",
+      "selectEvaluatorsDescription": "Select evaluators to add or create a new custom evaluator.",
+      "createCustom": "Create New Custom Evaluator",
+      "opensInNewTab": "(Opens in new tab)"
+    },
+    "inputs": {
+      "title": "Inputs",
+      "emptyState": "No inputs configured.",
+      "emptyStateDetailed": "Make your prompt dynamic with Inputs. Type {{name}} or highlight a value in a message and press ⌘E.",
+      "importFromProduction": "Import specific values from Production",
+      "importRandomFromProduction": "Import random values from Production",
+      "noProductionData": "No production data available",
+      "importVariablePlaceholder": "Import variable value from production...",
+      "enterDefaultPlaceholder": "Enter default value for {{name}}...",
+      "namePlaceholder": "Input name..."
+    },
+    "messages": {
+      "loadError": "Unable to load prompt version. Please try again.",
+      "loadErrorTitle": "Unable to load prompt version...",
+      "reloadPrompt": "Please load or import a different version to try again.",
+      "importHelp": "Learn more about importing from code.",
+      "addMessagePair": "Add Message Pair",
+      "addPrefillMessage": "Add Prefill Message"
+    },
+    "parameters": {
+      "title": "Parameters",
+      "creatorModelProvider": "Creator / Model / Provider",
+      "creator": "Creator",
+      "model": "Model",
+      "provider": "Provider",
+      "reasoningEffort": "Reasoning Effort",
+      "maxTokens": "Max Tokens",
+      "temperature": "Temperature",
+      "effort": "Effort",
+      "low": "Low",
+      "medium": "Medium",
+      "high": "High",
+      "responseFormat": "Response Format",
+      "jsonSchema": "JSON Schema",
+      "text": "Text",
+      "stopSequences": "Stop Sequences",
+      "addStopSequence": "Add a stop sequence"
+    },
+    "response": {
+      "title": "Response",
+      "addToMessages": "Add response to messages",
+      "render": "Render",
+      "placeholder": "Response will appear here..."
+    },
+    "responseFormat": {
+      "invalidSchema": "Invalid JSON Schema",
+      "editTitle": "Edit Response Format Schema",
+      "saveSchema": "Save Schema"
+    },
+    "toolbar": {
+      "typeHere": "Type here...",
+      "makeIntoInput": "Make Into Input",
+      "wrapInDelimiters": "Wrap In Delimiters",
+      "performEdit": "Perform an Edit",
+      "inputNamePlaceholder": "Input name...",
+      "delimiterPlaceholder": "Delimiter name...",
+      "editDescriptionPlaceholder": "Describe your edit...",
+      "promptPlaceholder": "Type your prompt..."
+    },
+    "tools": {
+      "title": "Tools",
+      "newTool": "New Tool",
+      "deleteTool": "Delete Tool",
+      "emptyState": "No Tools configured.",
+      "invalidJson": "Invalid JSON",
+      "saveTool": "Save Tool"
+    },
+    "toolEditor": {
+      "name": "Name",
+      "description": "Description",
+      "required": "Required",
+      "enterToolName": "Enter tool name",
+      "parameters": "Parameters ({{count}})",
+      "addParameter": "Add Parameter",
+      "noParameters": "No parameters added yet.",
+      "parameterName": "Parameter name",
+      "parameterDescription": "Parameter description",
+      "saveTool": "Save Tool"
+    },
+    "versionSelector": {
+      "editPromptId": "Edit prompt id",
+      "copyPromptId": "Copy Prompt ID",
+      "changePromptId": "Change Prompt ID",
+      "promoteToProduction": "Promote Version to Production",
+      "production": "Production",
+      "copiedPromptId": "Copied Prompt ID to clipboard"
+    },
+    "imageMessage": "Image message"
+  }
+}

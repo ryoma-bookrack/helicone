@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import {
   ResizableHandle,
   ResizablePanel,
@@ -219,6 +220,9 @@ const convertOpenAIChatRequestToMappedLLMRequest = (
 };
 
 const PlaygroundPage = (props: PlaygroundPageProps) => {
+  const { t } = useTranslation("playground");
+  const { t: tCommon } = useTranslation("common");
+
   const { setToolHandler } = useHeliconeAgent();
   const { requestId, promptVersionId, createPrompt } = props;
   const { setNotification } = useNotification();
@@ -629,7 +633,7 @@ const PlaygroundPage = (props: PlaygroundPageProps) => {
 
   const onCreatePrompt = async (tags: string[], promptName: string) => {
     if (!mappedContent) {
-      setNotification("No mapped content", "error");
+      setNotification(t("ui.noMappedContent"), "error");
       return;
     }
     const promptBody = convertMappedLLMRequestToOpenAIChatRequest(
@@ -654,7 +658,7 @@ const PlaygroundPage = (props: PlaygroundPageProps) => {
       }
     } catch (error) {
       console.error("Failed to save prompt:", error);
-      setNotification("Failed to save prompt", "error");
+      setNotification(t("ui.failedToSavePrompt"), "error");
     }
   };
 
@@ -664,12 +668,12 @@ const PlaygroundPage = (props: PlaygroundPageProps) => {
     commitMessage: string,
   ) => {
     if (!mappedContent) {
-      setNotification("No mapped content", "error");
+      setNotification(t("ui.noMappedContent"), "error");
       return;
     }
 
     if (!promptVersionData?.promptVersion || !promptVersionData?.prompt) {
-      setNotification("No prompt version data available", "error");
+      setNotification(t("ui.noPromptVersionDataAvailable"), "error");
       return;
     }
 
@@ -700,7 +704,7 @@ const PlaygroundPage = (props: PlaygroundPageProps) => {
       }
     } catch (error) {
       console.error("Failed to save prompt version:", error);
-      setNotification("Failed to save prompt version", "error");
+      setNotification(t("ui.failedToSavePromptVersion"), "error");
     }
   };
 
@@ -1012,7 +1016,7 @@ const PlaygroundPage = (props: PlaygroundPageProps) => {
           mappedContent.schema.request.messages || [],
         );
       if (hasSubstitutionFailure) {
-        setNotification("Improper template values!", "error");
+        setNotification(t("ui.improperTemplateValues"), "error");
         return mappedContent;
       }
       const substituted = HeliconeTemplateManager.substituteVariablesJSON(
@@ -1020,7 +1024,7 @@ const PlaygroundPage = (props: PlaygroundPageProps) => {
         substitutionValues,
       );
       if (!substituted.success) {
-        setNotification("Improper template values!", "error");
+        setNotification(t("ui.improperTemplateValues"), "error");
       }
 
       const substitutedTools = HeliconeTemplateManager.substituteVariablesJSON(
@@ -1028,7 +1032,7 @@ const PlaygroundPage = (props: PlaygroundPageProps) => {
         substitutionValues,
       );
       if (!substitutedTools.success) {
-        setNotification("Improper template values!", "error");
+        setNotification(t("ui.improperTemplateValues"), "error");
       }
 
       return {
@@ -1048,14 +1052,14 @@ const PlaygroundPage = (props: PlaygroundPageProps) => {
         },
       };
     } catch (error) {
-      setNotification("Improper template values!", "error");
+      setNotification(t("ui.improperTemplateValues"), "error");
       return mappedContent;
     }
   };
 
   const onRun = async () => {
     if (!mappedContent) {
-      setNotification("No mapped content", "error");
+      setNotification(t("ui.noMappedContent"), "error");
       return;
     }
 
@@ -1123,7 +1127,7 @@ const PlaygroundPage = (props: PlaygroundPageProps) => {
         if (error instanceof Error) {
           if (error.name === "AbortError") {
             setError("Request was cancelled");
-            setNotification("Request was cancelled", "error");
+            setNotification(t("ui.requestWasCancelled"), "error");
           } else {
             console.error("Error:", error);
             setError(
@@ -1142,7 +1146,7 @@ const PlaygroundPage = (props: PlaygroundPageProps) => {
         abortController.current = null;
       }
     } catch (error) {
-      setNotification("Failed to save prompt state", "error");
+      setNotification(t("ui.failedToSavePromptState"), "error");
       setIsLoading(false);
       if (error instanceof Error) {
         setError(error.message);
@@ -1217,9 +1221,7 @@ const PlaygroundPage = (props: PlaygroundPageProps) => {
         leftSection={
           <div className="flex items-center gap-3">
             <Link href="/playground">
-              <Small className="font-bold text-gray-500 dark:text-slate-300">
-                Playground
-              </Small>
+              <Small className="font-bold text-gray-500 dark:text-slate-300">{t("ui.playground")}</Small>
             </Link>
             {promptVersionData?.prompt && promptVersionData?.promptVersion && (
               <>

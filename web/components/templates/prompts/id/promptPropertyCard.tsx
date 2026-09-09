@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import {
   Tooltip,
   TooltipContent,
@@ -36,6 +37,9 @@ interface PromptPropertyCardProps {
 }
 
 const PromptPropertyCard = (props: PromptPropertyCardProps) => {
+  const { t } = useTranslation("prompts");
+  const { t: tCommon } = useTranslation("common");
+
   const {
     isSelected,
     onSelect,
@@ -116,7 +120,7 @@ const PromptPropertyCard = (props: PromptPropertyCardProps) => {
                       onClick={(e) => {
                         e.stopPropagation();
                         navigator.clipboard.writeText(requestId);
-                        setNotification("Copied to clipboard", "success");
+                        setNotification(t("ui.copiedToClipboard"), "success");
                       }}
                       className={clsx(
                         size === "large" ? "text-md" : "text-sm",
@@ -127,7 +131,7 @@ const PromptPropertyCard = (props: PromptPropertyCardProps) => {
                     </button>
                   </TooltipTrigger>
                   <TooltipContent className="z-[1001] text-xs">
-                    <p>Copy</p>
+                    <p>{tCommon("actions.copy")}</p>
                   </TooltipContent>
                 </Tooltip>
               </div>
@@ -137,7 +141,7 @@ const PromptPropertyCard = (props: PromptPropertyCardProps) => {
             </div>
           </div>
           <Col>
-            <label className="mt-2 text-xs text-slate-500">User Inputs</label>
+            <label className="mt-2 text-xs text-slate-500">{t("ui.userInputs")}</label>
             <ul className="flex w-full flex-col divide-y divide-slate-300 dark:divide-slate-700">
               {Object.entries(properties).map(([key, value]) => (
                 <li
@@ -182,7 +186,7 @@ const PromptPropertyCard = (props: PromptPropertyCardProps) => {
                       onClick={(e) => {
                         e.stopPropagation();
                         navigator.clipboard.writeText(requestId);
-                        setNotification("Copied to clipboard", "success");
+                        setNotification(t("ui.copiedToClipboard"), "success");
                       }}
                       className={clsx(
                         size === "large" ? "text-lg" : "text-sm",
@@ -193,7 +197,7 @@ const PromptPropertyCard = (props: PromptPropertyCardProps) => {
                     </button>
                   </TooltipTrigger>
                   <TooltipContent side="bottom" className="z-[1001] text-xs">
-                    <p>Copy</p>
+                    <p>{tCommon("actions.copy")}</p>
                   </TooltipContent>
                 </Tooltip>
               </TooltipProvider>

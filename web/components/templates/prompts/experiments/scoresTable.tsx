@@ -1,3 +1,5 @@
+import { formatStandardDateTime } from "@/lib/i18n/format";
+import { useTranslation } from "react-i18next";
 import ModelPill from "../../requests/modelPill";
 import { clsx } from "../../../shared/clsx";
 import { SimpleTable } from "../../../shared/table/simpleTable";
@@ -20,6 +22,9 @@ export type ScoresProps = {
   scores: ExperimentScores;
 };
 const ScoresTable = ({ scores }: ScoresProps) => {
+  const { t } = useTranslation("prompts");
+  const { t: tCommon } = useTranslation("common");
+
   const calculateChange = (datasetScore: number, hypothesisScore: number) => {
     const change = hypothesisScore - datasetScore;
     const percentageChange = (() => {
@@ -35,13 +40,7 @@ const ScoresTable = ({ scores }: ScoresProps) => {
     };
   };
 
-  const formatDate = (date: string) => {
-    return new Date(date).toLocaleDateString("en-US", {
-      month: "2-digit",
-      day: "2-digit",
-      year: "numeric",
-    });
-  };
+  const formatDate = (date: string) => formatStandardDateTime(date);
 
   const getScoreValue = (score: Score, field: string) => {
     if (field === "dateCreated" && score.valueType === "string") {
@@ -194,10 +193,10 @@ const ScoresTable = ({ scores }: ScoresProps) => {
 
   const renderScoreValue = (value: any) => {
     if (value instanceof Date) {
-      return value.toLocaleDateString();
+      return formatStandardDateTime(value);
     }
     if (typeof value === "string" && !isNaN(Date.parse(value))) {
-      return new Date(value).toLocaleDateString();
+      return formatStandardDateTime(value);
     }
 
     return value;
@@ -240,9 +239,7 @@ const ScoresTable = ({ scores }: ScoresProps) => {
   return (
     <>
       <div className="flex items-center space-x-4">
-        <h1 className="text-2xl font-semibold text-black dark:text-white">
-          Overview
-        </h1>
+        <h1 className="text-2xl font-semibold text-black dark:text-white">{t("ui.overview")}</h1>
       </div>
       <SimpleTable
         data={getTableData(scores) || []}
@@ -258,21 +255,21 @@ const ScoresTable = ({ scores }: ScoresProps) => {
           },
           {
             key: "dataset",
-            header: "Original prompt",
+            header: t("ui.originalPrompt"),
             render: (score) => (
               <div className="text-black">{score.dataset}</div>
             ),
           },
           {
             key: "hypothesis",
-            header: "Experiment prompt",
+            header: t("ui.experimentPrompt"),
             render: (score) => (
               <div className="text-black">{score.hypothesis}</div>
             ),
           },
           {
             key: "compare",
-            header: "Compare",
+            header: t("ui.compare"),
             render: (score) => (
               <div className="text-black">{score.compare}</div>
             ),

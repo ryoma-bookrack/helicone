@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
@@ -50,6 +51,8 @@ export const EvaluatorCard: React.FC<EvaluatorCardProps> = ({
   onEdit,
   onTest,
 }) => {
+  const { t } = useTranslation("evals");
+  const { t: tCommon } = useTranslation("common");
   // Chart view state
   const [chartView, setChartView] = useState<ChartView>("time");
 
@@ -135,13 +138,9 @@ export const EvaluatorCard: React.FC<EvaluatorCardProps> = ({
         >
           <TabsList className="grid w-full grid-cols-2">
             <TabsTrigger value="time" className="text-xs">
-              <LineChartIcon className="mr-1 h-3 w-3" />
-              Trend
-            </TabsTrigger>
+              <LineChartIcon className="mr-1 h-3 w-3" />{t("ui.trend")}</TabsTrigger>
             <TabsTrigger value="distribution" className="text-xs">
-              <BarChart2Icon className="mr-1 h-3 w-3" />
-              Distribution
-            </TabsTrigger>
+              <BarChart2Icon className="mr-1 h-3 w-3" />{t("ui.distribution")}</TabsTrigger>
           </TabsList>
         </Tabs>
 
@@ -164,8 +163,8 @@ export const EvaluatorCard: React.FC<EvaluatorCardProps> = ({
             </>
           ) : (
             <>
-              <span className="text-muted-foreground">No data available</span>
-              <span className="text-slate-500">Uses: 0</span>
+              <span className="text-muted-foreground">{t("ui.noDataAvailable")}</span>
+              <span className="text-slate-500">{t("ui.uses0")}</span>
             </>
           )}
         </div>
@@ -181,9 +180,7 @@ export const EvaluatorCard: React.FC<EvaluatorCardProps> = ({
             onEdit(evaluator.scoreName || evaluator.id);
           }}
         >
-          <EditIcon className="h-4 w-4" />
-          Edit
-        </Button>
+          <EditIcon className="h-4 w-4" />{tCommon("actions.edit")}</Button>
         <Button
           variant="outline"
           size="sm"
@@ -193,9 +190,7 @@ export const EvaluatorCard: React.FC<EvaluatorCardProps> = ({
             onTest();
           }}
         >
-          <PlayIcon className="h-4 w-4" />
-          Test
-        </Button>
+          <PlayIcon className="h-4 w-4" />{t("ui.test")}</Button>
       </CardFooter>
     </Card>
   );

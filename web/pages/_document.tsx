@@ -10,12 +10,13 @@ import { Toaster } from "@/components/ui/sonner";
 class MyDocument extends Document {
   static async getInitialProps(ctx: DocumentContext) {
     const initialProps = await Document.getInitialProps(ctx);
-    return { ...initialProps };
+    return { ...initialProps, locale: ctx.locale ?? "zh" };
   }
 
   render() {
+    const locale = (this.props as { locale?: string }).locale ?? "zh";
     return (
-      <Html>
+      <Html lang={locale === "zh" ? "zh-CN" : "en"}>
         <Head>
           {/* HTTP LAN (e.g. http://192.168.x.x) is not a secure context; browsers omit crypto.randomUUID. */}
           <script

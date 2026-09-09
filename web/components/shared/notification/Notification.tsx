@@ -1,5 +1,5 @@
 import { Transition } from "@headlessui/react";
-
+import { useTranslation } from "react-i18next";
 import { useEffect, useState } from "react";
 import { clsx } from "../clsx";
 import useNotification from "./useNotification";
@@ -12,6 +12,7 @@ import {
 
 const Notification = () => {
   const { variant, title, clearNotification } = useNotification();
+  const { t } = useTranslation("common");
 
   const [show, setShow] = useState(true);
 
@@ -137,7 +138,7 @@ const Notification = () => {
                     "inline-flex rounded-md p-1.5 hover:cursor-pointer focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-green-50",
                   )}
                 >
-                  <span className="sr-only">Dismiss</span>
+                  <span className="sr-only">{t("aria.dismiss")}</span>
                   <XMarkIcon className="h-5 w-5" aria-hidden="true" />
                 </button>
               </div>

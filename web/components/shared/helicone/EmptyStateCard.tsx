@@ -16,16 +16,16 @@ import {
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import { createHighlighter } from "shiki";
+import { useTranslation } from "react-i18next";
 
-// Create a singleton highlighter instance
 const highlighterPromise = createHighlighter({
   themes: ["github-light", "github-dark"],
   langs: ["javascript", "python", "bash", "http", "plaintext", "sql"],
 });
 
 interface EmptyStateFeature {
-  title: string;
-  description: string;
+  titleKey: string;
+  descriptionKey: string;
   icon?: React.ElementType;
   featureImage: {
     type: "image" | "video" | "code" | "none";
@@ -35,24 +35,22 @@ interface EmptyStateFeature {
   };
   cta?: {
     primary?: {
-      text: string;
+      ctaPrimaryKey?: string;
       link?: string;
       onClick?: boolean;
       showPlusIcon?: boolean;
     };
     secondary?: {
-      text: string;
+      ctaSecondaryKey: string;
       link: string;
     };
   };
 }
 
-// Feature definitions with consistent structure
 export const EMPTY_STATE_FEATURES: Record<string, EmptyStateFeature> = {
   prompts: {
-    title: "Create Your First Prompt",
-    description:
-      "Design, version, and deploy prompts through the AI Gateway. No code changes needed.",
+    titleKey: "emptyStates.prompts.title",
+    descriptionKey: "emptyStates.prompts.description",
     icon: Tag,
     featureImage: {
       type: "code",
@@ -71,20 +69,19 @@ const response = await client.chat.completions.create({
     },
     cta: {
       primary: {
-        text: "Create First Prompt",
+        ctaPrimaryKey: "emptyStates.prompts.ctaPrimary",
         onClick: true,
         showPlusIcon: true,
       },
       secondary: {
-        text: "View Docs",
+        ctaSecondaryKey: "emptyStates.prompts.ctaSecondary",
         link: "https://docs.helicone.ai/features/advanced-usage/prompts",
       },
     },
   },
   sessions: {
-    title: "Track Your First Session",
-    description:
-      "To start tracking your agentic workflow, simply add these headers:",
+    titleKey: "emptyStates.sessions.title",
+    descriptionKey: "emptyStates.sessions.description",
     icon: Layers,
     featureImage: {
       type: "code",
@@ -95,15 +92,14 @@ Helicone-Session-Name: Customer Support Flow`,
     },
     cta: {
       secondary: {
-        text: "View Docs",
+        ctaSecondaryKey: "emptyStates.sessions.ctaSecondary",
         link: "https://docs.helicone.ai/features/sessions",
       },
     },
   },
   cache: {
-    title: "Cache Common Responses",
-    description:
-      "Caching reduces API costs and improve response times. Control cache behaviors using these parameters:",
+    titleKey: "emptyStates.cache.title",
+    descriptionKey: "emptyStates.cache.description",
     icon: Archive,
     featureImage: {
       type: "code",
@@ -116,15 +112,14 @@ Helicone-Cache-Seed: "user-123"         // Optional: Isolate cache by seed`,
     },
     cta: {
       secondary: {
-        text: "View Docs",
+        ctaSecondaryKey: "emptyStates.cache.ctaSecondary",
         link: "https://docs.helicone.ai/features/advanced-usage/caching",
       },
     },
   },
   "rate-limits": {
-    title: "Configure Your Rate Limits",
-    description:
-      "Requests will appear here once they hit your configured limits. Monitor your API usage with 1 simple header:",
+    titleKey: "emptyStates.rateLimits.title",
+    descriptionKey: "emptyStates.rateLimits.description",
     icon: Shield,
     featureImage: {
       type: "code",
@@ -134,20 +129,19 @@ Helicone-Cache-Seed: "user-123"         // Optional: Isolate cache by seed`,
     },
     cta: {
       secondary: {
-        text: "View Docs",
+        ctaSecondaryKey: "emptyStates.rateLimits.ctaSecondary",
         link: "https://docs.helicone.ai/features/advanced-usage/custom-rate-limits",
       },
       primary: {
-        text: "Create Rate Limit",
+        ctaPrimaryKey: "emptyStates.rateLimits.ctaPrimary",
         onClick: true,
         showPlusIcon: true,
       },
     },
   },
   users: {
-    title: "Start Tracking User Metrics",
-    description:
-      "Start tracking per-user request volumes and usage patterns with a simple header:",
+    titleKey: "emptyStates.users.title",
+    descriptionKey: "emptyStates.users.description",
     icon: User,
     featureImage: {
       type: "code",
@@ -156,15 +150,14 @@ Helicone-Cache-Seed: "user-123"         // Optional: Isolate cache by seed`,
     },
     cta: {
       secondary: {
-        text: "View Docs",
+        ctaSecondaryKey: "emptyStates.users.ctaSecondary",
         link: "https://docs.helicone.ai/features/advanced-usage/user-metrics",
       },
     },
   },
   properties: {
-    title: "Create Your First Custom Property",
-    description:
-      "Add custom metadata to your requests. Track metrics and user behaviors for deeper insights.",
+    titleKey: "emptyStates.properties.title",
+    descriptionKey: "emptyStates.properties.description",
     icon: Tag,
     featureImage: {
       type: "code",
@@ -177,15 +170,14 @@ Helicone-Property-UseCase: email_campaign`,
     },
     cta: {
       secondary: {
-        text: "View Docs",
+        ctaSecondaryKey: "emptyStates.properties.ctaSecondary",
         link: "https://docs.helicone.ai/features/advanced-usage/custom-properties",
       },
     },
   },
   datasets: {
-    title: "Create Your First Dataset",
-    description:
-      "Curate your dataset from requests data to fine-tune LLMs or test prompts. ",
+    titleKey: "emptyStates.datasets.title",
+    descriptionKey: "emptyStates.datasets.description",
     icon: GitBranch,
     featureImage: {
       type: "video",
@@ -194,19 +186,18 @@ Helicone-Property-UseCase: email_campaign`,
     },
     cta: {
       primary: {
-        text: "Go to requests",
+        ctaPrimaryKey: "emptyStates.datasets.ctaPrimary",
         link: "/requests",
       },
       secondary: {
-        text: "View Docs",
+        ctaSecondaryKey: "emptyStates.datasets.ctaSecondary",
         link: "https://docs.helicone.ai/features/fine-tuning",
       },
     },
   },
   webhooks: {
-    title: "No Webhooks Configured",
-    description:
-      "Set up webhooks to automate your workflow and integrate with external tools.",
+    titleKey: "emptyStates.webhooks.title",
+    descriptionKey: "emptyStates.webhooks.description",
     icon: GitBranch,
     featureImage: {
       type: "none",
@@ -214,20 +205,19 @@ Helicone-Property-UseCase: email_campaign`,
     },
     cta: {
       primary: {
-        text: "Add Webhook",
+        ctaPrimaryKey: "emptyStates.webhooks.ctaPrimary",
         onClick: true,
         showPlusIcon: true,
       },
       secondary: {
-        text: "View Docs",
+        ctaSecondaryKey: "emptyStates.webhooks.ctaSecondary",
         link: "https://docs.helicone.ai/features/webhooks",
       },
     },
   },
   alerts: {
-    title: "Create Your First Alert",
-    description:
-      "Receive real-time notifications in Slack or via email when something goes wrong.",
+    titleKey: "emptyStates.alerts.title",
+    descriptionKey: "emptyStates.alerts.description",
     icon: Bell,
     featureImage: {
       type: "none",
@@ -235,16 +225,15 @@ Helicone-Property-UseCase: email_campaign`,
     },
     cta: {
       primary: {
-        text: "Create Alert",
+        ctaPrimaryKey: "emptyStates.alerts.ctaPrimary",
         onClick: true,
         showPlusIcon: true,
       },
     },
   },
   hql: {
-    title: "Request Access to HQL",
-    description:
-      "Query your Helicone data with HQL (Helicone Query Language). Analyze requests, tokens, costs, and custom properties across your entire LLM usage.",
+    titleKey: "emptyStates.hql.title",
+    descriptionKey: "emptyStates.hql.description",
     icon: Database,
     featureImage: {
       type: "code",
@@ -263,12 +252,12 @@ LIMIT 100`,
     },
     cta: {
       primary: {
-        text: "Request Access",
+        ctaPrimaryKey: "emptyStates.hql.ctaPrimary",
         onClick: true,
         showPlusIcon: false,
       },
       secondary: {
-        text: "View Docs",
+        ctaSecondaryKey: "emptyStates.hql.ctaSecondary",
         link: "https://docs.helicone.ai/features/hql",
       },
     },
@@ -282,7 +271,6 @@ export interface EmptyStateCardProps {
   onPrimaryClick?: () => void;
 }
 
-// Custom component for Shiki highlighted code
 const ShikiHighlightedCode: React.FC<{
   code: string;
   language: string;
@@ -297,7 +285,6 @@ const ShikiHighlightedCode: React.FC<{
         lang: language,
         theme: "github-dark",
       });
-      // Apply custom CSS to override any center alignment and add rounded corners
       const formattedHtml = html.replace(
         /<pre class="shiki"/,
         '<pre class="shiki rounded-lg" style="text-align: left;"',
@@ -322,12 +309,13 @@ export const EmptyStateCard = ({
   feature,
   onPrimaryClick,
 }: EmptyStateCardProps) => {
+  const { t } = useTranslation("common");
+
   const featureDefaults = feature
     ? EMPTY_STATE_FEATURES[feature]
     : ({
-        title: "No Data Available",
-        description:
-          "Start sending requests through Helicone to see your analytics here.",
+        titleKey: "emptyStates.default.title",
+        descriptionKey: "emptyStates.default.description",
         icon: Tag,
         featureImage: {
           type: "image",
@@ -335,15 +323,18 @@ export const EmptyStateCard = ({
         },
         cta: {
           primary: {
-            text: "Get Started",
+            ctaPrimaryKey: "emptyStates.default.ctaPrimary",
             link: "https://docs.helicone.ai/getting-started",
           },
           secondary: {
-            text: "View Docs",
+            ctaSecondaryKey: "emptyStates.default.ctaSecondary",
             link: "https://docs.helicone.ai/getting-started",
           },
         },
       } as EmptyStateFeature);
+
+  const title = t(featureDefaults.titleKey);
+  const description = t(featureDefaults.descriptionKey);
 
   const renderCTA = () => {
     const cta = featureDefaults.cta;
@@ -355,20 +346,20 @@ export const EmptyStateCard = ({
           (cta.primary.onClick ? (
             <Button variant="default" onClick={onPrimaryClick}>
               {cta.primary.showPlusIcon && <Plus className="mr-2 h-4 w-4" />}
-              {cta.primary.text}
+              {cta.primary.ctaPrimaryKey && t(cta.primary.ctaPrimaryKey)}
             </Button>
           ) : cta.primary.link ? (
             <Link href={cta.primary.link} target="_blank">
               <Button variant="default">
                 {cta.primary.showPlusIcon && <Plus className="mr-2 h-4 w-4" />}
-                {cta.primary.text}
+                {cta.primary.ctaPrimaryKey && t(cta.primary.ctaPrimaryKey)}
               </Button>
             </Link>
           ) : null)}
         {cta.secondary && (
           <Link href={cta.secondary.link} target="_blank">
             <Button variant="outline" className="gap-2">
-              {cta.secondary.text}
+              {t(cta.secondary.ctaSecondaryKey)}
               <SquareArrowOutUpRight className="h-4 w-4" />
             </Button>
           </Link>
@@ -377,11 +368,9 @@ export const EmptyStateCard = ({
     );
   };
 
-  // Standard layout for all empty states based on the properties format
   return (
     <div className="flex min-h-screen w-full items-center justify-center bg-background py-16 dark:bg-sidebar-background">
       <div className="mx-auto flex max-w-3xl flex-col items-center gap-8 px-4 text-center">
-        {/* Icon - Square shape */}
         {featureDefaults.icon && (
           <div className="flex h-16 w-16 items-center justify-center rounded-lg border border-border bg-accent">
             {React.createElement(featureDefaults.icon, {
@@ -392,14 +381,11 @@ export const EmptyStateCard = ({
         )}
 
         <div className="flex flex-col gap-2">
-          <H2>{featureDefaults.title}</H2>
+          <H2>{title}</H2>
 
-          <P className="max-w-3xl text-muted-foreground">
-            {featureDefaults.description}
-          </P>
+          <P className="max-w-3xl text-muted-foreground">{description}</P>
         </div>
 
-        {/* Feature Image */}
         {featureDefaults.featureImage.type !== "none" && (
           <div className="w-full">
             {featureDefaults.featureImage.type === "code" ? (
@@ -429,7 +415,7 @@ export const EmptyStateCard = ({
                 // eslint-disable-next-line @next/next/no-img-element
                 <img
                   src={featureDefaults.featureImage.content}
-                  alt={featureDefaults.title}
+                  alt={title}
                   className={`h-auto w-full rounded-lg border border-border max-w-${
                     featureDefaults.featureImage.maxWidth || "xl"
                   } mx-auto`}
@@ -439,7 +425,6 @@ export const EmptyStateCard = ({
           </div>
         )}
 
-        {/* Buttons */}
         {renderCTA()}
       </div>
     </div>

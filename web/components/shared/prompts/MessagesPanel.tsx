@@ -9,6 +9,7 @@ import {
 } from "@/utils/variables";
 import { Message } from "@helicone-package/llm-mapper/types";
 import { useEffect, useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { PiChatFill, PiChatsBold, PiTrashBold } from "react-icons/pi";
 
 import Link from "next/link";
@@ -37,7 +38,7 @@ export default function MessagesPanel({
   isPrefillSupported,
   scrollToBottom,
 }: MessagesPanelProps) {
-  // STATES AND REFERENCES
+  const { t } = useTranslation("common");
   const [hoveredTrashIdx, setHoveredTrashIdx] = useState<number | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -206,7 +207,7 @@ export default function MessagesPanel({
         <div className="flex flex-col gap-4 p-4">
           <div className="flex flex-col gap-4 rounded-lg border border-red-100 bg-red-500 p-4 dark:border-red-900">
             <h2 className="text-lg font-semibold text-white">
-              Unable to load prompt version...
+              {t("prompts.messages.loadErrorTitle")}
             </h2>
             <div className="font-mono overflow-auto rounded bg-slate-200 p-4 text-xs dark:bg-slate-800">
               <pre>
@@ -217,14 +218,14 @@ export default function MessagesPanel({
               </pre>
             </div>
             <p className="text-sm text-white">
-              Please load or import a different version to try again.{" "}
+              {t("prompts.messages.reloadPrompt")}{" "}
               <Link
                 href="https://docs.helicone.ai/features/prompts/import"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="font-medium text-white underline hover:text-blue-300"
               >
-                Learn more about importing from code.
+                {t("prompts.messages.importHelp")}
               </Link>
             </p>
           </div>
@@ -246,7 +247,7 @@ export default function MessagesPanel({
           }`}
         >
           <PiChatsBold />
-          Add Message Pair
+          {t("prompts.messages.addMessagePair")}
         </button>
 
         {isPrefillSupported && (
@@ -263,7 +264,7 @@ export default function MessagesPanel({
             }`}
           >
             <PiChatFill />
-            Add Prefill Message
+            {t("prompts.messages.addPrefillMessage")}
           </button>
         )}
       </div>

@@ -4,6 +4,7 @@ import { Menu } from "@headlessui/react";
 import { ArrowDownTrayIcon, ArrowPathIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { UserMetric } from "../../../lib/api/users/UserMetric";
 import { TimeInterval } from "../../../lib/timeCalculations/time";
 import { FilterLeaf } from "@helicone-package/filters/filterDefs";
@@ -68,9 +69,9 @@ interface ThemedHeaderProps {
 }
 
 const notificationMethods = [
-  { id: "filtered", title: "Only selected columns", filtered: true },
-  { id: "all", title: "All event properties", filtered: false },
-];
+  { id: "filtered", titleKey: "tableHeader.onlySelectedColumns", filtered: true },
+  { id: "all", titleKey: "tableHeader.allEventProperties", filtered: false },
+] as const;
 
 export default function ThemedHeader({
   isFetching,
@@ -78,6 +79,7 @@ export default function ThemedHeader({
   timeFilter,
   csvExport,
 }: ThemedHeaderProps) {
+  const { t } = useTranslation("common");
   const [exportFiltered, setExportFiltered] = useState(false);
 
   return (
@@ -85,7 +87,7 @@ export default function ThemedHeader({
       {/* Filters */}
       <div aria-labelledby="filter-heading" className="grid items-center">
         <h2 id="filter-heading" className="sr-only">
-          Filters
+          {t("tableHeader.filters")}
         </h2>
         <div className="flex flex-col items-start gap-4 lg:flex-row lg:items-center lg:gap-2">
           <div className="flex flex-col items-start gap-4 sm:flex-row sm:items-center sm:gap-2">
@@ -114,7 +116,7 @@ export default function ThemedHeader({
                   label: col.label,
                   value: col.label,
                 }))}
-                buttonLabel="Columns"
+                buttonLabel={t("tableHeader.columns")}
                 deselectAll={() => {
                   const newColumns = [...editColumns.columns];
 
@@ -155,7 +157,7 @@ export default function ThemedHeader({
                       aria-hidden="true"
                     />
                     <p className="hidden text-sm font-medium text-gray-900 sm:block">
-                      Export
+                      {t("actions.export")}
                     </p>
                   </button>
                 </Menu>
@@ -173,27 +175,29 @@ export default function ThemedHeader({
             <div className="flex flex-col space-y-8">
               <div className="flex flex-col space-y-4">
                 <p className="text-md font-semibold text-gray-900 sm:text-lg">
-                  Export CSV
+                  {t("export.csvTitle")}
                 </p>
                 <p className="sm:text-md text-sm text-gray-600">
-                  Exporting by CSV is limited to 500 rows due to the huge
-                  amounts of data in the requests. For larger exports, please
-                  use our{" "}
+                  {t("export.csvDescription")}{" "}
                   <Link
                     href="https://docs.helicone.ai/helicone-api/getting-started"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="font-semibold text-blue-600 underline"
                   >
-                    API
+                    {t("export.apiLink")}
                   </Link>
                   .
                 </p>
               </div>
 
               <fieldset className="space-y-2">
-                <p className="text-xs text-gray-600">Properties on export</p>
-                <legend className="sr-only">Notification method</legend>
+                <p className="text-xs text-gray-600">
+                  {t("tableHeader.propertiesOnExport")}
+                </p>
+                <legend className="sr-only">
+                  {t("tableHeader.notificationMethod")}
+                </legend>
                 <div className="space-y-2">
                   {notificationMethods.map((notificationMethod) => (
                     <div
@@ -214,15 +218,14 @@ export default function ThemedHeader({
                         htmlFor={notificationMethod.id}
                         className="ml-3 block text-sm font-medium leading-6 text-gray-600"
                       >
-                        {notificationMethod.title}
+                        {t(notificationMethod.titleKey)}
                       </label>
                     </div>
                   ))}
                 </div>
               </fieldset>
               <p className="sm:text-md text-sm text-gray-600">
-                Export may take a lot of time. Please do not close this modal
-                once export is started.
+                {t("export.exportWarning")}
               </p>
             </div>
 
@@ -232,7 +235,7 @@ export default function ThemedHeader({
                 onClick={() => csvExport.setOpenExport(false)}
                 className="flex flex-row items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-semibold text-gray-900 shadow-sm hover:bg-gray-50 hover:text-gray-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-500"
               >
-                Cancel
+                {t("actions.cancel")}
               </button>
               <button
                 className="text-md flex items-center rounded-md bg-black px-4 py-2 font-semibold text-white shadow-sm hover:bg-gray-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
@@ -243,10 +246,10 @@ export default function ThemedHeader({
                     <ArrowPathIcon
                       className={clsx("mr-2 inline h-5 w-5 animate-spin")}
                     />
-                    Exporting
+                    {t("export.exporting")}
                   </>
                 ) : (
-                  <p>Export</p>
+                  <p>{t("export.export")}</p>
                 )}
               </button>
             </div>

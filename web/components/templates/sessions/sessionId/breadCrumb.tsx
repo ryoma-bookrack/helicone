@@ -1,3 +1,4 @@
+import { formatStandardDateTime } from "@/lib/i18n/format";
 import useNotification from "@/components/shared/notification/useNotification";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -194,7 +195,7 @@ export const BreadCrumb = ({
                   Created on
                 </h3>
                 <p className="truncate text-sm text-slate-500">
-                  {startTime ? startTime.toLocaleDateString() : ""}
+                  {startTime ? formatStandardDateTime(startTime) : ""}
                 </p>
               </div>
             </div>

@@ -2,6 +2,7 @@ import { OpenAIChatRequest } from "@helicone-package/llm-mapper/mappers/openai/c
 import dynamic from "next/dynamic";
 import { markdownComponents } from "@/components/shared/prompts/ResponsePanel";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { ImageModal } from "../requests/components/chatComponent/single/images/ImageModal";
 import { User } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -29,6 +30,7 @@ const MessageRenderer = ({
   messageIndex,
   onQuickstartHelp,
 }: MessageRendererProps) => {
+  const { t } = useTranslation("agent");
   const router = useRouter();
   const [selectedImage, setSelectedImage] = useState<{
     src: string;
@@ -38,7 +40,7 @@ const MessageRenderer = ({
   const handleImageClick = (imageUrl: string, index: number) => {
     setSelectedImage({
       src: imageUrl,
-      alt: `Image ${index + 1}`,
+      alt: t("message.imageAlt", { index: index + 1 }),
     });
   };
 
@@ -84,7 +86,7 @@ const MessageRenderer = ({
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
                       src={item.image_url.url}
-                      alt={`Image ${index + 1}`}
+                      alt={t("message.imageAlt", { index: index + 1 })}
                       className="h-8 w-8 cursor-pointer rounded border border-border object-cover transition-opacity hover:opacity-80"
                       onClick={() =>
                         handleImageClick(item.image_url.url, index)
@@ -112,7 +114,7 @@ const MessageRenderer = ({
       <div className="w-full">
         <details className="w-full">
           <summary className="ml-0.5 cursor-pointer text-xs text-muted-foreground">
-            <span className="ml-0.5">Response</span>
+            <span className="ml-0.5">{t("message.response")}</span>
           </summary>
           <div className="mt-2 rounded-lg bg-muted px-3 py-2 text-xs text-muted-foreground">
             {typeof message.content === "string" && message.content}
@@ -137,7 +139,7 @@ const MessageRenderer = ({
               <User className="h-4 w-4 text-white" />
             </div>
             <span className="text-xs font-medium text-purple-700 dark:text-purple-400">
-              {message.name} from Helicone Support
+              {t("message.fromSupport", { name: message.name })}
             </span>
           </div>
         )}
@@ -180,7 +182,7 @@ const MessageRenderer = ({
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
                       src={item.image_url.url}
-                      alt={`Image ${index + 1}`}
+                      alt={t("message.imageAlt", { index: index + 1 })}
                       className="w-full cursor-pointer rounded border border-border object-cover transition-opacity hover:opacity-80"
                       onClick={() => {
                         handleImageClick(item.image_url.url, index);
@@ -198,7 +200,7 @@ const MessageRenderer = ({
                 size="sm"
                 className="text-sm"
               >
-                Help me integrate
+                {t("message.helpIntegrate")}
               </Button>
             </div>
           )}
@@ -210,7 +212,7 @@ const MessageRenderer = ({
                   className="flex flex-col gap-2 text-xs font-medium text-subdued-foreground"
                 >
                   <div className="font-medium">
-                    <span className="font-bold">Tool</span>:{" "}
+                    <span className="font-bold">{t("message.tool")}</span>:{" "}
                     {tool.function.name}
                   </div>
                 </div>
